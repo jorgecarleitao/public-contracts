@@ -37,40 +37,45 @@ The code is licenced under GPLv2.
 
 ## Pre-requisites and installation
 
-1. Get [virtualenv](http://www.virtualenv.org/en/latest/), a must-tool for Python.
+1- Get [virtualenv](http://www.virtualenv.org/en/latest/), a must-tool for Python.
 
 `sudo pip install virtualenv`
 
-2. Create a new virtual environment for this project
+2- Create a new virtual environment for this project
 
 `virtualenv ~/.env/public-contracts`
 
 (the path `~/.env/public-contracts` can be anything, I use that one).
 
-3. Enter in the virtual environment
+3- Enter in the virtual environment
 
 `source ~/.env/public-contracts/bin/activate`
 
-4. Install dependencies in the virtual environment
+4- Install dependencies in the virtual environment
 
 `pip install django`
+
 `pip install python-memcached` <- for caching
+
 `pip install django-treebeard` <- for hierarquical trees in the categories
+
 `pip install mysql-python` <- for using mysql database
 
-5. Install git if required (depends on your operating system)
+5- Install git if required (depends on your operating system)
 
-6. Get the code
+6- Get the code
 
-go to the directory where you want the code to live and do
+`cd` the directory where you want the code and run
+
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
-Then, do `cd public-contracts`
 
-7. Start the server
+Enter in the directory using `cd public-contracts`.
+
+7- Start the server
 
 `python manage.py runserver`
 
-8. In your browser, enter in the url `127.0.0.1:80000`.
+8- In your browser, enter the url `127.0.0.1:80000`.
 
-If something went wrong, please add an issue [here](https://github.com/jorgecarleitao/public-contracts/issues)
-so we can help you, and improve this instructions.
+If something went wrong, please report it [here](https://github.com/jorgecarleitao/public-contracts/issues)
+so we can help you and others by improving this instructions.
