@@ -1,25 +1,17 @@
-public-contracts
-================
+# Public contracts
 
 Public contracts is an open source website to analyse and visualise portuguese public contracts.
 The objective of this repository is to host a community that collaborates on the creation of the website.
 
-Motivation
-================
+## Motivation
 
-.. _Base: http://www.base.gov.pt/base2/
-.. _Category: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
+Every portuguese public entity has to publicly disclose its contracts in an official website,
+[Base](http://www.base.gov.pt/base2/). In particular, it has to disclose:
 
-Every portuguese public entity has to publicly disclose its contracts in an official website, Base_.
-In particular, it has to disclose:
-
-#) to whom the contract was made.
-
-#) how much the contract was.
-
-#) when the contract was made.
-
-#) which Category_ it belongs to.
+1. to whom the contract was made.
+2. how much the contract was.
+3. when the contract was made.
+4. which [category](http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm) it belongs to.
 
 Currently, this database has about 370.000 contracts, spamming orders of magnitude between their prices.
 
@@ -35,9 +27,7 @@ This project has an official website that hosts the database and the website cre
 
 ## The code
 
-.. _Django: https://www.djangoproject.com/
-
-We use Django_, JQuery, HTML and CSS, and we write the code in english.
+We use [Django](https://www.djangoproject.com/), JQuery, HTML and CSS, and we write the code in english.
 The official website is translated to portuguese to be accessible to anyone in Portugal.
 
 This project is starting, so we still don't have documentation for the collaborative process.
