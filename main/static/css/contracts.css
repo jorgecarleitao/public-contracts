@@ -1,0 +1,17 @@
+.price {
+    clear: both;
+}
+
+.category-list {
+    margin-top: 10px;
+    list-style: none;
+    margin-left: 0;
+    width: 100%;
+}
+
+.category-list li {
+    width: inherit;
+    margin-left: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid gray;
+}

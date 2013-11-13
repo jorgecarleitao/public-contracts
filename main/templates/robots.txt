@@ -1,0 +1,24 @@
+User-agent: *
+Disallow: /
+
+## adapted from stackoverflow/robots.txt
+
+# disallow adsense bot.
+User-agent: Mediapartners-Google
+Disallow: /
+
+# This isn't really an image
+User-agent: Googlebot-Image
+Disallow: /
+
+# Allow google bots
+User-agent: Googlebot
+Allow: /
+
+# Yahoo bot is evil.
+User-agent: Slurp
+Disallow: /
+
+# Yahoo Pipes is for feeds not web pages.
+User-agent: Yahoo Pipes 1.0
+Disallow: /

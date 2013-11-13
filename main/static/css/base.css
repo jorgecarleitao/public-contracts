@@ -1,0 +1,78 @@
+#header {
+    float: none;
+    clear: both;
+    height: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#top-header a {
+    margin-right: 10px;
+}
+
+#top-header,
+#footer {
+    background: rgb(240,240,240);
+    border-bottom: rgb(200,200,200) 1px solid;
+    border-top: rgb(200,200,200) 1px solid;
+    height: 20px;
+    float: none;
+    clear: both;
+}
+
+#footer .footer-links {
+    margin-top: 11px;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+#scopeNav .horizontal-tab-list {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+    width: 960px;
+}
+
+#scopeNav .horizontal-tab-list li {
+    background-color: #f5f5f5;
+    border: 1px lightgray solid;
+    outline: 1px black solid;
+}
+
+#scopeNav .horizontal-tab-list li {
+    margin-right: 10px;
+}
+
+.horizontal-tab-list .right-tab {
+    float: right;
+    margin-right: 0;
+}
+
+#scopeNav .right-tab {
+    margin-left: 10px;
+}
+
+#ContentLeft, #ContentRight, #ContentFull {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+#ContentLeft {
+    width: 75%;
+}
+#ContentRight {
+    width: 25%;
+    float: right;
+}
+#ContentFull {
+    width: 100%;
+}
+
+.content-wrapper {
+    width: 960px;
+    float: none;
+}
+
+.full {
+    width: 100%;
+}
