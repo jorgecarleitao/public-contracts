@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="summary" id="entity-{{entity.id}}">
+    <div class="full">
+        <div class="counter">
+            {{ forloop.counter }}
+        </div>
+        <div>
+            <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+            <div class="price">
+                <p>{% trans "Contracts:" %}
+                    {{ entity.count_contracts }}
+                </p>
+                <p>{% trans "Average depth:" %}
+                    {% if entity.avg_depth %}
+                        {{ entity.avg_depth }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

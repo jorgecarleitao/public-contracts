@@ -1,0 +1,54 @@
+{% extends "contracts/one_column_body.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Contracts"%}{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/Article">
+        <h4 itemprop="description">
+            Analizar e visualizar a rede de contratos públicos portugueses
+        </h4>
+        <p>
+            Os contratos de entidades públicas portuguesas estão publicados numa
+            <a href="http://www.base.gov.pt/base2/">base de dados oficial</a>. Esta base de dados
+            não permite fazer buscas complexas para análises estatísticas (por uma boa razão!).
+        </p>
+        <p>
+            Neste projeto, desenvolvemos uma forma simples de qualquer pessoa analisar a base de dados. Como?
+            Mantemos uma base de dados sincronizada regularmente com base de dados oficial e temos um
+            <a href="https://github.com/jorgecarleitao/public-contracts">código open source</a> e em Python,
+            que permite fazer qualquer pergunta à base de dados com o mínimo de conhecimentos de Python.
+        </p>
+        <p>
+            A ideia é diminuir a barreira técnica que existe entre o interesse comum e a informação já existente.
+        </p>
+        <p>
+            Este website, também open source, é o local onde divulgamos resultados de análises que nós próprios
+            fazemos com o código que disponibilizamos,
+            e tem também uma interface gráfica que lhe permite navegar na complexa rede de contratos públicos.
+        </p>
+        <img src="{% static "images/distribution_all.png" %}">
+        <p>
+            O gráfico é um exemplo do que estamos a fazer: representa o número relativo de contratos (eixo y)
+            com um dado valor em euros (eixo x).
+            Neste exemplo, toda a base de dados existente - ~370000 contratos - foi considerada.
+        </p>
+        <p>
+            Explique-mos o gráfico: considere o valor 10^6 (1 milhão de euros) no eixo do x.
+            Nesse ponto, o valor correspondente no eixo dos y é de ~10^-1 = 0.1 = 10%.
+            Isto significa que 1 em cada 10 contratos públicos são de 1 milhão de euros.
+            Por outro lado, só 1 em cada 10^4 (10 mil, eixo y) contratos são de 10^9 (mil milhões de euros, eixo x).
+        </p>
+        <p>
+            Uma análise mais cuidada no gráfico mostra que:
+        </p>
+        <ul>
+            <li>
+                a distribuição tem um máximo centrado em ~10^6 = 1.000.000 (1 milhão de euros).
+            </li>
+            <li>
+                Entre ~10^7 e ~10^9 a distribuição tem um comportamento lei de potências (linha a vermelho é expoente -1).
+            </li>
+        </ul>
+    </div>
+{% endblock %}

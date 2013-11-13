@@ -1,0 +1,40 @@
+{% extends "contracts/one_column_body.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block title %}{% trans "Categories"%}{% endblock %}
+{% block content %}
+    {% if category %}
+        <div class="category-view">
+            {% with ancentors=category.get_ancestors %}
+                {% if ancentors %}
+                    {% for ancestor in ancentors %}
+                        <h2><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.description_pt }}</a> ></h2>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <h2>{{ category.description_pt }} ({{ category.code }})</h2>
+            <p>
+                {% trans "In this category:" %} {{ category.own_contracts_count }} {% trans "contracts" %}, {% trans "total:"%} {{ category.own_contracts_price|intword }} € {% if categories %}{% trans "plus all sub-categories..." %}{% endif %}
+            </p>
+        </div>
+        <h3>{% trans "Sub-categories"%}</h3>
+    {% else %}
+        <h2>{% trans "Categories"%}</h2>
+    {% endif %}
+    <ul class="category-list">
+        {% for category in categories %}
+            {% with count=category.contracts_count %}
+                    <li>
+                        <h4><a href="{{ category.get_absolute_url }}">{{ category.description_pt }}</a></h4>
+                        <p>{{ count }} {% trans "contracts" %}, {% trans "total:"%} {{ category.contracts_price|intword }} €</p>
+                    </li>
+            {% endwith %}
+        {% endfor %}
+    </ul>
+    {% if no_code %}
+        <h3>{% trans "Contracts with no category" %}</h3>
+    {% else %}
+        <h3>{% trans "Contracts in this category" %}</h3>
+    {% endif %}
+    {% include "contracts/contract_list/contract_list_template.html" %}
+{% endblock %}

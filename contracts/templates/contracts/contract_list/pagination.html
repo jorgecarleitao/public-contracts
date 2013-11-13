@@ -1,0 +1,17 @@
+{% if contracts.paginator.num_pages != 1 %}
+    <ul class="pagination horizontal-tab-list">
+        {% if contracts.has_previous %}
+            {% if contracts.previous_page_number != 1 %}
+                <li><a class="page-selector">1</a></li>
+            {% endif %}
+            <li><a class="page-selector">{{ contracts.previous_page_number }}</a></li>
+        {% endif %}
+        <li><span class="active">{{ contracts.number }}</span></li>
+        {% if contracts.has_next %}
+            <li><a class="page-selector">{{ contracts.next_page_number }}</a></li>
+            {% if contracts.next_page_number != contracts.paginator.num_pages %}
+                <li><a class="page-selector">{{ contracts.paginator.num_pages }}</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+{% endif %}

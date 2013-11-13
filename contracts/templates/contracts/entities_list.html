@@ -1,0 +1,6 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "Entities"%}{% endblock %}
+{% block content %}
+    {% include "contracts/entity_list/entity_list_template.html" %}
+{% endblock %}

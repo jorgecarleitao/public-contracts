@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="summary" id="entity-{{entity.id}}">
+    <div class="full">
+        <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+        <div class="price">
+            {% with earned=entity.total_earned %}
+                {% with expended=entity.total_expended %}
+                    <p>
+                    {% if expended %}
+                        {% trans "Expenses:" %}
+                        {{ expended|intword }} €
+                    {% else %}
+                        {% trans "No expenses" %}
+                    {% endif %}
+                    </p>
+                    <p>
+                    {% if earned %}
+                        {% trans "Earnings:" %}
+                        {{ earned|intword }} €
+                    {% else %}
+                        {% trans "No earnings" %}
+                    {% endif %}
+                    </p>
+                {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</div>

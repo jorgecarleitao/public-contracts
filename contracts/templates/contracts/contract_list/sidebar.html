@@ -1,0 +1,8 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="box">
+    <h3 class="title">{% trans "Totals:"%}</h3>
+    <p>{% trans "All:"%} {{ total_price|intword }} €</p>
+    <p>{% trans "Last year:"%} {{ year_price|intword }} €</p>
+    <p>{% trans "Last month:"%} {{ month_price|intword }} €</p>
+</div>

@@ -1,0 +1,9 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "Contracts"%}{% endblock %}
+{% block content %}
+    {% include "contracts/contract_list/contract_list_template.html" %}
+{% endblock %}
+{% block sidebar %}
+    {% include "contracts/contract_list/sidebar.html" %}
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Entities index"%}{% endblock %}
+{% block content %}
+    <div class="rules"  itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">Que esforço fazem os municípios ao publicar os seus contratos?</h2>
+        <p itemprop="description">
+            As entidades públicas têm o dever de publicar os seus contratos públicos
+            <a href="http://www.base.gov.pt/base2/">na base de dados oficial de contratos públicos</a>.
+        </p>
+        <p>
+            Cada contrato tem associada uma categoria na
+            <a href="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm">
+                categorização oficial de contratos públicos da União Europeia</a>,
+            um conjunto de 9409 categorias organizadas segundo uma hierarquia, como ilustrado na figura seguinte:
+        </p>
+        <img src="{% static 'images/categories_example.png' %}" itemprop="primaryImageOfPage"/>
+        <p>
+            Em particular, sempre que um município adiciona um contrato na base de dados, tem de colocar a
+            categoria que melhor se adequa ao contrato. Isto é, pode decidir colocar categorias mais específicas, ou
+            menos específicas.
+            Com a informação existente, colocámos a pergunta:
+        </p>
+        <h4>
+            Quão específicos são os municípios a documentar os seus contratos?
+        </h4>
+        <p>
+            Para responder a esta pergunta, definimos um indicador de especificidade
+            que quantifica a especificidade do contrato na categorização oficial (<a id="extend-button-1">mais detalhes</a>).
+        </p>
+        <div id="extendable-1" hidden="1">
+            <h4>
+                Motivação e definição do indicador
+            </h4>
+            <p>
+                Dizemos que a especificidade de um contrato é 0 quando
+                ele não tem categoria, e é 7 quando o contrato tem a categoria mais específica possível (7 é a profundidade máxima da hierarquia).
+            </p>
+            <p>
+                Para cada entidade, o indicador é definido como a especificidade média dos seus contratos (todos onde a entidade foi "adjudicante", i.e. quem pagou).
+                Ou seja, para cada município, calculámos a especificidade de cada um dos seus contratos, e tirámos o valor médio (<a id="extend-button-2">mais detalhes</a>).
+            </p>
+            <div id="extendable-2" hidden="1">
+                <p>
+                    Na nossa definição, assumimos que se uma categoria tiver muitas subcategorias, o contrato que se insere nela não
+                    é necessariamente menos específico: assumimos que quem desenvolveu o sistema de categorias colocou cada nível da hierarquia
+                    com a mesma específicidade. Caso isto não seja válido, o valor médio terá de ser pesado pelo número de sub-categorias
+                    que cada categoria tem para a definição ser honesta.
+                </p>
+            </div>
+            <p>
+                É importante notar que nem todos os contratos são passíveis de ter a categoria mais específica [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial (PDF)</a>]:
+            </p>
+            <ul>
+                <li>
+                    Quando uma categoria não existe, o contrato é colocado numa categoria de menor especificidade
+                </li>
+                <li>
+                    Quando o contrato é sobre mais que uma categoria numa dada especificidade, este é colocado na categoria acima, menos específica.
+                </li>
+            </ul>
+            <p>
+                Isto invalida comparações entre duas quaisquer entidades, mas permite comparações entre
+                entidades que à partida usam categorias semelhantes.
+            </p>
+        </div>
+        <p>
+            Neste sentido, e motivados pelo <a href="http://poderlocal.transparencia.pt/">ranking da Associação Cívica Transparência e Integridade</a> (TIAC), comparámos a
+            especifícidade média entre municípios: enumerámos todos os municípios registados na base de dados pública e cálculamos a específicidade média dos seus contratos.
+            Eis o resultado:
+        </p>
+        <h4>
+            Municípios ordenados de acordo com a especificidade média dos seus contratos
+        </h4>
+    </div>
+    {% include "contracts/entity_rank/graph.html" %}
+
+    {% if entities %}
+        {% include "contracts/entity_list/pagination.html" %}
+        <div class="list-loop">
+            {% for entity in entities %}
+                {% include "contracts/entity_rank/summary.html" %}
+            {% endfor %}
+        </div>
+        {% include "contracts/entity_list/pagination.html" %}
+    {% endif %}
+
+    <script>
+        $(document).ready(function() {
+            $("#extend-button-1").click(function() {
+                $("#extendable-1").slideToggle();
+            });
+
+            $("#extend-button-2").click(function() {
+                $("#extendable-2").slideToggle();
+            });
+        });
+    </script>
+{% endblock %}
+{% block sidebar %}
+    {% include "contracts/entity_rank/sidebar.html" %}
+{% endblock %}
