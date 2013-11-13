@@ -33,7 +33,7 @@ The official website is translated to portuguese to be accessible to anyone in P
 This project is starting, so we still don't have documentation for the collaborative process.
 This is our current top priority.
 
-The code is licenced under GPLv2.
+The code is licenced under BSD.
 
 ## Pre-requisites and installation
 
