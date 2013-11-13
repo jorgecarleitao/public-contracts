@@ -1,0 +1,274 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-07 18:11+0000\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: contracts/urls.py:8 contracts/templates/contracts/categories_list.html:17
+#: contracts/templates/contracts/categories_list.html:29
+msgid "contracts"
+msgstr "contratos"
+
+#: contracts/urls.py:9
+msgid "categories"
+msgstr "categorias"
+
+#: contracts/urls.py:10
+msgid "entities"
+msgstr "entidades"
+
+#: contracts/urls.py:11
+msgid "category"
+msgstr "categoria"
+
+#: contracts/urls.py:12
+msgid "entities-category-ranking"
+msgstr "ranking-especificidade-municípios"
+
+#: contracts/views.py:18 contracts/views.py:45
+#: contracts/templates/contracts/contract_list/search_contracts.html:9
+#: contracts/templates/contracts/contract_list/search_contracts.html:13
+#: contracts/templates/contracts/contract_list/search_contracts.html:37
+msgid "price"
+msgstr "preço"
+
+#: contracts/views.py:18 contracts/views.py:45
+#: contracts/templates/contracts/contract_list/search_contracts.html:19
+#: contracts/templates/contracts/contract_list/search_contracts.html:23
+#: contracts/templates/contracts/contract_list/search_contracts.html:39
+msgid "date"
+msgstr "data"
+
+#: contracts/views.py:32 contracts/views.py:128
+#: contracts/templates/contracts/contract_list/search_contracts.html:51
+#: contracts/templates/contracts/entity_list/search_entities.html:51
+msgid "search"
+msgstr "procura"
+
+#: contracts/views.py:39 contracts/views.py:40 contracts/views.py:135
+#: contracts/views.py:136
+#: contracts/templates/contracts/contract_list/search_contracts.html:37
+#: contracts/templates/contracts/contract_list/search_contracts.html:39
+#: contracts/templates/contracts/entity_list/search_entities.html:37
+#: contracts/templates/contracts/entity_list/search_entities.html:39
+msgid "ordering"
+msgstr "ordem"
+
+#: contracts/views.py:50 contracts/views.py:146
+#: contracts/templates/contracts/contract_list/contract_list_template.html:19
+#: contracts/templates/contracts/entity_list/entity_list_template.html:19
+msgid "page"
+msgstr "página"
+
+#: contracts/views.py:110 contracts/views.py:116 contracts/views.py:141
+#: contracts/templates/contracts/entity_list/search_entities.html:9
+#: contracts/templates/contracts/entity_list/search_entities.html:13
+#: contracts/templates/contracts/entity_list/search_entities.html:37
+msgid "earnings"
+msgstr "ganho"
+
+#: contracts/views.py:110 contracts/views.py:118 contracts/views.py:141
+#: contracts/templates/contracts/entity_list/search_entities.html:19
+#: contracts/templates/contracts/entity_list/search_entities.html:23
+#: contracts/templates/contracts/entity_list/search_entities.html:39
+msgid "expenses"
+msgstr "despesa"
+
+#: contracts/templates/contracts/categories_list.html:4
+#: contracts/templates/contracts/categories_list.html:22
+#: contracts/templates/contracts/base/secondary_header.html:7
+msgid "Categories"
+msgstr "Categorias"
+
+#: contracts/templates/contracts/categories_list.html:17
+msgid "In this category:"
+msgstr "Nesta categoria"
+
+#: contracts/templates/contracts/categories_list.html:17
+#: contracts/templates/contracts/categories_list.html:29
+msgid "total:"
+msgstr "total:"
+
+#: contracts/templates/contracts/categories_list.html:17
+msgid "plus all sub-categories..."
+msgstr "mais nas sub-categorias..."
+
+#: contracts/templates/contracts/categories_list.html:20
+msgid "Sub-categories"
+msgstr "Sub-categorias"
+
+#: contracts/templates/contracts/categories_list.html:35
+msgid "Contracts with no category"
+msgstr "Contratos sem categoria"
+
+#: contracts/templates/contracts/categories_list.html:37
+msgid "Contracts in this category"
+msgstr "Contratos nesta categoria"
+
+#: contracts/templates/contracts/category_index.html:4
+msgid "Entities index"
+msgstr "Ranking de especificidade de municípios"
+
+#: contracts/templates/contracts/contracts_list.html:3
+#: contracts/templates/contracts/main_page.html:5
+#: contracts/templates/contracts/main_page.html:9
+#: contracts/templates/contracts/base/secondary_header.html:6
+msgid "Contracts"
+msgstr "Contratos"
+
+#: contracts/templates/contracts/entities_list.html:3
+#: contracts/templates/contracts/base/secondary_header.html:8
+msgid "Entities"
+msgstr "Entidades"
+
+#: contracts/templates/contracts/entity_summary.html:11
+msgid "Expenses:"
+msgstr "Despesa:"
+
+#: contracts/templates/contracts/entity_summary.html:14
+msgid "No expenses"
+msgstr "Sem despesa"
+
+#: contracts/templates/contracts/entity_summary.html:19
+msgid "Earnings:"
+msgstr "Ganhos:"
+
+#: contracts/templates/contracts/entity_summary.html:22
+msgid "No earnings"
+msgstr "Sem ganhos"
+
+#: contracts/templates/contracts/contract_list/search_contracts.html:5
+msgid "search_contracts_placeholder"
+msgstr "procurar contratos"
+
+#: contracts/templates/contracts/contract_list/search_contracts.html:12
+msgid "order by price"
+msgstr "ordenar por preço"
+
+#: contracts/templates/contracts/contract_list/search_contracts.html:22
+msgid "order by date"
+msgstr "ordenar por data"
+
+#: contracts/templates/contracts/contract_list/sidebar.html:4
+msgid "Totals:"
+msgstr "Totais:"
+
+#: contracts/templates/contracts/contract_list/sidebar.html:5
+msgid "All:"
+msgstr "Todos:"
+
+#: contracts/templates/contracts/contract_list/sidebar.html:6
+msgid "Last year:"
+msgstr "Neste ano:"
+
+#: contracts/templates/contracts/contract_list/sidebar.html:7
+msgid "Last month:"
+msgstr "Neste mês"
+
+#: contracts/templates/contracts/entity_list/search_entities.html:5
+msgid "search_entities_placeholder"
+msgstr "procurar entidades"
+
+#: contracts/templates/contracts/entity_list/search_entities.html:12
+msgid "order by earnings"
+msgstr "ordenar por ganhos"
+
+#: contracts/templates/contracts/entity_list/search_entities.html:22
+msgid "order by expenses"
+msgstr "ordenar por despesa"
+
+#: contracts/templates/contracts/entity_rank/summary.html:11
+msgid "Contracts:"
+msgstr "Contratos:"
+
+#: contracts/templates/contracts/entity_rank/summary.html:14
+msgid "Average depth:"
+msgstr "Especificidade média:"
+
+#: contracts/templatetags/contracts/humanize.py:11
+#, python-format
+msgid "%(value).1f thousand"
+msgid_plural "%(value).1f thousand"
+msgstr[0] "%(value).1f mil"
+msgstr[1] "%(value).1f mil"
+
+#: contracts/templatetags/contracts/humanize.py:12
+#, python-format
+msgid "%(value)s thousand"
+msgid_plural "%(value)s thousand"
+msgstr[0] "%(value)s mil"
+msgstr[1] "%(value)s mil"
+
+#: contracts/templatetags/contracts/humanize.py:15
+#, python-format
+msgid "%(value).1f million"
+msgid_plural "%(value).1f million"
+msgstr[0] "%(value).1f milhão"
+msgstr[1] "%(value).1f milhões"
+
+#: contracts/templatetags/contracts/humanize.py:16
+#, python-format
+msgid "%(value)s million"
+msgid_plural "%(value)s million"
+msgstr[0] "%(value)s milhão"
+msgstr[1] "%(value)s milhões"
+
+#: contracts/templatetags/contracts/humanize.py:19
+#, python-format
+msgid "%(value).1f billion"
+msgid_plural "%(value).1f billion"
+msgstr[0] "%(value).1f bilião"
+msgstr[1] "%(value).1f biliões"
+
+#: contracts/templatetags/contracts/humanize.py:20
+#, python-format
+msgid "%(value)s billion"
+msgid_plural "%(value)s billion"
+msgstr[0] "%(value)s bilião"
+msgstr[1] "%(value)s biliões"
+
+#: contracts/templatetags/contracts/humanize.py:23
+#, python-format
+msgid "%(value).1f trillion"
+msgid_plural "%(value).1f trillion"
+msgstr[0] "%(value).1f trilião"
+msgstr[1] "%(value).1f triliões"
+
+#: contracts/templatetags/contracts/humanize.py:24
+#, python-format
+msgid "%(value)s trillion"
+msgid_plural "%(value)s trillion"
+msgstr[0] "%(value)s trilião"
+msgstr[1] "%(value)s triliões"
+
+#: contracts/templatetags/contracts/humanize.py:27
+#, python-format
+msgid "%(value).1f quadrillion"
+msgid_plural "%(value).1f quadrillion"
+msgstr[0] "%(value).1f quadrilião"
+msgstr[1] "%(value).1f quadriliões"
+
+#: contracts/templatetags/contracts/humanize.py:28
+#, python-format
+msgid "%(value)s quadrillion"
+msgid_plural "%(value)s quadrillion"
+msgstr[0] "%(value)s quadrilião"
+msgstr[1] "%(value)s quadriliões"
+
+#: main/templates/top_header.html:4
+msgid "Main page"
+msgstr "Página inicial"
+
+#: main/templates/top_header.html:5
+msgid "Municipalities ranking"
+msgstr "Ranking de municípios"
