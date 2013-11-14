@@ -65,7 +65,7 @@ if LIVE:
     STATIC_ROOT = settings_local.STATIC_ROOT
 
 STATICFILES_DIRS = (
-    os.path.join(main_directory, '../docs/build'),
+    os.path.join(site_directory, 'docs/build'),
 )
 
 STATIC_URL = '/static/'
