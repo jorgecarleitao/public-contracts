@@ -4,8 +4,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
-import analysis.entities_category_ranking
 
+from contracts import views_data
 import models
 
 
@@ -168,7 +168,7 @@ def entities_list(request):
 
 def entities_category_ranking(request):
 
-    entities = analysis.entities_category_ranking.get_ranking()
+    entities = views_data.get_entities_categories_ranking()
 
     paginator = Paginator(entities, 20)
     page = request.GET.get(_('page'))
@@ -184,3 +184,8 @@ def entities_category_ranking(request):
     context = {'entities': entities}
 
     return render(request, 'contracts/entity_rank.html', context)
+
+
+def contracts_price_histogram(request):
+
+    return render(request, 'contracts/contracts_price_histogram.html')

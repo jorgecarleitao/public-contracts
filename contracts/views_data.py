@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-import analysis.entities_category_ranking
+import analysis
 from django.core.cache import cache
 
 
@@ -9,7 +9,7 @@ def get_entities_categories_ranking():
 
     entities = cache.get(cache_name)
     if entities is None:
-        entities = analysis.entities_category_ranking.get_ranking()
+        entities = analysis.get_ranking()
         cache.set(cache_name, list(entities), 60*60*24)
 
     return entities
@@ -51,5 +51,30 @@ def entities_category_ranking_histogram_json(request):
             if data[x]['min_position'] < entity.avg_depth <= data[x]['max_position']:
                 data[x]['value'] += 1
                 break
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def get_contracts_price_distribution():
+    cache_name = 'contracts_price_distribution'
+
+    distribution = cache.get(cache_name)
+    if distribution is None:
+        distribution = analysis.get_price_histogram()
+        cache.set(cache_name, distribution, 60*60*24)
+
+    return distribution
+
+
+def contracts_price_histogram_json(request):
+
+    distribution = get_contracts_price_distribution()
+
+    data = []
+    for entry in distribution:
+        if entry[1]:
+            data.append({'min_position': entry[0],
+                         'max_position': entry[0]*2,
+                         'value': entry[1]})
 
     return HttpResponse(json.dumps(data), content_type="application/json")
