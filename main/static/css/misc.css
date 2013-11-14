@@ -33,14 +33,21 @@
 }
 
 .box {
-    width: 200px;
+    width: 230px;
     float: right;
     background-color: #f5f5f5;
     padding-left: 5px;
 }
 
-.box a, .box p, .box .title {
+.box a,
+.box p,
+.box .title,
+.box li {
     width: 100%;
+}
+
+.box li {
+    margin-bottom: 13px;
 }
 
 .box .title {
