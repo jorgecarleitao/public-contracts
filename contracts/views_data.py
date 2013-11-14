@@ -1,15 +1,26 @@
 import json
 from django.http import HttpResponse
 import analysis.entities_category_ranking
+from django.core.cache import cache
+
+
+def get_entities_categories_ranking():
+    cache_name = 'entities_categories_ranking'
+
+    entities = cache.get(cache_name)
+    if entities is None:
+        entities = analysis.entities_category_ranking.get_ranking()
+        cache.set(cache_name, list(entities), 60*60*24)
+
+    return entities
 
 
 def entities_category_ranking_json(request):
 
-    entities = analysis.entities_category_ranking.get_ranking()
 
     data = []
     count = 0
-    for entity in entities:
+    for entity in get_entities_categories_ranking():
         count += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -20,7 +31,7 @@ def entities_category_ranking_json(request):
 
 def entities_category_ranking_histogram_json(request):
 
-    entities = analysis.entities_category_ranking.get_ranking()
+    entities = get_entities_categories_ranking()
 
     min_value = entities[-1].avg_depth - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[0].avg_depth + 0.00000001   # avoid rounding, this caused a bug before.
