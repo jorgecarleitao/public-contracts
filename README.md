@@ -1,25 +1,22 @@
 # Public contracts
 
-Public contracts is an open source Django website and API to analyse and visualise (portuguese) public contracts.
+Public contracts is an open source Django website and API to analyse and visualise the database of (portuguese) public contracts.
 This repository hosts the source code of both the API and the website.
 
 ## Motivation
 
-Every public entity in european union has to publicly disclose its contracts in an [official website](http://simap.europa.eu/supplier/national-procurement-databases/index_en.htm). In portuguese case, our first experiment, they disclose:
+Every public entity in European Union has to publicly disclose its
+contracts in an [official website](http://simap.europa.eu/supplier/national-procurement-databases/index_en.htm).
 
-1. to whom the contract was made.
-2. how much the contract was.
-3. when the contract was made.
-4. which [category](http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm) it belongs to.
+Currently, the [portuguese database](http://www.base.gov.pt/base2/) has about 370.000 contracts,
+spamming orders of magnitude between their prices.
 
-Currently, this database has about 370.000 contracts, spamming orders of magnitude between their prices.
-
-We have a (not shared) crawler that daily retrieves information from the official database to a database we host, and we provide read access to the it. This way, we can query it.
-This repository shares the API for querying it. In a near future, we will provide dumps of the database
-to allow offline querying.
+We have a simple (not shared) crawler that daily retrieves information from the official database to a database we host,
+and we provide read access to anyone. This way, anyone can query it by using the API
+this repository hosts. In a near future, we will provide dumps of the database to allow offline querying.
 
 Our [official website](http://contratos.publicos.pt) hosts the website whose code is in this repository (except some
-parts relative to the hosting).
+parts relative to the hosting) and anyone can help make it a better tool for visualising the database.
 
 ## The code
 
@@ -30,7 +27,8 @@ The code is licenced under BSD.
 
 ## Documentation
 
-The API for accessing the database is fully documented, the website, not yet.
+The API for accessing the database is [fully documented](http://127.0.0.1:8000/static/html/index.html);
+we are working on documenting the website for contributors.
 
 ## Pre-requisites and installation
 
