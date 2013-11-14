@@ -12,45 +12,45 @@
         <p>
             Cada contrato tem associada uma categoria na
             <a href="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm">
-                categorização oficial de contratos públicos da União Europeia</a>,
+                categorização oficial da União Europeia</a>,
             um conjunto de 9409 categorias organizadas segundo uma hierarquia, como ilustrado na figura seguinte:
         </p>
         <img src="{% static 'images/categories_example.png' %}" itemprop="primaryImageOfPage"/>
         <p>
-            Em particular, sempre que um município adiciona um contrato na base de dados, tem de colocar a
-            categoria que melhor se adequa ao contrato. Isto é, pode decidir colocar categorias mais específicas, ou
-            menos específicas.
+            Sempre que um município adiciona um contrato à base de dados, tem de colocar a
+            categoria que melhor se adequa ao contrato. Isto é, pode escolher uma categoria mais ou
+            menos específica.
             Com a informação existente, colocámos a pergunta:
         </p>
-        <h4>
+        <h3>
             Quão específicos são os municípios a documentar os seus contratos?
-        </h4>
+        </h3>
         <p>
-            Para responder a esta pergunta, definimos um indicador de especificidade
+            Para responder a esta pergunta, definimos um indicador
             que quantifica a especificidade do contrato na categorização oficial (<a id="extend-button-1">mais detalhes</a>).
         </p>
         <div id="extendable-1" hidden="1">
             <h4>
-                Motivação e definição do indicador
+                Definição do indicador
             </h4>
             <p>
                 Dizemos que a especificidade de um contrato é 0 quando
-                ele não tem categoria, e é 7 quando o contrato tem a categoria mais específica possível (7 é a profundidade máxima da hierarquia).
-            </p>
-            <p>
-                Para cada entidade, o indicador é definido como a especificidade média dos seus contratos (todos onde a entidade foi "adjudicante", i.e. quem pagou).
-                Ou seja, para cada município, calculámos a especificidade de cada um dos seus contratos, e tirámos o valor médio (<a id="extend-button-2">mais detalhes</a>).
+                ele não tem categoria, e é 7 quando o contrato tem a categoria mais específica possível (7 é a profundidade máxima da hierarquia) (<a id="extend-button-2">mais detalhes</a>).
             </p>
             <div id="extendable-2" hidden="1">
                 <p>
-                    Na nossa definição, assumimos que se uma categoria tiver muitas subcategorias, o contrato que se insere nela não
-                    é necessariamente menos específico: assumimos que quem desenvolveu o sistema de categorias colocou cada nível da hierarquia
-                    com a mesma específicidade. Caso isto não seja válido, o valor médio terá de ser pesado pelo número de sub-categorias
-                    que cada categoria tem para a definição ser honesta.
+                    Se uma categoria tiver mais subcategorias que outra, como acontece em muitas, poderia existir um problema de definição
+                    do que significa especificidade. Isto não é um problema pois o sistema de categorias foi pensado
+                    com isso em mente [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial de CPVS, página 6, primeira coluna, primeiro parágrafo (en)</a>].
                 </p>
             </div>
             <p>
-                É importante notar que nem todos os contratos são passíveis de ter a categoria mais específica [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial (PDF)</a>]:
+                Para cada entidade, o indicador é definido como a especificidade média dos seus contratos (todos onde a entidade foi "adjudicante", i.e. quem pagou).
+                Ou seja, calculámos a especificidade de cada um dos seus contratos, e tirámos o valor médio.
+            </p>
+
+            <p>
+                Notamos que nem todos os contratos são passíveis de ter a categoria mais específica [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial (PDF, en)</a>]:
             </p>
             <ul>
                 <li>
@@ -70,12 +70,16 @@
             especifícidade média entre municípios: enumerámos todos os municípios registados na base de dados pública e cálculamos a específicidade média dos seus contratos.
             Eis o resultado:
         </p>
-        <h4>
-            Municípios ordenados de acordo com a especificidade média dos seus contratos
-        </h4>
     </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
     {% include "contracts/entity_rank/graph.html" %}
-
+    {% include "contracts/entity_rank/histogram.html" %}
+    <div class="rules">
+        <h3>
+            Municípios ordenados de acordo com a especificidade média dos seus contratos
+        </h3>
+    </div>
     {% if entities %}
         {% include "contracts/entity_list/pagination.html" %}
         <div class="list-loop">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<svg id=graph></svg>
+<svg id="graph-ranking"></svg>
 <style>
     .axis path,
     .axis line {
@@ -46,8 +46,6 @@
         left: 0;
     }
 </style>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <script>
     var margin = {top: 40, right: 20, bottom: 40, left: 40},
             width = 720 - margin.left - margin.right,
@@ -74,7 +72,7 @@
                 return d.rank + ": <strong>" + d.name + "</strong> (" + d.avg_depth + ")";
             });
 
-    var svg = d3.select("#graph")
+    var svg = d3.select("#graph-ranking")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")

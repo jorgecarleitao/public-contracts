@@ -1,12 +1,9 @@
 
 from datetime import date
-import json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Sum, Q
-from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
-from django.views.decorators.cache import cache_page
 import analysis.entities_category_ranking
 
 import models
@@ -167,21 +164,6 @@ def entities_list(request):
     context = build_entity_list_context(context, request.GET)
 
     return render(request, 'contracts/entities_list.html', context)
-
-
-def entities_category_ranking_json(request):
-
-    entities = analysis.entities_category_ranking.get_ranking()
-
-    data = []
-    count = 0
-    for entity in entities:
-        count += 1
-        name = entity.name.split(' ')[2:]
-        name = ' '.join(name)
-        data.append({'name': name, 'rank': count, 'avg_depth': entity.avg_depth})
-
-    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def entities_category_ranking(request):
