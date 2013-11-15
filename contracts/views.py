@@ -1,6 +1,7 @@
 
 from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.decorators.cache import cache_page
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
@@ -166,6 +167,7 @@ def entities_list(request):
     return render(request, 'contracts/entities_list.html', context)
 
 
+@cache_page(60 * 60 * 12)
 def entities_category_ranking(request):
 
     entities = views_data.get_entities_categories_ranking()
