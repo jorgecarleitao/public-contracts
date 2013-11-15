@@ -4,7 +4,7 @@
 {% block title %}{% trans "Entities index"%}{% endblock %}
 {% block content %}
     <div class="rules" itemscope itemtype="http://schema.org/Article">
-        <h2 itemprop="name">Que esforço fazem os municípios ao publicar os seus contratos?</h2>
+        <h2 itemprop="name">Que esforço fazem os municípios ao publicarem os seus contratos?</h2>
         <p itemprop="description">
             As entidades públicas têm o dever de publicar os seus contratos públicos
             <a href="http://www.base.gov.pt/base2/">na base de dados oficial de contratos públicos</a>.
@@ -27,7 +27,7 @@
         </h3>
         <p>
             Para responder a esta pergunta, definimos um indicador
-            que quantifica a especificidade do contrato na categorização oficial (<a id="extend-button-1">mais detalhes</a>).
+            que quantifica a especificidade do contrato na categorização oficial (<a id="extend-button-1">expandir detalhes</a>).
         </p>
         <div id="extendable-1" hidden="1">
             <h4>
@@ -35,13 +35,22 @@
             </h4>
             <p>
                 Dizemos que a especificidade de um contrato é 0 quando
-                ele não tem categoria, e é 7 quando o contrato tem a categoria mais específica possível (7 é a profundidade máxima da hierarquia) (<a id="extend-button-2">mais detalhes</a>).
+                ele não tem categoria, e é 7 quando o contrato tem a categoria mais específica possível (7 é a profundidade máxima da hierarquia) (<a id="extend-button-2">expandir detalhes</a>).
             </p>
             <div id="extendable-2" hidden="1">
                 <p>
                     Se uma categoria tiver mais subcategorias que outra, como acontece em muitas, poderia existir um problema de definição
                     do que significa especificidade. Isto não é um problema pois o sistema de categorias foi pensado
                     com isso em mente [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial de CPVS, página 6, primeira coluna, primeiro parágrafo (en)</a>].
+                </p>
+                <p>
+                    Os dados são atualizados uma vez por dia e estão acessíveis:
+                    <a href="{% url 'category_ranking_index_json' %}">rankings</a> e
+                    <a href="{% url 'entities_category_ranking_histogram_json' %}">histograma</a>.
+                </p>
+                <p>
+                    O código fonte encontra-se no <a href="https://github.com/jorgecarleitao/public-contracts">repositório deste site</a>.
+                    Destacamos <a href="https://github.com/jorgecarleitao/public-contracts/blob/master/contracts/analysis/entities_category_ranking.py">o código para calcular as médias</a>.
                 </p>
             </div>
             <p>
@@ -68,7 +77,7 @@
         <p>
             Neste sentido, e motivados pelo <a href="http://poderlocal.transparencia.pt/">ranking da Associação Cívica Transparência e Integridade</a> (TIAC), comparámos a
             especifícidade média entre municípios: enumerámos todos os municípios registados na base de dados pública e cálculamos a específicidade média dos seus contratos.
-            Eis o resultado usando todos os contratos até hoje:
+            Eis o resultado:
         </p>
     </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
