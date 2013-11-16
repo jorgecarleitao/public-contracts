@@ -4,11 +4,11 @@ import analysis
 from django.core.cache import cache
 
 
-def get_entities_categories_ranking():
+def get_entities_categories_ranking(flush_cache=False):
     cache_name = 'entities_categories_ranking'
 
     entities = cache.get(cache_name)
-    if entities is None:
+    if entities is None or flush_cache:
         entities = analysis.get_ranking()
         cache.set(cache_name, list(entities), 60*60*24)
 
@@ -55,11 +55,11 @@ def entities_category_ranking_histogram_json(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_contracts_price_distribution():
+def get_contracts_price_distribution(flush_cache=False):
     cache_name = 'contracts_price_distribution'
 
     distribution = cache.get(cache_name)
-    if distribution is None:
+    if distribution is None or flush_cache:
         distribution = analysis.get_price_histogram()
         cache.set(cache_name, distribution, 60*60*24)
 
