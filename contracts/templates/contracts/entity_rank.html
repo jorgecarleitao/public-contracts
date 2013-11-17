@@ -39,18 +39,16 @@
             </p>
             <div id="extendable-2" hidden="1">
                 <p>
-                    Se uma categoria tiver mais subcategorias que outra, como acontece em muitas, poderia existir um problema de definição
-                    do que significa especificidade. Isto não é um problema pois o sistema de categorias foi pensado
-                    com isso em mente [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial de CPVS, página 6, primeira coluna, primeiro parágrafo (en)</a>].
+                    Quando uma categoria tem mais subcategorias que outra, como acontece em muitas, poderia existir um problema na definição
+                    de especificidade. Isto não é um problema pois o sistema de categorias foi desenvolvido
+                    exactamente a pensar nisso [<a href="http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/cpv_2008_guide_en.pdf">Guia oficial de CPVS, página 6, primeira coluna, primeiro item, entre parenteses</a>].
                 </p>
                 <p>
-                    Os dados são atualizados uma vez por dia e estão acessíveis:
-                    <a href="{% url 'category_ranking_index_json' %}">rankings</a> e
-                    <a href="{% url 'entities_category_ranking_histogram_json' %}">histograma</a>.
-                </p>
-                <p>
-                    O código fonte encontra-se no <a href="https://github.com/jorgecarleitao/public-contracts">repositório deste site</a>.
-                    Destacamos <a href="https://github.com/jorgecarleitao/public-contracts/blob/master/contracts/analysis/entities_category_ranking.py">o código para calcular as médias</a>.
+                    Os dados são atualizados uma vez por dia (04:00) e estão acessíveis
+                    <a href="{% url 'category_ranking_index_json' %}">aqui (rankings)</a> e
+                    <a href="{% url 'entities_category_ranking_histogram_json' %}">aqui (histograma)</a>.
+                    O código fonte usado para os calcular encontra-se <a href="https://github.com/jorgecarleitao/public-contracts">aqui</a>,
+                    onde destacamos <a href="https://github.com/jorgecarleitao/public-contracts/blob/master/contracts/analysis/__init__.py">o código para calcular as médias</a>.
                 </p>
             </div>
             <p>
@@ -70,7 +68,7 @@
                 </li>
             </ul>
             <p>
-                Isto invalida comparações entre duas quaisquer entidades, mas permite comparações entre
+                Isto invalida comparações entre duas quaisquer entidades, mas permite comparar
                 entidades que à partida usam categorias semelhantes.
             </p>
         </div>
@@ -110,6 +108,17 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $("a.page-selector").click(function() {
+                var me = $(this);
+                var newURL = null;
+                newURL = updateURLParameter(window.location.href, '{% trans "page"%}', me.html());
+                window.location.replace(newURL);
+            });
+        });
+    </script>
+
 {% endblock %}
 {% block sidebar %}
     {% include "contracts/entity_rank/sidebar.html" %}
