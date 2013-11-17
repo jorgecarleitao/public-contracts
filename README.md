@@ -46,7 +46,7 @@ we are working on documenting the website for contributors.
 
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
 
-Enter in the directory `cd public-contracts`.
+Enter in the directory `cd public-contracts/tools`.
 
 4- Run the example:
 
