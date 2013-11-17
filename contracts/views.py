@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render
 
 from contracts import views_data
+from contracts.analysis import get_time_difference
 import models
 
 
@@ -61,6 +62,7 @@ def build_contract_list_context(context, GET):
     return context
 
 
+#@cache_page(60 * 60 * 12)
 def contracts_list(request):
     """
     View that controls the contracts list.
@@ -167,10 +169,14 @@ def entities_list(request):
     return render(request, 'contracts/entities_list.html', context)
 
 
-@cache_page(60 * 60 * 12)
+#@cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
 
     entities = views_data.get_entities_categories_ranking()
+    count = 1
+    for entity in entities:
+        entity.rank = count
+        count += 1
 
     paginator = Paginator(entities, 20)
     page = request.GET.get(_('page'))
@@ -182,6 +188,8 @@ def entities_category_ranking(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         entities = paginator.page(paginator.num_pages)
+
+    print entities.number
 
     context = {'entities': entities}
 
