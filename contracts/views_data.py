@@ -9,8 +9,8 @@ def get_entities_categories_ranking(flush_cache=False):
 
     entities = cache.get(cache_name)
     if entities is None or flush_cache:
-        entities = analysis.get_ranking()
-        cache.set(cache_name, list(entities), 60*60*24)
+        entities = list(analysis.get_ranking())
+        cache.set(cache_name, entities, 60*60*24)
 
     return entities
 
