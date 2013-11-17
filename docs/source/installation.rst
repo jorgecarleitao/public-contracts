@@ -1,7 +1,7 @@
 Installation
 =============
 
-This document explains how you can install the tools this project provides.
+This document explains how you can install the API for accessing our database.
 
 .. _pip: https://pypi.python.org/pypi/pip
 
@@ -9,40 +9,43 @@ We assume you know a little of Python and how to install Python packages in your
 
 .. _virtualenv: http://www.virtualenv.org/en/latest/
 
-.. note:: You may need privileges to install using 'pip ...', in this case, you must use 'sudo pip ...' instead.
-
-.. hint:: You may want to use virtualenv_ to create a clean python environment that avoids installing the packages system-wise.
+.. note:: You may need privileges to install using 'pip ...'. If that is the case, you must use 'sudo pip ...' instead.
 
 Getting the source
 ---------------------
 
 .. _GitHub: https://github.com/jorgecarleitao/public-contracts
-.. _downloaded: https://github.com/jorgecarleitao/public-contracts
+.. _downloaded: https://github.com/jorgecarleitao/public-contracts/archive/master.zip
 .. _mailing-list: https://groups.google.com/forum/#!forum/public-contracts
 
 The source can be downloaded_ from GitHub, or cloned from the repository (also in GitHub_).
+The source doesn't need to be installed: once you downloaded it, it is ready for use.
 
-Dependencies of the database API
-----------------------------------
+Dependencies
+--------------
+
+For accessing the API, you need to install three python packages.
 
 Django
 ^^^^^^^^^^^^^^^^^
 
-Use::
+We use Django to abstract ourselves of the idea of database, and use Python classes to work with the database::
 
     pip install Django
 
 mysql-python
 ^^^^^^^^^^^^^^^^^
 
-Because we use mysql, you have to install the bindings for Python. Use::
+Our remote database is in mysql. To Python communicate with it, we need a binding::
 
     pip install mysql-python
 
 treebeard
 ^^^^^^^^^^^^^^^^^
 
-We use this package for efficient storage and usage of :doc:`tree structures <api/category>` in the database.
+The categories in our database are organized in a :doc:`tree structures <api/category>`.
+We use a package to an efficiently storage them in our database, and this package provides you the way to use them.
+
 Install using::
 
     pip install django-treebeard
@@ -50,51 +53,19 @@ Install using::
 Running the database API
 --------------------------
 
-Once you have the dependencies installed, run::
+.. _official number: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml
+
+Once you have the dependencies installed, enter in its directory and run::
 
     cd tools
     python example.py
+
+If everything went well, it outputs two numbers:
+
+    1. the total number of contracts in the database, that you can corroborate with the `official number`_.
+    2. the value of all contracts in the database.
 
 If some problem occur, please drop by our mailing-list_ so we can help you.
 
 For more information on the API, see section :doc:`usage` for a tutorial, and section :doc:`API` for its complete
 documentation.
-
-Dependencies for the website
-----------------------------------
-
-Install the dependencies for the API, plus:
-
-memcache
-^^^^^^^^^^^^^^^^^
-
-Our website uses a cache system, memcache. You can install it using::
-
-    pip install python-memcached
-
-Running the website
---------------------------
-
-Once you have the dependencies installed, you can try it by going to the directory "tools", and running
-
-    python manage.py runserver
-
-If some problem occur, please drop by our mailing-list_ so we can help you.
-
-
-Dependencies for building the documentation
-----------------------------------------------
-
-Sphinx
-^^^^^^^^^^^^^^^^^
-
-.. _sphinx: http://sphinx-doc.org/
-
-For building the documentation, you need sphinx_. It can be installed using::
-
-    pip install sphinx
-
-the documentation is built by entering in directory 'docs' and using::
-
-    make html
-
