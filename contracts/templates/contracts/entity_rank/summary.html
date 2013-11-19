@@ -8,16 +8,8 @@
         <div>
             <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
             <div class="price">
-                <p>{% trans "Contracts:" %}
-                    {{ entity.count_contracts }}
-                </p>
-                <p>{% trans "Average depth:" %}
-                    {% if entity.avg_depth %}
-                        {{ entity.avg_depth }}
-                    {% else %}
-                        0
-                    {% endif %}
-                </p>
+                <span>{% trans "Contracts:" %} {{ entity.contracts_number }}</span>
+                <span class="right">{% trans "Average depth:" %} {{ entity.avg_depth }}</span>
             </div>
         </div>
     </div>
