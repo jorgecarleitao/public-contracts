@@ -74,15 +74,12 @@ class Category(NS_Node):
     def get_absolute_url(self):
         return reverse('category_view', args=[self.pk])
 
-    def own_contracts(self):
-        return Contract.objects.filter(cpvs=self.code)
-
     def _own_contracts_aggregate(self):
         cache_name = __name__ + '>_own_contracts_aggregate' + '>%s' % self.code
         aggregate = cache.get(cache_name)
         if aggregate is None:
-            aggregate = self.own_contracts().aggregate(Sum('price'), Count('price'))
-            cache.add(cache_name, aggregate, 60*60*24)
+            aggregate = dict(self.contract_set.aggregate(Sum('price'), Count('price')))
+            cache.set(cache_name, aggregate, 60*60*24)
         return aggregate
 
     def own_contracts_count(self):
@@ -98,8 +95,8 @@ class Category(NS_Node):
         cache_name = __name__ + '>_contracts_aggregate' + '>%s' % self.code
         aggregate = cache.get(cache_name)
         if aggregate is None:
-            aggregate = self.contracts().aggregate(Sum('price'), Count('price'))
-            cache.add(cache_name, aggregate, 60*60*24)
+            aggregate = dict(self.contracts().aggregate(Sum('price'), Count('price')))
+            cache.set(cache_name, aggregate, 60*60*24)
 
         return aggregate
 
@@ -225,4 +222,12 @@ class Contract(models.Model):
         return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' % self.base_id
 
     def get_first_entity(self):
-        return self.contractors.all()[0]
+        # there are at least two contracts with errors in the official database,
+        # which leads to 0 contractors. These contracts don't have any information.
+        try:
+            return self.contractors.all()[0]
+        except IndexError:
+            return None
+
+    class Meta:
+        ordering = ['-signing_date']
