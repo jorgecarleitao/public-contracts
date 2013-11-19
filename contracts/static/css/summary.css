@@ -16,7 +16,8 @@
 
 .summary h2 {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
+    padding: 0;
 }
 
 .summary .categories {
@@ -40,4 +41,12 @@
     padding: 0 2px 3px 2px;
     width: 45px;
     font-size: 24px;
+}
+
+.summary .price {
+    width: 400px;
+}
+
+.summary .right {
+    float: right;
 }
