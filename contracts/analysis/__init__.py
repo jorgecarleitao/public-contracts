@@ -25,7 +25,7 @@ def get_ranking():
     2. We compute the average depth of its contracts
     3. We filter entities with average depth bigger than 0
     (Used to filter municipalities that appear twice in the official database)
-    4. We order then by decreasing average depth
+    4. We order them by decreasing average depth
     """
     return models.Entity.objects\
         .filter(name__startswith=u'Município')\
