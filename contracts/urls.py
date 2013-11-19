@@ -7,6 +7,7 @@ import views_data
 
 urlpatterns = patterns('',
                        url(r'^$', views.home, name='contracts_home'),
+                       url(r'^%s$' % _('about'), views.about, name='contracts_about'),
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),

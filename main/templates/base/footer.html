@@ -2,9 +2,9 @@
 {% load static %}
 <div id="footer">
     <div class="content-wrapper">
-        <a href="https://github.com/jorgecarleitao/public-contracts">Source code</a> |
+        <a href="{% url 'contracts_about' %}">{% trans "About"%}</a> |
+        <a href="https://github.com/jorgecarleitao/public-contracts">Source code repository</a> |
         <a href="{% static 'html/index.html' %}">Documentation</a> |
         <a href="https://groups.google.com/forum/#!forum/public-contracts">Mailing list</a> |
-        <a href="https://github.com/jorgecarleitao/public-contracts/issues">Report an error</a>
     </div>
 </div>
