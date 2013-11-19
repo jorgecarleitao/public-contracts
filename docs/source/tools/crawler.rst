@@ -7,15 +7,14 @@ Crawler
 .. _mechanize: http://wwwsearch.sourceforge.net/mechanize/
 
 .. important::
-    Currently, we don't provide the source of the crawler as it can be inadvertently used to generate
+    We don't provide the source of the crawler as it can be inadvertently used to cause
     Denial of Service (DoS) to Base_ database. The documentation is for the sake of explaining what it does.
 
 This document explains how Base_ provides its data and what our crawler does.
 
 .. note::
     If you want the information from Base_, consider retrieving them from our
-    :doc:`database <tools/database>`.
-    It is far better to crash our servers than Base_ server.
+    :doc:`database <tools/database>` or from http://www.dados.gov.pt/.
 
 Base database
 ---------------
