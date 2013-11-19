@@ -83,7 +83,7 @@
         max_rank = d3.max(data, function(d) { return d.rank; });
 
         x.domain([1, max_rank]);
-        y.domain([d3.min(data, function(d) { return d.avg_depth; }), d3.max(data, function(d) { return d.avg_depth; })]);
+        y.domain([d3.min(data, function(d) { return d.avg_depth; })-0.2, d3.max(data, function(d) { return d.avg_depth; })]);
 
         var var_width = width/(max_rank-1);
 
