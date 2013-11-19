@@ -1,13 +1,12 @@
 
 from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.decorators.cache import cache_page
 from django.db.models import Sum, Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 
 from contracts import views_data
-from contracts.analysis import get_time_difference
 import models
 
 
@@ -88,7 +87,8 @@ def categories_list(request):
     View that controls the categories list.
     """
     categories = models.Category.objects.filter(depth=1)
-    context = {'categories': categories, 'contracts': models.Contract.objects.filter(cpvs='').order_by('-signing_date'),
+    context = {'categories': categories,
+               'contracts': models.Contract.objects.filter(category=None),
                'no_code': True}
 
     context = build_contract_list_context(context, request.GET)
@@ -101,8 +101,9 @@ def category_view(request, category_id):
     View that controls the view of a specific category.
     """
     category = models.Category.objects.get(pk=category_id)
-    context = {'category': category, 'categories': category.get_children(),
-               'contracts': category.own_contracts().order_by('-signing_date')}
+    context = {'category': category,
+               'categories': category.get_children(),
+               'contracts': category.contract_set.all()}
 
     context = build_contract_list_context(context, request.GET)
 
@@ -169,7 +170,7 @@ def entities_list(request):
     return render(request, 'contracts/entities_list.html', context)
 
 
-#@cache_page(60 * 60 * 24)
+@cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
 
     entities = views_data.get_entities_categories_ranking()
@@ -177,19 +178,6 @@ def entities_category_ranking(request):
     for entity in entities:
         entity.rank = count
         count += 1
-
-    paginator = Paginator(entities, 20)
-    page = request.GET.get(_('page'))
-    try:
-        entities = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        entities = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        entities = paginator.page(paginator.num_pages)
-
-    print entities.number
 
     context = {'entities': entities}
 
