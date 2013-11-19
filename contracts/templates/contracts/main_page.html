@@ -1,6 +1,7 @@
-{% extends "contracts/one_column_body.html" %}
+{% extends "contracts/two_column_body.html" %}
 {% load i18n %}
 {% load static %}
+{% load twitter_tag %}
 
 {% block title %}{% trans "Public contracts"%}{% endblock %}
 {% block content %}
@@ -43,4 +44,7 @@
             ajudá-lo-emos a você mesmo responder.
         </p>
     </div>
+{% endblock %}
+{% block sidebar %}
+    {% include "contracts/contract_list/sidebar.html" %}
 {% endblock %}

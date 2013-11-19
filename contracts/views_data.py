@@ -1,4 +1,5 @@
 import json
+from django.db.models import Count
 from django.http import HttpResponse
 import analysis
 from django.core.cache import cache
@@ -9,15 +10,15 @@ def get_entities_categories_ranking(flush_cache=False):
 
     entities = cache.get(cache_name)
     if entities is None or flush_cache:
-        entities = list(analysis.get_ranking())
-        cache.set(cache_name, entities, 60*60*24)
+        entities = analysis.get_ranking()
+        entities = entities.annotate(contracts_number=Count('contracts_made__id'))
+        entities = list(entities)
+        cache.set(cache_name, entities, 60*60*48)
 
     return entities
 
 
 def entities_category_ranking_json(request):
-
-
     data = []
     count = 0
     for entity in get_entities_categories_ranking():
@@ -77,4 +78,20 @@ def contracts_price_histogram_json(request):
                          'max_position': entry[0]*2,
                          'value': entry[1]})
 
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def get_contracts_macro_statistics(flush_cache=False):
+    cache_name = 'contract_prices'
+
+    values = cache.get(cache_name)
+    if values is None or flush_cache:
+        values = analysis.get_contracts_macro_statistics()
+        cache.set(cache_name, values, 60*60*48)
+
+    return values
+
+
+def contracts_macro_statistics_json(request):
+    data = get_contracts_macro_statistics()
     return HttpResponse(json.dumps(data), content_type="application/json")

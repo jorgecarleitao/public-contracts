@@ -1,5 +1,6 @@
 # coding=utf-8
-from django.db.models import Avg
+from django.db.models import Avg, Sum, Count
+from datetime import date
 
 from contracts import models
 
@@ -32,3 +33,22 @@ def get_ranking():
         .annotate(avg_depth=Avg('contracts_made__category__depth'))\
         .filter(avg_depth__gt=0)\
         .order_by('-avg_depth')
+
+
+def get_contracts_macro_statistics():
+    contracts = models.Contract.objects.all()
+
+    today = date.today()
+    contracts_year = contracts.filter(signing_date__year=today.year)
+    contracts_month = contracts_year.filter(signing_date__month=today.month)
+
+    total_price = contracts.aggregate(count=Count('price'), sum=Sum('price'))
+    year_price = contracts_year.aggregate(count=Count('price'), sum=Sum('price'))
+    month_price = contracts_month.aggregate(count=Count('price'), sum=Sum('price'))
+
+    return {'total_sum': total_price['sum'],
+            'total_count': total_price['count'],
+            'year_sum': year_price['sum'],
+            'year_count': year_price['count'],
+            'month_sum': month_price['sum'],
+            'month_count': month_price['count']}
