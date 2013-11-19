@@ -75,7 +75,7 @@
         <p>
             Neste sentido, e motivados pelo <a href="http://poderlocal.transparencia.pt/">ranking da Associação Cívica Transparência e Integridade</a> (TIAC), comparámos a
             especifícidade média entre municípios: enumerámos todos os municípios registados na base de dados pública e cálculamos a específicidade média dos seus contratos.
-            Eis o resultado:
+            Eis o resultado (passe o rato pelo gráfico):
         </p>
     </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -86,16 +86,17 @@
         <h3>
             Municípios ordenados de acordo com a especificidade média dos seus contratos
         </h3>
+        <p>Use Crl + F para procurar o seu :-)</p>
     </div>
-    {% if entities %}
-        {% include "contracts/entity_list/pagination.html" %}
-        <div class="list-loop">
-            {% for entity in entities %}
-                {% include "contracts/entity_rank/summary.html" %}
-            {% endfor %}
-        </div>
-        {% include "contracts/entity_list/pagination.html" %}
-    {% endif %}
+    {% with entities=entities %}
+        {% if entities %}
+            <div class="list-loop">
+                {% for entity in entities %}
+                    {% include "contracts/entity_rank/summary.html" %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <script>
         $(document).ready(function() {
