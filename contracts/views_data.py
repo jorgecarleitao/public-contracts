@@ -95,3 +95,24 @@ def get_contracts_macro_statistics(flush_cache=False):
 def contracts_macro_statistics_json(request):
     data = get_contracts_macro_statistics()
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def get_procedure_types_time_series(flush_cache=False):
+    cache_name = 'procedure_type_time_series'
+
+    values = cache.get(cache_name)
+    if values is None or flush_cache:
+        values = analysis.get_procedure_types_time_series()
+        cache.set(cache_name, values, 60*60*24*30)  # one month
+
+    return values
+
+
+def get_procedure_types_time_series_json(request):
+    data = get_procedure_types_time_series()
+
+    for x in data:
+        x['from'] = x['from'].strftime('%Y-%m-%d')
+        x['to'] = x['to'].strftime('%Y-%m-%d')
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
