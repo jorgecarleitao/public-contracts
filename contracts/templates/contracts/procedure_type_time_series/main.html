@@ -1,0 +1,56 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Entities index"%}{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">Evolução temporal da contratação pública por concurso público</h2>
+        <p itemprop="description">
+            A contratação pública em Portugal é feita maioritariamente por <strong>ajuste direto</strong>
+            ou por <strong>concurso público</strong>.
+        </p>
+        <p>
+            Neste trabalho respondemos à pergunta:
+        </p>
+        <h3>Como evolui a percentagem de concursos públicos?</h3>
+        <p>
+            Pegámos em todos os contratos da <a href="http://www.base.gov.pt/base2/">base de dados pública</a>
+            fechados em cada mês, e cálculamos qual a percentagem deles feita por
+            ajuste directo, e qual é a percentagem por concurso público.
+        </p>
+        <p>
+            Fizemos isso para cada mês, desde o início de 2010 até ao mês anterior
+            a este (dados atualizados todos os meses). Eis o resultado:
+        </p>
+    </div>
+    {% include "contracts/procedure_type_time_series/graph.html" %}
+    <div class="rules">
+        <p>
+            De 2010 a 2013, dentro dos contratos existentes na base de dados,
+            temos um aumento consistente para o uso de concurso público.
+        </p>
+        <p>
+            Assumindo que as entidades publicitam na base de dados sem preferência ao tipo de contratação
+            (i.e. publicitam sem "filtrarem" contratos por ajuste direto ou concurso público),
+            então, concluímos que a contratação pública em Portugal tem-se alterado consideravelmente nos
+            últimos quatro anos.
+        </p>
+        <h3>
+            Quebra deste mês não é conclusiva.
+        </h3>
+        <p>
+            O tempo médio entre o contrato ter sido fechado e a publicação do mesmo é por volta de 1-2 meses (já medimos,
+            mas ainda não publicámos o gráfico no site).
+            Assumindo que os contratos por concurso público demoram mais tempo a serem fechados
+            que os por ajuste directo, concluímos que os últimos dois meses ainda não têm a totalidade dos contratos assinados.
+        </p>
+        <h3>
+            Alguma explicação para a anomalia a Novembro de 2012?
+        </h3>
+        <p>
+            Se acha que há algum gráfico adicional que pode ajudar a perceber esta anomalia,
+            coloque a sugestão na <a href="https://groups.google.com/forum/#!forum/public-contracts">mailing list</a>
+            deste projecto.
+        </p>
+    </div>
+{% endblock %}

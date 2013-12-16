@@ -189,5 +189,8 @@ def entities_category_ranking(request):
 
 
 def contracts_price_histogram(request):
-
     return render(request, 'contracts/contracts_price_histogram.html')
+
+
+def procedure_types_time_series(request):
+    return render(request, 'contracts/procedure_type_time_series/main.html')

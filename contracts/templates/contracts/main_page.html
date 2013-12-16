@@ -26,15 +26,21 @@
         <p>
             Este website, também open source, é o local onde divulgamos resultados de análises que nós próprios
             fazemos com o código que disponibilizamos,
-            e tem também uma interface gráfica que lhe permite navegar na complexa rede de contratos públicos.
+            e tem também uma interface que lhe permite navegar na complexa rede de contratos públicos.
         </p>
-        <h3>Análises existentes</h3>
+        <h3>Comparações entre municípios</h3>
         <ul>
             <li>
-                <a href="{% url "entities_category_ranking" %}">Ranking de municípios</a> (contribuída por Jorge C. Leitão)
+                <a href="{% url "entities_category_ranking" %}">Ranking de especificidade de municípios</a> (contribuída por Jorge C. Leitão)
             </li>
+        </ul>
+        <h3>Análises macroscópicas</h3>
+        <ul>
             <li>
                 <a href="{% url "contracts_price_histogram" %}">Distribuição de preços dos contratos</a> (contribuída por Jorge C. Leitão)
+            </li>
+            <li>
+                <a href="{% url "procedure_types_time_series" %}">Percentagem de contratos por ajuste direto e por concurso público</a>  (contribuída por Jorge C. Leitão)
             </li>
         </ul>
         <p>
