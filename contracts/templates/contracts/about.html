@@ -1,0 +1,27 @@
+{% extends "contracts/one_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "About"%}{% endblock %}
+{% block content %}
+    <div class="rules">
+        <h2>Sobre este projeto</h2>
+        <p>
+            Este projeto está sobre a responsabilidade de <a href="https://sites.google.com/site/jorgecarleitao/">Jorge C. Leitão</a>.
+        </p>
+        <h3>
+            As análises neste site não constituem um trabalho científico:
+        </h3>
+        <p>
+            Este trabalho <strong>não é peer reviewed</strong>.
+            Consequentemente, é necessário ser <strong>crítico</strong> na interpretação dos resultados apresentados.
+        </p>
+        <p>
+            Fazemos um esforço sério para que os resultados sejam rigorosos e interessantes, mas não há garantias
+            que não possam existir erros.
+        </p>
+        <p>
+            Se tiver alguma crítica ao trabalho apresentado,
+            pode colocá-la na <a href="https://groups.google.com/forum/#!forum/public-contracts">mailing list pública</a>
+            deste projeto, de forma a ela ser discutida publicamente.
+        </p>
+    </div>
+{% endblock %}
