@@ -20,5 +20,8 @@ urlpatterns = patterns('',
 
                        url(r'^%s$' % _('contracts-price-histogram'), views.contracts_price_histogram, name='contracts_price_histogram'),
                        url(r'^%s/data$' % _('contracts-price-histogram'), views_data.contracts_price_histogram_json, name='contracts_price_histogram_json'),
-                       url(r'^%s/data$' % _('contracts-macro-statistics'), views_data.contracts_macro_statistics_json, name='contracts_macro_statistics_json')
-                       )
+                       url(r'^%s/data$' % _('contracts-macro-statistics'), views_data.contracts_macro_statistics_json, name='contracts_macro_statistics_json'),
+
+                       url(r'^%s$' % _('procedure-type-time-series'), views.procedure_types_time_series, name='procedure_types_time_series'),
+                       url(r'^%s/data$' % _('procedure-type-time-series'), views_data.get_procedure_types_time_series_json, name='procedure_types_time_series_json')
+)
