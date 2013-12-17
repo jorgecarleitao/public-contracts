@@ -23,5 +23,11 @@ urlpatterns = patterns('',
                        url(r'^%s/data$' % _('contracts-macro-statistics'), views_data.contracts_macro_statistics_json, name='contracts_macro_statistics_json'),
 
                        url(r'^%s$' % _('procedure-type-time-series'), views.procedure_types_time_series, name='procedure_types_time_series'),
-                       url(r'^%s/data$' % _('procedure-type-time-series'), views_data.get_procedure_types_time_series_json, name='procedure_types_time_series_json')
+                       url(r'^%s/data$' % _('procedure-type-time-series'), views_data.get_procedure_types_time_series_json, name='procedure_types_time_series_json'),
+
+                       url(r'^%s$' % _('municipalities-delta-time'), views.municipalities_delta_time, name='municipalities_delta_time'),
+                       url(r'^%s/data$' % _('municipalities-delta-time'), views_data.municipalities_delta_time_json, name='municipalities_delta_time_json'),
+                       url(r'^%s/data/histogram$' % _('municipalities-delta-time'),
+                           views_data.municipalities_delta_time_histogram_json,
+                           name='municipalities_delta_time_histogram_json')
 )

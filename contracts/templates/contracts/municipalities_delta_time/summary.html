@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="summary" id="entity-{{entity.id}}">
+    <div class="full">
+        <div class="counter">
+            {{ entity.rank }}
+        </div>
+        <div>
+            <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+            <div class="price">
+                <span>{% trans "Contracts:" %} {{ entity.contracts_number }}</span>
+                <span class="right">{% trans "Average time:" %} {{ entity.average_delta_time|floatformat:3 }}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -194,3 +194,16 @@ def contracts_price_histogram(request):
 
 def procedure_types_time_series(request):
     return render(request, 'contracts/procedure_type_time_series/main.html')
+
+
+def municipalities_delta_time(request):
+
+    entities = views_data.get_municipalities_delta_time()
+    count = 1
+    for entity in entities:
+        entity.rank = count
+        count += 1
+
+    context = {'entities': entities}
+
+    return render(request, 'contracts/municipalities_delta_time/main.html', context)

@@ -57,7 +57,8 @@ def get_contracts_macro_statistics():
 def get_procedure_types_time_series():
     import calendar
     import datetime
-    def add_months(sourcedate,months):
+
+    def add_months(sourcedate, months):
         month = sourcedate.month - 1 + months
         year = sourcedate.year + month / 12
         month = month % 12 + 1
@@ -88,3 +89,28 @@ def get_procedure_types_time_series():
             break
 
     return data
+
+
+from datetime import timedelta
+
+
+def get_municipalities_delta_time():
+    municipalities = models.Entity.objects.filter(name__startswith=u'Município') \
+        .annotate(total=Count('contracts_made')).exclude(total__lt=5)
+
+    municipalities = list(municipalities)
+
+    for municipality in municipalities:
+        count = 0
+        avg = timedelta(0)
+        for contract in municipality.contracts_made.exclude(signing_date=None).exclude(added_date=None) \
+            .values('signing_date', 'added_date'):
+            avg += contract['added_date'] - contract['signing_date']
+            count += 1
+
+        municipality.average_delta_time = avg.days*1./count
+        municipality.contracts_number = count
+
+    municipalities.sort(key=lambda x: x.average_delta_time)
+
+    return municipalities

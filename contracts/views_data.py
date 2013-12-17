@@ -116,3 +116,52 @@ def get_procedure_types_time_series_json(request):
         x['to'] = x['to'].strftime('%Y-%m-%d')
 
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def get_municipalities_delta_time(flush_cache=False):
+    cache_name = 'municipalities_delta_time'
+
+    values = cache.get(cache_name)
+    if values is None or flush_cache:
+        values = analysis.get_municipalities_delta_time()
+        cache.set(cache_name, values, 60*60*24)  # one day
+
+    return values
+
+
+def municipalities_delta_time_json(request):
+    data = []
+    rank = 0
+    for entity in get_municipalities_delta_time():
+        rank += 1
+        name = entity.name.split(' ')[2:]
+        name = ' '.join(name)
+        data.append({'name': name, 'rank': rank, 'avg_dt': entity.average_delta_time})
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def municipalities_delta_time_histogram_json(request):
+
+    entities = get_municipalities_delta_time()
+
+    min_value = entities[0].average_delta_time - 0.00000001  # avoid rounding, this caused a bug before.
+    max_value = entities[-1].average_delta_time + 0.00000001   # avoid rounding, this caused a bug before.
+    n_bins = 20
+
+    # center between max and min: min_value + (max_value - min_value)*(count)/n_bins + (max_value - min_value)/n_bins/2
+
+    # create the histogram
+    data = [{'bin': x,
+             'value': 0,
+             'min_position': min_value + (max_value - min_value)*x/n_bins,
+             'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
+            } for x in range(n_bins)]
+
+    for entity in entities:
+        for x in range(n_bins):
+            if data[x]['min_position'] < entity.average_delta_time <= data[x]['max_position']:
+                data[x]['value'] += 1
+                break
+    print data
+    return HttpResponse(json.dumps(data), content_type="application/json")

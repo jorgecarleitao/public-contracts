@@ -17,7 +17,7 @@
             Neste projeto, desenvolvemos uma forma simples de qualquer pessoa analisar a base de dados. Como?
             Mantemos uma base de dados sincronizada regularmente com a base de dados oficial e temos um
             <a href="https://github.com/jorgecarleitao/public-contracts">código open source</a> e em Python,
-            que permite fazer qualquer pergunta à nossa base de dados com o
+            que permite fazer qualquer pergunta à base de dados com o
             <a href="https://github.com/jorgecarleitao/public-contracts/blob/master/tools/example.py">mínimo de conhecimentos em Python</a>.
         </p>
         <p>
@@ -28,10 +28,18 @@
             fazemos com o código que disponibilizamos,
             e tem também uma interface que lhe permite navegar na complexa rede de contratos públicos.
         </p>
+        <p>
+            Se tem uma pergunta que gostaria de fazer à base de dados,
+            <a href="https://groups.google.com/forum/#!forum/public-contracts">entre em contacto connosco</a>,
+            ajudá-lo-emos a você mesmo responder.
+        </p>
         <h3>Comparações entre municípios</h3>
         <ul>
             <li>
                 <a href="{% url "entities_category_ranking" %}">Ranking de especificidade de municípios</a> (contribuída por Jorge C. Leitão)
+            </li>
+            <li>
+                <a href="{% url "municipalities_delta_time" %}">Tempo de publicação dos municípios</a> (contribuída por Jorge C. Leitão)
             </li>
         </ul>
         <h3>Análises macroscópicas</h3>
@@ -43,11 +51,6 @@
                 <a href="{% url "procedure_types_time_series" %}">Percentagem de contratos por ajuste direto e por concurso público</a>  (contribuída por Jorge C. Leitão)
             </li>
         </ul>
-        <p>
-            Se tem uma pergunta que gostaria de fazer à base de dados,
-            <a href="https://groups.google.com/forum/#!forum/public-contracts">entre em contacto connosco</a>,
-            ajudá-lo-emos a você mesmo responder.
-        </p>
     </div>
 {% endblock %}
 {% block sidebar %}
