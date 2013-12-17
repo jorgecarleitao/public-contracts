@@ -14,20 +14,19 @@ From CPVS to categories
 
 .. _CPVS: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
 .. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
-.. _`nested set`: https://en.wikipedia.org/wiki/Nested_set_model
+.. _`nested set model`: https://en.wikipedia.org/wiki/Nested_set_model
 
 Europe Union has a categorisation system for public contracts, CPVS_, that translates a string of 8 digits
 into a category to be used in public contracts.
 
 More than categories, the system builds a tree_ with broader categories like "agriculture",
-and more specific ones like "potatos". For more information, see CPVS_.
+and more specific ones like "potatos".
 
-In our database, we construct a tree (a `nested set`_, specifically) of categories, and abstract the idea of digits:
+In our database, we construct a tree (using a `nested set model`_) of categories, and abstract the idea of digits:
 each category has a parent, a depth, and child categories (see :doc:`tools/cpvs_importer`).
 
-Each contract in Base_ has one (or none) of these numbers. In our database, each contract is
+Each contract in Base_ has one (or none) of such CPVS and thus, in our database, each contract is
 :attr:`associated <models.Contract.category>` with one (or none) category.
-category.
 
 API
 ------
@@ -60,11 +59,11 @@ API
 
     .. method:: own_contracts()
 
-        Returns all contracts that belong to this category (i.e. have same CPVS code).
+        Returns all contracts that specifically belong to this category (i.e. have same CPVS code).
 
     .. method:: contracts()
 
-        Returns all contracts that belong to this category or to any of its children.
+        Returns all contracts that belong to either this category or any of its children.
 
     .. method:: own_contracts_count()
     .. method:: contracts_count()

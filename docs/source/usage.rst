@@ -40,9 +40,9 @@ and we can access its data using standard Python notation for a class.
 
 But how do we pick a contract from the database?
 
-.. _this contract: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#791452
+.. _`this contract`: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#791452
 
-Look at this contract_ in the official database. It has the number "791452". Lets pick it up::
+Look at `this contract`_ in the official database. It has the number "791452". Lets pick it up::
 
     contract = models.Contract.objects.get(base_id=791452)
 
@@ -50,7 +50,7 @@ good, now, what do we want to know about the contract? Lets start with its price
 
     print contract.price
 
-Its kind of powerful right? (see also :docs:`responsibility <code_of_conduct>`). Now its category::
+Its kind of powerful right? (see also :doc:`responsibility <code_of_conduct>`). Now its category::
 
     print contract.category
 

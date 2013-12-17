@@ -7,13 +7,12 @@ a publicly available database.
 Public contracts is a pilot project for collaborative analysis and visualisation of public contracts databases.
 In this pilot, we use the portuguese database.
 
-We build and maintain an open source website and API for querying this database.
-
+We build and maintain an open source website and API for querying the database.
 Specifically, this project consists on the following components:
 
 - A database driven by Django ORM of portuguese public contracts, remotely accessible.
 - An API for querying the database using Django and Python.
-- A website for navigating the database and sharing statistical features of it.
+- A website for visualizing the database and sharing statistical features of it.
 
 For whom?
 ----------

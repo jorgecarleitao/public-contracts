@@ -1,0 +1,43 @@
+Website
+===============
+
+This documentation assumes you know Django.
+
+Dependencies for the website
+----------------------------------
+
+Install the :doc:`dependencies for the API <installation>`, plus:
+
+memcache
+^^^^^^^^^^^^^^^^^
+
+Our website uses a cache system, memcache. You can install it using::
+
+    pip install python-memcached
+
+Running the website
+--------------------------
+
+Once you have the dependencies installed, you can try it by going to the directory "tools", and running
+
+    python manage.py runserver
+
+If some problem occur, please drop by our mailing-list_ so we can help you.
+
+
+Dependencies for building the documentation
+----------------------------------------------
+
+Sphinx
+^^^^^^^^^^^^^^^^^
+
+.. _sphinx: http://sphinx-doc.org/
+
+For building the documentation, you need sphinx_. It can be installed using::
+
+    pip install sphinx
+
+the documentation is built by entering in directory 'docs' and using::
+
+    make html
+
