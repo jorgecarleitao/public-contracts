@@ -12,11 +12,6 @@ Crawler
 
 This document explains how Base_ provides its data and what our crawler does.
 
-.. note::
-    If you want the information from Base_, consider retrieving them from our
-    :doc:`database <tools/database>`.
-    It is far better to crash our servers than Base_ server.
-
 Base database
 ---------------
 
