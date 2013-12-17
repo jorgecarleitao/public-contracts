@@ -22,7 +22,9 @@ Once you have the dependencies installed, you can try it by going to the directo
 
     python manage.py runserver
 
-If some problem occur, please drop by our mailing-list_ so we can help you.
+.. _`mailing list`: https://groups.google.com/forum/#!forum/public-contracts
+
+If some problem occur, please drop by our `mailing list`_ so we can help you.
 
 
 Dependencies for building the documentation
