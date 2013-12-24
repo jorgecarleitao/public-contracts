@@ -221,11 +221,19 @@ class Contract(models.Model):
     def get_absolute_url(self):
         return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' % self.base_id
 
-    def get_first_entity(self):
+    def get_first_contractor(self):
         # there are at least two contracts with errors in the official database,
         # which leads to 0 contractors. These contracts don't have any information.
         try:
             return self.contractors.all()[0]
+        except IndexError:
+            return None
+
+    def get_first_contracted(self):
+        # there are at least two contracts with errors in the official database,
+        # which leads to 0 contracted. These contracts don't have any information.
+        try:
+            return self.contracted.all()[0]
         except IndexError:
             return None
 

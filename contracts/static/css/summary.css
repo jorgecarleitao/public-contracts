@@ -1,6 +1,6 @@
 .summary {
     padding-bottom: 3px;
-    padding-top: 3px;
+    padding-top: 10px;
     border-bottom: 1px solid #DDDBCE;
     width: 100%;
     clear: both;
@@ -25,14 +25,15 @@
     float: left;
 }
 
-.summary .age,
-.summary .entity-summary {
-    float: right;
-    margin-left: 5px;
+.summary .age {
+    float: left;
+    clear: both;
+    color: rgb(180,180,180);
 }
 
-.summary .age {
-    color: rgb(180,180,180);
+.summary .transfer {
+    float: left;
+    clear: both;
 }
 
 .summary .counter {
@@ -43,10 +44,36 @@
     font-size: 24px;
 }
 
-.summary .price {
-    width: 400px;
-}
-
 .summary .right {
     float: right;
+}
+
+.summary .price-1 {
+    color: green;
+    font-weight: bold;
+}
+
+.summary .price-2 {
+    color: #278000;
+    font-weight: bold;
+}
+
+.summary .price-3 {
+    color: #588000;
+    font-weight: bold;
+}
+
+.summary .price-4 {
+    color: #7d8000;
+    font-weight: bold;
+}
+
+.summary .price-5 {
+    color: #803c00;
+    font-weight: bold;
+}
+
+.summary .price-6 {
+    color: #800200;
+    font-weight: bold;
 }

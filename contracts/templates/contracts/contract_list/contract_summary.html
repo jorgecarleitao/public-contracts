@@ -3,11 +3,12 @@
 <div class="summary" id="contract-{{contract.id}}">
     <div class="full">
         <h2><a href="{{ contract.get_absolute_url }}">{{ contract.contract_description }}</a></h2>
-        <div class="price">
-            <p>{{ contract.price|intword }} €</p>
-        </div>
         <div class="age">{{contract.signing_date}}</div>
-        {% include "contracts/entity_inline.html" with entity=contract.get_first_entity %}
-        {% include "contracts/entity_inline.html" with entity=contract.get_first_entity %}
+        <div class="transfer">
+            {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
+            {% include "contracts/entity_inline.html" with entity=contract.get_first_contractor %}
+            <span class="entity-summary">&rarr;</span>
+            {% include "contracts/entity_inline.html" with entity=contract.get_first_contracted %}
+        </div>
     </div>
 </div>
