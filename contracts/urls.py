@@ -1,8 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.utils.translation import ugettext as _
 
 import views
 import views_data
+
+import entity_urls
 
 
 urlpatterns = patterns('',
@@ -11,6 +13,8 @@ urlpatterns = patterns('',
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),
+
+                       url(r'%s/' % _('entity'), include(entity_urls)),
 
                        url(r'^%s/(\d+)$' % _('category'), views.category_view, name='category_view'),
 

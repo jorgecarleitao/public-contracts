@@ -1,0 +1,17 @@
+{% load i18n %}
+<ul class="horizontal-tab-list">
+    <li>
+        {% if tab == 'summary' %}
+            <span>{% trans "Summary"%}</span>
+        {% else %}
+            <a href="{{ entity.get_absolute_url }}">{% trans "Summary"%}</a>
+        {% endif %}
+    </li>
+    <li>
+        {% if tab == 'contracts' %}
+            <span>{% trans "Contracts"%}</span>
+        {% else %}
+            <a href="{% url "entity_contracts" entity.id %}">{% trans "Contracts"%}</a>
+        {% endif %}
+    </li>
+</ul>

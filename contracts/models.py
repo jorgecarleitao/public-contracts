@@ -1,7 +1,8 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Q
+from django.utils.text import slugify
 from treebeard.ns_tree import NS_Node
 
 
@@ -132,9 +133,10 @@ class Entity(models.Model):
     def total_expended(self):
         return self.data.total_expended
 
-    def last_contract_date(self):
+    def last_contracts(self, slice):
         try:
-            #return Contract.objects.filter(Q(contracted__pk=self.id) | Q(contractors__pk=self.id)).order_by('-signing_date')[0]
+            return Contract.objects.filter(Q(contracted__pk=self.id) |
+                                           Q(contractors__pk=self.id)).order_by('-signing_date')[:slice]
             pass
         except IndexError:
             return None
@@ -142,8 +144,11 @@ class Entity(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_absolute_url(self):
+    def get_base_url(self):
         return 'http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#%s' % self.base_id
+
+    def get_absolute_url(self):
+        return reverse('entity', args=(self.id, slugify(self.name)))
 
     def count_contracts(self):
         return self.contracts_made.count()

@@ -7,18 +7,14 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-24 08:06+0000\n"
+"POT-Creation-Date: 2013-12-24 09:09+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contracts/urls.py:10
-msgid "about"
-msgstr "acerca"
-
-#: contracts/urls.py:11
+#: contracts/entity_urls.py:8 contracts/urls.py:13
 #: contracts/templates/contracts/category_list/category_summary.html:6
 #: contracts/templates/contracts/category_list/category_view.html:16
 #: contracts/templates/contracts/contract_list/sidebar.html:4
@@ -28,61 +24,69 @@ msgid "contracts"
 msgstr "contratos"
 
 #: contracts/urls.py:12
+msgid "about"
+msgstr "acerca"
+
+#: contracts/urls.py:14
 msgid "categories"
 msgstr "categorias"
 
-#: contracts/urls.py:13
+#: contracts/urls.py:15
 msgid "entities"
 msgstr "entidades"
 
-#: contracts/urls.py:15
+#: contracts/urls.py:17
+msgid "entity"
+msgstr "entidade"
+
+#: contracts/urls.py:19
 msgid "category"
 msgstr "categoria"
 
-#: contracts/urls.py:17 contracts/urls.py:18 contracts/urls.py:19
+#: contracts/urls.py:21 contracts/urls.py:22 contracts/urls.py:23
 msgid "entities-category-ranking"
 msgstr "ranking-especificidade-municípios"
 
-#: contracts/urls.py:21 contracts/urls.py:22
+#: contracts/urls.py:25 contracts/urls.py:26
 msgid "contracts-price-histogram"
 msgstr "histograma-precos-contratos"
 
-#: contracts/urls.py:23
+#: contracts/urls.py:27
 msgid "contracts-macro-statistics"
 msgstr ""
 
-#: contracts/urls.py:25 contracts/urls.py:26
+#: contracts/urls.py:29 contracts/urls.py:30
 msgid "procedure-type-time-series"
 msgstr "série-temporal-de-ajuste-direto-vs-concurso-público"
 
-#: contracts/urls.py:28 contracts/urls.py:29 contracts/urls.py:30
+#: contracts/urls.py:32 contracts/urls.py:33 contracts/urls.py:34
 msgid "municipalities-delta-time"
 msgstr "municípios-tempo-médio-publicação-contratos"
 
 #: contracts/views.py:23 contracts/views.py:50
-#: contracts/templates/contracts/contract_list/search_contracts.html:9
-#: contracts/templates/contracts/contract_list/search_contracts.html:13
-#: contracts/templates/contracts/contract_list/search_contracts.html:37
+#: contracts/templates/contracts/contract_list/search_contracts.html:10
+#: contracts/templates/contracts/contract_list/search_contracts.html:14
+#: contracts/templates/contracts/contract_list/search_contracts.html:38
 msgid "price"
 msgstr "preço"
 
 #: contracts/views.py:23 contracts/views.py:50
-#: contracts/templates/contracts/contract_list/search_contracts.html:19
-#: contracts/templates/contracts/contract_list/search_contracts.html:23
-#: contracts/templates/contracts/contract_list/search_contracts.html:39
+#: contracts/templates/contracts/contract_list/search_contracts.html:20
+#: contracts/templates/contracts/contract_list/search_contracts.html:24
+#: contracts/templates/contracts/contract_list/search_contracts.html:40
 msgid "date"
 msgstr "data"
 
 #: contracts/views.py:37 contracts/views.py:136
-#: contracts/templates/contracts/contract_list/search_contracts.html:51
+#: contracts/templates/contracts/contract_list/search_contracts.html:52
 #: contracts/templates/contracts/entity_list/search_entities.html:51
 msgid "search"
 msgstr "procura"
 
 #: contracts/views.py:44 contracts/views.py:45 contracts/views.py:143
 #: contracts/views.py:144
-#: contracts/templates/contracts/contract_list/search_contracts.html:37
-#: contracts/templates/contracts/contract_list/search_contracts.html:39
+#: contracts/templates/contracts/contract_list/search_contracts.html:38
+#: contracts/templates/contracts/contract_list/search_contracts.html:40
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_list/search_entities.html:39
 msgid "sorting"
@@ -120,6 +124,8 @@ msgstr "Contratos públicos"
 #: contracts/templates/contracts/base/secondary_header.html:6
 #: contracts/templates/contracts/contract_list/main.html:3
 #: contracts/templates/contracts/contracts_price_histogram/main.html:3
+#: contracts/templates/contracts/entity_view/main_selector.html:12
+#: contracts/templates/contracts/entity_view/main_selector.html:14
 msgid "Contracts"
 msgstr "Contratos"
 
@@ -140,7 +146,7 @@ msgstr "total:"
 
 #: contracts/templates/contracts/category_list/category_view.html:13
 msgid "In this category:"
-msgstr "Nesta categoria"
+msgstr "Nesta categoria:"
 
 #: contracts/templates/contracts/category_list/category_view.html:20
 msgid "plus sub-categories..."
@@ -154,15 +160,15 @@ msgstr "Contratos sem categoria"
 msgid "Contracts in this category"
 msgstr "Contratos nesta categoria"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:5
+#: contracts/templates/contracts/contract_list/search_contracts.html:6
 msgid "search_contracts_placeholder"
 msgstr "procurar contratos"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:12
+#: contracts/templates/contracts/contract_list/search_contracts.html:13
 msgid "order by price"
 msgstr "ordenar por preço"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:22
+#: contracts/templates/contracts/contract_list/search_contracts.html:23
 msgid "order by date"
 msgstr "ordenar por data"
 
@@ -223,6 +229,39 @@ msgstr "Contratos:"
 #: contracts/templates/contracts/entity_rank/summary.html:12
 msgid "Average depth:"
 msgstr "Especificidade média:"
+
+#: contracts/templates/contracts/entity_view/main_selector.html:5
+#: contracts/templates/contracts/entity_view/main_selector.html:7
+msgid "Summary"
+msgstr "Sumário"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:8
+msgid "NIF:"
+msgstr "NIF:"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:11
+msgid "Total earned:"
+msgstr "Ganho:"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:14
+msgid "Total expended:"
+msgstr "Despesa:"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:17
+msgid "Number of contracts made:"
+msgstr "Número de contratos como contratante:"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:22
+msgid "Last contracts"
+msgstr "Últimos contratos"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:24
+msgid "Full list"
+msgstr "Lista completa"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:26
+msgid "Last categories"
+msgstr "Últimas categorias"
 
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:12
 msgid "Average time:"

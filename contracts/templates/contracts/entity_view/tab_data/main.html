@@ -1,0 +1,28 @@
+{% extends "contracts/entity_view/main.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block entity_content %}
+    <div class="rules">
+        <ul>
+            <li>
+                {% trans "NIF:"%} {{ entity.nif }}
+            </li>
+            <li>
+                {% trans "Total earned:"%} {{ entity.total_earned|intword }} €
+            </li>
+            <li>
+                {% trans "Total expended:"%} {{ entity.total_expended|intword }} €
+            </li>
+            <li>
+                {% trans "Number of contracts made:"%} {{ entity.count_contracts }}
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <h3 class="rules">{% trans "Last contracts" %}</h3>
+    {% include "contracts/contract_list/contracts_loop.html" with contracts=last_contracts%}
+    <h4><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></h4>
+    <hr>
+    <h3 class="rules">{% trans "Last categories" %}</h3>
+    {% include "contracts/category_list/categories_loop.html" with categories=last_categories%}
+{% endblock %}
