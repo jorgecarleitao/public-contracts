@@ -185,7 +185,7 @@ def entities_category_ranking(request):
 
     context = {'entities': entities}
 
-    return render(request, 'contracts/entity_rank/entity_rank.html', context)
+    return render(request, 'contracts/entity_rank/main.html', context)
 
 
 def contracts_price_histogram(request):
