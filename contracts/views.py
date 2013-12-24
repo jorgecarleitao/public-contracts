@@ -83,7 +83,7 @@ def contracts_list(request):
     context['year_price'] = contracts_year.aggregate(Sum('price'))['price__sum']
     context['month_price'] = contracts_month.aggregate(Sum('price'))['price__sum']
 
-    return render(request, 'contracts/contracts_list.html', context)
+    return render(request, 'contracts/contract_list/main.html', context)
 
 
 def categories_list(request):
