@@ -171,7 +171,7 @@ def entities_list(request):
 
     context = build_entity_list_context(context, request.GET)
 
-    return render(request, 'contracts/entities_list.html', context)
+    return render(request, 'contracts/entity_list/main.html', context)
 
 
 @cache_page(60 * 60 * 24)
