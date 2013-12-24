@@ -39,9 +39,12 @@ def intword(value):
     try:
         value = int(value)
     except (TypeError, ValueError):
-        return value
+        if value is None:
+            return 0
+        else:
+            return value
 
-    value /= 100
+    value /= 100.  # prices are in cents, we translate them to euros.
 
     if value < 1000:
         return value
