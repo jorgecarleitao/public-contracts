@@ -23,7 +23,7 @@
                 .attr('class', 'd3-tip')
                 .offset([-10, 0])
                 .html(function(d) {
-                    return "[" + d.max_position.toFixed(2) + ", " + d.min_position.toFixed(2) + "]: <strong>" + d.value + "</strong>";
+                    return "[" + d.min_position.toFixed(2) + ", " + d.max_position.toFixed(2) + "]: <strong>" + d.value + "</strong>";
                 });
 
         var svg1 = d3.select("#graph-histogram")
