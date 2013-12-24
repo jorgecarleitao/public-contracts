@@ -14,6 +14,8 @@ import socket
 
 if socket.gethostname() == settings_local.HOST_NAME:
     LIVE = True
+    DEBUG = False
+    TEMPLATE_DEBUG = False
 else:
     LIVE = False
 
@@ -35,16 +37,13 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+if LIVE and hasattr(settings_local, 'DATABASES'):
+    DATABASES = settings_local.DATABASES
 
 # to make tests run faster
 import sys
 if 'test' in sys.argv:
     DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
-
-if LIVE:
-    DEBUG = False
-    TEMPLATE_DEBUG = DEBUG
-    DATABASES = settings_local.DATABASES
 
 ALLOWED_HOSTS = ['*']
 SECRET_KEY = settings_local.SECRET_KEY
@@ -92,9 +91,13 @@ MIDDLEWARE_CLASSES = (
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '127.0.0.1:11211'
     }
 }
+if LIVE and hasattr(settings_local, 'CACHES'):
+    CACHES = settings_local.CACHES
+
+TIMEOUT = 60*60*24
 
 ROOT_URLCONF = 'main.urls'
 WSGI_APPLICATION = 'main.apache.wsgi.application'
