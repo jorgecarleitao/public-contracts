@@ -1,11 +1,11 @@
 {% extends "contracts/two_column_body.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans "Entities index"%}{% endblock %}
+{% block title %}Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?{% endblock %}
 {% block content %}
     <div class="rules" itemscope itemtype="http://schema.org/Article">
-        <h2 itemprop="name">Evolução temporal da contratação pública por concurso público</h2>
-        <p itemprop="description">
+        <h2 itemprop="name">Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?</h2>
+        <p>
             A contratação pública em Portugal é feita maioritariamente por <strong>ajuste direto</strong>
             ou por <strong>concurso público</strong>.
         </p>
@@ -13,14 +13,10 @@
             Neste trabalho respondemos à pergunta:
         </p>
         <h3>Como evolui a percentagem de concursos públicos?</h3>
-        <p>
-            Pegámos em todos os contratos da <a href="http://www.base.gov.pt/base2/">base de dados pública</a>
-            fechados em cada mês, e cálculamos qual a percentagem deles feita por
-            ajuste directo, e qual é a percentagem por concurso público.
-        </p>
-        <p>
-            Fizemos isso para cada mês, desde o início de 2010 até ao mês anterior
-            a este (dados atualizados todos os meses). Eis o resultado:
+        <p itemprop="description">
+            Considerámos todos os contratos da <a href="http://www.base.gov.pt/base2/">base de dados pública</a>
+            fechados em cada mês (desde 2010) e cálculamos que percentagem foi feita por
+            ajuste directo e que percentagem foi feita por concurso público.
         </p>
     </div>
     {% include "contracts/procedure_type_time_series/graph.html" %}
@@ -36,7 +32,7 @@
             últimos quatro anos para maior uso de concursos públicos.
         </p>
         <h3>
-            Dados deste mês não são conclusivos.
+            Dados deste mês ainda não são conclusivos
         </h3>
         <p>
             O tempo médio entre o contrato ter sido fechado e a publicação do mesmo na base de dados oficial
