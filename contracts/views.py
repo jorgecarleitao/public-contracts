@@ -97,7 +97,7 @@ def categories_list(request):
 
     context = build_contract_list_context(context, request.GET)
 
-    return render(request, 'contracts/categories_list.html', context)
+    return render(request, 'contracts/category_list/main.html', context)
 
 
 def category_view(request, category_id):
@@ -111,7 +111,7 @@ def category_view(request, category_id):
 
     context = build_contract_list_context(context, request.GET)
 
-    return render(request, 'contracts/categories_list.html', context)
+    return render(request, 'contracts/category_list/main.html', context)
 
 
 def build_entity_list_context(context, GET):
