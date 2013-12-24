@@ -109,16 +109,6 @@
             });
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            $("a.page-selector").click(function() {
-                var me = $(this);
-                var newURL = null;
-                newURL = updateURLParameter(window.location.href, '{% trans "page"%}', me.html());
-                window.location.replace(newURL);
-            });
-        });
-    </script>
 
 {% endblock %}
 {% block sidebar %}
