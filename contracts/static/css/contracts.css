@@ -12,6 +12,5 @@
 .category-list li {
     width: inherit;
     margin-left: 0;
-    margin-bottom: 10px;
     border-bottom: 1px solid gray;
 }
