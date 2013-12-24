@@ -1,9 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.utils.translation import ugettext as _
 
 import views
 import views_data
-import entity_views
+
+import entity_urls
 
 
 urlpatterns = patterns('',
@@ -12,6 +13,8 @@ urlpatterns = patterns('',
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),
+
+                       url(r'%s/' % _('entity'), include(entity_urls)),
 
                        url(r'^%s/(\d+)$' % _('category'), views.category_view, name='category_view'),
 
@@ -32,8 +35,3 @@ urlpatterns = patterns('',
                            views_data.municipalities_delta_time_histogram_json,
                            name='municipalities_delta_time_histogram_json')
 )
-
-urlpatterns += patterns('',
-                        url(r'%s/(\d+)' % _('entity'), entity_views.main_view, name='entity'),
-                        url(r'%s/(\d+)/(\w+)' % _('entity'), entity_views.main_view, name='entity'),
-                        )
