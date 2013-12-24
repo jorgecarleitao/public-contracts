@@ -67,7 +67,7 @@
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function(d) {
-                return d.rank + ": <strong>" + d.name + "</strong> (" + d.avg_dt + ")";
+                return d.rank + ": <strong>" + d.name + "</strong> (" + d.avg_dt.toFixed(3) + ")";
             });
 
     var svg = d3.select("#graph-ranking")
