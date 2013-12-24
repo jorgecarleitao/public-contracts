@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="category-view">
+    {% with ancentors=category.get_ancestors %}
+        {% if ancentors %}
+            {% for ancestor in ancentors %}
+                <h2><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.description_pt }}</a> ></h2>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <h2>{{ category.description_pt }} ({{ category.code }})</h2>
+    <p>
+        {% trans "In this category:" %}
+    </p>
+    <ul>
+        <li>{{ category.own_contracts_count }} {% trans "contracts" %}</li>
+        <li>{{ category.own_contracts_price|intword }} €</li>
+    </ul>
+    <p>
+        {% if categories %}{% trans "plus sub-categories..." %}{% endif %}
+    </p>
+</div>

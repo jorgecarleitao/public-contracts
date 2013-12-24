@@ -1,0 +1,8 @@
+{% load i18n %}
+{% load contracts.humanize %}
+{% with count=category.contracts_count %}
+    <li>
+        <h4><a href="{{ category.get_absolute_url }}">{{ category.description_pt }}</a></h4>
+        <p>{{ count }} {% trans "contracts" %}, {% trans "total:"%} {{ category.contracts_price|intword }} €</p>
+    </li>
+{% endwith %}
