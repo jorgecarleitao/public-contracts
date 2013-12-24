@@ -85,7 +85,7 @@ msgstr "procura"
 #: contracts/templates/contracts/contract_list/search_contracts.html:39
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_list/search_entities.html:39
-msgid "ordering"
+msgid "sorting"
 msgstr "ordem"
 
 #: contracts/views.py:55 contracts/views.py:154

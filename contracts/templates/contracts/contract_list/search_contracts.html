@@ -1,12 +1,12 @@
 {% load i18n %}
 {% if contracts or search %}
-<div class="ordering">
+<div class="sorting">
     <ul class="horizontal-tab-list">
         <li {% if search %}class="active"{% endif %}>
             <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search_contracts_placeholder" %}" value="{{search}}">
         </li>
         <li>
-            {% if ordering == 'price' %}
+            {% if sorting == 'price' %}
                 <span>{% trans "price" %}</span>
             {% else %}
                 <a class="ordering order-price"
@@ -35,9 +35,9 @@
             var newURL = null;
 
             if ($(this).hasClass('order-price'))
-                newURL = updateURLParameter(window.location.href, '{% trans "ordering"%}', '{% trans "price"%}');
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "price"%}');
             else if ($(this).hasClass('order-date'))
-                newURL = updateURLParameter(window.location.href, '{% trans "ordering"%}', '{% trans "date"%}');
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "date"%}');
 
             window.location.replace(newURL);
         });

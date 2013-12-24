@@ -41,8 +41,8 @@ def build_contract_list_context(context, GET):
         context['contracts'] = context['contracts'].filter(search_Q)
         context['search'] = GET[key]
 
-    if _('ordering') in GET:
-        order = GET[_('ordering')]
+    if _('sorting') in GET:
+        order = GET[_('sorting')]
 
         context['contracts'], applied = apply_order(context['contracts'], order)
 

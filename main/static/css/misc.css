@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.ordering {
+.sorting {
     float: right;
 }
 
@@ -11,7 +11,7 @@
     width: 50%;
 }
 
-.ordering #search_content {
+.sorting #search_content {
     font-size: inherit;
     padding: 0;
     margin-top: 3px;
