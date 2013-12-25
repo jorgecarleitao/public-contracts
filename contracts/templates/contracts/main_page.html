@@ -5,26 +5,14 @@
 {% block title %}{% trans "Public contracts"%}{% endblock %}
 {% block content %}
     <div class="rules" itemscope itemtype="http://schema.org/Article">
-        <h4 itemprop="description">
-            Analizar e visualizar a rede de contratos públicos portugueses
-        </h4>
-        <p>
-            Os contratos de entidades públicas portuguesas estão publicados numa
-            <a href="http://www.base.gov.pt/base2/">base de dados oficial</a>. Esta base de dados
-            não permite fazer buscas complexas para análises estatísticas (por uma boa razão!).
-        </p>
-        <p>
-            Neste projeto, mantemos uma base de dados sincronizada regularmente com a base de dados oficial e temos um
-            <a href="https://github.com/jorgecarleitao/public-contracts">código open source</a> e em Python,
-            que permite fazer análises estatísiticas à base de dados com
-            <a href="https://github.com/jorgecarleitao/public-contracts/blob/master/tools/example.py">mínimo de conhecimentos em Python</a>.
-        </p>
-        <p>
-            A ideia é diminuir a barreira técnica que existe entre o interesse comum e a informação já existente.
-        </p>
-        <p>
-            Este website, também open source, é o local onde divulgamos resultados de análises que nós próprios
-            fazemos com o código que disponibilizamos, e permite navegar na complexa rede de contratos públicos.
+        <h2 class="center">Bem vindo ao contratos públicos</h2>
+        <p itemprop="description">
+            O <strong>contratos públicos</strong> é um projecto
+            <a href="https://github.com/jorgecarleitao/public-contracts">open source</a>
+            para analisar e visualizar a rede de
+            <a href="http://www.base.gov.pt/base2/">contratos públicos portugueses</a>.
+            Neste website pode navegar na base de dados de contratos públicos e encontrar análises
+            estatísticas que ajudam a compreender a contratação pública portuguesa.
         </p>
         <h3>Comparações entre municípios</h3>
         <ul>
@@ -45,12 +33,8 @@
             </li>
         </ul>
         <p>
-            Se tem uma pergunta que gostaria de fazer à base de dados,
-            <a href="https://groups.google.com/forum/#!forum/public-contracts">entre em contacto connosco</a>,
-            ajudá-lo-emos a você mesmo responder.
+            Se tem uma análise que gostaria de ver feita ou alguma sugestão,
+            <a href="https://groups.google.com/forum/#!forum/public-contracts">entre em contacto connosco</a>.
         </p>
     </div>
-{% endblock %}
-{% block sidebar %}
-    {% include "contracts/contract_list/sidebar.html" %}
 {% endblock %}
