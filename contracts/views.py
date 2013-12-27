@@ -1,4 +1,3 @@
-
 from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Sum, Q
@@ -140,8 +139,8 @@ def build_entity_list_context(context, GET):
         context['entities'] = context['entities'].filter(search_Q)
         context['search'] = GET[key]
 
-    if _('ordering') in GET:
-        order = GET[_('ordering')]
+    if _('sorting') in GET:
+        order = GET[_('sorting')]
 
         context['entities'], applied = apply_order(context['entities'], order)
 
