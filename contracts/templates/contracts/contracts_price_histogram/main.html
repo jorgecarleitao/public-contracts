@@ -1,6 +1,10 @@
 {% extends "contracts/two_column_body.html" %}
 {% load i18n %}
 {% block title %}{% trans "Contracts"%}{% endblock %}
+{% block forejs %}
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+{% endblock %}
 {% block content %}
     <div class="rules">
         <h2>Quantos contratos públicos têm o valor X€?</h2>
@@ -8,8 +12,6 @@
             A <a href="http://www.base.gov.pt/base2/">base de dados oficial de contratos públicos</a> tem por volta de 370.000 contratos.
             Nesta análise, procurámos saber quantos deles têm o valor X€.
         </p>
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
         {% include "contracts/contracts_price_histogram/graph.html" %}
         <p>
             O gráfico representa o número de contratos (eixo y) que existem dentro de uma gama de preços (eixo x).
