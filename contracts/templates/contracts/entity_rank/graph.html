@@ -36,7 +36,6 @@
         position: absolute;
         text-align: center;
     }
-
     /* Style northward tooltips differently */
     .d3-tip.n:after {
         margin: -1px 0 0 0;
@@ -49,19 +48,11 @@
             width = 720 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
-    var x = d3.scale.linear()
-            .range([0, width]);
+    var x = d3.scale.linear().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
 
-    var y = d3.scale.linear()
-            .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+    var xAxis = d3.svg.axis().scale(x).orient("bottom");
+    var yAxis = d3.svg.axis().scale(y).orient("left");
 
     var tip = d3.tip()
             .attr('class', 'd3-tip')
@@ -80,12 +71,17 @@
 
     var data;
     d3.json("{% url 'category_ranking_index_json' %}", function(data) {
-        max_rank = d3.max(data, function(d) { return d.rank; });
+        var min_x = d3.min(data, function(d) { return d.rank; });
+        var max_x = d3.max(data, function(d) { return d.rank; });
 
-        x.domain([1, max_rank]);
-        y.domain([d3.min(data, function(d) { return d.avg_depth; })-0.2, d3.max(data, function(d) { return d.avg_depth; })]);
+        var min_y = d3.min(data, function(d) { return d.avg_depth; });
+        var max_y = d3.max(data, function(d) { return d.avg_depth; });
 
-        var var_width = width/(max_rank-1);
+        // the bar width varies with number of data points.
+        var bar_width = width/(max_x+1);
+
+        x.domain([min_x-0.2, max_x + 1]);
+        y.domain([min_y-0.2, max_y + 0.2]);
 
         svg.append("g")
                 .attr("class", "x axis")
@@ -107,11 +103,11 @@
                 .text("Especificidade média");
 
         svg.selectAll(".bar")
-                .data(data)
-                .enter().append("rect")
+                .data(data).enter()
+                .append("rect")
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.rank); })
-                .attr("width", var_width)
+                .attr("width", bar_width)
                 .attr("y", function(d) { return y(d.avg_depth); })
                 .attr("height", function(d) { return height - y(d.avg_depth); })
                 .on('mouseover', tip.show)

@@ -1,6 +1,6 @@
 <svg id="graph-histogram"></svg>
 <script>
-    $( document ).ready(function() {
+    function scope() {
         var margin = {top: 0, right: 20, bottom: 40, left: 40};
         var width = 720 - margin.left - margin.right;
         var height = 150 - margin.top - margin.bottom;
@@ -76,5 +76,6 @@
                     .on('mouseover', tip1.show)
                     .on('mouseout', tip1.hide);
         });
-    });
+    }
+    scope();
 </script>
