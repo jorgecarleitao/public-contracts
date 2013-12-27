@@ -3,12 +3,12 @@
 <div class="summary" id="entity-{{entity.id}}">
     <div class="full">
         <div class="counter">
-            {{ entity.rank }}
+            <p>{{ entity.rank }}</p>
         </div>
         <div class="content">
             <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
             <div class="content">
-                <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth}}</strong>
+                <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
                 ({{ entity.contracts_number }} {% trans "contracts" %})</span>
             </div>
         </div>

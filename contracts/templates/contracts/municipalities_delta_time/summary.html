@@ -3,13 +3,14 @@
 <div class="summary" id="entity-{{entity.id}}">
     <div class="full">
         <div class="counter">
-            {{ entity.rank }}
+            <p>{{ entity.average_delta_time|floatformat:1 }}</p>
+            <p class="label">{% trans "days" %}</p>
         </div>
-        <div>
+        <div class="content">
             <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
-            <div class="price">
-                <span>{% trans "Contracts:" %} {{ entity.contracts_number }}</span>
-                <span class="right">{% trans "Average time:" %} {{ entity.average_delta_time|floatformat:3 }}</span>
+            <div class="content">
+                <span> {{ entity.contracts_number }} {% trans "contracts" %}
+                </span>
             </div>
         </div>
     </div>

@@ -6,12 +6,9 @@
     clear: both;
 }
 
-.summary .counters {
-    padding-top: 3px;
-}
-
 .summary .content {
-    width: 615px;
+    width: 415px;
+    float: left;
 }
 
 .summary h2 {
@@ -38,10 +35,16 @@
 
 .summary .counter {
     text-align: center;
-    margin-right: 3px;
-    padding: 0 2px 3px 2px;
-    width: 45px;
+    margin-right: 8px;
     font-size: 24px;
+}
+
+.summary .counter p {
+    float: none;
+}
+
+.summary .counter .label {
+    font-size: 14px;
 }
 
 .summary .right {
