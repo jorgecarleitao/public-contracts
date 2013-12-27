@@ -5,11 +5,11 @@
         <div class="counter">
             {{ entity.rank }}
         </div>
-        <div>
+        <div class="content">
             <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
-            <div class="price">
-                <span>{% trans "Contracts:" %} {{ entity.contracts_number }}</span>
-                <span class="right">{% trans "Average depth:" %} {{ entity.avg_depth }}</span>
+            <div class="content">
+                <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth}}</strong>
+                ({{ entity.contracts_number }} {% trans "contracts" %})</span>
             </div>
         </div>
     </div>
