@@ -1,27 +1,12 @@
 import json
-from django.db.models import Count
 from django.http import HttpResponse
-import analysis
-from django.core.cache import cache
-
-
-def get_entities_categories_ranking(flush_cache=False):
-    cache_name = 'entities_categories_ranking'
-
-    entities = cache.get(cache_name)
-    if entities is None or flush_cache:
-        entities = analysis.get_ranking()
-        entities = entities.annotate(contracts_number=Count('contracts_made__id'))
-        entities = list(entities)
-        cache.set(cache_name, entities, 60*60*48)
-
-    return entities
+from analysis import cache
 
 
 def entities_category_ranking_json(request):
     data = []
     count = 0
-    for entity in get_entities_categories_ranking():
+    for entity in cache.get_entities_categories_ranking():
         count += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -32,7 +17,7 @@ def entities_category_ranking_json(request):
 
 def entities_category_ranking_histogram_json(request):
 
-    entities = get_entities_categories_ranking()
+    entities = cache.get_entities_categories_ranking()
 
     min_value = entities[-1].avg_depth - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[0].avg_depth + 0.00000001   # avoid rounding, this caused a bug before.
@@ -56,20 +41,9 @@ def entities_category_ranking_histogram_json(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_contracts_price_distribution(flush_cache=False):
-    cache_name = 'contracts_price_distribution'
-
-    distribution = cache.get(cache_name)
-    if distribution is None or flush_cache:
-        distribution = analysis.get_price_histogram()
-        cache.set(cache_name, distribution, 60*60*24)
-
-    return distribution
-
-
 def contracts_price_histogram_json(request):
 
-    distribution = get_contracts_price_distribution()
+    distribution = cache.get_contracts_price_distribution()
 
     data = []
     for entry in distribution:
@@ -81,35 +55,13 @@ def contracts_price_histogram_json(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_contracts_macro_statistics(flush_cache=False):
-    cache_name = 'contract_prices'
-
-    values = cache.get(cache_name)
-    if values is None or flush_cache:
-        values = analysis.get_contracts_macro_statistics()
-        cache.set(cache_name, values, 60*60*48)
-
-    return values
-
-
 def contracts_macro_statistics_json(request):
-    data = get_contracts_macro_statistics()
+    data = cache.get_contracts_macro_statistics()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_procedure_types_time_series(flush_cache=False):
-    cache_name = 'procedure_type_time_series'
-
-    values = cache.get(cache_name)
-    if values is None or flush_cache:
-        values = analysis.get_procedure_types_time_series()
-        cache.set(cache_name, values, 60*60*24*30)  # one month
-
-    return values
-
-
 def get_procedure_types_time_series_json(request):
-    data = get_procedure_types_time_series()
+    data = cache.get_procedure_types_time_series()
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -118,21 +70,10 @@ def get_procedure_types_time_series_json(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_municipalities_delta_time(flush_cache=False):
-    cache_name = 'municipalities_delta_time'
-
-    values = cache.get(cache_name)
-    if values is None or flush_cache:
-        values = analysis.get_municipalities_delta_time()
-        cache.set(cache_name, values, 60*60*24)  # one day
-
-    return values
-
-
 def municipalities_delta_time_json(request):
     data = []
     rank = 0
-    for entity in get_municipalities_delta_time():
+    for entity in cache.get_municipalities_delta_time():
         rank += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -143,7 +84,7 @@ def municipalities_delta_time_json(request):
 
 def municipalities_delta_time_histogram_json(request):
 
-    entities = get_municipalities_delta_time()
+    entities = cache.get_municipalities_delta_time()
 
     min_value = entities[0].average_delta_time - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[-1].average_delta_time + 0.00000001   # avoid rounding, this caused a bug before.
@@ -163,5 +104,5 @@ def municipalities_delta_time_histogram_json(request):
             if data[x]['min_position'] < entity.average_delta_time <= data[x]['max_position']:
                 data[x]['value'] += 1
                 break
-    print data
+
     return HttpResponse(json.dumps(data), content_type="application/json")
