@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
-from contracts import views_data
+from analysis import cache
 import models
 
 
@@ -64,7 +64,6 @@ def build_contract_list_context(context, GET):
     return context
 
 
-#@cache_page(60 * 60 * 12)
 def contracts_list(request):
     """
     View that controls the contracts list.
@@ -176,7 +175,7 @@ def entities_list(request):
 @cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
 
-    entities = views_data.get_entities_categories_ranking()
+    entities = cache.get_entities_categories_ranking()
     count = 1
     for entity in entities:
         entity.rank = count
@@ -195,9 +194,10 @@ def procedure_types_time_series(request):
     return render(request, 'contracts/procedure_type_time_series/main.html')
 
 
+@cache_page(60 * 60 * 24)
 def municipalities_delta_time(request):
 
-    entities = views_data.get_municipalities_delta_time()
+    entities = cache.get_municipalities_delta_time()
     count = 1
     for entity in entities:
         entity.rank = count
