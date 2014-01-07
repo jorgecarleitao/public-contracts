@@ -27,8 +27,7 @@ The code is licenced under BSD.
 
 ## Documentation
 
-The API for accessing the database is [fully documented](http://contratos.publicos.pt/static/html/index.html);
-we are working on documenting the website for contributors.
+The API for accessing the database is [fully documented](http://public-contracts.readthedocs.org/en/latest/).
 
 ## Pre-requisites and installation
 

@@ -1,10 +1,10 @@
 What is this?
 ---------------
 
-Each public entity of an european country (EU) has to publicly disclose the contracts they have made. These are stored in
-a publicly available database.
+Each public entity of an european country (EU) has to publicly disclose the contracts they have made.
+These are stored in a publicly available database.
 
-Public contracts is a pilot project for collaborative analysis and visualisation of public contracts databases.
+Public contracts is a pilot project for collaborative analysis and visualisation of databases of public contracts.
 In this pilot, we use the portuguese database.
 
 We build and maintain an open source website and API for querying the database.
@@ -29,7 +29,7 @@ How can I use it?
 For navigating in the database and discovering some of its features, visit our website_.
 
 For using the API, you can download the source, available on GitHub_.
-Its documentation can be found :doc:`here <api>`, and examples of usage can be found in the section
+This is its documentation, and examples of usage can be found in the section
 :doc:`ask your own questions to the database <usage>`.
 
 How can I contribute?
