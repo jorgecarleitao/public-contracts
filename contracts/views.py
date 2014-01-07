@@ -159,7 +159,7 @@ def build_entity_list_context(context, GET):
 
 
 def entities_list(request):
-    entities = models.Entity.objects.all()
+    entities = models.Entity.objects.all().select_related("data")
 
     context = {'entities': entities}
 
