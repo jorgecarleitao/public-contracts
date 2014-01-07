@@ -1,6 +1,7 @@
 # coding=utf-8
-from django.db.models import Avg, Sum, Count
 from datetime import date
+
+from django.db.models import Sum, Count
 
 from contracts import models
 
@@ -20,19 +21,28 @@ def get_price_histogram():
     return data
 
 
-def get_ranking():
+def get_municipalities_specificity():
     """
     1. We filter entities that start with 'Município'
-    2. We compute the average depth of its contracts
-    3. We filter entities with average depth bigger than 0
-    (Used to filter municipalities that appear twice in the official database)
-    4. We order them by decreasing average depth
+    2. We compute the sum of depths and the number of contracts
+    3. We exclude municipalities with less than 5 contracts
+    4. We compute the average depth
+    5. We order them by decreasing average depth
     """
-    return models.Entity.objects \
+    municipalities = models.Entity.objects \
         .filter(name__startswith=u'Município') \
-        .annotate(avg_depth=Avg('contracts_made__category__depth')) \
-        .filter(avg_depth__gt=0) \
-        .order_by('-avg_depth')
+        .annotate(sum_depth=Sum('contracts_made__category__depth'), count=Count('contracts_made')) \
+        .exclude(count__lt=5)
+
+    # 4.
+    municipalities = list(municipalities)
+    for municipality in municipalities:
+        municipality.avg_depth = municipality.sum_depth*1./municipality.count
+
+    # 5.
+    municipalities.sort(key=lambda x: x.avg_depth, reverse=True)
+
+    return municipalities
 
 
 def get_contracts_macro_statistics():

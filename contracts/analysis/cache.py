@@ -1,4 +1,3 @@
-from django.db.models import Count
 from django.core.cache import cache
 
 import analysis
@@ -9,9 +8,7 @@ def get_entities_categories_ranking(flush_cache=False):
 
     entities = cache.get(cache_name)
     if entities is None or flush_cache:
-        entities = analysis.get_ranking()
-        entities = entities.annotate(contracts_number=Count('contracts_made__id'))
-        entities = list(entities)
+        entities = analysis.get_municipalities_specificity()
         cache.set(cache_name, entities, 60*60*48)
 
     return entities

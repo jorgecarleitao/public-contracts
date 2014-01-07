@@ -9,7 +9,7 @@
             <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
             <div class="content">
                 <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
-                ({{ entity.contracts_number }} {% trans "contracts" %})</span>
+                ({{ entity.count }} {% trans "contracts" %})</span>
             </div>
         </div>
     </div>
