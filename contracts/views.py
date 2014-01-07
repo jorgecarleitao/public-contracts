@@ -68,7 +68,7 @@ def contracts_list(request):
     """
     View that controls the contracts list.
     """
-    contracts = models.Contract.objects.all().order_by('-signing_date')
+    contracts = models.Contract.objects.all().order_by('-signing_date').prefetch_related("contracted", "contractors")
     context = {'contracts': contracts}
 
     context = build_contract_list_context(context, request.GET)
@@ -76,10 +76,6 @@ def contracts_list(request):
     today = date.today()
     contracts_year = contracts.filter(signing_date__year=today.year)
     contracts_month = contracts_year.filter(signing_date__month=today.month)
-
-    context['total_price'] = contracts.aggregate(Sum('price'))['price__sum']
-    context['year_price'] = contracts_year.aggregate(Sum('price'))['price__sum']
-    context['month_price'] = contracts_month.aggregate(Sum('price'))['price__sum']
 
     return render(request, 'contracts/contract_list/main.html', context)
 
