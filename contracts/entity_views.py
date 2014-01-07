@@ -25,7 +25,7 @@ def main_view(request, entity_id, slug=None):
 def contracts(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    all_contracts = entity.contracts_made.order_by('-signing_date')
+    all_contracts = entity.last_contracts()
 
     context = {'entity': entity,
                'tab': 'contracts',
