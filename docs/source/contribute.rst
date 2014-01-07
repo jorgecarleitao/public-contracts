@@ -105,7 +105,7 @@ Documentation
 ::::::::::::::::::
 
 The API of this project is expected to be fully documented, i.e., this documentation **is**
-part of the project. If you find a mistake on it, please fill a ticket in the `ticket system`_.
+part of the project. If you find a mistake, please help us out by filling a ticket in the `ticket system`_.
 
 A modification on the code that changes semantics of the project
 has to be accompanied by the respective change in documentation to be incorporated.

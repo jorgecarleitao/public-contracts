@@ -1,13 +1,11 @@
 Category
 ========
 
+.. currentmodule:: contracts
+
 .. _Base: http://www.base.gov.pt/base2
 
 This document provides the API references for the categories of contracts in the database.
-
-For information on building the database of categories, see :mod:`contracts.cpvs`.
-
-.. currentmodule:: contracts
 
 From CPVS to categories
 -------------------------
@@ -16,16 +14,16 @@ From CPVS to categories
 .. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
 .. _`nested set model`: https://en.wikipedia.org/wiki/Nested_set_model
 
-Europe Union has a categorisation system for public contracts, CPVS_, that translates a string of 8 digits
-into a category to be used in public contracts.
+Europe Union has a categorisation system for public contracts, CPVS_, that maps a string of 8 digits
+into a category (i.e. a name) to be used in each public contract.
 
 More than categories, the system builds a tree_ with broader categories like "agriculture",
 and more specific ones like "potatos".
 
 In our database, we construct a tree (using a `nested set model`_) of categories, and abstract the idea of digits:
-each category has a parent, a depth, and child categories (see :doc:`tools/cpvs_importer`).
+each category has a parent, a depth, and child categories.
 
-Each contract in Base_ has one (or none) of such CPVS and thus, in our database, each contract is
+Each contract in Base_ has one (or none) of such CPVS and thus, each contract is
 :attr:`associated <models.Contract.category>` with one (or none) category.
 
 API
@@ -33,8 +31,8 @@ API
 
 .. class:: models.Category
 
-    A category is an OneToMany relationship to :doc:`contract`: each contract has one category, each category
-    as more than one contract.
+    A category is an OneToMany relationship to :class:`~models.Contract`: each contract has one category,
+    each category can have more than one contract.
 
     It has the following attributes:
 
@@ -52,6 +50,14 @@ API
         The depth of the attribute on the tree.
 
     And has the following methods:
+
+    .. method:: get_children()
+
+        Returns all children categories.
+
+    .. method:: get_ancestors()
+
+        Returns all anscestor categories, excluding itself.
 
     .. method:: get_absolute_url()
 
