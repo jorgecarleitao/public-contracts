@@ -86,7 +86,7 @@ def categories_list(request):
     """
     categories = models.Category.objects.filter(depth=1)
     context = {'categories': categories,
-               'contracts': models.Contract.objects.filter(category=None),
+               'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors"),
                'no_code': True}
 
     context = build_contract_list_context(context, request.GET)
@@ -101,7 +101,7 @@ def category_view(request, category_id):
     category = models.Category.objects.get(pk=category_id)
     context = {'category': category,
                'categories': category.get_children(),
-               'contracts': category.contract_set.all()}
+               'contracts': category.contract_set.all().prefetch_related("contracted", "contractors")}
 
     context = build_contract_list_context(context, request.GET)
 
