@@ -1,12 +1,12 @@
 import json
 from django.http import HttpResponse
-from analysis import cache
+from analysis import AnalysisManager
 
 
 def entities_category_ranking_json(request):
     data = []
     count = 0
-    for entity in cache.get_entities_categories_ranking():
+    for entity in AnalysisManager.get_analysis('municipalities_categories_ranking'):
         count += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -17,7 +17,7 @@ def entities_category_ranking_json(request):
 
 def entities_category_ranking_histogram_json(request):
 
-    entities = cache.get_entities_categories_ranking()
+    entities = AnalysisManager.get_analysis('municipalities_categories_ranking')
 
     min_value = entities[-1].avg_depth - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[0].avg_depth + 0.00000001   # avoid rounding, this caused a bug before.
@@ -30,7 +30,7 @@ def entities_category_ranking_histogram_json(request):
              'value': 0,
              'min_position': min_value + (max_value - min_value)*x/n_bins,
              'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-            } for x in range(n_bins)]
+             } for x in range(n_bins)]
 
     for entity in entities:
         for x in range(n_bins):
@@ -43,7 +43,7 @@ def entities_category_ranking_histogram_json(request):
 
 def contracts_price_histogram_json(request):
 
-    distribution = cache.get_contracts_price_distribution()
+    distribution = AnalysisManager.get_analysis('contracts_price_distribution')
 
     data = []
     for entry in distribution:
@@ -56,12 +56,12 @@ def contracts_price_histogram_json(request):
 
 
 def contracts_macro_statistics_json(request):
-    data = cache.get_contracts_macro_statistics()
+    data = AnalysisManager.get_analysis('contracts_macro_statistics')
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def get_procedure_types_time_series_json(request):
-    data = cache.get_procedure_types_time_series()
+    data = AnalysisManager.get_analysis('procedure_type_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -73,7 +73,7 @@ def get_procedure_types_time_series_json(request):
 def municipalities_delta_time_json(request):
     data = []
     rank = 0
-    for entity in cache.get_municipalities_delta_time():
+    for entity in AnalysisManager.get_analysis('municipalities_delta_time'):
         rank += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -84,7 +84,7 @@ def municipalities_delta_time_json(request):
 
 def municipalities_delta_time_histogram_json(request):
 
-    entities = cache.get_municipalities_delta_time()
+    entities = AnalysisManager.get_analysis('municipalities_delta_time')
 
     min_value = entities[0].average_delta_time - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[-1].average_delta_time + 0.00000001   # avoid rounding, this caused a bug before.
@@ -97,7 +97,7 @@ def municipalities_delta_time_histogram_json(request):
              'value': 0,
              'min_position': min_value + (max_value - min_value)*x/n_bins,
              'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-            } for x in range(n_bins)]
+             } for x in range(n_bins)]
 
     for entity in entities:
         for x in range(n_bins):

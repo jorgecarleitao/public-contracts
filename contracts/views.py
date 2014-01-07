@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
-from analysis import cache
+from analysis import AnalysisManager
 import models
 
 
@@ -175,7 +175,7 @@ def entities_list(request):
 @cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
 
-    entities = cache.get_entities_categories_ranking()
+    entities = AnalysisManager.get_analysis('municipalities_categories_ranking')
     count = 1
     for entity in entities:
         entity.rank = count
@@ -197,7 +197,7 @@ def procedure_types_time_series(request):
 @cache_page(60 * 60 * 24)
 def municipalities_delta_time(request):
 
-    entities = cache.get_municipalities_delta_time()
+    entities = AnalysisManager.get_analysis('municipalities_delta_time')
     count = 1
     for entity in entities:
         entity.rank = count
