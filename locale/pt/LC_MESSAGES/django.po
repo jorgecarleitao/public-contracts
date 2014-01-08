@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-27 22:54+0000\n"
+"POT-Creation-Date: 2014-01-08 15:23+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -65,28 +65,28 @@ msgstr "série-temporal-de-ajuste-direto-vs-concurso-público"
 msgid "municipalities-delta-time"
 msgstr "municípios-tempo-médio-publicação-contratos"
 
-#: contracts/views.py:23 contracts/views.py:50
+#: contracts/views.py:22 contracts/views.py:49
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
 #: contracts/templates/contracts/contract_list/search_contracts.html:14
 #: contracts/templates/contracts/contract_list/search_contracts.html:38
 msgid "price"
 msgstr "preço"
 
-#: contracts/views.py:23 contracts/views.py:50
+#: contracts/views.py:22 contracts/views.py:49
 #: contracts/templates/contracts/contract_list/search_contracts.html:20
 #: contracts/templates/contracts/contract_list/search_contracts.html:24
 #: contracts/templates/contracts/contract_list/search_contracts.html:40
 msgid "date"
 msgstr "data"
 
-#: contracts/views.py:37 contracts/views.py:136
+#: contracts/views.py:36 contracts/views.py:132
 #: contracts/templates/contracts/contract_list/search_contracts.html:52
 #: contracts/templates/contracts/entity_list/search_entities.html:51
 msgid "search"
 msgstr "procura"
 
-#: contracts/views.py:44 contracts/views.py:45 contracts/views.py:143
-#: contracts/views.py:144
+#: contracts/views.py:43 contracts/views.py:44 contracts/views.py:139
+#: contracts/views.py:140
 #: contracts/templates/contracts/contract_list/search_contracts.html:38
 #: contracts/templates/contracts/contract_list/search_contracts.html:40
 #: contracts/templates/contracts/entity_list/search_entities.html:37
@@ -94,20 +94,20 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/views.py:55 contracts/views.py:154
+#: contracts/views.py:54 contracts/views.py:150
 #: contracts/templates/contracts/contract_list/contract_list_template.html:19
 #: contracts/templates/contracts/entity_list/entity_list_template.html:19
 msgid "page"
 msgstr "página"
 
-#: contracts/views.py:118 contracts/views.py:124 contracts/views.py:149
+#: contracts/views.py:114 contracts/views.py:120 contracts/views.py:145
 #: contracts/templates/contracts/entity_list/search_entities.html:9
 #: contracts/templates/contracts/entity_list/search_entities.html:13
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:118 contracts/views.py:126 contracts/views.py:149
+#: contracts/views.py:114 contracts/views.py:122 contracts/views.py:145
 #: contracts/templates/contracts/entity_list/search_entities.html:19
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:39
@@ -115,9 +115,150 @@ msgid "expenses"
 msgstr "despesa"
 
 #: contracts/templates/contracts/about.html:3
-#: main/templates/base/footer.html:5
-msgid "About"
-msgstr "Acerca"
+#: contracts/templates/contracts/about.html:6
+msgid "About Public Contracts"
+msgstr "Sobre o Contratos Públicos"
+
+#: contracts/templates/contracts/about.html:8
+#, python-format
+msgid ""
+"\n"
+"                This project is under the responsibility of <a href="
+"\"%(website)s\">%(author)s</a>, %(email)s.\n"
+"            "
+msgstr ""
+"\n"
+"Este projeto está sobre a responsabilidade de <a href=\"%(website)s\">"
+"%(author)s</a>, %(email)s.</p>"
+
+#: contracts/templates/contracts/about.html:12
+msgid "Disclaimer"
+msgstr ""
+
+#: contracts/templates/contracts/about.html:13
+#, python-format
+msgid ""
+"\n"
+"        <p>\n"
+"            Most people don’t have the time nor skills to scrutinize our "
+"analysis,\n"
+"            and our analysis are not peer reviewed by specialists in the "
+"field.\n"
+"            This means that they do not follow a scientific procedure.\n"
+"        </p>\n"
+"        <p>\n"
+"            The analysis we provide can easily be used to support claims "
+"about specific public or private entities.\n"
+"            In any circumstance we do such claims in this website.\n"
+"            This website is a place for gaining understanding and not to "
+"form a political agenda.\n"
+"        </p>\n"
+"        <p>\n"
+"            Our objective, besides providing the API, is to analyze the "
+"database.\n"
+"            We try to always state the main assumptions of our work, and we "
+"try to address their main criticisms.\n"
+"        </p>\n"
+"        <p>\n"
+"            If you have any suggestion or criticism, please add it to the <a "
+"href=\"%(mailing_list)s\">public mailing list</a>.\n"
+"        </p>\n"
+"        "
+msgstr ""
+"\n"
+"<p>A maioria não tem o tempo ou conhecimentos para escrutinar as análises "
+"que são feitasneste projeto. Para além disso, as nossas análises <strong>não "
+"são peer reviewed</strong> e portanto não são científicas. Consequentemente, "
+"seja <strong>crítico</strong> na interpretação.</p><p>As análises que aqui "
+"apresentamos podem ser facilmente usadas para difamar entidadesespecíficas, "
+"públicas ou privadas.Em qualquer circunstância este projeto se revê nessas "
+"afirmações. Este é um projeto para conhecer e compreender a contratação "
+"portuguesa e não um local para formar uma agenda política.</p><p>O nosso "
+"objetivo, para além de providenciar a API para fazer perguntas á base de "
+"dados,é analisá-la. Tentamos sempre afirmar as assunções usadas, e ter em "
+"conta as principais críticasao trabalho.</p><p>Se tiver alguma crítica ou "
+"sugestão, pode colocá-la na <a href=\"%(mailing_list)s\">mailing list</a> "
+"deste projeto, de forma a ela ser publicamente discutida.</p>"
+
+#: contracts/templates/contracts/about.html:32
+msgid "Acknowledgments"
+msgstr "Agradecimentos"
+
+#: contracts/templates/contracts/about.html:35
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">Django foundation and its "
+"contributors</a> for the\n"
+"                extraordinary software and helpful community they are;\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">Fundação Django e contribuidores</a> pelo "
+"software extraordinário e comunidade fantástica que é;"
+
+#: contracts/templates/contracts/about.html:41
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">Má despesa pública</a>, a "
+"portuguese blog,\n"
+"                for publicizing some of our analysis;\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">Blog Má despesa pública</a> por ajudarem a "
+"divulgar algumas das nossas análises;"
+
+#: contracts/templates/contracts/about.html:47
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">The portuguese's official "
+"database</a>\n"
+"                for insights on the current law about public contracts;\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">Base de dados oficial portuguesa, BASE</a> pela "
+"ajuda na interpretação da lei e ajuda técnica;"
+
+#: contracts/templates/contracts/about.html:53
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">The European Union's website</"
+"a>\n"
+"                for the insightful information about public contracts;\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">Website da União Europeia</a> que contém "
+"informação importante sobre contratação pública e legislação;"
+
+#: contracts/templates/contracts/about.html:59
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">Django-treebeard package</a>\n"
+"                for the efficient tree storage;\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">Django-treebeard</a> que nos facilita "
+"tecnicamente a implementação das categorias;"
+
+#: contracts/templates/contracts/about.html:65
+#, python-format
+msgid ""
+"\n"
+"                <a href=\"%(mailing_list)s\">read the docs</a> for hosting "
+"our documentation.\n"
+"                "
+msgstr ""
+"\n"
+"<a href=\"%(mailing_list)s\">read the docs</a> que aloja a documentação da "
+"base de dados."
 
 #: contracts/templates/contracts/main_page.html:5
 msgid "Public contracts"
@@ -334,6 +475,10 @@ msgid "%(value)s quadrillion"
 msgid_plural "%(value)s quadrillion"
 msgstr[0] "%(value)s quadrilião"
 msgstr[1] "%(value)s quadriliões"
+
+#: main/templates/base/footer.html:4
+msgid "About"
+msgstr "Acerca"
 
 #: main/templates/base/top_header.html:4
 msgid "Main page"

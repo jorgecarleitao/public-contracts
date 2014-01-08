@@ -1,56 +1,70 @@
 {% extends "contracts/one_column_body.html" %}
 {% load i18n %}
-{% block title %}{% trans "About"%}{% endblock %}
+{% block title %}{% trans "About Public Contracts"%}{% endblock %}
 {% block content %}
     <div class="rules">
-        <h2>Sobre este projeto</h2>
+        <h2>{% trans "About Public Contracts"%}</h2>
         <p>
-            Este projeto está sobre a responsabilidade de
-            <a href="https://sites.google.com/site/jorgecarleitao/">Jorge C. Leitão</a>, jorgecarleitao at gmail dot com.
+            {% blocktrans with author="Jorge C. Leitão" email="jorgecarleitao at gmail dot com" website="https://sites.google.com/site/jorgecarleitao/"%}
+                This project is under the responsibility of <a href="{{ website }}">{{ author }}</a>, {{ email }}.
+            {% endblocktrans %}
         </p>
-        <h4>
-            Código de conduta
-        </h4>
+        <h4>{% trans "Disclaimer"%}</h4>
+        {% blocktrans with mailing_list="https://groups.google.com/forum/#!forum/public-contracts"%}
         <p>
-            A maioria das pessoas não tem o tempo, vontade ou conhecimentos para escrutinar as análises que são feitas
-            neste website, ainda que o código seja aberto. Para além disso, este trabalho <strong>não é peer reviewed</strong>
-            e portanto não é científico. Seja <strong>crítico</strong> na interpretação.
-        </p>
-        <p>
-            As análises que aqui apresentamos podem ser facilmente usadas para difamar entidades
-            específicas, quer sejam públicas ou privadas.
-            Em qualquer circunstância este projeto se revê nessas afirmações. Este é um projeto para conhecer
-            e compreender a contratação portuguesa e não um local para formar uma agenda política.
+            Most people don’t have the time nor skills to scrutinize our analysis,
+            and our analysis are not peer reviewed by specialists in the field.
+            This means that they do not follow a scientific procedure.
         </p>
         <p>
-            Se tiver alguma crítica ou sugestão, pode colocá-la na
-            <a href="https://groups.google.com/forum/#!forum/public-contracts">mailing list pública</a>
-            deste projeto, de forma a ela ser publicamente discutida.
+            The analysis we provide can easily be used to support claims about specific public or private entities.
+            In any circumstance we do such claims in this website.
+            This website is a place for gaining understanding and not to form a political agenda.
         </p>
-        <h2>Agradecimentos/Acknowledgments</h2>
+        <p>
+            Our objective, besides providing the API, is to analyze the database.
+            We try to always state the main assumptions of our work, and we try to address their main criticisms.
+        </p>
+        <p>
+            If you have any suggestion or criticism, please add it to the <a href="{{ mailing_list }}">public mailing list</a>.
+        </p>
+        {% endblocktrans %}
+        <h2>{% trans "Acknowledgments"%}</h2>
         <ul>
             <li>
-                <a href="https://www.djangoproject.com/">Django foundation and its contributors</a> for the
-                extraordinary software and helpful community they are.
+                {% blocktrans with mailing_list="https://www.djangoproject.com/"%}
+                <a href="{{ mailing_list }}">Django foundation and its contributors</a> for the
+                extraordinary software and helpful community they are;
+                {% endblocktrans %}
             </li>
             <li>
-                <a href="http://madespesapublica.blogspot.pt/">Má despesa pública</a>,
-                a portuguese blog, for publicizing some of our analysis;
+                {% blocktrans with mailing_list="http://madespesapublica.blogspot.pt/"%}
+                <a href="{{ mailing_list }}">Má despesa pública</a>, a portuguese blog,
+                for publicizing some of our analysis;
+                {% endblocktrans %}
             </li>
             <li>
-                <a href="http://www.base.gov.pt/base2/">The portuguese's official database</a>
+                {% blocktrans with mailing_list="http://www.base.gov.pt/base2/"%}
+                <a href="{{ mailing_list }}">The portuguese's official database</a>
                 for insights on the current law about public contracts;
+                {% endblocktrans %}
             </li>
             <li>
-                <a href="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm">The European Union's website</a>
+                {% blocktrans with mailing_list="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm"%}
+                <a href="{{ mailing_list }}">The European Union's website</a>
                 for the insightful information about public contracts;
+                {% endblocktrans %}
             </li>
             <li>
-                <a href="https://github.com/tabo/django-treebeard">Django-treebeard package</a>
+                {% blocktrans with mailing_list="https://github.com/tabo/django-treebeard"%}
+                <a href="{{ mailing_list }}">Django-treebeard package</a>
                 for the efficient tree storage;
+                {% endblocktrans %}
             </li>
             <li>
-                <a href="https://readthedocs.org/">read the docs</a> for hosting our documentation.
+                {% blocktrans with mailing_list="https://readthedocs.org/"%}
+                <a href="{{ mailing_list }}">read the docs</a> for hosting our documentation.
+                {% endblocktrans %}
             </li>
         </ul>
     </div>
