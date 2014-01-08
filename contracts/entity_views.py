@@ -7,12 +7,9 @@ from views import build_contract_list_context
 def main_view(request, entity_id, slug=None):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    categories = []
-    contracts = entity.last_contracts(5)
-
-    for contract in contracts:
-        if contract.category:
-            categories.append(contract.category)
+    contracts = entity.last_contracts(5).prefetch_related("contracted", "contractors")
+    categories = models.Category.objects.filter(pk__in=list(contracts.values_list('category__id', flat=True)))\
+        .extra(select=models.Category.annotate_contracts_values())
 
     context = {'entity': entity,
                'tab': 'summary',
@@ -25,7 +22,7 @@ def main_view(request, entity_id, slug=None):
 def contracts(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    all_contracts = entity.last_contracts()
+    all_contracts = entity.last_contracts().prefetch_related("contracted", "contractors")
 
     context = {'entity': entity,
                'tab': 'contracts',

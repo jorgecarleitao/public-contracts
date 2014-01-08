@@ -89,23 +89,24 @@ class Category(NS_Node):
     def own_contracts_price(self):
         return self._own_contracts_aggregate()['price__sum']
 
-    def contracts(self):
-        return Contract.objects.filter(cpvs__startswith='%s' % self.code[:self.depth + 1])
-
-    def _contracts_aggregate(self):
-        cache_name = __name__ + '>_contracts_aggregate' + '>%s' % self.code
-        aggregate = cache.get(cache_name)
-        if aggregate is None:
-            aggregate = dict(self.contracts().aggregate(Sum('price'), Count('price')))
-            cache.set(cache_name, aggregate, 60*60*24)
-
-        return aggregate
-
-    def contracts_count(self):
-        return self._contracts_aggregate()['price__count']
-
-    def contracts_price(self):
-        return self._contracts_aggregate()['price__sum']
+    @staticmethod
+    def annotate_contracts_values():
+        """
+        Annotates the value and number of contracts belonging to this category or children of it.
+        """
+        return {
+            'contracts_price': """SELECT SUM(T2.price)
+                           FROM contracts_contract T2
+                           LEFT OUTER JOIN contracts_category T3 ON T2.category_id = T3.id
+                           WHERE T3.lft BETWEEN contracts_category.lft and contracts_category.rgt - 1 AND
+                                 T3.tree_id = contracts_category.tree_id
+                                 """,
+            'contracts_count': """SELECT COUNT(T2.id)
+                           FROM contracts_contract T2
+                           LEFT OUTER JOIN contracts_category T3 ON T2.category_id = T3.id
+                           WHERE T3.lft BETWEEN contracts_category.lft and contracts_category.rgt - 1 AND
+                                 T3.tree_id = contracts_category.tree_id
+                                 """}
 
 
 class Council(models.Model):
@@ -133,13 +134,16 @@ class Entity(models.Model):
     def total_expended(self):
         return self.data.total_expended
 
-    def last_contracts(self, slice):
+    def last_contracts(self, slice_value=None):
+        query = Contract.objects.filter(Q(contracted__pk=self.id) |
+                                        Q(contractors__pk=self.id)).order_by('-signing_date')
+        if slice_value is None:
+            return query
+
         try:
-            return Contract.objects.filter(Q(contracted__pk=self.id) |
-                                           Q(contractors__pk=self.id)).order_by('-signing_date')[:slice]
-            pass
+            return query[:slice_value]
         except IndexError:
-            return None
+            return query
 
     def __unicode__(self):
         return self.name

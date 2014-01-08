@@ -1,6 +1,6 @@
 from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Sum, Q
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
@@ -85,6 +85,8 @@ def categories_list(request):
     View that controls the categories list.
     """
     categories = models.Category.objects.filter(depth=1)
+    categories = categories.extra(select=models.Category.annotate_contracts_values())
+
     context = {'categories': categories,
                'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors"),
                'no_code': True}
@@ -100,7 +102,7 @@ def category_view(request, category_id):
     """
     category = models.Category.objects.get(pk=category_id)
     context = {'category': category,
-               'categories': category.get_children(),
+               'categories': category.get_children().extra(select=models.Category.annotate_contracts_values()),
                'contracts': category.contract_set.all().prefetch_related("contracted", "contractors")}
 
     context = build_contract_list_context(context, request.GET)
