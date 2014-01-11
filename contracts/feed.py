@@ -25,7 +25,7 @@ class CategoryFeed(Feed):
         price_str = u'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - " + (item.description or "no description")
+        return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -54,7 +54,7 @@ class EntityFeed(Feed):
         price_str = u'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - " + (item.description or "no description")
+        return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
