@@ -136,7 +136,7 @@ class Entity(models.Model):
 
     def last_contracts(self, slice_value=None):
         query = Contract.objects.filter(Q(contracted__pk=self.id) |
-                                        Q(contractors__pk=self.id)).order_by('-signing_date')
+                                        Q(contractors__pk=self.id)).distinct()
         if slice_value is None:
             return query
 
