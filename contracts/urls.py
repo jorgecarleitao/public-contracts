@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 from django.utils.translation import ugettext as _
 
+import feed
 import views
 import views_data
 import views_analysis
@@ -17,6 +18,7 @@ urlpatterns = patterns('',
 
                        url(r'%s/' % _('entity'), include(entity_urls)),
 
+                       url(r'^%s/(\d+)/rss$' % _('category'), feed.CategoryFeed(), name='category_view'),
                        url(r'^%s/(\d+)$' % _('category'), views.category_view, name='category_view'),
 
                        url(r'^%s$' % _('entities-category-ranking'), views_analysis.entities_category_ranking, name='entities_category_ranking'),
