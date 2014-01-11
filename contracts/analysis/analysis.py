@@ -139,13 +139,12 @@ def get_municipalities_contracts_time_series():
 
         aggregate = municipalities.filter(contracts_made__signing_date__gte=min_date,
                                           contracts_made__signing_date__lt=max_date)\
-            .aggregate(count=Count("contracts_made"), value=Count("contracts_made__price"))
+            .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
 
         entry = {'from': min_date,
                  'to': max_date,
                  'count': aggregate['count'],
-                 'value': aggregate['value']
-        }
+                 'value': aggregate['value'] or 0}
         data.append(entry)
         min_date = max_date
         if min_date == end_date:
