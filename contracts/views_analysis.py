@@ -38,3 +38,7 @@ def municipalities_delta_time(request):
     context = {'entities': entities}
 
     return render(request, 'contracts/municipalities_delta_time/main.html', context)
+
+
+def municipalities_contracts_time_series(request):
+    return render(request, 'contracts/municipalities_contracts_time_series/main.html')
