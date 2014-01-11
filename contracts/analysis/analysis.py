@@ -1,9 +1,19 @@
 # coding=utf-8
-from datetime import date
+from datetime import date, timedelta
+import datetime
+import calendar
 
 from django.db.models import Sum, Count
 
 from contracts import models
+
+
+def add_months(sourcedate, months):
+    month = sourcedate.month - 1 + months
+    year = sourcedate.year + month / 12
+    month = month % 12 + 1
+    day = min(sourcedate.day, calendar.monthrange(year,month)[1])
+    return datetime.date(year, month, day)
 
 
 def get_price_histogram():
@@ -65,16 +75,6 @@ def get_contracts_macro_statistics():
 
 
 def get_procedure_types_time_series():
-    import calendar
-    import datetime
-
-    def add_months(sourcedate, months):
-        month = sourcedate.month - 1 + months
-        year = sourcedate.year + month / 12
-        month = month % 12 + 1
-        day = min(sourcedate.day, calendar.monthrange(year,month)[1])
-        return datetime.date(year, month, day)
-
     min_date = datetime.date(2010, 1, 1)
     end_date = datetime.date(date.today().year, date.today().month, 1)
 
@@ -101,9 +101,6 @@ def get_procedure_types_time_series():
     return data
 
 
-from datetime import timedelta
-
-
 def get_municipalities_delta_time():
     municipalities = models.Entity.objects.filter(name__startswith=u'Município') \
         .annotate(total=Count('contracts_made')).exclude(total__lt=5)
@@ -124,3 +121,34 @@ def get_municipalities_delta_time():
     municipalities.sort(key=lambda x: x.average_delta_time)
 
     return municipalities
+
+
+def get_municipalities_contracts_time_series():
+    """
+    Computes the number of and value of contracts of municipalities
+    from 2008 to today, with a window of 1 month.
+    """
+    min_date = datetime.date(2008, 1, 1)
+    end_date = datetime.date(date.today().year, date.today().month, 1)
+
+    municipalities = models.Entity.objects.filter(name__startswith=u'Município')
+
+    data = []
+    while True:
+        max_date = add_months(min_date, 1)
+
+        aggregate = municipalities.filter(contracts_made__signing_date__gte=min_date,
+                                          contracts_made__signing_date__lt=max_date)\
+            .aggregate(count=Count("contracts_made"), value=Count("contracts_made__price"))
+
+        entry = {'from': min_date,
+                 'to': max_date,
+                 'count': aggregate['count'],
+                 'value': aggregate['value']
+        }
+        data.append(entry)
+        min_date = max_date
+        if min_date == end_date:
+            break
+
+    return data
