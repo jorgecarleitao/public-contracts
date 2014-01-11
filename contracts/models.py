@@ -228,6 +228,9 @@ class Contract(models.Model):
     contracted = models.ManyToManyField('Entity')
 
     def get_absolute_url(self):
+        return reverse('contract', args=(self.id,))
+
+    def get_base_url(self):
         return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' % self.base_id
 
     def get_first_contractor(self):

@@ -1,0 +1,35 @@
+{% extends "contracts/one_column_body.html" %}
+{% load i18n %}
+
+{% block title %}{{ contract.id }} - {{ contract.contract_description }}{% endblock %}
+{% block content %}
+    <div class="rules">
+        <h2>{{ contract.description }} (<a href="{{ contract.get_base_url }}">BASE</a>)</h2>
+        <p>
+            {{ contract.contract_description }}
+        </p>
+        <p>
+            <span class="entity-summary">{{ contract.procedure_type.name }}: </span>
+            {% for contracted in contract.contractors.all %}
+                {% include "contracts/entity_inline.html" with entity=contracted %}
+            {% endfor %}
+            <span class="entity-summary">&rarr;</span>
+            {% for contracted in contract.contracted.all %}
+                {% include "contracts/entity_inline.html" with entity=contracted %}
+            {% endfor %}
+        </p>
+        <p>{% trans "Signed:" %} {{contract.signing_date}}</p>
+        <p>
+            {% if contract.category %}
+                {% trans "Categorized as" %} <a href="{{ contract.category.get_absolute_url }}">{{ contract.category.description_pt }}</a>
+            {% else %}
+                {% trans "No category assigned." %}
+            {% endif %}
+        </p>
+        <p class="summary">
+            {% trans "Value:" %} {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
+        </p>
+        <p>{% trans "Added:" %} {{contract.added_date}}</p>
+
+    </div>
+{% endblock %}

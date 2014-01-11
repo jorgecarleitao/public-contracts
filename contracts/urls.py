@@ -6,6 +6,7 @@ import views_data
 import views_analysis
 
 import entity_urls
+import contract_urls
 
 
 urlpatterns = patterns('',
@@ -14,6 +15,8 @@ urlpatterns = patterns('',
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),
+
+                       url(r'%s/' % _('contract'), include(contract_urls)),
 
                        url(r'%s/' % _('entity'), include(entity_urls)),
 
