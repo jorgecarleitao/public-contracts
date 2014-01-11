@@ -120,7 +120,6 @@ INSTALLED_APPS = (
     'main',
     'contracts',
     'treebeard',  # for model in trees
-    'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
