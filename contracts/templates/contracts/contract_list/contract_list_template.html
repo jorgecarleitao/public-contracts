@@ -3,6 +3,7 @@
     {% if contracts %}
         {% include "contracts/contract_list/pagination.html" %}
     {% endif %}
+    <a id="rss-feed" href="{{ request.path }}{% if request.path|last != "/"%}/{% endif %}rss"></a>
     {% include "contracts/contract_list/search_contracts.html" %}
     <div class="list-loop">
         {% include "contracts/contract_list/contracts_loop.html" %}

@@ -13,8 +13,13 @@ import contract_urls
 urlpatterns = patterns('',
                        url(r'^$', views.home, name='contracts_home'),
                        url(r'^%s$' % _('about'), views.about, name='contracts_about'),
+
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
+                       url(r'^%s/rss$' % _('contracts'), feed.ContractsFeed(), name='contracts_list_feed'),
+
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
+                       url(r'^%s/rss$' % _('categories'), feed.ContractsFeed()),
+
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),
 
                        url(r'%s/' % _('contract'), include(contract_urls)),

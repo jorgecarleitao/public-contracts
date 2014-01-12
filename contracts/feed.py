@@ -1,11 +1,12 @@
 # coding=utf-8
 from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
 from main.domain import SITE_NAME
 
-from .models import Category, Entity
+from .models import Category, Entity, Contract
 
 
 class CategoryFeed(Feed):
@@ -35,6 +36,32 @@ class CategoryFeed(Feed):
 
     def items(self, obj):
         return obj.contract_set.all()
+
+
+class ContractsFeed(Feed):
+    def title(self, _):
+        return "Contracts in %s" % SITE_NAME
+
+    def link(self, _):
+        return reverse('contracts_list_feed')
+
+    def description(self, __):
+        return _("Latest contracts in %s" % SITE_NAME)
+
+    def item_title(self, item):
+        price_str = u'unknown'
+        if item.price:
+            price_str = str(item.price/100)
+        return price_str + u"€ - " + (item.contract_description or "no description")
+
+    def item_description(self, item):
+        result = "Contractors: "
+        for x in item.contractors.all():
+            result += x.name + "; "
+        return result[:-2]
+
+    def items(self, _):
+        return Contract.objects.all()[:200]
 
 
 class EntityFeed(Feed):
