@@ -11,8 +11,7 @@ from contracts import models
 from contracts.analysis import AnalysisManager
 
 # retrieve latest entities and contracts.
-crawler.update_entities()
-crawler.update_contracts()
+crawler.update_all()
 
 # update entities earnings and expenses
 for entity in models.Entity.objects.all():

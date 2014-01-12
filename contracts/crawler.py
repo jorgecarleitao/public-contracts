@@ -62,7 +62,7 @@ def clean_place(item, data):
     data['district'] = None
     data['council'] = None
     if 'executionPlace' in item and item['executionPlace']:
-        names = re.split(', |<BR/>', item['executionPlace']) # we only take the first place (they can be more than one)
+        names = re.split(', |<BR/>', item['executionPlace'])  # we only take the first place (they can be more than one)
         if len(names) >= 1:
             country_name = names[0]
             data['country'] = models.Country.objects.get(name=country_name)
@@ -131,9 +131,6 @@ class AbstractCrawler():
 
         return json.loads(html)
 
-    def block_to_range(self, i):
-        return i*25, (i+1)*25 - 1
-
 
 class StaticDataCrawler(AbstractCrawler):
     def retrieve_and_save_contracts_types(self):
@@ -197,8 +194,7 @@ class StaticDataCrawler(AbstractCrawler):
                 district.save()
 
     def retrieve_and_save_councils(self):
-
-        def save_council(district):
+        for district in models.District.objects.all():
             url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d' % district.base_id
             data = self.goToPage(url)
 
@@ -213,13 +209,24 @@ class StaticDataCrawler(AbstractCrawler):
                     council = models.Council(name=element['description'], base_id=element['id'], district=district)
                     council.save()
 
-        for district in models.District.objects.all():
-            save_council(district)
+    def retrieve_and_save_all(self):
+        self.retrieve_and_save_contracts_types()
+        self.retrieve_and_save_procedures_types()
+        self.retrieve_and_save_countries()
+        self.retrieve_and_save_districts()
+        self.retrieve_and_save_councils()
 
 
 class Crawler(AbstractCrawler):
+    """
+    The main crawler. See docs
+    """
     data_directory = '../../data'
     contracts_directory = '../../contracts'
+
+    @staticmethod
+    def block_to_range(i):
+        return i*25, (i+1)*25 - 1
 
     def _get_entities_block(self, block):
         """
@@ -231,7 +238,7 @@ class Crawler(AbstractCrawler):
         the last existing entity in Base's database.
         """
 
-        def _retrieve_entities(block):
+        def _retrieve_entities():
             print '_retrieve_entities(%d)' % block
             self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
             data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades")
@@ -244,13 +251,12 @@ class Crawler(AbstractCrawler):
             f = open(file_name, "rb")
             data = pickle.load(f)
             if len(data) != 25:  # if block is not complete, we retrieve it again to try to complete it.
-                # todo, write another error for this case
                 print '_get_entities_block(%d)' % block,
                 print 'returns len(data) = %d != 25' % len(data)
                 raise IOError
             f.close()
         except IOError:
-            data = _retrieve_entities(block)
+            data = _retrieve_entities()
             f = open(file_name, "wb")
             pickle.dump(data, f)
             f.close()
@@ -287,7 +293,7 @@ class Crawler(AbstractCrawler):
         It raises a `NoMoreEntriesError` if the retrieval returned 0 contracts i.e. if we have reached
         the last existing contract in Base's database.
         """
-        def _retrieve_contracts(block):
+        def _retrieve_contracts():
             self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
             data = self.goToPage("http://www.base.gov.pt/base2/rest/contratos")
             if len(data) == 0:  # if there are no entries, we just stop the procedure.
@@ -306,26 +312,27 @@ class Crawler(AbstractCrawler):
             f.close()
         except IOError:
             # online retrieval
-            data = _retrieve_contracts(block)
+            data = _retrieve_contracts()
 
             f = open(file_name, "wb")
             pickle.dump(data, f)
             f.close()
         return data
 
-    def _retrieve_contract(self, base_id):
+    def _retrieve_and_save_contract_data(self, base_id):
         """
-        Retrieves a specific contract.
+        Returns the data of a contract. It first tries the file. If the file doesn't exist,
+        it retrieves the data from Base and saves it in the file.
         """
-        print '_retrieve_contract(%d)' % base_id
-        url = 'http://www.base.gov.pt/base2/rest/contratos/%d' % base_id
-        return self.goToPage(url)
 
-    def _contract(self, base_id):
-        """
-        Returns the data of a contract from a file. If the file doesn't exist,
-        it retrieves the data from Base, saves it, and returns it.
-        """
+        def _retrieve_contract_data():
+            """
+            Retrieves data from a specific contract.
+            """
+            print '_retrieve_contract(%d)' % base_id
+            url = 'http://www.base.gov.pt/base2/rest/contratos/%d' % base_id
+            return self.goToPage(url)
+
         file_name = '%s/%d.dat' % (self.contracts_directory, base_id)
         try:
             f = open(file_name, "rb")
@@ -333,7 +340,7 @@ class Crawler(AbstractCrawler):
             f.close()
         except IOError:
             # online retrieval
-            data = self._retrieve_contract(base_id)
+            data = _retrieve_contract_data()
             f = open(file_name, "wb")
             pickle.dump(data, f)
             f.close()
@@ -364,7 +371,8 @@ class Crawler(AbstractCrawler):
 
     def update_entities(self):
         """
-        Saves Goes to all blocks,
+        Goes to all blocks and saves all entities in each block.
+        Once a block is completely empty, we stop.
         """
         block = self._last_entity_block()
         while True:
@@ -374,7 +382,8 @@ class Crawler(AbstractCrawler):
             except self.NoMoreEntriesError:
                 break
 
-    def _save_contract(self, item):
+    @staticmethod
+    def _save_contract(item):
         print '_save_contract(%s):' % item['id'],
         data = {'base_id': item['id'],
                 'procedure_type': clean_procedure_type(item),
@@ -392,8 +401,9 @@ class Crawler(AbstractCrawler):
             data['category'] = models.Category.objects.get(code=data['cpvs'])
         except models.Category.DoesNotExist:
             data['category'] = None
+
+        # we try to see if it already exists
         try:
-            # we try to get the contract
             contract = models.Contract.objects.get(base_id=data['base_id'])
             print 'contract %d already exists' % data['base_id']
         except models.Contract.DoesNotExist:
@@ -412,7 +422,7 @@ class Crawler(AbstractCrawler):
 
         for raw_contract in raw_contracts:
             try:
-                data = self._contract(raw_contract['id'])
+                data = self._retrieve_and_save_contract_data(raw_contract['id'])
                 self._save_contract(data)
             # this has given errors before, we print the contract number to gain some information.
             except:
@@ -428,6 +438,8 @@ class Crawler(AbstractCrawler):
             except self.NoMoreEntriesError:
                 break
 
-crawler = Crawler()
+    def update_all(self):
+        self.update_entities()
+        self.update_contracts()
 
-# from contracts.crawler import crawler; crawler.update_contracts()
+crawler = Crawler()
