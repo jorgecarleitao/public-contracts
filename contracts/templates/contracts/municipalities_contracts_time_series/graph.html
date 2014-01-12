@@ -1,3 +1,4 @@
+{% load i18n %}
 <svg id="graph"></svg>
 <style>
     .axis path,
@@ -90,7 +91,7 @@
         var max_y = d3.max(data, function(d) { return d.count; });
 
         x.domain(d3.extent(data, function(d) { return d.from; }));
-        y.domain([0, max_y]);
+        y.domain([0, max_y*1.1]);
 
         // grid lines
         svg.append("g")
@@ -128,13 +129,13 @@
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis)
                 .append("text")
-                .text("signing month")
+                .text("{% trans "month"%}")
                 .attr("transform", "translate(" + width/2 + ","+ 35 + ")");
 
         svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
-                .text("number of contracts");
+                .text("{% trans "number of signed contracts"%}");
     });
 </script>

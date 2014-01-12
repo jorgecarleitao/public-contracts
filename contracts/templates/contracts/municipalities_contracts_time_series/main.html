@@ -14,8 +14,8 @@
         </p>
         <p>
             {% blocktrans %}
-                We picked all contracts of all municipalities and grouped then by the month of <strong>signing date</strong>,
-                from 2008. Here is the result:
+                We picked all contracts of all municipalities and grouped then by the month of <strong>signing date</strong>.
+                Here is the result:
             {% endblocktrans %}
         </p>
     </div>
@@ -44,7 +44,7 @@
             </li>
             <li>
                 {% blocktrans %}
-                    There were two municipal elections; one in October 2009, the other in September 2013.
+                    There were two municipal elections; one in 10-2009, the other in 09-2013.
                     In both cases, the number of contracts is significantly above the average value.
                 {% endblocktrans %}
             </li>
@@ -55,18 +55,47 @@
                     This may explain why 2013 peak was weaker than the 2009.
                 {% endblocktrans %}
             </li>
+            <li><a id="extend-button-1">{% trans "Expand technical details..." %}</a></li>
+            <li class="extendable-1" hidden="1">
+                {% blocktrans %}
+                Because the database contains only a percentage of all contracts (not every contract is published),
+                one important assumption is that this percentage does not depend on the signing date.
+                (For experts:) the assumption is that the database constitute an unbiased sample
+                of all contracts.
+                {% endblocktrans %}
+            </li>
+            <li class="extendable-1" hidden="1">
+                {% blocktrans %}
+                We are not using the sum of values (€) of the contracts.
+                The argument is that values are unbounded:
+                one single contract can make a particular month to have a arbitrary large value.
+                (For experts:) the reason is that the variance of the sum of values can be
+                unbounded because the distribution of values is broad.
+                {% endblocktrans %}
+            </li>
+            <li class="extendable-1" hidden="1">
+                {% blocktrans %}
+                On the other hand, the number of contracts is bounded. Moreover, the number of contracts
+                reflects better the idea of "number of individual actions" the municipality does.
+                {% endblocktrans %}
+            </li>
         </ul>
         <p>
             {% blocktrans %}
                 Overall, we argue that municipal elections have a strong
                 influence on the number of contracts on months preceding the election.
             {% endblocktrans %}
-        </p>
-        <p>
             {% blocktrans %}
                 In the particular case of 2009, this quantifies to an almost duplication
                 of the number of contracts in relation to the average value.
             {% endblocktrans %}
         </p>
     </div>
+    <script>
+        $(document).ready(function() {
+            $("#extend-button-1").click(function() {
+                $(".extendable-1").slideToggle();
+            });
+        });
+    </script>
 {% endblock %}
