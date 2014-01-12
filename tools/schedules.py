@@ -19,5 +19,5 @@ for entity in models.Entity.objects.all():
     entity.compute_data()
 
 # update analysis
-for analysis_name, analysis in AnalysisManager:
+for analysis in AnalysisManager.values():
     analysis.update()
