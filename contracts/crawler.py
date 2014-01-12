@@ -135,6 +135,88 @@ class AbstractCrawler():
         return i*25, (i+1)*25 - 1
 
 
+class StaticDataCrawler(AbstractCrawler):
+    def retrieve_and_save_contracts_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tipocontratos'
+        data = self.goToPage(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ContractType.objects.get(base_id=element['id'])
+                pass
+            except models.ContractType.DoesNotExist:
+                contract_type = models.ContractType(name=element['description'], base_id=element['id'])
+                contract_type.save()
+
+    def retrieve_and_save_procedures_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos'
+        data = self.goToPage(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ProcedureType.objects.get(name=element['description'])
+                pass
+            except models.ProcedureType.DoesNotExist:
+                procedure_type = models.ProcedureType(name=element['description'], base_id=element['id'])
+                procedure_type.save()
+
+    def retrieve_and_save_countries(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/paises'
+        data = self.goToPage(url)
+
+        for element in data['items']:
+            try:
+                # if it exists, we pass
+                models.Country.objects.get(name=element['description'])
+                pass
+            except models.Country.DoesNotExist:
+                country = models.Country(name=element['description'])
+                country.save()
+
+    def retrieve_and_save_districts(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=187'  # 187 is Portugal.
+        data = self.goToPage(url)
+
+        portugal = models.Country.objects.get(name="Portugal")
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.District.objects.get(base_id=element['id'])
+                pass
+            except models.District.DoesNotExist:
+                district = models.District(name=element['description'], base_id=element['id'], country=portugal)
+                district.save()
+
+    def retrieve_and_save_councils(self):
+
+        def save_council(district):
+            url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d' % district.base_id
+            data = self.goToPage(url)
+
+            for element in data['items']:
+                if element['id'] == '0':  # id = 0 is "All", that we don't use.
+                    continue
+                try:
+                    # if it exists, we pass
+                    models.Council.objects.get(base_id=element['id'])
+                    pass
+                except models.Council.DoesNotExist:
+                    council = models.Council(name=element['description'], base_id=element['id'], district=district)
+                    council.save()
+
+        for district in models.District.objects.all():
+            save_council(district)
+
+
 class Crawler(AbstractCrawler):
     data_directory = '../../data'
     contracts_directory = '../../contracts'
@@ -256,86 +338,6 @@ class Crawler(AbstractCrawler):
             pickle.dump(data, f)
             f.close()
         return data
-
-    def retrieve_and_save_contracts_types(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/tipocontratos'
-        data = self.goToPage(url)
-
-        for element in data['items']:
-            if element['id'] == '0':  # id = 0 is "All" that we don't use.
-                continue
-            try:
-                # if it exists, we pass
-                models.ContractType.objects.get(base_id=element['id'])
-                pass
-            except models.ContractType.DoesNotExist:
-                contract_type = models.ContractType(name=element['description'], base_id=element['id'])
-                contract_type.save()
-
-    def retrieve_and_save_procedures_types(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos'
-        data = self.goToPage(url)
-
-        for element in data['items']:
-            if element['id'] == '0':  # id = 0 is "All that we don't use.
-                continue
-            try:
-                # if it exists, we pass
-                models.ProcedureType.objects.get(name=element['description'])
-                pass
-            except models.ProcedureType.DoesNotExist:
-                procedure_type = models.ProcedureType(name=element['description'], base_id=element['id'])
-                procedure_type.save()
-
-    def retrieve_and_save_countries(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/paises'
-        data = self.goToPage(url)
-
-        for element in data['items']:
-            try:
-                # if it exists, we pass
-                models.Country.objects.get(name=element['description'])
-                pass
-            except models.Country.DoesNotExist:
-                country = models.Country(name=element['description'])
-                country.save()
-
-    def retrieve_and_save_districts(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=187'  # 187 is Portugal.
-        data = self.goToPage(url)
-
-        portugal = models.Country.objects.get(name="Portugal")
-
-        for element in data['items']:
-            if element['id'] == '0':  # id = 0 is "All" that we don't use.
-                continue
-            try:
-                # if it exists, we pass
-                models.District.objects.get(base_id=element['id'])
-                pass
-            except models.District.DoesNotExist:
-                district = models.District(name=element['description'], base_id=element['id'], country=portugal)
-                district.save()
-
-    def retrieve_and_save_councils(self):
-
-        def save_council(district):
-            url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d' % district.base_id
-            data = self.goToPage(url)
-
-            for element in data['items']:
-                if element['id'] == '0':  # id = 0 is "All", that we don't use.
-                    continue
-                try:
-                    # if it exists, we pass
-                    models.Council.objects.get(base_id=element['id'])
-                    pass
-                except models.Council.DoesNotExist:
-                    council = models.Council(name=element['description'], base_id=element['id'], district=district)
-                    council.save()
-
-        for district in models.District.objects.all():
-            save_council(district)
 
     def _save_entities(self, block):
         """
