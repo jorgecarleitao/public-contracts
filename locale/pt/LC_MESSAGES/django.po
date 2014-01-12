@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-12 12:31+0000\n"
+"POT-Creation-Date: 2014-01-12 15:11+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -87,7 +87,7 @@ msgstr "municípios-tempo-médio-publicação-contratos"
 
 #: contracts/urls.py:47 contracts/urls.py:48
 msgid "when-do-portuguese-municipalities-contract-most"
-msgstr "Quando-é-que-os-municípios-mais-contratam"
+msgstr "quando-e-que-os-municipios-mais-contratam"
 
 #: contracts/views.py:20 contracts/views.py:47
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
@@ -446,11 +446,11 @@ msgstr "Lista completa"
 msgid "Last categories"
 msgstr "Últimas categorias"
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:132
+#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:128
 msgid "month"
 msgstr "mês"
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:139
+#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:135
 msgid "number of signed contracts"
 msgstr "Número de contratos assinados"
 
@@ -529,16 +529,16 @@ msgstr ""
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:46
 msgid ""
 "\n"
-"                    There were two municipal elections; one in 10-2009, the "
-"other in 09-2013.\n"
-"                    In both cases, the number of contracts is significantly "
-"above the average value.\n"
+"                    There were two municipal elections; one in 11-10-2009, "
+"the other in 29-09-2013.\n"
+"                    In both cases, the number of contracts significantly "
+"increases before the election month.\n"
 "                "
 msgstr ""
 "\n"
-"Houve duas eleições autárquicas neste periodo; uma em 10-2009 e outra "
-"em 09-2013. Em ambos os casos, o número de contratos aumenta "
-"significamente em relação ao valor médio."
+"Houve duas eleições autárquicas neste periodo; uma em 11-10-2009 e outra em "
+"29-09-2013. Em ambos os casos, o número de contratos aumenta significamente "
+"em relação ao valor médio."
 
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:52
 msgid ""
@@ -611,7 +611,19 @@ msgstr ""
 "de contratos reflete melhor a ideia de \"número de acções individuais\" que "
 "o município fez."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:84
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:83
+msgid ""
+"\n"
+"                    There is a periodic peak of contracts in September. The "
+"beginning of school can be a\n"
+"                    justification for it.\n"
+"                "
+msgstr ""
+"\n"
+"Há um pico periódico em Setembro. Uma possível explicação é o início do "
+"período escolar."
+
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:90
 msgid ""
 "\n"
 "                Overall, we argue that municipal elections have a strong\n"
@@ -623,7 +635,7 @@ msgstr ""
 "Em suma, argumentamos que as eleições autárquicas têm uma grande influência "
 "na contratação pública dos municípios portugueses."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:88
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:94
 msgid ""
 "\n"
 "                In the particular case of 2009, this quantifies to an almost "
@@ -635,6 +647,18 @@ msgstr ""
 "\n"
 "Na eleição de 2009, isto quantifica-se em quase o dobro de contratos em "
 "relação à média do resto do mandato."
+
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:100
+msgid ""
+"\n"
+"                Please notice: this is one interpretation of the results. "
+"There is a public mailing list\n"
+"                for anyone to expose or discuss these results.\n"
+"            "
+msgstr ""
+"\n"
+"Nota: isto é uma interpretação dos resultados. Se quiser acrescentar alguma coisa, "
+"envie-nos um e-mail para a mailing list pública."
 
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:7
 msgid "days"
