@@ -92,9 +92,7 @@ def clean_country(item):
     return country
 
 
-class Crawler():
-    data_directory = '../../data'
-    contracts_directory = '../../contracts'
+class AbstractCrawler():
 
     class NoMoreEntriesError:
         pass
@@ -135,6 +133,11 @@ class Crawler():
 
     def block_to_range(self, i):
         return i*25, (i+1)*25 - 1
+
+
+class Crawler(AbstractCrawler):
+    data_directory = '../../data'
+    contracts_directory = '../../contracts'
 
     def _get_entities_block(self, block):
         """
