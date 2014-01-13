@@ -11,23 +11,25 @@ contracts in an [official website](http://simap.europa.eu/supplier/national-proc
 Currently, the [portuguese database](http://www.base.gov.pt/base2/) has about 370.000 contracts,
 spamming orders of magnitude between their prices.
 
-We have a simple (not shared) crawler that daily retrieves information from the official database to a database we host,
+We have a crawler that daily retrieves information from the official database to a database we host,
 and we provide read access to anyone. This way, anyone can query it by using the API
-this repository hosts. In a near future, we will provide dumps of the database to allow offline querying.
+this repository hosts.
 
-Our [official website](http://contratos.publicos.pt) hosts the website whose code is in this repository (except some
-parts relative to the hosting) and anyone can help make it a better tool for visualising the database.
+Our [official website](http://contratos.publicos.pt) hosts the website whose code is in this repository
+and anyone can help make it a better tool for visualising the database.
 
 ## The code
 
-We use [Django](https://www.djangoproject.com/) ORM for the API and database. We use JQuery and d3.js for visualisations of statistical quantities of the database.
+We use [Django](https://www.djangoproject.com/) ORM for the API and database.
+We use JQuery and d3.js for visualisations of statistical quantities of the database.
 The official website is translated to portuguese (via i18n), also hosted here.
 
 The code is licenced under BSD.
 
 ## Documentation
 
-The API for accessing the database is [fully documented](http://public-contracts.readthedocs.org/en/latest/).
+The API for accessing the database and the crawler are [documented](http://public-contracts.readthedocs.org/en/latest/).
+The documentation is serious. If you find any mistake, please don't hesitate in filling an issue on github.
 
 ## Pre-requisites and installation
 
