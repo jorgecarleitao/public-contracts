@@ -134,9 +134,23 @@ class Entity(models.Model):
     def total_expended(self):
         return self.data.total_expended
 
+    def get_contracts_ids(self, flush_cache=False):
+        """
+        Retrieves a list of all contracts' ids the entity participated in.
+        The result is cached for 1 month because it is updated on server side using cron.
+        """
+        cache_name = __name__ + '>_last_contracts' + '>%s' % self.nif
+        result = cache.get(cache_name)
+        if result is None or flush_cache:
+            # retrieves the list. This is an expensive query.
+            result = list(Contract.objects.filter(Q(contracted__pk=self.id) |
+                                                  Q(contractors__pk=self.id)).distinct().values_list('id', flat=True))
+            cache.set(cache_name, result, 60*60*30)
+        return result
+
     def last_contracts(self, slice_value=None):
-        query = Contract.objects.filter(Q(contracted__pk=self.id) |
-                                        Q(contractors__pk=self.id)).distinct()
+        query = Contract.objects.filter(id__in=self.get_contracts_ids())
+
         if slice_value is None:
             return query
 
@@ -181,6 +195,9 @@ class Entity(models.Model):
         self.data.total_earned = self.contract_set.aggregate(Sum('price'))['price__sum'] or 0
         self.data.total_expended = self.contracts_made.aggregate(Sum('price'))['price__sum'] or 0
         self.data.save()
+
+        # update list of contracts
+        self.get_contracts_ids(flush_cache=True)
 
 
 class EntityData(models.Model):
