@@ -7,10 +7,9 @@
     <div class="rules" itemscope itemtype="http://schema.org/Article">
         <h2 class="center">{% trans "Welcome to Public Contracts" %}</h2>
         <p itemprop="description">
-            {% blocktrans with github="https://github.com/jorgecarleitao/public-contracts" base="http://www.base.gov.pt/base2/"%}
-                <strong>Public contracts</strong> is an <a href="{{ github }}">open source</a>
-                project for colaborative analysis and visualization of the network of
-                <a href="{{ base }}">portuguese public contracts</a>.
+            {% blocktrans with github="https://github.com/jorgecarleitao/public-contracts" %}
+                An <a href="{{ github }}">open source</a>
+                project for collaborative analysis and visualization of the portuguese database of public contracts.
             {% endblocktrans %}
         </p>
         <p>
