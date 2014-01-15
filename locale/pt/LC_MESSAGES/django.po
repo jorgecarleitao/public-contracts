@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-12 15:11+0000\n"
+"POT-Creation-Date: 2014-01-15 18:19+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -404,8 +404,6 @@ msgid "order by expenses"
 msgstr "ordenar por despesa"
 
 #: contracts/templates/contracts/entity_rank/main.html:4
-#: contracts/templates/contracts/municipalities_procedure_type/main.html:4
-#: contracts/templates/contracts/municipalities_specificity_time_series/main.html:4
 msgid "Entities index"
 msgstr "Ranking de especificidade de municípios"
 
@@ -540,27 +538,11 @@ msgstr ""
 "29-09-2013. Em ambos os casos, o número de contratos aumenta significamente "
 "em relação ao valor médio."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:52
-msgid ""
-"\n"
-"                    There was an important change in the portuguese law in "
-"the 2013 election, which\n"
-"                    forbid presidents of municipalities with more than 3 "
-"mandates to re-candidate.\n"
-"                    This may explain why 2013 peak was weaker than the "
-"2009.\n"
-"                "
-msgstr ""
-"\n"
-"Houve uma alteração importante á lei na eleição de 2013 que proibe "
-"presidentes com mais de 3 mandados de se recandidatarem. Isto pode explicar "
-"porque é que o pico de 2013 é menor que o de 2009."
-
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:58
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:51
 msgid "Expand technical details..."
 msgstr "Expandir detalhes técnicos..."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:60
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:53
 msgid ""
 "\n"
 "                Because the database contains only a percentage of all "
@@ -578,7 +560,7 @@ msgstr ""
 "data de assinatura. (Para especialistas:) a assunção é que a base de dados "
 "constitui uma amostra unbiased de todos os contratos."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:68
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:61
 msgid ""
 "\n"
 "                We are not using the sum of values (€) of the contracts.\n"
@@ -597,7 +579,7 @@ msgstr ""
 "variância da soma pode ser ilimitada porque a distribuição de valores é "
 "broad."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:77
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:70
 msgid ""
 "\n"
 "                On the other hand, the number of contracts is bounded. "
@@ -611,7 +593,7 @@ msgstr ""
 "de contratos reflete melhor a ideia de \"número de acções individuais\" que "
 "o município fez."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:83
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:76
 msgid ""
 "\n"
 "                    There is a periodic peak of contracts in September. The "
@@ -623,7 +605,7 @@ msgstr ""
 "Há um pico periódico em Setembro. Uma possível explicação é o início do "
 "período escolar."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:90
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:83
 msgid ""
 "\n"
 "                Overall, we argue that municipal elections have a strong\n"
@@ -635,30 +617,17 @@ msgstr ""
 "Em suma, argumentamos que as eleições autárquicas têm uma grande influência "
 "na contratação pública dos municípios portugueses."
 
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:94
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:87
 msgid ""
 "\n"
 "                In the particular case of 2009, this quantifies to an almost "
 "duplication\n"
-"                of the number of contracts in relation to the average "
-"value.\n"
+"                of the number of contracts in relation to posterior dates.\n"
 "            "
 msgstr ""
 "\n"
 "Na eleição de 2009, isto quantifica-se em quase o dobro de contratos em "
-"relação à média do resto do mandato."
-
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:100
-msgid ""
-"\n"
-"                Please notice: this is one interpretation of the results. "
-"There is a public mailing list\n"
-"                for anyone to expose or discuss these results.\n"
-"            "
-msgstr ""
-"\n"
-"Nota: isto é uma interpretação dos resultados. Se quiser acrescentar alguma coisa, "
-"envie-nos um e-mail para a mailing list pública."
+"relação a datas posteriores."
 
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:7
 msgid "days"
