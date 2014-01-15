@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-15 18:19+0000\n"
+"POT-Creation-Date: 2014-01-15 19:31+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -288,6 +288,83 @@ msgstr ""
 msgid "Public contracts"
 msgstr "Contratos públicos"
 
+#: contracts/templates/contracts/main_page.html:8
+msgid "Welcome to Public Contracts"
+msgstr "Bem vindo ao Contratos Públicos"
+
+#: contracts/templates/contracts/main_page.html:10
+#, python-format
+msgid ""
+"\n"
+"                <strong>Public contracts</strong> is an <a href=\"%(github)s"
+"\">open source</a>\n"
+"                project for colaborative analysis and visualization of the "
+"network of\n"
+"                <a href=\"%(base)s\">portuguese public contracts</a>.\n"
+"            "
+msgstr ""
+"\n"
+"O <strong>contratos públicos</strong> é um projecto<a href=\"%(github)s"
+"\">open source</a> para analizar e visualizar a <a href=\"%(base)s\">rede de "
+"contratos públicosportugueses</a>."
+
+#: contracts/templates/contracts/main_page.html:17
+msgid ""
+"\n"
+"                In this website you can navigate in the database of all "
+"contracts or take a look at\n"
+"                our statistical analysis to better understand portuguese "
+"public procurement.\n"
+"            "
+msgstr ""
+"\n"
+"Neste website pode navegar na base de dados de todos os contratos ou "
+"conhecer as nossas análisesestatísticas para melhorar compreender a "
+"contratação pública portuguesa."
+
+#: contracts/templates/contracts/main_page.html:22
+msgid "Analysis of municipalities"
+msgstr "Análises a municípios"
+
+#: contracts/templates/contracts/main_page.html:25
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:4
+#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:7
+msgid "When do portuguese municipalities contract most?"
+msgstr "Quando é que os municípios mais contratam?"
+
+#: contracts/templates/contracts/main_page.html:28
+msgid "Ranking of specificity of municipalities"
+msgstr "Ranking de especificidade de municípios"
+
+#: contracts/templates/contracts/main_page.html:31
+msgid "Time of publication of municipalities"
+msgstr "Tempo de publicação dos municípios"
+
+#: contracts/templates/contracts/main_page.html:34
+msgid "Macroscopic analysis"
+msgstr "Análises macroscópicas"
+
+#: contracts/templates/contracts/main_page.html:37
+msgid "Distribution of prices of contracts"
+msgstr ", Distribuição de preços dos contratos"
+
+#: contracts/templates/contracts/main_page.html:40
+msgid "Percentage of contracts by direct procurement or public tender"
+msgstr "Percentagem de contratos por ajuste direto e por concurso público."
+
+#: contracts/templates/contracts/main_page.html:44
+#, python-format
+msgid ""
+"\n"
+"                If you want a new analysis or have any suggestion, post it "
+"in\n"
+"                <a href=\"%(mailing_list)s\">our mailing list</a>.\n"
+"            "
+msgstr ""
+"\n"
+"Se tem uma análise que gostaria de ver feita ou alguma sugestão, <a href="
+"\"%(mailing_list)s\">entre em contacto connosco</a>."
+
 #: contracts/templates/contracts/base/secondary_header.html:6
 #: contracts/templates/contracts/contract_list/main.html:3
 #: contracts/templates/contracts/contracts_price_histogram/main.html:3
@@ -451,11 +528,6 @@ msgstr "mês"
 #: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:135
 msgid "number of signed contracts"
 msgstr "Número de contratos assinados"
-
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:4
-#: contracts/templates/contracts/municipalities_contracts_time_series/main.html:7
-msgid "When do portuguese municipalities contract most?"
-msgstr "Quando é que os municípios mais contratam?"
 
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:9
 #, python-format
