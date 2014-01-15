@@ -14,7 +14,6 @@
     <link href="{% static 'css/misc.css' %}" rel="stylesheet" type="text/css"/>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
-    {# <script src="{% static 'js/jquery-1.10.2.min.js' %}" ></script> #}
 
     <script src="{% static 'js/change_get_parameters.js' %}" ></script>
     {% block forejs %}{% endblock %}
@@ -23,8 +22,7 @@
 
 {% include "base/top_header.html" %}
 <div class="content-wrapper">
-    {% include "base/header.html" %}
-    {% block secondary_header %}{% include "base/secondary_header.html" %}{% endblock %}
+    {% block header %}{% include "base/header.html" %}{% endblock %}
     {% block body %}{% endblock %}
 </div>
 {% include "base/footer.html" %}
