@@ -304,9 +304,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"O <strong>contratos públicos</strong> é um projecto<a href=\"%(github)s"
+"O <strong>contratos públicos</strong> é um projecto <a href=\"%(github)s"
 "\">open source</a> para analizar e visualizar a <a href=\"%(base)s\">rede de "
-"contratos públicosportugueses</a>."
+"contratos públicos portugueses</a>."
 
 #: contracts/templates/contracts/main_page.html:17
 msgid ""
@@ -319,7 +319,7 @@ msgid ""
 msgstr ""
 "\n"
 "Neste website pode navegar na base de dados de todos os contratos ou "
-"conhecer as nossas análisesestatísticas para melhorar compreender a "
+"ver as nossas análises estatísticas para melhor compreender a "
 "contratação pública portuguesa."
 
 #: contracts/templates/contracts/main_page.html:22
