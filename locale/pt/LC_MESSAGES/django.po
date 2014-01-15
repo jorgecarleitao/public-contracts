@@ -346,7 +346,7 @@ msgstr "Análises macroscópicas"
 
 #: contracts/templates/contracts/main_page.html:37
 msgid "Distribution of prices of contracts"
-msgstr ", Distribuição de preços dos contratos"
+msgstr "Distribuição de preços dos contratos"
 
 #: contracts/templates/contracts/main_page.html:40
 msgid "Percentage of contracts by direct procurement or public tender"
