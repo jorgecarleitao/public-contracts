@@ -1,11 +1,17 @@
 import os
 import sys
 
-root = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-packages = os.path.join(root, '/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages')
+#path to directory of the .wgsi file ('[directory]/')
+wsgi_dir = os.path.abspath(os.path.dirname(__file__))
 
-sys.path.insert(0, packages)
-sys.path.insert(0, root)
+# path to project root directory (osqa '/')
+project_dir = os.path.dirname(wsgi_dir)
+
+print project_dir
+
+# add project  directory to system's Path
+sys.path.append(project_dir)
+sys.path.append('/home/littlepig/webapps/public_contracts/public-contracts/main')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
 import django.core.handlers.wsgi
