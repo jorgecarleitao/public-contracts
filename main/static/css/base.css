@@ -25,6 +25,10 @@
     clear: both;
 }
 
+#secondaryHeader {
+    clear: both;
+}
+
 #footer .footer-links {
     margin-top: 11px;
     padding-right: 2px;
