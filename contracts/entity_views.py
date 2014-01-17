@@ -8,8 +8,7 @@ def main_view(request, entity_id, slug=None):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
     contracts = entity.last_contracts(5).prefetch_related("contracted", "contractors")
-    categories = models.Category.objects.filter(pk__in=list(contracts.values_list('category__id', flat=True)))\
-        .extra(select=models.Category.annotate_contracts_values())
+    categories = models.Category.objects.filter(pk__in=list(contracts.values_list('category__id', flat=True)))
 
     context = {'entity': entity,
                'tab': 'summary',

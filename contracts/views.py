@@ -83,7 +83,6 @@ def categories_list(request):
     View that controls the categories list.
     """
     categories = models.Category.objects.filter(depth=1)
-    categories = categories.extra(select=models.Category.annotate_contracts_values())
 
     context = {'categories': categories,
                'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors"),
@@ -100,7 +99,7 @@ def category_view(request, category_id):
     """
     category = models.Category.objects.get(pk=category_id)
     context = {'category': category,
-               'categories': category.get_children().extra(select=models.Category.annotate_contracts_values()),
+               'categories': category.get_children(),
                'contracts': category.contract_set.all().prefetch_related("contracted", "contractors")}
 
     context = build_contract_list_context(context, request.GET)

@@ -13,9 +13,13 @@ from contracts.analysis import AnalysisManager
 # retrieve latest entities and contracts.
 crawler.update_all()
 
-# update entities earnings and expenses
+# update entities data
 for entity in models.Entity.objects.all():
     entity.compute_data()
+
+# update categories data
+for category in models.Category.objects.all():
+    category.compute_data()
 
 # update analysis
 for analysis in AnalysisManager.values():
