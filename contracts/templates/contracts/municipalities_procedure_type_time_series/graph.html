@@ -1,0 +1,191 @@
+{% load i18n %}
+<svg id="graph"></svg>
+<style>
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+    .grid .tick {
+        stroke: lightgrey;
+        opacity: 0.7;
+        shape-rendering: crispEdges;
+    }
+    .grid path {
+        stroke-width: 0;
+    }
+</style>
+<script>
+    var margin = {top: 40, right: 40, bottom: 40, left: 40},
+            width = 720 - margin.left - margin.right,
+            height = 350 - margin.top - margin.bottom;
+
+    var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+    var x = d3.time.scale()
+            .range([0, width]);
+
+    var y = d3.scale.linear()
+            .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom").tickValues([
+                new Date(2008, 6),
+                new Date(2009, 0),
+                new Date(2009, 6),
+                new Date(2010, 0),
+                new Date(2010, 6),
+                new Date(2011, 0),
+                new Date(2011, 6),
+                new Date(2012, 0),
+                new Date(2012, 6),
+                new Date(2013, 0),
+                new Date(2013, 6)])
+            .tickFormat(d3.time.format("%m/%y"));
+
+    var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+    var yAxis1 = d3.svg.axis()
+            .scale(y)
+            .orient("right");
+
+    var line = d3.svg.line()
+            .x(function(d) { return x(d.from); })
+            .y(function(d) { return y(d.direct); });
+
+    var line1 = d3.svg.line()
+            .x(function(d) { return x(d.from); })
+            .y(function(d) { return y(d.tender); });
+
+    var color_hash = {0: ["{% trans "direct procurement" %}", "#00b400"],
+                      1: ["{% trans "tender" %}", "#1b95db"]};
+
+    var svg = d3.select("#graph")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    function make_x_axis() {
+        return d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(8)
+    }
+
+    function make_y_axis() {
+        return d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(8)
+    }
+
+    d3.json('{% url "municipalities_procedure_types_time_series_json" %}', function(error, data) {
+
+        data.forEach(function(d) {
+            d.from = parseDate(d.from);
+            d.direct = (+d.direct)*100;
+            d.tender = (+d.tender)*100;
+        });
+
+        x.domain(d3.extent(data, function(d) { return d.from; }));
+        y.domain([0, 100]);
+
+        // grid lines
+        svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", "translate(0," + height + ")")
+                .call(make_x_axis()
+                        .tickSize(-height, 0, 0)
+                        .tickFormat("")
+                );
+        // grid lines
+        svg.append("g")
+                .attr("class", "grid")
+                .call(make_y_axis()
+                        .tickSize(-width, 0, 0)
+                        .tickFormat("")
+                );
+
+        // paths
+        svg.append("path").datum(data)
+                .attr("class", "line")
+                .attr("d", line)
+                .attr("stroke", color_hash[0][1])
+                .attr("stroke-width", 2)
+                .attr("fill", "none");
+
+        // points
+        svg.selectAll("circle")
+                .data(data).enter()
+                .append("svg:circle")
+                .attr("stroke", color_hash[0][1])
+                .attr("fill", color_hash[0][1])
+                .attr("cx", function(d, i) { return x(d.from) })
+                .attr("cy", function(d, i) { return y(d.direct) })
+                .attr("r", 3);
+
+        // paths
+        svg.append("path").datum(data)
+                .attr("class", "line")
+                .attr("d", line1)
+                .attr("stroke", color_hash[1][1])
+                .attr("stroke-width", 2)
+                .attr("fill", "none");
+
+        // points
+        svg.selectAll(".point")
+                .data(data).enter()
+                .append("svg:circle")
+                .attr("stroke", color_hash[1][1])
+                .attr("fill", color_hash[1][1])
+                .attr("cx", function(d) { return x(d.from) })
+                .attr("cy", function(d) { return y(d.tender) })
+                .attr("r", 3);
+
+
+        // function(d) { return d.from.getMonth()+ '/' + d.from.getFullYear()
+        //                    + ': ' + d.direct.toFixed(1) + ' ' + d.tender.toFixed(1); }
+        svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .text("%");
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate("+ width + ",0)")
+                .call(yAxis1)
+                .append("text")
+                .text("%");
+
+        legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("x", width - 100)
+                .attr("y", 100)
+                .attr("height", 100)
+                .attr("width", 100);
+        for (var i = 0; i < 2; i++)
+        {
+            legend.append("svg:circle")
+                    .attr("cx", width - 170)
+                    .attr("cy", 100 + i*20)
+                    .attr("r", 3)
+                    .style("fill", color_hash[i][1]);
+            legend.append("text")
+                    .attr("x", width - 160)
+                    .attr("y", 100 + i*20 + 4)
+                    .text(color_hash[i][0]);
+        }
+    });
+</script>

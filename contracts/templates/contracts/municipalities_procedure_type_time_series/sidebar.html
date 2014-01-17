@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class="box">
+    <h4 class="title">Pontos chave</h4>
+    <ul>
+        <li>
+            A <a href="http://www.base.gov.pt/base2/">base de contratos públicos</a> é uma ferramenta
+            útil e madura para <strong>analizar a contratação pública portuguesa</strong>.
+        </li>
+        <li>
+            A contratação pública publicada dos municípios na base de dados oficial é maioritariamente
+            por <strong>ajuste direto</strong> ou por <strong>concurso público</strong>.
+        </li>
+    </ul>
+</div>
+<script>
+    $(function() {
+
+        var $sidebar   = $(".box"),
+                $window    = $(window),
+                offset     = $sidebar.offset(),
+                topPadding = 15;
+
+        $window.scroll(function() {
+            if ($window.scrollTop() > offset.top) {
+                $sidebar.stop().animate({
+                    marginTop: $window.scrollTop() - offset.top + topPadding
+                });
+            } else {
+                $sidebar.stop().animate({
+                    marginTop: 0
+                });
+            }
+        });
+
+    });
+</script>

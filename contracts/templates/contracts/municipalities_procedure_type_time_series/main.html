@@ -1,0 +1,32 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans 'Portuguese municipalities - tender or direct procurement?' %}{% endblock %}
+{% block forejs %}
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">{% trans 'Portuguese municipalities - tender or direct procurement?' %}</h2>
+        <p>
+            {% blocktrans %}
+                Public contracts are decided either by a <strong>procurement</strong>
+                or by a <strong>public tender</strong>.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% trans "In this analysis we answer the question:"%}
+        </p>
+        <h3>{% trans "How municipalities do procurement?"%}</h3>
+        <p itemprop="description">
+            {% blocktrans %}
+                We considered all contracts of all municipalities of each month and asked how many were decided
+                by tender, and how many were decided by direct procurement. Here is the result:
+            {% endblocktrans %}
+        </p>
+    </div>
+    {% include "contracts/municipalities_procedure_type_time_series/graph.html" %}
+{% endblock %}
+{% block sidebar %}
+    {% include "contracts/municipalities_procedure_type_time_series/sidebar.html" %}
+{% endblock %}
