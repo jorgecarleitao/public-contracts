@@ -145,7 +145,7 @@ class Entity(models.Model):
             # retrieves the list. This is an expensive query.
             result = list(Contract.objects.filter(Q(contracted__pk=self.id) |
                                                   Q(contractors__pk=self.id)).distinct().values_list('id', flat=True))
-            cache.set(cache_name, result, 60*60*30)
+            cache.set(cache_name, result, 60*60*24*30)
         return result
 
     def last_contracts(self, slice_value=None):
