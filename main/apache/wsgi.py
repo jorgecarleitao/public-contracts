@@ -7,8 +7,6 @@ wsgi_dir = os.path.abspath(os.path.dirname(__file__))
 # path to project root directory (osqa '/')
 project_dir = os.path.dirname(wsgi_dir)
 
-print project_dir
-
 # add project  directory to system's Path
 sys.path.append(project_dir)
 sys.path.append('/home/littlepig/webapps/public_contracts/public-contracts/main')
