@@ -1,14 +1,18 @@
 {% load i18n %}
 <div class="box">
-    <h4 class="title">Pontos chave</h4>
+    <h4 class="title">{% trans "Key points" %}</h4>
     <ul>
         <li>
-            A <a href="http://www.base.gov.pt/base2/">base de contratos públicos</a> é uma ferramenta
-            útil e madura para <strong>analizar a contratação pública portuguesa</strong>.
+            {% blocktrans with base="http://www.base.gov.pt/base2/"%}
+                The <a href="{{ base }}">oficial database</a> is a useful and insightful
+                tool to analyse the portuguese procurement.
+            {% endblocktrans %}
         </li>
         <li>
-            A contratação pública publicada dos municípios na base de dados oficial é maioritariamente
-            por <strong>ajuste direto</strong> ou por <strong>concurso público</strong>.
+            {% trans "About 90 percent of all procurements from municipalities are today made by direct procurement." %}
+        </li>
+        <li>
+            {% trans "In the last 5 years, there has been a slight increase to use the public tender." %}
         </li>
     </ul>
 </div>

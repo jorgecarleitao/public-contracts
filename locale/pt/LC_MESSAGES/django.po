@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-17 15:55+0000\n"
+"POT-Creation-Date: 2014-01-19 18:05+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,6 +88,10 @@ msgstr "municípios-tempo-médio-publicação-contratos"
 #: contracts/urls.py:47 contracts/urls.py:48
 msgid "when-do-portuguese-municipalities-contract-most"
 msgstr "quando-e-que-os-municipios-mais-contratam"
+
+#: contracts/urls.py:50 contracts/urls.py:51
+msgid "how-do-portuguese-municipalities-contract-most"
+msgstr "como-e-que-os-municipios-mais-contratam"
 
 #: contracts/views.py:20 contracts/views.py:47
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
@@ -321,26 +325,30 @@ msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
 #: contracts/templates/contracts/main_page.html:27
+msgid "How do portuguese municipalities contract most?"
+msgstr "Como é que os municípios mais contratam?"
+
+#: contracts/templates/contracts/main_page.html:30
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/templates/contracts/main_page.html:30
+#: contracts/templates/contracts/main_page.html:33
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/templates/contracts/main_page.html:33
+#: contracts/templates/contracts/main_page.html:36
 msgid "Macroscopic analysis"
 msgstr "Análises macroscópicas"
 
-#: contracts/templates/contracts/main_page.html:36
+#: contracts/templates/contracts/main_page.html:39
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/templates/contracts/main_page.html:39
+#: contracts/templates/contracts/main_page.html:42
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/templates/contracts/main_page.html:43
+#: contracts/templates/contracts/main_page.html:46
 #, python-format
 msgid ""
 "\n"
@@ -692,6 +700,85 @@ msgstr ""
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:7
 msgid "days"
 msgstr "dias"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/graph.html:64
+msgid "direct procurement"
+msgstr "ajuste direto"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/graph.html:65
+msgid "tender"
+msgstr "concurso público"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:4
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:10
+msgid "Portuguese municipalities - tender or direct procurement?"
+msgstr "Como é que os municípios mais contratam?"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:12
+msgid ""
+"\n"
+"                The procedure to create a public procurement in Portugal is "
+"mainly either by\n"
+"                <strong>direct procurement</strong> or by a <strong>public "
+"tender</strong>.\n"
+"                In this analysis we asked the question:\n"
+"            "
+msgstr ""
+"\n"
+"O procedimento para criar um contrato público é maioritariamente "
+"<strong>ajuste direto</strong> ou <strong>concurso público</strong>. Nesta "
+"análise colocámos a pergunta:"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:18
+msgid "How municipalities do procurement?"
+msgstr "Que procedimento os municípios mais usam?"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:20
+msgid ""
+"\n"
+"                We considered all contracts of all municipalities of each "
+"month and asked how many were decided\n"
+"                by a public tender, and how many were decided by direct "
+"procurement. Here is the result:\n"
+"            "
+msgstr ""
+"\n"
+"Considerámos todos os contratos de todos os municípios de cada mês e "
+"perguntámos que percentagem deles foi feita por ajuste direto e por concurso "
+"público. Eis o resultado:"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:3
+msgid "Key points"
+msgstr "Pontos chave"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:6
+#, python-format
+msgid ""
+"\n"
+"                The <a href=\"%(base)s\">oficial database</a> is a useful "
+"and insightful\n"
+"                tool to analyse the portuguese procurement.\n"
+"            "
+msgstr ""
+"\n"
+"A <a href=\"%(base)s\">base de dados oficial</a> é uma ferramenta útil e "
+"madura para analizar a contratação pública portuguesa."
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:12
+msgid ""
+"About 90 percent of all procurements from municipalities are today made by "
+"direct procurement."
+msgstr ""
+"Cerca de 90 porcento de todos os contratos públicos dos municípios são hoje "
+"decididos por ajuste direto."
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:15
+msgid ""
+"In the last 5 years, there has been a slight increase to use the public "
+"tender."
+msgstr ""
+"Nos últimos 5 anos, tem havido uma pequena têndencia para usar mais o "
+"concurso público."
 
 #: contracts/templatetags/contracts/humanize.py:11
 #, python-format

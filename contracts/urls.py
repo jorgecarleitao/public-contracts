@@ -47,6 +47,6 @@ urlpatterns = patterns('',
                        url(r'^%s$' % _('when-do-portuguese-municipalities-contract-most'), views_analysis.municipalities_contracts_time_series, name='municipalities_contracts_time_series'),
                        url(r'^%s/data$' % _('when-do-portuguese-municipalities-contract-most'), views_data.municipalities_contracts_time_series_json, name='municipalities_contracts_time_series_json'),
 
-                       url(r'^%s$' % _('test-procedures'), views_analysis.municipalities_procedure_types_time_series, name='municipalities_procedure_types_time_series'),
-                       url(r'^%s/data$' % _('test-procedures'), views_data.municipalities_procedure_types_time_series_json, name='municipalities_procedure_types_time_series_json')
+                       url(r'^%s$' % _('how-do-portuguese-municipalities-contract-most'), views_analysis.municipalities_procedure_types_time_series, name='municipalities_procedure_types_time_series'),
+                       url(r'^%s/data$' % _('how-do-portuguese-municipalities-contract-most'), views_data.municipalities_procedure_types_time_series_json, name='municipalities_procedure_types_time_series_json')
 )
