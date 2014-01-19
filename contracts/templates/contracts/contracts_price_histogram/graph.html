@@ -1,3 +1,4 @@
+{% load i18n %}
 <svg id="graph-histogram"></svg>
 <style>
     .axis path,
@@ -103,7 +104,7 @@
                     .attr("y", 32)
                     .attr("x", width/2)
                     .style("text-anchor", "end")
-                    .text("Valor em €");
+                    .text("{% trans "Value in €" %}");
 
             svg1.append("g")
                     .attr("class", "y axis")
@@ -112,7 +113,7 @@
                     .attr("x", 150)
                     .attr("y", 12)
                     .style("text-anchor", "end")
-                    .text("Número de contratos");
+                    .text("{% trans "Number of contracts" %}");
 
             svg1.selectAll(".bar")
                     .data(data)

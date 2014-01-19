@@ -1,38 +1,35 @@
 {% extends "contracts/two_column_body.html" %}
 {% load i18n %}
-{% block title %}{% trans "Contracts"%}{% endblock %}
+{% load contracts.humanize %}
+{% block title %}{% trans "Distribution of contract prices"%}{% endblock %}
 {% block forejs %}
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 {% endblock %}
 {% block content %}
     <div class="rules">
-        <h2>Quantos contratos públicos têm o valor X€?</h2>
+        <h2>{% trans "How many contracts are priced as X Euros?"%}</h2>
         <p>
-            A <a href="http://www.base.gov.pt/base2/">base de dados oficial de contratos públicos</a> tem por volta de 370.000 contratos.
-            Nesta análise, procurámos saber quantos deles têm o valor X€.
+            {% blocktrans with count=count price=price|intword%}
+                Portugal's official database has today {{ count }} contracts, with a total value of {{ price }} €.
+                In this analysis, we asked:
+            {% endblocktrans %}
         </p>
+        <h3>{% trans "What is the distribution of prices of these contracts?" %}</h3>
         {% include "contracts/contracts_price_histogram/graph.html" %}
         <p>
-            O gráfico representa o número de contratos (eixo y) que existem dentro de uma gama de preços (eixo x).
-            Realçamos duas caracteristicas da distribuição:
+            {% blocktrans %}
+                The graph represents the number of contracts (y-axis) within a price range (x-axis).
+                We point out two caracteristics of the distribution:
+            {% endblocktrans %}
         </p>
         <ul>
             <li>
-                O máximo da distribuição encontra-se entre 5000€ e 10000€.
+                {% trans "The maximum is around 5000€-10.000€" %}
             </li>
             <li>
-                A distribuição contém várias ordens de grandeza,
-                com contratos desde euros até milhões de euros.
+                {% trans "The distribution is broad, with contracts from euros to million of euros." %}
             </li>
         </ul>
-        <p>
-            O código fonte de todas as análises é público e encontra-se
-            <a href="https://github.com/jorgecarleitao/public-contracts">aqui</a>.
-            Pode usá-lo para fazer as suas próprias análises.
-        </p>
     </div>
-{% endblock %}
-{% block sidebar %}
-    {# include "contracts/contract_price_histogram/sidebar.html" #}
 {% endblock %}

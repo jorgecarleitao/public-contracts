@@ -19,7 +19,13 @@ def entities_category_ranking(request):
 
 
 def contracts_price_histogram(request):
-    return render(request, 'contracts/contracts_price_histogram/main.html')
+
+    data = AnalysisManager.get_analysis("contracts_macro_statistics")
+
+    context = {'count': data['total_count'],
+               'price': data['total_sum']}
+
+    return render(request, 'contracts/contracts_price_histogram/main.html', context)
 
 
 def procedure_types_time_series(request):
