@@ -1,3 +1,4 @@
+{% load i18n %}
 <svg id="graph"></svg>
 <style>
     .axis path,
@@ -6,7 +7,6 @@
         stroke: #000;
         shape-rendering: crispEdges;
     }
-
     .grid .tick {
         stroke: lightgrey;
         opacity: 0.7;
@@ -15,7 +15,6 @@
     .grid path {
         stroke-width: 0;
     }
-
 </style>
 <script>
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
@@ -33,6 +32,10 @@
     var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom").tickValues([
+                new Date(2008, 6),
+                new Date(2009, 0),
+                new Date(2009, 6),
+                new Date(2010, 0),
                 new Date(2010, 6),
                 new Date(2011, 0),
                 new Date(2011, 6),
@@ -40,7 +43,7 @@
                 new Date(2012, 6),
                 new Date(2013, 0),
                 new Date(2013, 6)])
-            .tickFormat(d3.time.format("%m-%Y"));
+            .tickFormat(d3.time.format("%m/%y"));
 
     var yAxis = d3.svg.axis()
             .scale(y)
@@ -58,8 +61,8 @@
             .x(function(d) { return x(d.from); })
             .y(function(d) { return y(d.tender); });
 
-    var color_hash = {0:["ajuste direto", "#00b400"],
-        1:["concurso público", "#1b95db"]};
+    var color_hash = {0: ["{% trans "direct procurement" %}", "#00b400"],
+                      1: ["{% trans "tender" %}", "#1b95db"]};
 
     var svg = d3.select("#graph")
             .attr("width", width + margin.left + margin.right)
@@ -82,7 +85,7 @@
                 .ticks(8)
     }
 
-    d3.json('{% url "procedure_types_time_series_json" %}', function(error, data) {
+    d3.json('{% url "municipalities_procedure_types_time_series_json" %}', function(error, data) {
 
         data.forEach(function(d) {
             d.from = parseDate(d.from);
@@ -168,20 +171,20 @@
 
         legend = svg.append("g")
                 .attr("class", "legend")
-                .attr("x", width - 65)
-                .attr("y", 50)
+                .attr("x", width - 100)
+                .attr("y", 100)
                 .attr("height", 100)
                 .attr("width", 100);
         for (var i = 0; i < 2; i++)
         {
             legend.append("svg:circle")
-                    .attr("cx", width - 120)
-                    .attr("cy", 50 + i*20)
+                    .attr("cx", width - 170)
+                    .attr("cy", 100 + i*20)
                     .attr("r", 3)
                     .style("fill", color_hash[i][1]);
             legend.append("text")
-                    .attr("x", width - 110)
-                    .attr("y", 50 + i*20 + 4)
+                    .attr("x", width - 160)
+                    .attr("y", 100 + i*20 + 4)
                     .text(color_hash[i][0]);
         }
     });

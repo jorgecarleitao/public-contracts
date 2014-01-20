@@ -48,3 +48,7 @@ def municipalities_delta_time(request):
 
 def municipalities_contracts_time_series(request):
     return render(request, 'contracts/municipalities_contracts_time_series/main.html')
+
+
+def municipalities_procedure_types_time_series(request):
+    return render(request, 'contracts/municipalities_procedure_type_time_series/main.html')

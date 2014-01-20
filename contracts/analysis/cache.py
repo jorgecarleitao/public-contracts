@@ -37,7 +37,9 @@ _allAnalysis = [Analysis('municipalities_delta_time', analysis.get_municipalitie
                 Analysis('contracts_macro_statistics', analysis.get_contracts_macro_statistics),
                 Analysis('contracts_price_distribution', analysis.get_price_histogram),
                 Analysis('municipalities_categories_ranking', analysis.get_municipalities_specificity),
-                Analysis('municipalities_contracts_time_series', analysis.get_municipalities_contracts_time_series)
+                Analysis('municipalities_contracts_time_series', analysis.get_municipalities_contracts_time_series),
+                Analysis('municipalities_procedure_types_time_series',
+                         analysis.get_municipalities_procedure_types_time_series)
                 ]
 
 for x in _allAnalysis:

@@ -138,7 +138,7 @@ def get_municipalities_contracts_time_series():
         max_date = add_months(min_date, 1)
 
         aggregate = municipalities.filter(contracts_made__signing_date__gte=min_date,
-                                          contracts_made__signing_date__lt=max_date)\
+                                          contracts_made__signing_date__lt=max_date) \
             .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
 
         entry = {'from': min_date,
@@ -146,6 +146,35 @@ def get_municipalities_contracts_time_series():
                  'count': aggregate['count'],
                  'value': aggregate['value'] or 0}
         data.append(entry)
+        min_date = max_date
+        if min_date == end_date:
+            break
+
+    return data
+
+
+def get_municipalities_procedure_types_time_series():
+
+    min_date = datetime.date(2008, 1, 1)
+    end_date = datetime.date(date.today().year, date.today().month, 1)
+
+    data = []
+    while True:
+        max_date = add_months(min_date, 1)
+
+        contracts = models.Contract.objects.filter(contractors__name__startswith=u'Município',
+                                                   signing_date__gte=min_date,
+                                                   signing_date__lt=max_date)
+
+        count = contracts.count()
+        if count != 0:
+            entry = {'from': min_date,
+                     'to': max_date,
+                     'direct': contracts.filter(procedure_type_id=2).count()*1./count,
+                     'tender': contracts.filter(procedure_type_id=3).count()*1./count
+            }
+            data.append(entry)
+
         min_date = max_date
         if min_date == end_date:
             break

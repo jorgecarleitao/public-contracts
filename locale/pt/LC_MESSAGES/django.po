@@ -89,6 +89,10 @@ msgstr "municípios-tempo-médio-publicação-contratos"
 msgid "when-do-portuguese-municipalities-contract-most"
 msgstr "quando-e-que-os-municipios-mais-contratam"
 
+#: contracts/urls.py:50 contracts/urls.py:51
+msgid "how-do-portuguese-municipalities-contract-most"
+msgstr "como-e-que-os-municipios-mais-contratam"
+
 #: contracts/views.py:20 contracts/views.py:47
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
 #: contracts/templates/contracts/contract_list/search_contracts.html:14
@@ -164,7 +168,7 @@ msgstr ""
 msgid ""
 "\n"
 "        <p>\n"
-"            Most people don’t have the time nor skills to scrutinize our "
+"            Most people don’t have the time nor will to scrutinize our "
 "analysis,\n"
 "            and our analysis are not peer reviewed by specialists in the "
 "field.\n"
@@ -173,15 +177,9 @@ msgid ""
 "        <p>\n"
 "            The analysis we provide can easily be used to support claims "
 "about specific public or private entities.\n"
-"            In any circumstance we do such claims in this website.\n"
-"            This website is a place for gaining understanding and not to "
-"form a political agenda.\n"
-"        </p>\n"
-"        <p>\n"
-"            Our objective, besides providing the API, is to analyze the "
-"database.\n"
-"            We try to always state the main assumptions of our work, and we "
-"try to address their main criticisms.\n"
+"            In any circumstance we do such claims.\n"
+"            This website is a place for gaining a better understanding on "
+"portuguese public procurement.\n"
 "        </p>\n"
 "        <p>\n"
 "            If you have any suggestion or criticism, please add it to the <a "
@@ -190,25 +188,22 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"<p>A maioria não tem o tempo ou conhecimentos para escrutinar as análises "
-"que são feitasneste projeto. Para além disso, as nossas análises <strong>não "
-"são peer reviewed</strong> e portanto não são científicas. Consequentemente, "
-"seja <strong>crítico</strong> na interpretação.</p><p>As análises que aqui "
-"apresentamos podem ser facilmente usadas para difamar entidadesespecíficas, "
-"públicas ou privadas.Em qualquer circunstância este projeto se revê nessas "
-"afirmações. Este é um projeto para conhecer e compreender a contratação "
-"portuguesa e não um local para formar uma agenda política.</p><p>O nosso "
-"objetivo, para além de providenciar a API para fazer perguntas á base de "
-"dados,é analisá-la. Tentamos sempre afirmar as assunções usadas, e ter em "
-"conta as principais críticasao trabalho.</p><p>Se tiver alguma crítica ou "
-"sugestão, pode colocá-la na <a href=\"%(mailing_list)s\">mailing list</a> "
-"deste projeto, de forma a ela ser publicamente discutida.</p>"
+"<p>A maioria de vós não tem o tempo ou vontade para escrutinar as análises "
+"que são feitas neste projeto. Para além disso, as nossas análises "
+"<strong>não são peer reviewed</strong> e portanto não são científicas. "
+"Consequentemente, seja <strong>crítico</strong> na interpretação.</p><p>As "
+"análises aqui apresentadas podem ser usadas para difamar entidades, públicas "
+"ou privadas. Em qualquer circunstância nos revêmos nessas afirmações. Este é "
+"um projeto com o objetivo de melhorar a nossa compreensão sobre a "
+"contratação pública portuguesa.</p><p>Se tiver alguma crítica ou sugestão, "
+"pode colocá-la na <a href=\"%(mailing_list)s\">mailing list</a> deste "
+"projeto.</p>"
 
-#: contracts/templates/contracts/about.html:32
+#: contracts/templates/contracts/about.html:28
 msgid "Acknowledgments"
 msgstr "Agradecimentos"
 
-#: contracts/templates/contracts/about.html:35
+#: contracts/templates/contracts/about.html:31
 #, python-format
 msgid ""
 "\n"
@@ -221,7 +216,7 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">Fundação Django e contribuidores</a> pelo "
 "software extraordinário e comunidade fantástica que é;"
 
-#: contracts/templates/contracts/about.html:41
+#: contracts/templates/contracts/about.html:37
 #, python-format
 msgid ""
 "\n"
@@ -234,7 +229,7 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">Blog Má despesa pública</a> por ajudarem a "
 "divulgar algumas das nossas análises;"
 
-#: contracts/templates/contracts/about.html:47
+#: contracts/templates/contracts/about.html:43
 #, python-format
 msgid ""
 "\n"
@@ -247,7 +242,7 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">Base de dados oficial portuguesa, BASE</a> pela "
 "ajuda na interpretação da lei e ajuda técnica;"
 
-#: contracts/templates/contracts/about.html:53
+#: contracts/templates/contracts/about.html:49
 #, python-format
 msgid ""
 "\n"
@@ -260,7 +255,7 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">Website da União Europeia</a> que contém "
 "informação importante sobre contratação pública e legislação;"
 
-#: contracts/templates/contracts/about.html:59
+#: contracts/templates/contracts/about.html:55
 #, python-format
 msgid ""
 "\n"
@@ -272,7 +267,7 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">Django-treebeard</a> que nos facilita "
 "tecnicamente a implementação das categorias;"
 
-#: contracts/templates/contracts/about.html:65
+#: contracts/templates/contracts/about.html:61
 #, python-format
 msgid ""
 "\n"
@@ -330,26 +325,30 @@ msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
 #: contracts/templates/contracts/main_page.html:27
+msgid "How do portuguese municipalities contract most?"
+msgstr "Como é que os municípios mais contratam?"
+
+#: contracts/templates/contracts/main_page.html:30
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/templates/contracts/main_page.html:30
+#: contracts/templates/contracts/main_page.html:33
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/templates/contracts/main_page.html:33
+#: contracts/templates/contracts/main_page.html:36
 msgid "Macroscopic analysis"
 msgstr "Análises macroscópicas"
 
-#: contracts/templates/contracts/main_page.html:36
+#: contracts/templates/contracts/main_page.html:39
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/templates/contracts/main_page.html:39
+#: contracts/templates/contracts/main_page.html:42
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/templates/contracts/main_page.html:43
+#: contracts/templates/contracts/main_page.html:46
 #, python-format
 msgid ""
 "\n"
@@ -756,6 +755,85 @@ msgstr ""
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:7
 msgid "days"
 msgstr "dias"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/graph.html:64
+msgid "direct procurement"
+msgstr "ajuste direto"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/graph.html:65
+msgid "tender"
+msgstr "concurso público"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:4
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:10
+msgid "Portuguese municipalities - tender or direct procurement?"
+msgstr "Como é que os municípios mais contratam?"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:12
+msgid ""
+"\n"
+"                The procedure to create a public procurement in Portugal is "
+"mainly either by\n"
+"                <strong>direct procurement</strong> or by a <strong>public "
+"tender</strong>.\n"
+"                In this analysis we asked the question:\n"
+"            "
+msgstr ""
+"\n"
+"O procedimento para criar um contrato público é maioritariamente "
+"<strong>ajuste direto</strong> ou <strong>concurso público</strong>. Nesta "
+"análise colocámos a pergunta:"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:18
+msgid "How municipalities do procurement?"
+msgstr "Que procedimento os municípios mais usam?"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/main.html:20
+msgid ""
+"\n"
+"                We considered all contracts of all municipalities of each "
+"month and asked how many were decided\n"
+"                by a public tender, and how many were decided by direct "
+"procurement. Here is the result:\n"
+"            "
+msgstr ""
+"\n"
+"Considerámos todos os contratos de todos os municípios de cada mês e "
+"perguntámos que percentagem deles foi feita por ajuste direto e por concurso "
+"público. Eis o resultado:"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:3
+msgid "Key points"
+msgstr "Pontos chave"
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:6
+#, python-format
+msgid ""
+"\n"
+"                The <a href=\"%(base)s\">oficial database</a> is a useful "
+"and insightful\n"
+"                tool to analyse the portuguese procurement.\n"
+"            "
+msgstr ""
+"\n"
+"A <a href=\"%(base)s\">base de dados oficial</a> é uma ferramenta útil e "
+"madura para analizar a contratação pública portuguesa."
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:12
+msgid ""
+"About 90 percent of all procurements from municipalities are today made by "
+"direct procurement."
+msgstr ""
+"Cerca de 90 porcento de todos os contratos públicos dos municípios são hoje "
+"decididos por ajuste direto."
+
+#: contracts/templates/contracts/municipalities_procedure_type_time_series/sidebar.html:15
+msgid ""
+"In the last 5 years, there has been a slight increase to use the public "
+"tender."
+msgstr ""
+"Nos últimos 5 anos, tem havido uma pequena têndencia para usar mais o "
+"concurso público."
 
 #: contracts/templatetags/contracts/humanize.py:11
 #, python-format
