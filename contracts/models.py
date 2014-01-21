@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count
 from django.utils.text import slugify
 from treebeard.ns_tree import NS_Node
 
@@ -143,8 +143,8 @@ class Entity(models.Model):
         result = cache.get(cache_name)
         if result is None or flush_cache:
             # retrieves the list. This is an expensive query.
-            result = list(Contract.objects.filter(Q(contracted__pk=self.id) |
-                                                  Q(contractors__pk=self.id)).distinct().values_list('id', flat=True))
+            result = list(self.contract_set.all().values_list('id', flat=True)) + \
+                     list(self.contracts_made.all().values_list('id', flat=True))
             cache.set(cache_name, result, 60*60*24*30)
         return result
 
