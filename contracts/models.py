@@ -139,7 +139,7 @@ class Entity(models.Model):
         Retrieves a list of all contracts' ids the entity participated in.
         The result is cached for 1 month because it is updated on server side using cron.
         """
-        cache_name = __name__ + '>_last_contracts' + '>%s' % self.nif
+        cache_name = __name__ + '>contracts_ids' + '>%s' % self.id
         result = cache.get(cache_name)
         if result is None or flush_cache:
             # retrieves the list. This is an expensive query.
