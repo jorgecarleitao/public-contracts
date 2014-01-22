@@ -44,8 +44,12 @@ _allAnalysis = [Analysis('municipalities_delta_time', analysis.get_entities_delt
                          u'Município'),
                 Analysis('procedure_type_time_series', analysis.get_all_procedure_types_time_series),
                 Analysis('contracts_macro_statistics', analysis.get_contracts_macro_statistics),
-                Analysis('contracts_price_distribution', analysis.get_price_histogram)
-                ]
+                Analysis('contracts_price_distribution', analysis.get_price_histogram),
+                Analysis('ministries_contracts_time_series', analysis.get_entities_contracts_time_series,
+                         u'Secretaria-Geral do Ministério'),
+                Analysis('ministries_delta_time', analysis.get_entities_delta_time,
+                         u'Secretaria-Geral do Ministério')
+]
 
 for x in _allAnalysis:
     AnalysisManager.register(x)
