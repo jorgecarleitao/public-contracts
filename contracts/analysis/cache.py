@@ -5,10 +5,11 @@ import analysis
 
 class Analysis:
 
-    def __init__(self, name, function, timeout=60*60*24):
+    def __init__(self, name, function, *args, **kwargs):
         self.name = name
         self.function = function
-        self.timeout = timeout
+        self.args = args
+        self.kwargs = kwargs
 
     def get(self):
         result = cache.get(self.name)
@@ -17,8 +18,8 @@ class Analysis:
         return result
 
     def update(self):
-        result = self.function()
-        cache.set(self.name, result, self.timeout)
+        result = self.function(*self.args, **self.kwargs)
+        cache.set(self.name, result, 60*60*24)
         return result
 
 
