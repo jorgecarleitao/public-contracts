@@ -31,28 +31,28 @@ def get_price_histogram():
     return data
 
 
-def get_municipalities_specificity():
+def get_entities_specificity(startswith_string):
     """
-    1. We filter entities that start with 'Município'
+    1. We filter entities that start with "startswith_string"
     2. We compute the sum of depths and the number of contracts
-    3. We exclude municipalities with less than 5 contracts
+    3. We exclude entities with less than 5 contracts
     4. We compute the average depth
     5. We order them by decreasing average depth
     """
-    municipalities = models.Entity.objects \
-        .filter(name__startswith=u'Município') \
+    entities = models.Entity.objects \
+        .filter(name__startswith=startswith_string) \
         .annotate(sum_depth=Sum('contracts_made__category__depth'), count=Count('contracts_made')) \
         .exclude(count__lt=5)
 
     # 4.
-    municipalities = list(municipalities)
-    for municipality in municipalities:
-        municipality.avg_depth = municipality.sum_depth*1./municipality.count
+    entities = list(entities)
+    for entity in entities:
+        entity.avg_depth = entity.sum_depth*1./entity.count
 
     # 5.
-    municipalities.sort(key=lambda x: x.avg_depth, reverse=True)
+    entities.sort(key=lambda x: x.avg_depth, reverse=True)
 
-    return municipalities
+    return entities
 
 
 def get_contracts_macro_statistics():
@@ -74,7 +74,7 @@ def get_contracts_macro_statistics():
             'month_count': month_price['count']}
 
 
-def get_procedure_types_time_series():
+def get_all_procedure_types_time_series():
     min_date = datetime.date(2010, 1, 1)
     end_date = datetime.date(date.today().year, date.today().month, 1)
 
@@ -101,29 +101,29 @@ def get_procedure_types_time_series():
     return data
 
 
-def get_municipalities_delta_time():
-    municipalities = models.Entity.objects.filter(name__startswith=u'Município') \
+def get_entities_delta_time(startswith_string):
+    entities = models.Entity.objects.filter(name__startswith=startswith_string) \
         .annotate(total=Count('contracts_made')).exclude(total__lt=5)
 
-    municipalities = list(municipalities)
+    entities = list(entities)
 
-    for municipality in municipalities:
+    for entity in entities:
         count = 0
         avg = timedelta(0)
-        for contract in municipality.contracts_made.exclude(signing_date=None).exclude(added_date=None) \
+        for contract in entity.contracts_made.exclude(signing_date=None).exclude(added_date=None) \
             .values('signing_date', 'added_date'):
             avg += contract['added_date'] - contract['signing_date']
             count += 1
 
-        municipality.average_delta_time = avg.days*1./count
-        municipality.contracts_number = count
+        entity.average_delta_time = avg.days*1./count
+        entity.contracts_number = count
 
-    municipalities.sort(key=lambda x: x.average_delta_time)
+    entities.sort(key=lambda x: x.average_delta_time)
 
-    return municipalities
+    return entities
 
 
-def get_municipalities_contracts_time_series():
+def get_entities_contracts_time_series(startswith_string):
     """
     Computes the number of and value of contracts of municipalities
     from 2008 to today, with a window of 1 month.
@@ -131,14 +131,14 @@ def get_municipalities_contracts_time_series():
     min_date = datetime.date(2008, 1, 1)
     end_date = datetime.date(date.today().year, date.today().month, 1)
 
-    municipalities = models.Entity.objects.filter(name__startswith=u'Município')
+    entities = models.Entity.objects.filter(name__startswith=startswith_string)
 
     data = []
     while True:
         max_date = add_months(min_date, 1)
 
-        aggregate = municipalities.filter(contracts_made__signing_date__gte=min_date,
-                                          contracts_made__signing_date__lt=max_date) \
+        aggregate = entities.filter(contracts_made__signing_date__gte=min_date,
+                                    contracts_made__signing_date__lt=max_date) \
             .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
 
         entry = {'from': min_date,
@@ -153,7 +153,7 @@ def get_municipalities_contracts_time_series():
     return data
 
 
-def get_municipalities_procedure_types_time_series():
+def get_procedure_types_time_series(startswith_string):
 
     min_date = datetime.date(2008, 1, 1)
     end_date = datetime.date(date.today().year, date.today().month, 1)
@@ -162,7 +162,7 @@ def get_municipalities_procedure_types_time_series():
     while True:
         max_date = add_months(min_date, 1)
 
-        contracts = models.Contract.objects.filter(contractors__name__startswith=u'Município',
+        contracts = models.Contract.objects.filter(contractors__name__startswith=startswith_string,
                                                    signing_date__gte=min_date,
                                                    signing_date__lt=max_date)
 

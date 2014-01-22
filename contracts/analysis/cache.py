@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.core.cache import cache
 
 import analysis
@@ -33,14 +34,17 @@ class AnalysisManager(dict):
 
 AnalysisManager = AnalysisManager()
 
-_allAnalysis = [Analysis('municipalities_delta_time', analysis.get_municipalities_delta_time),
-                Analysis('procedure_type_time_series', analysis.get_procedure_types_time_series),
+_allAnalysis = [Analysis('municipalities_delta_time', analysis.get_entities_delta_time,
+                         u'Município'),
+                Analysis('municipalities_contracts_time_series', analysis.get_entities_contracts_time_series,
+                         u'Município'),
+                Analysis('municipalities_categories_ranking', analysis.get_entities_specificity,
+                         u'Município'),
+                Analysis('municipalities_procedure_types_time_series', analysis.get_procedure_types_time_series,
+                         u'Município'),
+                Analysis('procedure_type_time_series', analysis.get_all_procedure_types_time_series),
                 Analysis('contracts_macro_statistics', analysis.get_contracts_macro_statistics),
-                Analysis('contracts_price_distribution', analysis.get_price_histogram),
-                Analysis('municipalities_categories_ranking', analysis.get_municipalities_specificity),
-                Analysis('municipalities_contracts_time_series', analysis.get_municipalities_contracts_time_series),
-                Analysis('municipalities_procedure_types_time_series',
-                         analysis.get_municipalities_procedure_types_time_series)
+                Analysis('contracts_price_distribution', analysis.get_price_histogram)
                 ]
 
 for x in _allAnalysis:
