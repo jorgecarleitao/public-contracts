@@ -4,8 +4,8 @@
 
 {% block title %}{% trans "Public contracts"%}{% endblock %}
 {% block content %}
-    <div class="rules" itemscope itemtype="http://schema.org/Article">
-        <h2 class="center">{% trans "Welcome to Public Contracts" %}</h2>
+    <div class="rules" itemscope itemtype="http://schema.org/WebPage">
+        <h2 class="center" itemprop="name">{% trans "Welcome to Public Contracts" %}</h2>
         <p itemprop="description">
             {% blocktrans with github="https://github.com/jorgecarleitao/public-contracts" %}
                 An <a href="{{ github }}">open source</a>
