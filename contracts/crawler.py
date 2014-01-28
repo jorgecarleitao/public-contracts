@@ -92,7 +92,7 @@ def clean_country(item):
     return country
 
 
-class AbstractCrawler():
+class AbstractCrawler(object):
 
     class NoMoreEntriesError:
         pass
@@ -127,12 +127,16 @@ class AbstractCrawler():
 
     def goToPage(self, url):
         response = self.browser.open(url)
-        html = response.read()
-
-        return json.loads(html)
+        return response.read()
 
 
-class StaticDataCrawler(AbstractCrawler):
+class JSONCrawler(AbstractCrawler):
+
+    def goToPage(self, url):
+        json.loads(super(JSONCrawler, self).goToPage(url))
+
+
+class StaticDataCrawler(JSONCrawler):
     def retrieve_and_save_contracts_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tipocontratos'
         data = self.goToPage(url)
@@ -217,7 +221,7 @@ class StaticDataCrawler(AbstractCrawler):
         self.retrieve_and_save_councils()
 
 
-class Crawler(AbstractCrawler):
+class Crawler(JSONCrawler):
     """
     The main crawler. See docs
     """
