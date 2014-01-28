@@ -1,4 +1,4 @@
-Our database
+Database
 =============
 
 This document explains what is our database, how you can access it remotely,
@@ -9,7 +9,7 @@ Database
 
 .. _`official database`: http://www.base.gov.pt/base2
 
-The `official database` doesn't provide access to their database (for a good reason), but provides
+The `official database` doesn't provide access to their database, but provides
 access to its data. On one hand, this means we cannot perform any query we want, but on the other, it means we
 can retrieve its information.
 
@@ -39,6 +39,12 @@ or you can download a dump and import it to your own database.
 Download and import dumps
 --------------------------
 
-.. important:: This is not implemented yet.
+.. _`phpmyadmin panel`: https://web306.webfaction.com/static/phpMyAdmin
 
-We provide dumps of the database in .sql. These dumps can be used for instance to mount the database locally.
+We don't provide dumps of the database in .sql,
+however, you can create your own dump by accessing the `phpmyadmin panel`_ of the database
+using the credentials above and export it to the format you prefer using:
+
+- click on the database contracts (left tab)
+- click on export (top tab)
+- export
