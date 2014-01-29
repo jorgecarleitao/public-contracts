@@ -126,3 +126,13 @@ def municipalities_procedure_types_time_series_json(request):
         x['to'] = x['to'].strftime('%Y-%m-%d')
 
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def ministries_contracts_time_series_json(request):
+    data = AnalysisManager.get_analysis('ministries_contracts_time_series')
+
+    for x in data:
+        x['from'] = x['from'].strftime('%Y-%m-%d')
+        x['to'] = x['to'].strftime('%Y-%m-%d')
+
+    return HttpResponse(json.dumps(data), content_type="application/json")

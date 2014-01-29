@@ -52,3 +52,7 @@ def municipalities_contracts_time_series(request):
 
 def municipalities_procedure_types_time_series(request):
     return render(request, 'contracts/municipalities_procedure_type_time_series/main.html')
+
+
+def ministries_contracts_time_series(request):
+    return render(request, 'contracts/ministries_contracts_time_series/main.html')

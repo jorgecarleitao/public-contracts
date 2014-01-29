@@ -1,0 +1,60 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "When do portuguese ministries contract most?"%}{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">{% trans "When do portuguese ministries contract most?" %}</h2>
+        <p itemprop="description">
+            {% blocktrans with url="http://www.base.gov.pt/base2/" %}
+                By European law, portuguese public entities must publish their contracts in an
+                <a href="{{ url }}">official public database</a>. With this database,
+                we posed the question: when do portuguese ministries contract most?
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                We picked all contracts of all ministries and grouped then by the month of <strong>signing date</strong>.
+                Here is the result:
+            {% endblocktrans %}
+        </p>
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+    {% include "contracts/ministries_contracts_time_series/graph.html" %}
+    <div class="rules">
+        <p>
+            {% blocktrans %}
+                Relevant context:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
+                {% blocktrans %}
+                    By ministry we mean entities whose name starts with "Secretaria-Geral do Ministério ...".
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    The database only started to be populated from 2008, when European Union law came into effect.
+                    To some extent, this explains the sudden increase during 2008-2009.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    We are not using the sum of values (€) of the contracts.
+                    The argument is that values are unbounded:
+                    one single contract can make a particular month to have a arbitrary large value.
+                    (For experts:) the reason is that the variance of the sum of values can be
+                    unbounded because the distribution of values is broad.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    We have no explanation why there is a consistent increase since the beginning of 2013,
+                    which is already the double of the average value over the last 3 years.
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+{% endblock %}
