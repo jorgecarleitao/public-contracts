@@ -18,52 +18,6 @@ class District(models.Model):
     country = models.ForeignKey('Country')
 
 
-class CPVS(models.Model):
-    code = models.CharField(max_length=254)
-    description_en = models.CharField(max_length=254)
-    description_pt = models.CharField(max_length=254)
-
-    def division(self):
-        return CPVS.objects.get(code__startswith=self.code[:2] + '000000-')
-
-    def group(self):
-        return CPVS.objects.get(code__startswith=self.code[:3] + '00000-')
-
-    def klass(self):
-        return CPVS.objects.get(code__startswith=self.code[:4] + '0000-')
-
-    def category(self):
-        return CPVS.objects.get(code__startswith=self.code[:5] + '000-')
-
-    def sub_category1(self):
-        return CPVS.objects.get(code__startswith=self.code[:6] + '00-')
-
-    @classmethod
-    def divisions(cls):
-        return CPVS.objects.filter(code__contains='000000-')
-
-    def groups(self):
-        return CPVS.objects.filter(code__startswith=self.code[:2], code__contains='00000-').exclude(pk=self.pk)
-
-    def classes(self):
-        return CPVS.objects.filter(code__startswith=self.code[:3], code__contains='0000-').exclude(pk=self.pk)
-
-    def categories(self):
-        return CPVS.objects.filter(code__startswith=self.code[:4], code__contains='000-').exclude(pk=self.pk)
-
-    def sub_categories1(self):
-        return CPVS.objects.filter(code__startswith=self.code[:5], code__contains='00-').exclude(pk=self.pk)
-
-    def sub_categories2(self):
-        return CPVS.objects.filter(code__startswith=self.code[:6], code__contains='0-').exclude(pk=self.pk)
-
-    def sub_categories3(self):
-        return CPVS.objects.filter(code__startswith=self.code[:7]).exclude(pk=self.pk)
-
-    def __unicode__(self):
-        return self.code[:8]
-
-
 class Category(NS_Node):
     code = models.CharField(max_length=254)
     description_en = models.CharField(max_length=254)
