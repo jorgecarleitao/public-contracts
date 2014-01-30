@@ -11,7 +11,7 @@ This tutorial assumes you already :doc:`installed <installation>` the source.
 We use Django_ for accessing the database. Django is a web framework,
 but here we limit the usage of Django to accessing the database.
 
-We will assume you are in directory "tools", as the installation part ended there.
+We will assume you are in directory "contracts/tools", as the installation part ended there.
 
 Setup
 ---------

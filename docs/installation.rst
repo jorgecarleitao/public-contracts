@@ -58,7 +58,7 @@ Running the database API
 
 Once you have the dependencies installed, enter in its directory and run::
 
-    cd tools
+    cd contracts/tools
     python example.py
 
 If everything went well, it outputs two numbers:

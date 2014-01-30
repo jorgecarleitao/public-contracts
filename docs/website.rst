@@ -18,7 +18,7 @@ Our website uses a cache system, memcache. You can install it using::
 Running the website
 --------------------------
 
-Once you have the dependencies installed, you can try it by going to the directory "tools", and running
+Once you have the dependencies installed, you can try it by running
 
     python manage.py runserver
 

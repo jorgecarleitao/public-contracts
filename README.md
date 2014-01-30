@@ -46,7 +46,7 @@ This documentation is serious. If you find any mistake, please don't hesitate in
 
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
 
-Enter in the directory `cd public-contracts/tools`.
+Enter in the directory `cd public-contracts/contracts/tools`.
 
 4- Run the example:
 
