@@ -133,7 +133,7 @@ class AbstractCrawler(object):
 class JSONCrawler(AbstractCrawler):
 
     def goToPage(self, url):
-        json.loads(super(JSONCrawler, self).goToPage(url))
+        return json.loads(super(JSONCrawler, self).goToPage(url))
 
 
 class StaticDataCrawler(JSONCrawler):
@@ -225,8 +225,8 @@ class Crawler(JSONCrawler):
     """
     The main crawler. See docs
     """
-    data_directory = '../../data'
-    contracts_directory = '../../contracts'
+    data_directory = '../../../data'
+    contracts_directory = '../../../contracts'
 
     @staticmethod
     def block_to_range(i):
@@ -275,7 +275,10 @@ class Crawler(JSONCrawler):
         regex = re.compile(r"(\d+)_entities.dat")
         files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
         files = sorted(files, key=lambda x: int(x), reverse=True)
-        return files[0]
+        if len(files):
+            return files[0]
+        else:
+            return 0
 
     def _last_contract_block(self):
         """
@@ -286,7 +289,10 @@ class Crawler(JSONCrawler):
         regex = re.compile(r"(\d+).dat")
         files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
         files = sorted(files, key=lambda x: int(x), reverse=True)
-        return files[0]
+        if len(files):
+            return files[0]
+        else:
+            return 0
 
     def _get_contracts_block(self, block):
         """
