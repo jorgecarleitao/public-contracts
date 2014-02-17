@@ -1,0 +1,85 @@
+{% extends "deputies/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Public deputies"%}{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/WebPage">
+        <h2 class="center" itemprop="name">{% trans "Welcome to Public Deputies" %}</h2>
+        <p itemprop="description">
+            {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" parliament_url="http://www.parlamento.pt/" %}
+                In this sub-project we use the official database of deputies from the
+                <a href="{{ parliament_url }}">portuguese parliament</a>
+                to try to understand the relationship between political agents (deputies)
+                and economical agents (entities).
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                We are working on a way to map the declarations of conflicts of interests of the deputies
+                into public and private entities.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                Meanwhile, we provide some analysis of the deputies.
+            {% endblocktrans %}
+            {% blocktrans %}
+                The first analysis is:
+            {% endblocktrans %}
+        </p>
+        <h4>{% trans "How long a portuguese deputy stays in the parliament?"%}</h4>
+        <p>
+            {% blocktrans with parliament_url="http://www.parlamento.pt/"%}
+                Portuguese deputies can be in the parliament for multiple mandates,
+                bounded only by the persons' maximum age. With the data from the
+                <a href="{{ parliament_url }}">official website</a> of the portuguese
+                parliament, we posed the question of how long a deputy stays in parliament. Here is the result:
+            {% endblocktrans %}
+        </p>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+        {% include "deputies/deputies_survival_distribution/graph.html" %}
+        <p>
+            {% blocktrans %}
+                The data accounts for ~750 deputies since 1992. For each deputy, we
+                considered the total time of all his mandates.
+                The graph shows the percentage of deputies (y-axis, log-scale) with at
+                least x days in parliament (x-axis), each bar accounts for 50 days.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                The data seems to be well modeled by a constant function up to ~800 days, followed by an
+                exponential decay with exponent ~2200 days.
+                The half-life of the deputy is ~1500 days (one full mandate).
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% url "deputies_deputies" as the_url %}
+            {% blocktrans with url=the_url %}
+                The graph also shows that ~2% of all deputies ever in the parliament are there for at least 20 years.
+                You can find who they are <a href="{{ url }}?sorting=mandates">here</a>.
+            {% endblocktrans %}
+        </p>
+        <h4>{% trans "Other informations about this project"%}</h4>
+        <ul>
+            <li>
+                <p>
+                    {% blocktrans %}
+                        We use Twitter to announce updates and new analysis.
+                    {% endblocktrans %}
+                </p>
+            </li>
+            <li>
+                <p>
+                    {% blocktrans with url="http://demo.cratica.org/"%}
+                        This sub-project is becoming possible also because
+                        <a href="{{ url }}">demo.cratica</a>'s source code is open.
+                        We thank the contributors of demo.cratica for that and for the code.
+                    {% endblocktrans %}
+                </p>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

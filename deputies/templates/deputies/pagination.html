@@ -1,0 +1,17 @@
+{% if deputies.paginator.num_pages != 1 %}
+    <ul class="pagination horizontal-tab-list">
+        {% if deputies.has_previous %}
+            {% if deputies.previous_page_number != 1 %}
+                <li><a class="page-selector">1</a></li>
+            {% endif %}
+            <li><a class="page-selector">{{ deputies.previous_page_number }}</a></li>
+        {% endif %}
+        <li><span class="active">{{ deputies.number }}</span></li>
+        {% if deputies.has_next %}
+            <li><a class="page-selector">{{ deputies.next_page_number }}</a></li>
+            {% if deputies.next_page_number != deputies.paginator.num_pages %}
+                <li><a class="page-selector">{{ deputies.paginator.num_pages }}</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+{% endif %}

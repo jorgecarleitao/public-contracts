@@ -1,69 +1,44 @@
 import pickle
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime
-import mechanize as mc
-import cookielib
+
+from contracts.crawler import AbstractCrawler
 
 
-class AbstractCrawler(object):
+def safe_pickle_load(file_name):
+    """
+    Given a file name, returns the unpickled content of the file or None if any exception.
+    """
+    try:
+        f = open(file_name, "r")
+        try:
+            data = pickle.load(f)
+        except EOFError:
+            data = None
+        finally:
+            f.close()
+    except IOError:
+        data = None
 
-    class NoMoreEntriesError:
-        pass
-
-    def __init__(self):
-        # Browser
-        br = mc.Browser()
-
-        # Cookie Jar
-        cj = cookielib.LWPCookieJar()
-        br.set_cookiejar(cj)
-
-        # Browser options
-        br.set_handle_equiv(True)
-        br.set_handle_redirect(True)
-        br.set_handle_referer(True)
-        br.set_handle_robots(False)
-
-        # Follows refresh 0 but not hangs on refresh > 0
-        br.set_handle_refresh(mc._http.HTTPRefreshProcessor(), max_time=1)
-
-        # Want debugging messages?
-        #br.set_debug_http(True)
-        #br.set_debug_redirects(True)
-        #br.set_debug_responses(True)
-
-        # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
-        br.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
-                                        'AppleWebKit/537.36 (KHTML, like Gecko)'),
-                         ('Range', "items=0-24")]
-        self.browser = br
-
-    def goToPage(self, url):
-        response = self.browser.open(url)
-        return response.read()
+    return data
 
 
-crawler = AbstractCrawler()
+def clean_legislature(string):
+    """
+    Parses a string into a legislature (integer) and dates (beginning and end).
+    """
 
-DEFAULT_MAX = 4600
+    roman_numerals = {
+        'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
+        'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10,
+        'XI': 11, 'XII': 12, 'XIII': 13, 'XIV': 14, 'XV': 15,
+        'XVI': 16, 'XVII': 17, 'XVIII': 18, 'XIX': 19, 'XX': 20,
+        'XXI': 21, 'XXII': 22, 'XXIII': 23, 'XXIV': 24, 'XXV': 25,
+        }
 
-ROMAN_NUMERALS = {
-    'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
-    'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10,
-    'XI': 11, 'XII': 12, 'XIII': 13, 'XIV': 14, 'XV': 15,
-    'XVI': 16, 'XVII': 17, 'XVIII': 18, 'XIX': 19, 'XX': 20,
-    'XXI': 21, 'XXII': 22, 'XXIII': 23, 'XXIV': 24, 'XXV': 25,
-    }
-
-DATASETS = '../../datasets/'
-URL_DEPS_ACTIVOS='http://www.parlamento.pt/DeputadoGP/Paginas/DeputadosemFuncoes.aspx'
-FORMATTER_URL_BIO_DEP='http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=%d'
-
-
-def parse_legislature(s):
-    s = s.replace('&nbsp;', '')
-    number, dates = s.split('[')
-    number = ROMAN_NUMERALS[number.strip()]
+    string = string.replace('&nbsp;', '')
+    number, dates = string.split('[')
+    number = roman_numerals[number.strip()]
     dates = dates.strip(' ]')
     if len(dates.split(' a ')) == 2:
         start, end = dates.split(' a ')
@@ -75,128 +50,176 @@ def parse_legislature(s):
     return number, start, end
 
 
-def parse_deputy(id):
-    url = FORMATTER_URL_BIO_DEP % id
-    soup = BeautifulSoup(crawler.goToPage(url))
+class DeputiesCrawler(AbstractCrawler):
+    def __init__(self):
+        super(DeputiesCrawler, self).__init__()
 
-    id_prefix = 'ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_'
+        self._deputy_url_formatter = 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=%d'
 
-    name = soup.find('span', dict(id=id_prefix+'ucNome_rptContent_ctl01_lblText'))
-    short = soup.find('span', dict(id=id_prefix+'lblNomeDeputado'))
-    birthdate = soup.find('span', dict(id=id_prefix+'ucDOB_rptContent_ctl01_lblText'))
-    party = soup.find('span', dict(id=id_prefix+'lblPartido'))
-    occupation = soup.find('div', dict(id=id_prefix+'pnlProf'))
-    education = soup.find('div', dict(id=id_prefix+'pnlHabilitacoes'))
-    current_jobs = soup.find('div', dict(id=id_prefix+'pnlCargosDesempenha'))
-    jobs = soup.find('div', dict(id=id_prefix+'pnlCargosExercidos'))
-    awards = soup.find('div', dict(id=id_prefix+'pnlCondecoracoes'))
-    comissions = soup.find('div', dict(id=id_prefix+'pnlComissoes'))
-    mandates = soup.find('table', dict(id=id_prefix+'gvTabLegs'))
+        self._html_prefix = 'ctl00_ctl13_g_8035397e_bdf3_4dc3_b9fb_8732bb699c12_ctl00_'
 
-    if not name:
-        return {}
+        self._html_mapping = {'name': 'ucNome_rptContent_ctl01_lblText',
+                              'short': 'lblNomeDeputado',
+                              'birthday': 'ucDOB_rptContent_ctl01_lblText',
+                              'party': 'lblPartido',
+                              'occupation': 'pnlProf',
+                              'education': 'pnlHabilitacoes',
+                              'current_jobs': 'pnlCargosDesempenha',
+                              'jobs': 'pnlCargosExercidos',
+                              'awards': 'pnlCondecoracoes',
+                              'commissions': 'pnlComissoes',
+                              'mandates': 'gvTabLegs'}
 
-    entry = {'id': id,
-             'name': name.text,
-             'url': url,
-             'scrape_date': datetime.utcnow().isoformat()}
-    if short:
-        entry['shortname'] = short.text
-    if birthdate:
-        entry['birthday'] = datetime.strptime(birthdate.text, "%Y-%m-%d").date()
-    if party:
-        entry['party'] = party.text
+        self._html_element = {'name': 'span',
+                              'short': 'span',
+                              'birthday': 'span',
+                              'party': 'span',
+                              'occupation': 'div',
+                              'education': 'div',
+                              'current_jobs': 'div',
+                              'jobs': 'div',
+                              'awards': 'div',
+                              'commissions': 'div',
+                              'mandates': 'table'}
 
-    entry['education'] = []
-    if education:
-        #TODO: break educations string into multiple entries, ';' is the separator
-        #TODO: these blocks are repeated and should be made into functions
-        for each in education.findAll('tr')[1:]:
-            text = each.find('span').text
-            entry['education'].append(text)
+        self.data_directory = '../../../deputies_data/'
 
-    if occupation:
-        entry['occupation'] = []
-        for each in occupation.findAll('tr')[1:]:
-            entry['occupation'].append(each.text)
-    if jobs:
-        entry['jobs'] = []
-        for each in jobs.findAll('tr')[1:]:
-            if '\n' in each.text:
-                for j in each.text.split('\n'):
-                    if j:
-                        entry['jobs'].append(j.rstrip(' .;'))
-            else:
-                entry['jobs'].append(each.text)
-    if current_jobs:
-        entry['current_jobs'] = []
-        for each in current_jobs.findAll('tr')[1:]:
-            if '\n' in each.text:
-                for j in each.text.split('\n'):
-                    if j:
-                        entry['current_jobs'].append(j.rstrip(' .;'))
-            else:
-                entry['current_jobs'].append(each.text.rstrip(' ;.'))
-    if comissions:
-        entry['commissions'] = []
-        for each in comissions.findAll('tr')[1:]:
-            entry['commissions'].append(each.text)
+    def crawl_deputy(self, bid):
+        url = self._deputy_url_formatter % bid
+        soup = BeautifulSoup(self.goToPage(url))
 
-    entry['awards'] = []
-    if awards:
-        for each in awards.findAll('tr')[1:]:
-            if '\n' in each.text:
-                for j in each.text.split('\n'):
-                    if j:
-                        entry['awards'].append(j.rstrip(' .;'))
-            else:
-                entry['awards'].append(each.text.rstrip(' ;.'))
-    if mandates:
-        entry['mandates'] = []
-        for each in mandates.findAll('tr')[1:]:
-            leg = each.findAll('td')
-            l = leg[0].text
-            number, start_date, end_date = parse_legislature(l)
+        tester_key = 'name'
+        # if name doesn't exist, we exit
+        if not soup.find(self._html_element[tester_key], dict(id=self._html_prefix + self._html_mapping[tester_key])):
+            return {}
 
-            entry['mandates'].append({'legislature': number,
-                                      'start_date': start_date,
-                                      'end_date': end_date,
-                                      'constituency': leg[3].text,
-                                      'party': leg[4].text})
+        # we populate "entry" with each datum
+        entry = {}
+        for key in self._html_mapping:
+            entry[key] = soup.find(self._html_element[key],
+                                   dict(id=self._html_prefix + self._html_mapping[key])) or None
+        entry['name'] = entry['name'].text
 
-    return entry
+        # and we clean and validate it in place:
+        entry['id'] = bid
+        entry['retrieval_date'] = datetime.utcnow().isoformat()
 
+        if entry['short'] is not None:
+            entry['short'] = entry['short'].text
+        if entry['birthday'] is not None:
+            entry['birthday'] = datetime.strptime(entry['birthday'].text, "%Y-%m-%d").date()
+        if entry['party'] is not None:
+            entry['party'] = entry['party'].text
 
-def _scrape():
-    all_entries = []
+        if entry['education'] is not None:
+            entries = []
+            for each in entry['education'].findAll('tr')[1:]:
+                text = each.find('span').text
+                entries.append(text)
+            entry['education'] = entries
+        else:
+            entry['education'] = []
 
-    id = 0
-    while True:
-        print "retrieving id %d" % id
-        try:
-            entry = parse_deputy(id)
-            if entry != {}:
-                all_entries.append(entry)
-        except:
-            print('Was not able to retrieve id %d' % id)
-            break
-        id += 1
+        if entry['occupation'] is not None:
+            entries = []
+            for each in entry['occupation'].findAll('tr')[1:]:
+                entries.append(each.text)
+            entry['occupation'] = entries
+        else:
+            entry['occupation'] = []
 
-    return all_entries
+        if entry['jobs']:
+            entries = []
+            for each in entry['jobs'].findAll('tr')[1:]:
+                if '\n' in each.text:
+                    for j in each.text.split('\n'):
+                        if j:
+                            entries.append(j.rstrip(' .;'))
+                else:
+                    entries.append(each.text)
+            entry['jobs'] = entries
+        else:
+            entry['jobs'] = []
 
+        if entry['current_jobs'] is not None:
+            entries = []
+            for each in entry['current_jobs'].findAll('tr')[1:]:
+                if '\n' in each.text:
+                    for j in each.text.split('\n'):
+                        if j:
+                            entries.append(j.rstrip(' .;'))
+                else:
+                    entries.append(each.text.rstrip(' ;.'))
+            entry['current_jobs'] = entries
+        else:
+            entry['current_jobs'] = []
 
-def scrape(flush_cache=False):
-    file_name = "data.dat"
-    try:
-        file = open(file_name, "r")
-        data = pickle.load(file)
-        file.close()
-    except IOError:
-        data = None
+        if entry['commissions'] is not None:
+            entries = []
+            for each in entry['commissions'].findAll('tr')[1:]:
+                entries.append(each.text)
+            entry['commissions'] = entries
+        else:
+            entry['commissions'] = []
 
-    if data is None or flush_cache:
-        file = open(file_name, "w")
-        data = _scrape()
-        pickle.dump(data, file)
-        file.close()
-    return data
+        if entry['awards']:
+            entries = []
+            for each in entry['awards'].findAll('tr')[1:]:
+                if '\n' in each.text:
+                    for j in each.text.split('\n'):
+                        if j:
+                            entries.append(j.rstrip(' .;'))
+                else:
+                    entries.append(each.text.rstrip(' ;.'))
+            entry['awards'] = entries
+        else:
+            entry['awards'] = []
+
+        if entry['mandates']:
+            entries = []
+            for each in entry['mandates'].findAll('tr')[1:]:
+                leg = each.findAll('td')
+                l = leg[0].text
+                number, start_date, end_date = clean_legislature(l)
+
+                entries.append({'legislature': number,
+                                'start_date': start_date,
+                                'end_date': end_date,
+                                'constituency': leg[3].text,
+                                'party': leg[4].text})
+            entry['mandates'] = entries
+        else:
+            entry['mandates'] = []
+
+        return entry
+
+    def get_deputy(self, bid, flush_cache=False):
+        file_name = self.data_directory + 'deputy_%d.dat' % bid
+        data = safe_pickle_load(file_name)
+
+        if data is None or flush_cache:
+            data = self.crawl_deputy(bid)
+            f = open(file_name, "w")
+            pickle.dump(data, f)
+            f.close()
+        return data
+
+    def get_deputies(self, flush_cache=False):
+        """
+        Entry point of this crawler.
+        """
+        bid = 0
+        while True:
+            if bid < 8319:
+                bid += 1
+                continue
+
+            print('retrieving bid %d' % bid)
+            try:
+                entry = self.get_deputy(bid, flush_cache)
+                if entry != {}:
+                    yield entry
+            except:
+                print('Not able to retrieve bid %d' % bid)
+                raise
+            bid += 1

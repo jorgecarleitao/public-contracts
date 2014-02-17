@@ -1,0 +1,19 @@
+{% load i18n %}
+<li class="summary">
+    <h4>
+        <a href="{{ party.get_absolute_url }}">{{ party.abbrev }}</a>
+    </h4>
+    <div class="age">
+        {% blocktrans count count=party.mandates_count %}
+            {{ count }} mandate
+        {% plural %}
+            {{ count }} mandates
+        {% endblocktrans %}-
+
+        {% blocktrans count count=party.deputies_count %}
+            {{ count }} deputy
+        {% plural %}
+            {{ count }} deputies
+        {% endblocktrans %}
+    </div>
+</li>

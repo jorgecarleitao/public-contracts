@@ -1,0 +1,6 @@
+{% extends "deputies/two_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "Parties"%}{% endblock %}
+{% block content %}
+    {% include "deputies/parties_list/parties_loop.html" %}
+{% endblock %}

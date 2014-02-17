@@ -1,0 +1,6 @@
+{% extends "deputies/two_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "Deputies"%}{% endblock %}
+{% block content %}
+    {% include "deputies/deputy_list_template.html" %}
+{% endblock %}

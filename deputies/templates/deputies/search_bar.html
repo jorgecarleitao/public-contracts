@@ -1,0 +1,57 @@
+{% load i18n %}
+{% if deputies or search %}
+<div class="sorting">
+    <ul class="horizontal-tab-list">
+        <li {% if search %}class="active"{% endif %}>
+            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search deputies" %}" value="{{search}}">
+        </li>
+        <li>
+            {% if sorting == 'name' %}
+                <span>{% trans "name" %}</span>
+            {% else %}
+                <a class="ordering order-name"
+                   title="{% trans "order by name" %}">
+                    {% trans "name" %}
+                </a>
+            {% endif %}
+        </li>
+        <li>
+            {% if ordering == 'mandates' %}
+                <span>{% trans "mandates" %}</span>
+            {% else %}
+                <a class="ordering order-mandates"
+                   title="{% trans "order by mandates" %}">
+                    {% trans "mandates" %}
+                </a>
+            {% endif %}
+        </li>
+    </ul>
+</div>
+{% endif %}
+<script>
+    $(document).ready(function() {
+
+        $("a.ordering, a.filter").click(function() {
+            var newURL = null;
+
+            if ($(this).hasClass('order-name'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "name"%}');
+            else if ($(this).hasClass('order-mandates'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "mandates"%}');
+
+            window.location.replace(newURL);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $("#search_content").keypress(function(e) {
+            if(e.which == 13)
+            {
+                var newURL = updateURLParameter(window.location.href, "{%trans 'search'%}", $(this).val());
+                window.location.replace(newURL);
+            }
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max
 
 
 class Deputy(models.Model):
@@ -9,16 +10,24 @@ class Deputy(models.Model):
     name = models.CharField(max_length=254)
     birthday = models.DateField(null=True)  # some deputies don't have birthday info.
 
-    occupation = models.CharField(blank=True, max_length=254)
+    party = models.ForeignKey("Party", null=True)  # the current party, updated on legislatures
 
-    commissions = models.TextField(blank=True, max_length=5000)
-    education = models.TextField(blank=True, max_length=5000)
-    current_jobs = models.TextField(blank=True, max_length=5000)
-    jobs = models.TextField(blank=True, max_length=5000)
-    awards = models.TextField(blank=True, max_length=5000)
+    is_active = models.BooleanField(default=False)  # if the deputy's last mandate is on the current legislature.
 
     def __unicode__(self):
-        return 'deputy ' + self.shortname
+        return 'deputy ' + self.name
+
+    def get_absolute_url(self):
+        return 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=%d' % self.official_id
+
+    def update(self):
+        mandate = self.mandate_set.first()
+        if mandate.legislature.number == Legislature.objects.all().aggregate(max=Max("number"))['max']:
+            self.is_active = True
+        else:
+            self.is_active = False
+        self.party = mandate.party
+        self.save()
 
     class Meta:
         ordering = ['name']
@@ -54,15 +63,15 @@ class Mandate(models.Model):
     """
     deputy = models.ForeignKey(Deputy)
     legislature = models.ForeignKey(Legislature)
-    district = models.ForeignKey('contracts.District', null=True) # null if outside portugal
+    district = models.ForeignKey('contracts.District', null=True)  # null if outside Portugal
     party = models.ForeignKey(Party)
 
     # he can leave or enter in the middle of the legislature
-    date_begin = models.DateField()
+    date_start = models.DateField()
     date_end = models.DateField(null=True)  # if it haven't finished yet, it is null.
 
     def __unicode__(self):
-        return '%s (%s - %s)' % (self.deputy.shortname, self.legislature, self.party.abbrev)
+        return '%s (%s - %s)' % (self.deputy.name, self.legislature, self.party.abbrev)
 
     class Meta:
         ordering = ['-legislature__number']

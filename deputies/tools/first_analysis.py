@@ -6,7 +6,7 @@ from deputies import models
 
 for deputy in models.Deputy.objects.all():
     total_time = timedelta(0)
-    for mandate in deputy.mandate_set.filter(party__abbrev="CDS-PP"):
+    for mandate in deputy.mandate_set.all():
 
         if mandate.date_end is None:
             mandate.date_end = date.today()
