@@ -11,6 +11,10 @@
     margin-right: 10px;
 }
 
+.twitter-follow-button {
+    float: right;
+}
+
 #hlogo {
     padding: 0;
 }
@@ -27,6 +31,7 @@
 
 #secondaryHeader {
     clear: both;
+    float: left;
 }
 
 #footer .footer-links {
@@ -66,11 +71,15 @@
 
 #ContentLeft {
     width: 75%;
+    clear: left;
 }
+
 #ContentRight {
     width: 25%;
     float: right;
+    clear: right;
 }
+
 #ContentFull {
     width: 100%;
 }
