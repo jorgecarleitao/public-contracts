@@ -3,7 +3,6 @@ import os
 import pickle
 import re
 import mechanize as mc
-import cookielib
 import json
 
 import models
@@ -100,24 +99,6 @@ class AbstractCrawler(object):
     def __init__(self):
         # Browser
         br = mc.Browser()
-
-        # Cookie Jar
-        cj = cookielib.LWPCookieJar()
-        br.set_cookiejar(cj)
-
-        # Browser options
-        br.set_handle_equiv(True)
-        br.set_handle_redirect(True)
-        br.set_handle_referer(True)
-        br.set_handle_robots(False)
-
-        # Follows refresh 0 but not hangs on refresh > 0
-        br.set_handle_refresh(mc._http.HTTPRefreshProcessor(), max_time=1)
-
-        # Want debugging messages?
-        #br.set_debug_http(True)
-        #br.set_debug_redirects(True)
-        #br.set_debug_responses(True)
 
         # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
         br.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
