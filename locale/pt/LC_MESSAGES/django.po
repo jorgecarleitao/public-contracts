@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-29 17:36+0000\n"
+"POT-Creation-Date: 2014-02-18 19:06+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -114,6 +114,7 @@ msgstr "data"
 #: contracts/views.py:34 contracts/views.py:129
 #: contracts/templates/contracts/contract_list/search_contracts.html:52
 #: contracts/templates/contracts/entity_list/search_entities.html:51
+#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:52
 msgid "search"
 msgstr "procura"
 
@@ -123,12 +124,17 @@ msgstr "procura"
 #: contracts/templates/contracts/contract_list/search_contracts.html:40
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_list/search_entities.html:39
+#: deputies/views.py:32 deputies/views.py:33
+#: deputies/templates/deputies/search_bar.html:38
+#: deputies/templates/deputies/search_bar.html:40
 msgid "sorting"
 msgstr "ordem"
 
 #: contracts/views.py:52 contracts/views.py:147
 #: contracts/templates/contracts/contract_list/contract_list_template.html:20
 #: contracts/templates/contracts/entity_list/entity_list_template.html:19
+#: deputies/views.py:43
+#: deputies/templates/deputies/deputy_list_template.html:20
 msgid "page"
 msgstr "página"
 
@@ -379,6 +385,7 @@ msgstr ""
 #: contracts/templates/contracts/contract_list/main.html:3
 #: contracts/templates/contracts/entity_view/main_selector.html:12
 #: contracts/templates/contracts/entity_view/main_selector.html:14
+#: main/templates/base/top_header.html:4
 msgid "Contracts"
 msgstr "Contratos"
 
@@ -995,14 +1002,272 @@ msgid_plural "%(value)s quadrillion"
 msgstr[0] "%(value)s quadrilião"
 msgstr[1] "%(value)s quadriliões"
 
+#: deputies/urls.py:9
+msgid "home"
+msgstr "início"
+
+#: deputies/urls.py:11
+msgid "parties"
+msgstr "partidos"
+
+#: deputies/urls.py:13
+msgid "deputies-time-distribution"
+msgstr "distribuicao-de-tempos-de-deputados"
+
+#: deputies/views.py:11 deputies/views.py:38
+#: deputies/templates/deputies/search_bar.html:10
+#: deputies/templates/deputies/search_bar.html:14
+#: deputies/templates/deputies/search_bar.html:38
+msgid "name"
+msgstr "nome"
+
+#: deputies/views.py:11 deputies/views.py:38
+#: deputies/templates/deputies/search_bar.html:20
+#: deputies/templates/deputies/search_bar.html:24
+#: deputies/templates/deputies/search_bar.html:40
+msgid "mandates"
+msgstr "mandatos"
+
+#: deputies/templates/deputies/deputies_list.html:3
+#: deputies/templates/deputies/base/header.html:8
+msgid "Deputies"
+msgstr "Deputados"
+
+#: deputies/templates/deputies/deputy_summary.html:5
+msgid "in legislature"
+msgstr "activo"
+
+#: deputies/templates/deputies/deputy_summary.html:7
+#, python-format
+msgid ""
+"\n"
+"                %(count)s mandate\n"
+"            "
+msgid_plural ""
+"\n"
+"                %(count)s mandates\n"
+"            "
+msgstr[0] ""
+"\n"
+"%(count)s mandato\n"
+"            "
+msgstr[1] ""
+"\n"
+"%(count)s mandatos\n"
+"            "
+
+#: deputies/templates/deputies/main_page.html:5
+msgid "Public deputies"
+msgstr "Deputados Públicos"
+
+#: deputies/templates/deputies/main_page.html:8
+msgid "Welcome to Public Deputies"
+msgstr "Bem vindo ao Deputados Públicos"
+
+#: deputies/templates/deputies/main_page.html:10
+#, python-format
+msgid ""
+"\n"
+"                In this sub-project we use the official database of deputies "
+"from the\n"
+"                <a href=\"%(parliament_url)s\">portuguese parliament</a>\n"
+"                to try to understand the relationship between political "
+"agents (deputies)\n"
+"                and economical agents (entities).\n"
+"            "
+msgstr ""
+"\n"
+"Neste sub-projeto usamos a base de dados oficial de deputados do <a href="
+"\"%(parliament_url)s\">parlamento</a> para compreendermos melhor a relação "
+"entre agentes políticos (deputados) e agentes económicos (entidades)."
+
+#: deputies/templates/deputies/main_page.html:18
+msgid ""
+"\n"
+"                We are working on a way to map the declarations of conflicts "
+"of interests of the deputies\n"
+"                into public and private entities.\n"
+"            "
+msgstr ""
+"\n"
+"Estamos a trabalhar numa forma de mapear as declarações de interesses dos "
+"deputados em entidades da base de dados de contratos públicos."
+
+#: deputies/templates/deputies/main_page.html:24
+msgid ""
+"\n"
+"                Meanwhile, we provide some analysis of the deputies.\n"
+"            "
+msgstr ""
+"\n"
+"Entretanto, apresentamos algumas análises sobre o parlamento."
+
+#: deputies/templates/deputies/main_page.html:27
+msgid ""
+"\n"
+"                The first analysis is:\n"
+"            "
+msgstr ""
+"\n"
+"A primeira análise é:"
+
+#: deputies/templates/deputies/main_page.html:31
+msgid "How long a portuguese deputy stays in the parliament?"
+msgstr "Quanto tempo um deputado está no parlamento?"
+
+#: deputies/templates/deputies/main_page.html:33
+#, python-format
+msgid ""
+"\n"
+"                Portuguese deputies can be in the parliament for multiple "
+"mandates,\n"
+"                bounded only by the persons' maximum age. With the data from "
+"the\n"
+"                <a href=\"%(parliament_url)s\">official website</a> of the "
+"portuguese\n"
+"                parliament, we posed the question of how long a deputy stays "
+"in parliament. Here is the result:\n"
+"            "
+msgstr ""
+"\n"
+"Os deputados podem estar no parlamento durante múltiplos mandatos, limitados "
+"apenas pela sua idade máxima. Com os dados do <a href=\"%(parliament_url)s\">site oficial</a> do parlamento, "
+"colocámos a questão de quanto tempo um deputado está no parlamento. Eis o "
+"resultado:"
+
+#: deputies/templates/deputies/main_page.html:44
+msgid ""
+"\n"
+"                The data accounts for ~750 deputies since 1992. For each "
+"deputy, we\n"
+"                considered the total time of all his mandates.\n"
+"                The graph shows the percentage of deputies (y-axis, log-"
+"scale) with at\n"
+"                least x days in parliament (x-axis), each bar accounts for "
+"50 days.\n"
+"            "
+msgstr ""
+"\n"
+"Os dados são de ~750 deputados, desde 1992. Para cada deputado, considerámos o tempo total de todos os seus mandados. "
+"O gráfico mostra a percentagem de deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento (eixo-x), "
+"cada barra corresponde a 50 dias."
+
+#: deputies/templates/deputies/main_page.html:52
+msgid ""
+"\n"
+"                The data seems to show an exponential decay with an half-"
+"life of about ~1500 days (one full mandate).\n"
+"            "
+msgstr ""
+"\n"
+"Os dados parecem ter um decaimento exponencial, com um tempo de semi-vida de ~1500 dias (1 mandato completo)."
+
+#: deputies/templates/deputies/main_page.html:58
+#, python-format
+msgid ""
+"\n"
+"                The graph also shows that ~2%% of all deputies ever in the "
+"parliament are there for at least 20 years.\n"
+"                You can find who they are <a href=\"%(url)s?sorting=mandates"
+"\">here</a>.\n"
+"            "
+msgstr ""
+"\n"
+"O gráfico mostra também que ~2%% de todos os deputados que estiveram algum dia no parlamento "
+"estão lá há mais de 20 anos. "
+"Pode conhecê-los <a href=\"%(url)s?sorting=mandates\">aqui</a>.\n"
+"            "
+
+#: deputies/templates/deputies/main_page.html:63
+msgid "Other informations about this project"
+msgstr "Outras informações sobre este projeto"
+
+#: deputies/templates/deputies/main_page.html:67
+msgid ""
+"\n"
+"                        We use Twitter to announce updates and new "
+"analysis.\n"
+"                    "
+msgstr ""
+"\n"
+"Usamos o Twitter para anunciar novas análises e resultados."
+
+#: deputies/templates/deputies/main_page.html:74
+#, python-format
+msgid ""
+"\n"
+"                        This sub-project is becoming possible also because\n"
+"                        <a href=\"%(url)s\">demo.cratica</a>'s source code "
+"is open.\n"
+"                        We thank the contributors of demo.cratica for that "
+"and for the code.\n"
+"                    "
+msgstr ""
+"\n"
+"Este sub-projeto tem sido possível também devido ao <a href=\"%(url)s\">demo.cratica</a> ser um projeto de "
+"código aberto. Agradecemos aos seus contribuidores por isso e pelas ideias que usámos do seu código."
+
+#: deputies/templates/deputies/search_bar.html:6
+msgid "search deputies"
+msgstr "procurar deputados"
+
+#: deputies/templates/deputies/search_bar.html:13
+msgid "order by name"
+msgstr "ordenar por nome"
+
+#: deputies/templates/deputies/search_bar.html:23
+msgid "order by mandates"
+msgstr "ordenar por número de mandatos"
+
+#: deputies/templates/deputies/base/header.html:9
+#: deputies/templates/deputies/parties_list/main.html:3
+msgid "Parties"
+msgstr "Partidos"
+
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:106
+msgid "Number of days (a full mandate is ~ 1500)"
+msgstr "Número de dias (mandato completo são ~1500 dias)"
+
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:115
+msgid "Percentage of deputies"
+msgstr "Percentagem de deputados"
+
+#: deputies/templates/deputies/parties_list/party_summary.html:7
+#, python-format
+msgid ""
+"\n"
+"            %(count)s mandate\n"
+"        "
+msgid_plural ""
+"\n"
+"            %(count)s mandates\n"
+"        "
+msgstr[0] ""
+"\n"
+"%(count)s mandato\n"
+"        "
+msgstr[1] ""
+"\n"
+"%(count)s mandatos\n"
+"        "
+
+#: deputies/templates/deputies/parties_list/party_summary.html:13
+#, python-format
+msgid ""
+"\n"
+"            %(count)s deputy\n"
+"        "
+msgid_plural ""
+"\n"
+"            %(count)s deputies\n"
+"        "
+msgstr[0] ""
+"\n"
+"%(count)s deputado"
+msgstr[1] ""
+"\n"
+"%(count)s deputados"
+
 #: main/templates/base/footer.html:4
 msgid "About"
 msgstr "Acerca"
-
-#: main/templates/base/top_header.html:6
-msgid "Municipalities ranking"
-msgstr "Ranking de municípios"
-
-#: main/templates/base/top_header.html:7
-msgid "Municipalities publication time"
-msgstr "Tempo de publicação de municípios"
