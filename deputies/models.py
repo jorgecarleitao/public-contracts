@@ -21,7 +21,7 @@ class Deputy(models.Model):
         return 'http://www.parlamento.pt/DeputadoGP/Paginas/Biografia.aspx?BID=%d' % self.official_id
 
     def update(self):
-        mandate = self.mandate_set.first()
+        mandate = self.mandate_set.all()[:1].get()
         if mandate.legislature.number == Legislature.objects.all().aggregate(max=Max("number"))['max']:
             self.is_active = True
         else:
