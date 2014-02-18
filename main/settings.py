@@ -119,6 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
 INSTALLED_APPS = (
     'main',
     'contracts',
+    'deputies',
     'treebeard',  # for model in trees
     'django.contrib.sitemaps',
     'django.contrib.contenttypes',

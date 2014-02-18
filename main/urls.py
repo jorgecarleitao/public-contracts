@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
 
 import contracts.urls
+import deputies.urls
 import views
 
 urlpatterns = patterns('',
                        url(r'^', include(contracts.urls)),
+                       url(r'^deputies', include(deputies.urls)),
                        (r'^robots\.txt$', views.robots),
                        )
 
