@@ -1,5 +1,5 @@
 import set_up
-set_up.set_up_django_environment('settings')
+set_up.set_up_django_environment('settings_private')
 
 from deputies import crawler as c
 import populator as p
