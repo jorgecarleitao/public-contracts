@@ -3,6 +3,7 @@ import os
 import re
 from datetime import datetime
 
+from socket import error as SocketError
 from BeautifulSoup import BeautifulSoup
 
 from contracts.crawler import AbstractCrawler
@@ -246,7 +247,17 @@ class DeputiesCrawler(AbstractCrawler):
     def get_new_deputies(self):
         bid = self.get_last_bid()
         while True:
-            entry = self.get_deputy(bid, True)
+            try:
+                entry = self.get_deputy(bid, True)
+            except SocketError:
+                if self.browser.addheaders:
+                    print("removed header")
+                    self.browser.addheaders = []
+                else:
+                    print("added header")
+                    self.browser.addheaders = ['User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
+                                               'AppleWebKit/537.36 (KHTML, like Gecko)']
+                entry = self.get_deputy(bid, True)
             if entry != {}:
                 yield entry
             bid += 1
