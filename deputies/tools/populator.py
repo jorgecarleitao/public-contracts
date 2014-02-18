@@ -7,9 +7,10 @@ import contracts.models
 
 class DeputiesDBPopulator(object):
     """
-    An object that receives data from the crawler to populate the database of deputies.
+    An object that receives data from the crawler and populates the database of deputies.
 
-    It has one entry point `populate_deputy(data)`, where data is a dictionary with content.
+    It has one entry point, `populate_deputy(data)`, where data is a dictionary with content
+    which always updates the existing data.
     """
 
     @staticmethod

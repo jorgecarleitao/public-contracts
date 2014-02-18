@@ -1,6 +1,9 @@
 import pickle
-from BeautifulSoup import BeautifulSoup
+import os
+import re
 from datetime import datetime
+
+from BeautifulSoup import BeautifulSoup
 
 from contracts.crawler import AbstractCrawler
 
@@ -34,7 +37,7 @@ def clean_legislature(string):
         'XI': 11, 'XII': 12, 'XIII': 13, 'XIV': 14, 'XV': 15,
         'XVI': 16, 'XVII': 17, 'XVIII': 18, 'XIX': 19, 'XX': 20,
         'XXI': 21, 'XXII': 22, 'XXIII': 23, 'XXIV': 24, 'XXV': 25,
-        }
+    }
 
     string = string.replace('&nbsp;', '')
     number, dates = string.split('[')
@@ -194,32 +197,56 @@ class DeputiesCrawler(AbstractCrawler):
         return entry
 
     def get_deputy(self, bid, flush_cache=False):
+        print('retrieving bid %d' % bid)
         file_name = self.data_directory + 'deputy_%d.dat' % bid
         data = safe_pickle_load(file_name)
 
         if data is None or flush_cache:
-            data = self.crawl_deputy(bid)
+            try:
+                data = self.crawl_deputy(bid)
+            except:
+                print('Not able to retrieve bid %d' % bid)
+                raise
+
             f = open(file_name, "w")
             pickle.dump(data, f)
             f.close()
         return data
 
+    def get_last_bid(self):
+        regex = re.compile(r"deputy_(\d+).dat")
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s' % self.data_directory) if re.match(regex, f)]
+        files = sorted(files, key=lambda x: int(x), reverse=True)
+        if len(files):
+            return files[0]
+        else:
+            return 0
+
     def get_deputies(self, flush_cache=False):
         """
-        Entry point of this crawler.
+        Returns an iterable of deputies data. If flush_cache is True,
+        cached data is updated.
         """
         bid = 0
         while True:
-            if bid < 8319:
-                bid += 1
-                continue
+            entry = self.get_deputy(bid, flush_cache)
+            if entry != {}:
+                yield entry
+            bid += 1
 
-            print('retrieving bid %d' % bid)
-            try:
-                entry = self.get_deputy(bid, flush_cache)
-                if entry != {}:
-                    yield entry
-            except:
-                print('Not able to retrieve bid %d' % bid)
-                raise
+    def get_deputies_list(self, bid_list):
+        """
+        Returns an iterable of deputies data from the bid list.
+        Used to update entries.
+        """
+        for bid in bid_list:
+            entry = self.get_deputy(bid, flush_cache=True)
+            yield entry
+
+    def get_new_deputies(self):
+        bid = self.get_last_bid()
+        while True:
+            entry = self.get_deputy(bid, True)
+            if entry != {}:
+                yield entry
             bid += 1
