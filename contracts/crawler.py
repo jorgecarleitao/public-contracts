@@ -100,6 +100,8 @@ class AbstractCrawler(object):
         # Browser
         br = mc.Browser()
 
+        br.set_handle_robots(False)
+
         # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
         br.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
                                         'AppleWebKit/537.36 (KHTML, like Gecko)'),
