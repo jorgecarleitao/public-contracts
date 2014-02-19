@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-18 19:06+0000\n"
+"POT-Creation-Date: 2014-02-19 17:51+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1131,9 +1131,9 @@ msgid ""
 msgstr ""
 "\n"
 "Os deputados podem estar no parlamento durante múltiplos mandatos, limitados "
-"apenas pela sua idade máxima. Com os dados do <a href=\"%(parliament_url)s\">site oficial</a> do parlamento, "
-"colocámos a questão de quanto tempo um deputado está no parlamento. Eis o "
-"resultado:"
+"apenas pela sua idade máxima. Com os dados do <a href=\"%(parliament_url)s"
+"\">site oficial</a> do parlamento, colocámos a questão de quanto tempo um "
+"deputado está no parlamento. Eis o resultado:"
 
 #: deputies/templates/deputies/main_page.html:44
 msgid ""
@@ -1148,9 +1148,10 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Os dados são de ~750 deputados, desde 1992. Para cada deputado, considerámos o tempo total de todos os seus mandados. "
-"O gráfico mostra a percentagem de deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento (eixo-x), "
-"cada barra corresponde a 50 dias."
+"Os dados são de ~750 deputados, desde 1992. Para cada deputado, considerámos "
+"o tempo total de todos os seus mandados. O gráfico mostra a percentagem de "
+"deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento "
+"(eixo-x), cada barra corresponde a 50 dias."
 
 #: deputies/templates/deputies/main_page.html:52
 msgid ""
@@ -1160,7 +1161,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Os dados parecem ter um decaimento exponencial, com um tempo de semi-vida de ~1500 dias (1 mandato completo)."
+"Os dados parecem ter um decaimento exponencial, com um tempo de semi-vida de "
+"~1500 dias (1 mandato completo)."
 
 #: deputies/templates/deputies/main_page.html:58
 #, python-format
@@ -1173,9 +1175,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"O gráfico mostra também que ~2%% de todos os deputados que estiveram algum dia no parlamento "
-"estão lá há mais de 20 anos. "
-"Pode conhecê-los <a href=\"%(url)s?ordem=mandatos\">aqui</a>.\n"
+"O gráfico mostra também que ~2%% de todos os deputados que estiveram algum "
+"dia no parlamento estão lá há mais de 20 anos. Pode conhecê-los <a href="
+"\"%(url)s?ordem=mandatos\">aqui</a>.\n"
 "            "
 
 #: deputies/templates/deputies/main_page.html:63
@@ -1204,8 +1206,9 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Este sub-projeto tem sido possível também devido ao <a href=\"%(url)s\">demo.cratica</a> ser um projeto de "
-"código aberto. Agradecemos aos seus contribuidores por isso e pelas ideias que usámos do seu código."
+"Este sub-projeto tem sido possível também devido ao <a href=\"%(url)s\">demo."
+"cratica</a> ser um projeto de código aberto. Agradecemos aos seus "
+"contribuidores por isso e pelas ideias que usámos do seu código."
 
 #: deputies/templates/deputies/search_bar.html:6
 msgid "search deputies"
@@ -1267,6 +1270,10 @@ msgstr[0] ""
 msgstr[1] ""
 "\n"
 "%(count)s deputados"
+
+#: main/urls.py:10
+msgid "deputies"
+msgstr "deputados"
 
 #: main/templates/base/footer.html:4
 msgid "About"
