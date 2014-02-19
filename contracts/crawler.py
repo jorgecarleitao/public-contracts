@@ -208,8 +208,8 @@ class Crawler(JSONCrawler):
     """
     The main crawler. See docs
     """
-    data_directory = '../../../data'
-    contracts_directory = '../../../contracts'
+    data_directory = '../../data'
+    contracts_directory = '../../contracts'
 
     @staticmethod
     def block_to_range(i):
