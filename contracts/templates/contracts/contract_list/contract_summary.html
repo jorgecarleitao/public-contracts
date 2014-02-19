@@ -4,6 +4,12 @@
     <div class="full">
         <h2><a href="{{ contract.get_absolute_url }}">{{ contract.contract_description }}</a></h2>
         <div class="age">{{contract.signing_date}}</div>
+        {% with category=contract.category %}
+        <div class="category">
+            {% trans "Categorized as:" %}
+            {% include "contracts/category_a.html" %}
+        </div>
+        {% endwith %}
         <div class="transfer">
             {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
             {% for contracted in contract.contractors.all %}

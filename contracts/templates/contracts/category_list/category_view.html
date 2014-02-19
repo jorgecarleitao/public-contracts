@@ -4,11 +4,13 @@
     {% with ancentors=category.get_ancestors %}
         {% if ancentors %}
             {% for ancestor in ancentors %}
-                <h2><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.description_pt }}</a> ></h2>
+                <h2>
+                    {% include "contracts/category_a.html" with category=ancestor %} >
+                </h2>
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <h2>{{ category.description_pt }} ({{ category.code }})</h2>
+    <h2>{% include "contracts/category_a.html" %} ({{ category.code }})</h2>
     <p>
         {% trans "In this category:" %}
     </p>

@@ -15,6 +15,7 @@
     font-weight: bold;
     font-size: 16px;
     padding: 0;
+    margin-bottom: 2px;
 }
 
 .summary .categories {
@@ -28,9 +29,15 @@
     color: rgb(180,180,180);
 }
 
+.summary .category {
+    float: left;
+    margin-left: 10px;
+}
+
 .summary .transfer {
     float: left;
     clear: both;
+    margin-top: 2px;
 }
 
 .summary .counter {

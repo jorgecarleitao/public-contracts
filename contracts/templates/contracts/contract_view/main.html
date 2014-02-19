@@ -21,7 +21,7 @@
         <p>{% trans "Signed:" %} {{contract.signing_date}}</p>
         <p>
             {% if contract.category %}
-                {% trans "Categorized as" %} <a href="{{ contract.category.get_absolute_url }}">{{ contract.category.description_pt }}</a>
+                {% trans "Categorized as" %} {% include "contracts/category_a.html" with category=contract.category %}
             {% else %}
                 {% trans "No category assigned." %}
             {% endif %}

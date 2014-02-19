@@ -1,0 +1,9 @@
+{% spaceless %}
+<a href="{{ category.get_absolute_url }}">
+    {% if LANGUAGE_CODE == 'pt' %}
+        {{category.description_pt}}
+    {% else %}
+        {{category.description_en}}
+    {% endif %}
+</a>
+{% endspaceless %}

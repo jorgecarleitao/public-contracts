@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-19 17:51+0000\n"
+"POT-Creation-Date: 2014-02-19 18:17+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 #: contracts/entity_urls.py:9 contracts/entity_urls.py:10 contracts/urls.py:17
 #: contracts/urls.py:18
 #: contracts/templates/contracts/category_list/category_summary.html:6
-#: contracts/templates/contracts/category_list/category_view.html:16
+#: contracts/templates/contracts/category_list/category_view.html:18
 #: contracts/templates/contracts/contract_list/sidebar.html:4
 #: contracts/templates/contracts/contract_list/sidebar.html:5
 #: contracts/templates/contracts/contract_list/sidebar.html:6
@@ -404,11 +404,11 @@ msgstr "Entidades"
 msgid "total:"
 msgstr "total:"
 
-#: contracts/templates/contracts/category_list/category_view.html:13
+#: contracts/templates/contracts/category_list/category_view.html:15
 msgid "In this category:"
 msgstr "Nesta categoria:"
 
-#: contracts/templates/contracts/category_list/category_view.html:20
+#: contracts/templates/contracts/category_list/category_view.html:22
 msgid "plus sub-categories..."
 msgstr "mais sub-categorias..."
 
@@ -419,6 +419,10 @@ msgstr "Contratos sem categoria"
 #: contracts/templates/contracts/category_list/main.html:15
 msgid "Contracts in this category"
 msgstr "Contratos nesta categoria"
+
+#: contracts/templates/contracts/contract_list/contract_summary.html:9
+msgid "Categorized as:"
+msgstr "Categorizado como:"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:6
 msgid "search contracts"
