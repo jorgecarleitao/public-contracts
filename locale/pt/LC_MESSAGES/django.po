@@ -1175,7 +1175,7 @@ msgstr ""
 "\n"
 "O gráfico mostra também que ~2%% de todos os deputados que estiveram algum dia no parlamento "
 "estão lá há mais de 20 anos. "
-"Pode conhecê-los <a href=\"%(url)s?sorting=mandates\">aqui</a>.\n"
+"Pode conhecê-los <a href=\"%(url)s?ordem=mandatos\">aqui</a>.\n"
 "            "
 
 #: deputies/templates/deputies/main_page.html:63
