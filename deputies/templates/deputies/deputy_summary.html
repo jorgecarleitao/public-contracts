@@ -2,7 +2,7 @@
 <div class="summary" id="deputy-{{deputy.id}}">
     <div class="full">
         <h2><a href="{{ deputy.get_absolute_url }}">{{ deputy.name }}</a>
-            ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}{{deputy.party.abbrev}})</h2>
+            ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}<a href="{{ deputy.party.get_absolute_url }}">{{deputy.party.abbrev}}</a>)</h2>
         <div class="age">
             {% blocktrans count count=deputy.mandate_count %}
                 {{ count }} mandate

@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Max
 
@@ -38,6 +39,9 @@ class Party(models.Model):
     A Party
     """
     abbrev = models.CharField(max_length=20)
+
+    def get_absolute_url(self):
+        return reverse('party_view', args=[self.pk])
 
     def __unicode__(self):
         return self.abbrev
