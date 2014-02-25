@@ -674,7 +674,6 @@ msgstr ""
 "inicial durante 2008-2009"
 
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:44
-#, fuzzy
 msgid ""
 "\n"
 "                    We are not using the sum of values (€) of the "
