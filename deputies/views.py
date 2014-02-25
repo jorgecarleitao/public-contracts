@@ -79,6 +79,25 @@ def parties(request):
     return render(request, 'deputies/parties_list/main.html', {'parties': parties})
 
 
+def party_view(request, party_id):
+
+    party = models.Party.objects.get(id=party_id)
+    deputies = models.Deputy.objects.filter(party_id=party_id)
+    deputies = deputies.annotate(mandate_count=Count('mandate'))
+    deputies = deputies.select_related("party__abbrev")
+
+    party.deputies_count = models.Deputy.objects.filter(party_id=party_id).count()
+    party.current_count = models.Deputy.objects.filter(party_id=party_id, is_active=True).count()
+
+    party.mandates_count = party.mandate_set.count()
+
+    context = {'party': party, 'deputies': deputies}
+
+    context = build_deputies_list_context(context, request.GET)
+
+    return render(request, 'deputies/party_view/main.html', context)
+
+
 def legislatures(request):
 
     context = {'legislatures': models.Legislature.objects.all()}

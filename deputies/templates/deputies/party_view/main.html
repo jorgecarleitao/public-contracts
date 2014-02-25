@@ -1,0 +1,31 @@
+{% extends "deputies/two_column_body.html" %}
+{% load i18n %}
+{% block title %}{{ party }}{% endblock %}
+{% block content %}
+    <div class="rules">
+        <h2>{{ party }}</h2>
+        <ul>
+            <li>
+                <p>
+                    {% blocktrans count count=party.deputies_count %}
+                        {{ count }} deputy
+                    {% plural %}
+                        {{ count }} deputies
+                    {% endblocktrans %}
+                    ({{ party.current_count }} {% trans "in current legislature" %})
+                </p>
+            </li>
+            <li>
+                <p>
+                    {% blocktrans count count=party.mandates_count %}
+                        {{ count }} mandate
+                    {% plural %}
+                        {{ count }} mandates
+                    {% endblocktrans %}
+                </p>
+            </li>
+        </ul>
+        <h4>{% trans "Deputies list" %}</h4>
+        {% include "deputies/deputy_list_template.html"%}
+    </div>
+{% endblock %}
