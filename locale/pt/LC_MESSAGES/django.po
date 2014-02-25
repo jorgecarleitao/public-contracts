@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-19 18:17+0000\n"
+"POT-Creation-Date: 2014-02-25 07:15+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,9 +32,9 @@ msgid "Contracts in \"%s\""
 msgstr "Contracts em \"%s\""
 
 #: contracts/feed.py:49
-#, fuzzy, python-format
+#, python-format
 msgid "Latest contracts in %s"
-msgstr "Últimos contratos"
+msgstr "Últimos contratos em %s"
 
 #: contracts/feed.py:78
 #, python-format
@@ -1014,7 +1014,11 @@ msgstr "início"
 msgid "parties"
 msgstr "partidos"
 
-#: deputies/urls.py:13
+#: deputies/urls.py:12
+msgid "party"
+msgstr "partido"
+
+#: deputies/urls.py:14
 msgid "deputies-time-distribution"
 msgstr "distribuicao-de-tempos-de-deputados"
 
@@ -1275,7 +1279,53 @@ msgstr[1] ""
 "\n"
 "%(count)s deputados"
 
-#: main/urls.py:10
+#: deputies/templates/deputies/party_view/main.html:10
+#, python-format
+msgid ""
+"\n"
+"                        %(count)s deputy\n"
+"                    "
+msgid_plural ""
+"\n"
+"                        %(count)s deputies\n"
+"                    "
+msgstr[0] ""
+"\n"
+"%(count)s mandato\n"
+"            "
+msgstr[1] ""
+"\n"
+"%(count)s mandatos\n"
+"            "
+
+#: deputies/templates/deputies/party_view/main.html:15
+msgid "in current legislature"
+msgstr "nesta legislatura"
+
+#: deputies/templates/deputies/party_view/main.html:20
+#, python-format
+msgid ""
+"\n"
+"                        %(count)s mandate\n"
+"                    "
+msgid_plural ""
+"\n"
+"                        %(count)s mandates\n"
+"                    "
+msgstr[0] ""
+"\n"
+"%(count)s mandato\n"
+"            "
+msgstr[1] ""
+"\n"
+"%(count)s mandatos\n"
+"            "
+
+#: deputies/templates/deputies/party_view/main.html:28
+msgid "Deputies list"
+msgstr "Lista de deputados"
+
+#: main/urls.py:16
 msgid "deputies"
 msgstr "deputados"
 
