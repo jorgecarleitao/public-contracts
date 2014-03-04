@@ -50,7 +50,13 @@
         </p>
         <p>
             {% blocktrans %}
-                The data seems to show an exponential decay with an half-life of about ~1500 days (one full mandate).
+                For instance, if a deputy has 2 mandates (consecutives or not), one with 1500 days
+                and other with 1010 days, he or she counts to the interval [2050, 2100].
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                The data seems to show an exponential decay with an half-life of about ~1500 days (one complete legislature).
             {% endblocktrans %}
         </p>
         <p>
@@ -58,6 +64,12 @@
             {% blocktrans with url=the_url %}
                 The graph also shows that ~2% of all deputies ever in the parliament are there for at least 20 years.
                 You can find who they are <a href="{{ url }}?sorting=mandates">here</a>.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans with url="https://twitter.com/joaomiranda/status/439387468367142912"%}
+                Notice that deputies with less than one legislature can be due to interruptions in legislatures.
+                Thanks to João Miranda and Pedro Magalhães, see discussion <a href="{{ url }}">here</a>.
             {% endblocktrans %}
         </p>
         <h4>{% trans "Other informations about this project"%}</h4>
