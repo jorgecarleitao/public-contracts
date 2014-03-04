@@ -4,6 +4,7 @@ import datetime
 import calendar
 
 from django.db.models import Sum, Count
+from django.db import connection
 
 from contracts import models
 
@@ -125,31 +126,40 @@ def get_entities_delta_time(startswith_string):
 
 def get_entities_contracts_time_series(startswith_string):
     """
-    Computes the number of and value of contracts of all entities
+    Computes the time series of number of contracts of all entities
     starting with startswith_string.
-    from 2008 to today, with a window of 1 month.
     """
-    min_date = datetime.date(2008, 1, 1)
-    end_date = datetime.date(date.today().year, date.today().month, 1)
+    cursor = connection.cursor()
 
-    entities = models.Entity.objects.filter(name__startswith=startswith_string)
+    startswith_string += '%%'
+
+    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+                       MONTH(`contracts_contract`.`signing_date`),
+                       COUNT(`contracts_contract`.`id`)
+                FROM `contracts_contract`
+                     INNER JOIN `contracts_contract_contractors`
+                         ON ( `contracts_contract`.`id` = `contracts_contract_contractors`.`contract_id` )
+                     INNER JOIN `contracts_entity`
+                         ON ( `contracts_contract_contractors`.`entity_id` = `contracts_entity`.`id` )
+                WHERE `contracts_entity`.`name` LIKE BINARY %s
+                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+                '''
+
+    cursor.execute(query, startswith_string)
 
     data = []
-    while True:
-        max_date = add_months(min_date, 1)
+    for row in cursor.fetchall():
+        year, month, value = row
+        if year is None:
+            continue
 
-        aggregate = entities.filter(contracts_made__signing_date__gte=min_date,
-                                    contracts_made__signing_date__lt=max_date) \
-            .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
+        min_date = datetime.date(int(year), int(month), 1)
+        max_date = add_months(min_date, 1)
 
         entry = {'from': min_date,
                  'to': max_date,
-                 'count': aggregate['count'],
-                 'value': aggregate['value'] or 0}
+                 'count': int(value)}
         data.append(entry)
-        min_date = max_date
-        if min_date == end_date:
-            break
 
     return data
 
