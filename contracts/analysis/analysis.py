@@ -82,8 +82,8 @@ def get_all_procedure_types_time_series():
     data = []
     for i in range(100):
         max_date = add_months(min_date, 1)
-        contracts = models.Contract.objects.filter(added_date__gte=min_date,
-                                                   added_date__lt=max_date)
+        contracts = models.Contract.objects.filter(signing_date__gte=min_date,
+                                                   signing_date__lt=max_date)
 
         count = contracts.count()
         if count == 0:
