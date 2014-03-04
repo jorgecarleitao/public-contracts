@@ -17,6 +17,11 @@
     margin-top: 3px;
 }
 
+.graph {
+    float:left;
+    clear: both;
+}
+
 .pagination {
     width: 50%;
 }
