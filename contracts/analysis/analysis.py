@@ -125,7 +125,8 @@ def get_entities_delta_time(startswith_string):
 
 def get_entities_contracts_time_series(startswith_string):
     """
-    Computes the number of and value of contracts of municipalities
+    Computes the number of and value of contracts of all entities
+    starting with startswith_string.
     from 2008 to today, with a window of 1 month.
     """
     min_date = datetime.date(2008, 1, 1)
@@ -175,6 +176,64 @@ def get_procedure_types_time_series(startswith_string):
             }
             data.append(entry)
 
+        min_date = max_date
+        if min_date == end_date:
+            break
+
+    return data
+
+
+def get_excluding_entities_contracts_time_series(startswith_string):
+    """
+    Computes the number of and value of contracts of all entities excluding the ones
+    starting with startswith_string.
+    from 2008 to today, with a window of 1 month.
+    """
+    min_date = datetime.date(2008, 1, 1)
+    end_date = datetime.date(date.today().year, date.today().month, 1)
+
+    entities = models.Entity.objects.exclude(name__startswith=startswith_string)
+
+    data = []
+    while True:
+        max_date = add_months(min_date, 1)
+
+        aggregate = entities.filter(contracts_made__signing_date__gte=min_date,
+                                    contracts_made__signing_date__lt=max_date) \
+            .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
+
+        entry = {'from': min_date,
+                 'to': max_date,
+                 'count': aggregate['count'],
+                 'value': aggregate['value'] or 0}
+        data.append(entry)
+        min_date = max_date
+        if min_date == end_date:
+            break
+
+    return data
+
+
+def get_contracts_price_time_series():
+
+    min_date = datetime.date(2008, 1, 1)
+    end_date = datetime.date(date.today().year, date.today().month, 1)
+
+    contracts = models.Contract.objects.all()
+
+    data = []
+    while True:
+        max_date = add_months(min_date, 1)
+
+        aggregate = contracts.filter(signing_date__gte=min_date,
+                                     signing_date__lt=max_date) \
+            .aggregate(count=Count("id"), value=Sum("price"))
+
+        entry = {'from': min_date,
+                 'to': max_date,
+                 'count': aggregate['count'],
+                 'value': aggregate['value'] or 0}
+        data.append(entry)
         min_date = max_date
         if min_date == end_date:
             break

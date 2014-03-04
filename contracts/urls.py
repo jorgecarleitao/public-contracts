@@ -44,6 +44,10 @@ urlpatterns = patterns('',
                        url(r'^%s/data$' % _('municipalities-delta-time'), views_data.municipalities_delta_time_json, name='municipalities_delta_time_json'),
                        url(r'^%s/data/histogram$' % _('municipalities-delta-time'), views_data.municipalities_delta_time_histogram_json, name='municipalities_delta_time_histogram_json'),
 
+                       url(r'^%s$' % _('when-do-portugal-contract-most'), views_analysis.contracts_time_series, name='contracts_time_series'),
+                       url(r'^%s/data$' % _('when-do-portugal-contract-most'), views_data.contracts_time_series_json, name='contracts_time_series_json'),
+                       url(r'^%s/data/excluding-municipalities$' % _('when-do-portugal-contract-most'), views_data.excluding_municipalities_contracts_time_series_json, name='excluding_municipalities_contracts_time_series_json'),
+
                        url(r'^%s$' % _('when-do-portuguese-municipalities-contract-most'), views_analysis.municipalities_contracts_time_series, name='municipalities_contracts_time_series'),
                        url(r'^%s/data$' % _('when-do-portuguese-municipalities-contract-most'), views_data.municipalities_contracts_time_series_json, name='municipalities_contracts_time_series_json'),
 
