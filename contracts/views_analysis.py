@@ -60,3 +60,6 @@ def ministries_contracts_time_series(request):
 
 def contracts_time_series(request):
     return render(request, 'contracts/contracts_time_series/main.html')
+
+def legislation_application_time_series(request):
+    return render(request, 'contracts/legislation_application_time_series/main.html')

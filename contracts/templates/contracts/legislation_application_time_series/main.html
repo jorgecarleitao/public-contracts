@@ -1,0 +1,58 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "How many contracts are published too late?"%}{% endblock %}
+{% block content %}
+    <div class="rules" itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">{% trans "How many contracts are published too late?" %}</h2>
+        <p itemprop="description">
+            {% blocktrans with url="http://www.base.gov.pt/base2/" %}
+                By European law, portuguese public entities must publish their contracts in an
+                <a href="{{ url }}">official public database</a> within 10 days after it is signed.
+                We question: how many contracts are published outside this interval?
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                We picked all contracts in the database and count how many of then were signed on each month,
+                and how many were added to the official database with more than 10 days from signing date.
+                Here is the result:
+            {% endblocktrans %}
+        </p>
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+    {% include "contracts/legislation_application_time_series/graph.html" %}
+    <div class="rules">
+        <h4>{% trans "Observations and context" %}</h4>
+        <ul>
+            <li>
+                {% blocktrans %}
+                    Because the database contains only a percentage of all contracts (not every contract is published),
+                    one important assumption is that this percentage does not strongly depend on the signing date.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    We are not using the sum of values (€) of the contracts.
+                    The argument is that values are unbounded:
+                    one single contract can make a particular month to have a arbitrary large value.
+                    (For experts:) the reason is that the variance of the sum of values can be
+                    unbounded because the distribution of values is broad.
+                {% endblocktrans %}
+            </li>
+        </ul>
+        <p>
+            {% blocktrans %}
+                We see that the application of the law was mainly improved during 2009, and now more than 99%
+                of all published contracts comply to this point of the law.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                While this does not mean that the law of public contracts is being applied in 99% of the cases,
+                it shows that the 10 days requirement is being fulfilled 99% of the cases.
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock %}

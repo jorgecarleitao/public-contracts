@@ -129,8 +129,6 @@ def get_entities_contracts_time_series(startswith_string):
     Computes the time series of number of contracts of all entities
     starting with startswith_string.
     """
-    cursor = connection.cursor()
-
     startswith_string += '%%'
 
     query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
@@ -145,6 +143,7 @@ def get_entities_contracts_time_series(startswith_string):
                 GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
                 '''
 
+    cursor = connection.cursor()
     cursor.execute(query, startswith_string)
 
     data = []
@@ -247,5 +246,38 @@ def get_contracts_price_time_series():
         min_date = max_date
         if min_date == end_date:
             break
+
+    return data
+
+
+def get_legislation_application_time_series():
+
+    max_days = 10  # Código dos contratos públicos - parte II - Contratação pública - CAPÍTULO XII - Artigo 108.
+
+    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+                       MONTH(`contracts_contract`.`signing_date`),
+                       COUNT(`contracts_contract`.`id`),
+                       SUM(DATEDIFF(`contracts_contract`.`signing_date`,`contracts_contract`.`added_date`) > 10)
+                FROM `contracts_contract`
+                WHERE `contracts_contract`.`signing_date` IS NOT NULL
+                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+                '''
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    data = []
+    for row in cursor.fetchall():
+        year, month, count, ilegal_contracts = row
+        if year is None or ilegal_contracts == 0:
+            continue
+
+        min_date = datetime.date(int(year), int(month), 1)
+        max_date = add_months(min_date, 1)
+
+        entry = {'from': min_date,
+                 'to': max_date,
+                 'count': float(ilegal_contracts)/count}
+        data.append(entry)
 
     return data

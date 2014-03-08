@@ -51,7 +51,9 @@ _allAnalysis = [Analysis('municipalities_delta_time', analysis.get_entities_delt
                 Analysis('ministries_contracts_time_series', analysis.get_entities_contracts_time_series,
                          u'Secretaria-Geral do Ministério'),
                 Analysis('ministries_delta_time', analysis.get_entities_delta_time,
-                         u'Secretaria-Geral do Ministério')
+                         u'Secretaria-Geral do Ministério'),
+
+                Analysis('legislation_application_time_series', analysis.get_legislation_application_time_series)
 ]
 
 for x in _allAnalysis:

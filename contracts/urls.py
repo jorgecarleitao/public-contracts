@@ -56,4 +56,7 @@ urlpatterns = patterns('',
 
                        url(r'^%s$' % _('when-do-portuguese-ministries-contract-most'), views_analysis.ministries_contracts_time_series, name='ministries_contracts_time_series'),
                        url(r'^%s/data$' % _('when-do-portuguese-ministries-contract-most'), views_data.ministries_contracts_time_series_json, name='ministries_contracts_time_series_json'),
+
+                       url(r'^%s$' % _('how-many-contracts-are-published-too-late'), views_analysis.legislation_application_time_series, name='legislation_application_time_series'),
+                       url(r'^%s/data$' % _('how-many-contracts-are-published-too-late'), views_data.legislation_application_time_series_json, name='legislation_application_time_series_json'),
 )

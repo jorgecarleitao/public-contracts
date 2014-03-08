@@ -50,6 +50,9 @@
             <li>
                 <a href="{% url "contracts_time_series" %}">{% trans "When do Portugal contract most?" %}</a>
             </li>
+            <li>
+                <a href="{% url "legislation_application_time_series" %}">{% trans "How many contracts are published too late?" %}</a>
+            </li>
         </ul>
         <p>
             {% blocktrans with mailing_list="https://groups.google.com/forum/#!forum/public-contracts" %}
