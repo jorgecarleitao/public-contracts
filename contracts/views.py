@@ -66,7 +66,7 @@ def contracts_list(request):
     """
     View that controls the contracts list.
     """
-    contracts = models.Contract.objects.all().order_by('-signing_date').prefetch_related("contracted", "contractors")
+    contracts = models.Contract.objects.all().prefetch_related("contracted", "contractors", "category")
     context = {'contracts': contracts}
 
     context = build_contract_list_context(context, request.GET)
@@ -85,7 +85,7 @@ def categories_list(request):
     categories = models.Category.objects.filter(depth=1)
 
     context = {'categories': categories,
-               'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors"),
+               'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors", "category"),
                'no_code': True}
 
     context = build_contract_list_context(context, request.GET)
@@ -100,7 +100,7 @@ def category_view(request, category_id):
     category = models.Category.objects.get(pk=category_id)
     context = {'category': category,
                'categories': category.get_children(),
-               'contracts': category.contract_set.all().prefetch_related("contracted", "contractors")}
+               'contracts': category.contract_set.all().prefetch_related("contracted", "contractors", "category")}
 
     context = build_contract_list_context(context, request.GET)
 
