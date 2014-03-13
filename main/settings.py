@@ -63,10 +63,6 @@ STATIC_ROOT = os.path.join(main_directory, 'static')
 if LIVE:
     STATIC_ROOT = settings_local.STATIC_ROOT
 
-STATICFILES_DIRS = (
-    os.path.join(site_directory, 'docs/build'),
-)
-
 STATIC_URL = '/static/'
 if LIVE:
     STATIC_URL = 'http://%s/static/' % SITE_DOMAIN
@@ -74,7 +70,6 @@ if LIVE:
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
 TEMPLATE_LOADERS = (
