@@ -14,4 +14,11 @@
             <a href="{% url "entity_contracts" entity.id %}">{% trans "Contracts"%}</a>
         {% endif %}
     </li>
+    <li>
+        {% if tab == 'costumers' %}
+            <span>{% trans "Costumers"%}</span>
+        {% else %}
+            <a href="{% url "entity_costumers" entity.id %}">{% trans "Costumers"%}</a>
+        {% endif %}
+    </li>
 </ul>

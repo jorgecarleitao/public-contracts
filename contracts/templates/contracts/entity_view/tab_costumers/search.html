@@ -1,0 +1,69 @@
+{% load i18n %}
+<div class="sorting">
+    <ul class="horizontal-tab-list">
+        <li {% if search %}class="active"{% endif %}>
+            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
+        </li>
+    <li>
+            {% if sorting == 'name' %}
+                <span>{% trans "name" %}</span>
+            {% else %}
+                <a class="sorting order-name"
+                   title="{% trans "order by name" %}">
+                    {% trans "name" %}
+                </a>
+            {% endif %}
+        </li>
+    <li>
+            {% if sorting == 'contracts' %}
+                <span>{% trans "contracts" %}</span>
+            {% else %}
+                <a class="sorting order-contracts"
+                   title="{% trans "order by number of contracts" %}">
+                    {% trans "contracts" %}
+                </a>
+            {% endif %}
+        </li>
+        <li>
+            {% if sorting == 'value' %}
+                <span>{% trans "value" %}</span>
+            {% else %}
+                <a class="sorting order-value"
+                   title="{% trans "order by value" %}">
+                    {% trans "value" %}
+                </a>
+            {% endif %}
+        </li>
+
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        $("a.sorting, a.filter").click(function() {
+            var newURL = null;
+
+            if ($(this).hasClass('order-name'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "name"%}');
+            else if ($(this).hasClass('order-value'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "value"%}');
+            else if ($(this).hasClass('order-contracts'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "contracts"%}');
+
+            window.location.replace(newURL);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $("#search_content").keypress(function(e) {
+            if(e.which == 13)
+            {
+                var newURL = updateURLParameter(window.location.href, "{%trans 'search'%}", $(this).val());
+                window.location.replace(newURL);
+            }
+        });
+    });
+</script>

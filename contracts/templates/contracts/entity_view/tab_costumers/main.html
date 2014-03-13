@@ -1,0 +1,7 @@
+{% extends "contracts/entity_view/main.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block entity_content %}
+    <h2>{% trans "Costumers"%}:</h2>
+    {% include "contracts/entity_view/tab_costumers/list.html"%}
+{% endblock %}

@@ -7,24 +7,83 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-07 07:04+0000\n"
+"POT-Creation-Date: 2014-03-13 07:38+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contracts/entity_urls.py:9 contracts/entity_urls.py:10 contracts/urls.py:17
-#: contracts/urls.py:18
+#: contracts/entity_urls.py:9 contracts/entity_urls.py:11
+#: contracts/entity_views.py:40 contracts/urls.py:17 contracts/urls.py:18
 #: contracts/templates/contracts/category_list/category_summary.html:6
 #: contracts/templates/contracts/category_list/category_view.html:18
 #: contracts/templates/contracts/contract_list/sidebar.html:4
 #: contracts/templates/contracts/contract_list/sidebar.html:5
 #: contracts/templates/contracts/contract_list/sidebar.html:6
 #: contracts/templates/contracts/entity_rank/summary.html:12
+#: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:9
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:19
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:23
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:52
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:12
 msgid "contracts"
 msgstr "contratos"
+
+#: contracts/entity_urls.py:10
+msgid "costumers"
+msgstr "clientes"
+
+#: contracts/entity_views.py:40
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:29
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:33
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:50
+msgid "value"
+msgstr "valor"
+
+#: contracts/entity_views.py:40
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:9
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:13
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:48
+#: deputies/views.py:11 deputies/views.py:38
+#: deputies/templates/deputies/search_bar.html:10
+#: deputies/templates/deputies/search_bar.html:14
+#: deputies/templates/deputies/search_bar.html:38
+msgid "name"
+msgstr "nome"
+
+#: contracts/entity_views.py:60 contracts/views.py:34 contracts/views.py:129
+#: contracts/templates/contracts/contract_list/search_contracts.html:52
+#: contracts/templates/contracts/entity_list/search_entities.html:51
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:64
+#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:52
+msgid "search"
+msgstr "procura"
+
+#: contracts/entity_views.py:67 contracts/entity_views.py:68
+#: contracts/views.py:41 contracts/views.py:42 contracts/views.py:136
+#: contracts/views.py:137
+#: contracts/templates/contracts/contract_list/search_contracts.html:38
+#: contracts/templates/contracts/contract_list/search_contracts.html:40
+#: contracts/templates/contracts/entity_list/search_entities.html:37
+#: contracts/templates/contracts/entity_list/search_entities.html:39
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:48
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:50
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:52
+#: deputies/views.py:32 deputies/views.py:33
+#: deputies/templates/deputies/search_bar.html:38
+#: deputies/templates/deputies/search_bar.html:40
+msgid "sorting"
+msgstr "ordem"
+
+#: contracts/entity_views.py:77 contracts/views.py:52 contracts/views.py:147
+#: contracts/templates/contracts/contract_list/contract_list_template.html:20
+#: contracts/templates/contracts/entity_list/entity_list_template.html:19
+#: contracts/templates/contracts/entity_view/tab_costumers/list.html:21
+#: deputies/views.py:43
+#: deputies/templates/deputies/deputy_list_template.html:20
+msgid "page"
+msgstr "página"
 
 #: contracts/feed.py:23
 #, python-format
@@ -118,33 +177,6 @@ msgstr "preço"
 #: contracts/templates/contracts/contract_list/search_contracts.html:40
 msgid "date"
 msgstr "data"
-
-#: contracts/views.py:34 contracts/views.py:129
-#: contracts/templates/contracts/contract_list/search_contracts.html:52
-#: contracts/templates/contracts/entity_list/search_entities.html:51
-#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:52
-msgid "search"
-msgstr "procura"
-
-#: contracts/views.py:41 contracts/views.py:42 contracts/views.py:136
-#: contracts/views.py:137
-#: contracts/templates/contracts/contract_list/search_contracts.html:38
-#: contracts/templates/contracts/contract_list/search_contracts.html:40
-#: contracts/templates/contracts/entity_list/search_entities.html:37
-#: contracts/templates/contracts/entity_list/search_entities.html:39
-#: deputies/views.py:32 deputies/views.py:33
-#: deputies/templates/deputies/search_bar.html:38
-#: deputies/templates/deputies/search_bar.html:40
-msgid "sorting"
-msgstr "ordem"
-
-#: contracts/views.py:52 contracts/views.py:147
-#: contracts/templates/contracts/contract_list/contract_list_template.html:20
-#: contracts/templates/contracts/entity_list/entity_list_template.html:19
-#: deputies/views.py:43
-#: deputies/templates/deputies/deputy_list_template.html:20
-msgid "page"
-msgstr "página"
 
 #: contracts/views.py:111 contracts/views.py:117 contracts/views.py:142
 #: contracts/templates/contracts/entity_list/search_entities.html:9
@@ -483,6 +515,7 @@ msgid "No category assigned."
 msgstr "Sem categoria."
 
 #: contracts/templates/contracts/contract_view/main.html:30
+#: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
 msgid "Value:"
 msgstr "Valor:"
 
@@ -726,6 +759,7 @@ msgid "No earnings"
 msgstr "Sem ganhos"
 
 #: contracts/templates/contracts/entity_list/search_entities.html:5
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:5
 msgid "search entities"
 msgstr "procurar entidades"
 
@@ -749,6 +783,25 @@ msgstr "Especificidade média:"
 #: contracts/templates/contracts/entity_view/main_selector.html:7
 msgid "Summary"
 msgstr "Sumário"
+
+#: contracts/templates/contracts/entity_view/main_selector.html:19
+#: contracts/templates/contracts/entity_view/main_selector.html:21
+#: contracts/templates/contracts/entity_view/tab_costumers/main.html:5
+msgid "Costumers"
+msgstr "Clientes"
+
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:12
+#: deputies/templates/deputies/search_bar.html:13
+msgid "order by name"
+msgstr "ordenar por nome"
+
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:22
+msgid "order by number of contracts"
+msgstr "ordenar por número de contratos"
+
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:32
+msgid "order by value"
+msgstr "ordenar por valor"
 
 #: contracts/templates/contracts/entity_view/tab_data/main.html:8
 msgid "NIF:"
@@ -1234,13 +1287,6 @@ msgid "deputies-time-distribution"
 msgstr "distribuicao-de-tempos-de-deputados"
 
 #: deputies/views.py:11 deputies/views.py:38
-#: deputies/templates/deputies/search_bar.html:10
-#: deputies/templates/deputies/search_bar.html:14
-#: deputies/templates/deputies/search_bar.html:38
-msgid "name"
-msgstr "nome"
-
-#: deputies/views.py:11 deputies/views.py:38
 #: deputies/templates/deputies/search_bar.html:20
 #: deputies/templates/deputies/search_bar.html:24
 #: deputies/templates/deputies/search_bar.html:40
@@ -1461,10 +1507,6 @@ msgstr ""
 #: deputies/templates/deputies/search_bar.html:6
 msgid "search deputies"
 msgstr "procurar deputados"
-
-#: deputies/templates/deputies/search_bar.html:13
-msgid "order by name"
-msgstr "ordenar por nome"
 
 #: deputies/templates/deputies/search_bar.html:23
 msgid "order by mandates"
