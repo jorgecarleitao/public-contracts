@@ -14,12 +14,8 @@ def clean_price(item):
     return int(price)
 
 
-def clean_contracted(item):
-    return models.Entity.objects.filter(base_id__in=[contracted['id'] for contracted in item['contracted']])
-
-
-def clean_contractors(item):
-    return models.Entity.objects.filter(base_id__in=[contractor['id'] for contractor in item['contracting']])
+def clean_entities(items):
+    return models.Entity.objects.filter(base_id__in=[item['id'] for item in items])
 
 
 def clean_date(string_date):
@@ -115,6 +111,11 @@ def clean_country(item):
         country = None
 
     return country
+
+
+def clean_dre_document(item):
+    # Todo: document this function with an example.
+    return int(item.split('=')[-1])
 
 
 class AbstractCrawler(object):
@@ -486,8 +487,8 @@ class ContractsCrawler(DynamicCrawler):
             contract = models.Contract.objects.create(**data)
             print 'contract %d saved' % data['base_id']
 
-        contractors = clean_contractors(item)
-        contracted = clean_contracted(item)
+        contractors = clean_entities(item['contracting'])
+        contracted = clean_entities(item['contracted'])
         contract.contracted.add(*list(contracted))
         contract.contractors.add(*list(contractors))
 
@@ -605,6 +606,7 @@ class TendersCrawler(DynamicCrawler):
                 'announcement_number': item['announcementNumber'],
                 'dre_number': int(item['dreNumber']),
                 'dre_series': int(item['dreSeries']),
+                'dre_document': clean_dre_document(item['reference']),
                 'publication_date': item['drPublicationDate'],
                 'deadline_date': clean_deadline(item['proposalDeadline'], item['drPublicationDate']),
                 'cpvs': clean_cpvs(item['cpvs']),
@@ -625,7 +627,7 @@ class TendersCrawler(DynamicCrawler):
             tender = models.Tender.objects.create(**data)
             print 'tender %d saved' % data['base_id']
 
-        contractors = clean_contractors(item)
+        contractors = clean_entities(item)
         tender.contractors.add(*list(contractors))
 
     def _save_tenders(self, block):

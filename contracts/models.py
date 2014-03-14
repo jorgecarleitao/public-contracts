@@ -239,7 +239,21 @@ class Contract(models.Model):
 
 
 class Tender(models.Model):
+    """
+    A tender. It contains lots of meta-data, most of them still not used.
+    Important data:
+    * base_id: the id on the BASE
+    * contractors: the entities that started the tender
+    * description
+    * publication_date: when it was officially published
+    * deadline_date: its official deadline date
+    * category
+    * price
+    """
     base_id = models.IntegerField(unique=True)
+
+    contractors = models.ManyToManyField('Entity')
+
     description = models.CharField(max_length=254)
     model_type = models.ForeignKey('ModelType')
     act_type = models.ForeignKey('ActType')
