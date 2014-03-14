@@ -9,8 +9,7 @@ import models
 
 
 def clean_price(item):
-    price = item[u'initialContractualPrice']
-    price = price.split(' ')[0]
+    price = item.split(' ')[0]
     price = price.replace(".", "").replace(",", "")
     return int(price)
 
@@ -35,7 +34,7 @@ def clean_cpvs(item):
     It is like {u'cpvs': u'79822500-7, Servi\xe7os de concep\xe7\xe3o gr\xe1fica'}
     we want '79822500-7'
     """
-    return item[u'cpvs'].split(',')[0]
+    return item.split(',')[0]
 
 
 def clean_contract_type(item):
@@ -385,8 +384,8 @@ class Crawler(JSONCrawler):
                 'description': item['description'],
                 'signing_date': clean_date(item['signingDate']),
                 'added_date': clean_date(item['publicationDate']),
-                'cpvs': clean_cpvs(item),
-                'price': clean_price(item)}
+                'cpvs': clean_cpvs(item['cpvs']),
+                'price': clean_price(item['initialContractualPrice'])}
         data = clean_place(item, data)
 
         # we try to associate the cpvs to a category
