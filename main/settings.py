@@ -53,12 +53,6 @@ USE_L10N = False
 USE_TZ = True
 LOCALE_PATHS = (site_directory + '/locale',)
 
-MEDIA_ROOT = os.path.join(main_directory, 'media')
-
-MEDIA_URL = '/media/'
-if LIVE:
-    MEDIA_URL = 'http://%s/media/' % SITE_DOMAIN
-
 STATIC_ROOT = os.path.join(main_directory, 'static')
 if LIVE:
     STATIC_ROOT = settings_local.STATIC_ROOT
@@ -78,10 +72,6 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 if DEBUG:
@@ -117,45 +107,8 @@ INSTALLED_APPS = (
     'deputies',
     'treebeard',  # for model in trees
     'django.contrib.sitemaps',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
 )
 
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
-if hasattr(settings_local, 'DEFAULT_FROM_EMAIL'):
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
-    EMAIL_HOST = settings_local.EMAIL_HOST
-    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
-    EMAIL_PORT = settings_local.EMAIL_PORT
-    SERVER_EMAIL = settings_local.SERVER_EMAIL
