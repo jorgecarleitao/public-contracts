@@ -236,3 +236,30 @@ class Contract(models.Model):
 
     class Meta:
         ordering = ['-signing_date']
+
+
+class Tender(models.Model):
+    base_id = models.IntegerField(unique=True)
+    description = models.CharField(max_length=254)
+    model_type = models.ForeignKey('ModelType')
+    act_type = models.ForeignKey('ActType')
+    contract_type = models.ForeignKey('ContractType', null=True)
+
+    announcement_number = models.CharField(max_length=254)
+
+    publication_date = models.DateField()
+    deadline_date = models.DateField()
+
+    category = models.ForeignKey('Category', null=True)
+    price = models.BigIntegerField()
+
+    dre_number = models.IntegerField()
+    dre_series = models.IntegerField()
+    dre_document = models.IntegerField()
+
+    def get_dre_url(self):
+        return 'http://dre.pt/util/getpdf.asp?s=udrcp&serie=%d&data=%s&iddr=%d&iddip=%d' %\
+               (self.dre_series,
+                self.publication_date.strftime('%Y-%m-%d'),
+                self.dre_number,
+                self.dre_document)
