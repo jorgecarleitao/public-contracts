@@ -178,6 +178,20 @@ class ProcedureType(models.Model):
     name = models.CharField(max_length=254)
 
 
+class ActType(models.Model):
+
+    base_id = models.IntegerField(unique=True)
+
+    name = models.CharField(max_length=254)
+
+
+class ModelType(models.Model):
+
+    base_id = models.IntegerField(unique=True)
+
+    name = models.CharField(max_length=254)
+
+
 class Contract(models.Model):
     base_id = models.IntegerField(unique=True)
     added_date = models.DateField()

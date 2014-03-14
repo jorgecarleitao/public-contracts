@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import pickle
 import re
@@ -29,6 +29,19 @@ def clean_date(string_date):
         return None
 
 
+def clean_deadline(string_date, string_days):
+    starting_date = datetime.strptime(string_date, "%d-%m-%Y").date()
+
+    string_days.split(' ')
+
+    if string_days[1] == 'dias.':
+        deadline = timedelta(days=int(string_days[0]))
+    else:
+        raise NotImplementedError
+
+    return starting_date + deadline
+
+
 def clean_cpvs(item):
     """
     It is like {u'cpvs': u'79822500-7, Servi\xe7os de concep\xe7\xe3o gr\xe1fica'}
@@ -48,6 +61,20 @@ def clean_procedure_type(item):
     try:
         return models.ProcedureType.objects.get(name=item[u'contractingProcedureType'])
     except models.ProcedureType.DoesNotExist:
+        return None
+
+
+def clean_model_type(name):
+    try:
+        return models.ModelType.objects.get(name=name)
+    except models.ModelType.DoesNotExist:
+        return None
+
+
+def clean_act_type(name):
+    try:
+        return models.ActType.objects.get(name=name)
+    except models.ActType.DoesNotExist:
         return None
 
 
@@ -433,5 +460,44 @@ class Crawler(JSONCrawler):
     def update_all(self):
         self.update_entities()
         self.update_contracts()
+
+
+class StaticDataTendersCrawler(StaticDataCrawler):
+
+    def retrieve_and_save_act_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tiposacto'
+
+        data = self.goToPage(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ActType.objects.get(base_id=element['id'])
+                pass
+            except models.ActType.DoesNotExist:
+                act_type = models.ActType(name=element['description'], base_id=element['id'])
+                act_type.save()
+
+    def retrieve_and_save_model_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tiposmodelo'
+        data = self.goToPage(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ModelType.objects.get(base_id=element['id'])
+                pass
+            except models.ModelType.DoesNotExist:
+                act_type = models.ModelType(name=element['description'], base_id=element['id'])
+                act_type.save()
+
+    def retrieve_and_save_all(self):
+        super(StaticDataTendersCrawler, self).retrieve_and_save_all()
+        self.retrieve_and_save_model_types()
+        self.retrieve_and_save_act_types()
 
 crawler = Crawler()
