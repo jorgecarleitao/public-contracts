@@ -12,4 +12,5 @@ urlpatterns = patterns('',
                        url(r'(\d+)/%s$' % _('contracted'), category_views.contracted, name='category_contracted'),
 
                        url(r'(\d+)/%s$' % _('tenders'), category_views.tenders, name='category_tenders'),
+                       url(r'(\d+)/%s/rss$' % _('tenders'), feed.CategoryTendersFeed(), name='category_tenders_rss'),
                        )
