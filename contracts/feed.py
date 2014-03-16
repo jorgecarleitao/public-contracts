@@ -25,7 +25,7 @@ class CategoryFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price / 100)
+            price_str = str(item.price/100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -51,7 +51,7 @@ class ContractsFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price / 100)
+            price_str = str(item.price/100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -80,7 +80,7 @@ class EntityFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price / 100)
+            price_str = str(item.price/100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -106,8 +106,8 @@ class TendersFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price / 100)
-        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") + \
+            price_str = str(item.price/100)
+        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
                u" - " + (item.description or "no description")
 
     def item_link(self, item):
