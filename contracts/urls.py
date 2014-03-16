@@ -19,7 +19,6 @@ urlpatterns = patterns('',
                        url(r'^%s/rss$' % _('contracts'), feed.ContractsFeed(), name='contracts_list_feed'),
 
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
-                       url(r'^%s/rss$' % _('categories'), feed.ContractsFeed()),
 
                        url(r'^%s$' % _('tenders'), views.tenders_list, name='tenders_list'),
                        url(r'^%s/rss$' % _('tenders'), feed.TendersFeed(), name='tenders_list_feed'),

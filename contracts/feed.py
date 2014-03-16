@@ -9,7 +9,7 @@ from main.domain import SITE_NAME
 from .models import Category, Entity, Contract, Tender
 
 
-class CategoryFeed(Feed):
+class CategoryContractsFeed(Feed):
     def get_object(self, request, category_id):
         return get_object_or_404(Category, id=category_id)
 
