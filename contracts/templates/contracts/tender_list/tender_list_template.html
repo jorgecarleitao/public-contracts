@@ -1,0 +1,23 @@
+{% load i18n %}
+<div class="main-list">
+    {% if tenders %}
+        {% include "contracts/tender_list/pagination.html" %}
+    {% endif %}
+    {% include "contracts/tender_list/search.html" %}
+    <div class="list-loop">
+        {% include "contracts/tender_list/tenders_loop.html" %}
+    </div>
+    {% if tenders %}
+        {% include "contracts/tender_list/pagination.html" %}
+    {% endif %}
+</div>
+<script>
+    $(document).ready(function() {
+        $("a.page-selector").click(function() {
+            var me = $(this);
+            var newURL = null;
+            newURL = updateURLParameter(window.location.href, '{% trans "page"%}', me.html());
+            window.location.replace(newURL);
+        });
+    });
+</script>

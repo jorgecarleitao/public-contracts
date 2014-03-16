@@ -278,3 +278,6 @@ class Tender(models.Model):
                 self.publication_date.strftime('%Y-%m-%d'),
                 self.dre_number,
                 self.dre_document)
+
+    class Meta:
+        ordering = ['-publication_date']

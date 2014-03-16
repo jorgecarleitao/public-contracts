@@ -165,3 +165,60 @@ def entities_list(request):
     context = build_entity_list_context(context, request.GET)
 
     return render(request, 'contracts/entity_list/main.html', context)
+
+
+def build_tender_list_context(context, GET):
+    def apply_order(querySet, order):
+        ordering = {_('price'): '-price', _('date'): '-publication_date'}
+
+        if order not in ordering:
+            return querySet, False
+
+        return querySet.order_by(ordering[order]), True
+
+    def filter_search(search):
+        words = search.split(' ')
+        _filter = Q()
+        for word in words:
+            _filter &= Q(description__icontains=word)
+        return _filter
+
+    key = _('search')
+    if key in GET and GET[key]:
+        search_Q = filter_search(GET[key])
+        context[key] = GET[key]
+        context['tenders'] = context['tenders'].filter(search_Q)
+        context['search'] = GET[key]
+
+    if _('sorting') in GET:
+        order = GET[_('sorting')]
+
+        context['tenders'], applied = apply_order(context['tenders'], order)
+
+        # if it is a valid ordering, we send it to the template.
+        order_name = {_('price'): 'price', _('date'): 'date'}
+        if applied:
+            context['ordering'] = order_name[order]
+
+    paginator = Paginator(context['tenders'], 20)
+    page = GET.get(_('page'))
+    try:
+        context['tenders'] = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        context['tenders'] = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        context['tenders'] = paginator.page(paginator.num_pages)
+
+    return context
+
+
+def tenders_list(request):
+    tenders = models.Tender.objects.all()
+
+    context = {'tenders': tenders}
+
+    context = build_tender_list_context(context, request.GET)
+
+    return render(request, 'contracts/tender_list/main.html', context)
