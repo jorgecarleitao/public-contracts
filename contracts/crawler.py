@@ -39,7 +39,7 @@ def clean_deadline(string_date, string_days):
     if len(string_days) == 0:
         deadline = timedelta(days=0) # some don't have deadline (don't know why)
     elif strings[1] == 'dias.':
-        deadline = timedelta(days=int(string_days[0]))
+        deadline = timedelta(days=int(strings[0]))
     else:
         raise NotImplementedError
 
