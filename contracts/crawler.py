@@ -15,7 +15,13 @@ def clean_price(item):
 
 
 def clean_entities(items):
-    return models.Entity.objects.filter(base_id__in=[item['id'] for item in items])
+    entities = models.Entity.objects.filter(base_id__in=[item['id'] for item in items])
+
+    # we check that all entities are there
+    if entities.count() != len(items):
+        raise IndexError
+
+    return entities
 
 
 def clean_date(string_date):
@@ -28,9 +34,11 @@ def clean_date(string_date):
 def clean_deadline(string_date, string_days):
     starting_date = datetime.strptime(string_date, "%d-%m-%Y").date()
 
-    string_days.split(' ')
+    strings = string_days.split(' ')
 
-    if string_days[1] == 'dias.':
+    if len(string_days) == 0:
+        deadline = timedelta(days=0) # some don't have deadline (don't know why)
+    elif strings[1] == 'dias.':
         deadline = timedelta(days=int(string_days[0]))
     else:
         raise NotImplementedError
@@ -48,7 +56,7 @@ def clean_cpvs(item):
 
 def clean_contract_type(item):
     try:
-        return models.ContractType.objects.get(name=item[u'contractTypes'])
+        return models.ContractType.objects.get(name=item)
     except models.ContractType.DoesNotExist:
         return None
 
@@ -607,8 +615,8 @@ class TendersCrawler(DynamicCrawler):
                 'dre_number': int(item['dreNumber']),
                 'dre_series': int(item['dreSeries']),
                 'dre_document': clean_dre_document(item['reference']),
-                'publication_date': item['drPublicationDate'],
-                'deadline_date': clean_deadline(item['proposalDeadline'], item['drPublicationDate']),
+                'publication_date': clean_date(item['drPublicationDate']),
+                'deadline_date': clean_deadline(item['drPublicationDate'], item['proposalDeadline']),
                 'cpvs': clean_cpvs(item['cpvs']),
                 'price': clean_price(item['basePrice'])}
 
@@ -627,7 +635,7 @@ class TendersCrawler(DynamicCrawler):
             tender = models.Tender.objects.create(**data)
             print 'tender %d saved' % data['base_id']
 
-        contractors = clean_entities(item)
+        contractors = clean_entities(item['contractingEntities'])
         tender.contractors.add(*list(contractors))
 
     def _save_tenders(self, block):
@@ -641,7 +649,7 @@ class TendersCrawler(DynamicCrawler):
             # this has given errors before, we print the contract number to gain some information.
             except:
                 print 'error on saving tender %d' % raw_tender['id']
-                raise
+                #raise
 
     def update(self):
         """
@@ -665,7 +673,7 @@ class DynamicDataCrawler():
 
     def update_all(self):
         self.entities_crawler.update()
-        self.contracts_crawler.update()
+        #self.contracts_crawler.update()
         self.tenders_crawler.update()
 
 crawler = DynamicDataCrawler()

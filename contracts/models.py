@@ -264,6 +264,7 @@ class Tender(models.Model):
     publication_date = models.DateField()
     deadline_date = models.DateField()
 
+    cpvs = models.CharField(max_length=254)
     category = models.ForeignKey('Category', null=True)
     price = models.BigIntegerField()
 
