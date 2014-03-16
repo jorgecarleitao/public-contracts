@@ -3,16 +3,6 @@
 {% load contracts.humanize %}
 {% block title %}{% trans "Categories"%}{% endblock %}
 {% block content %}
-    {% if category %}
-        {% include "contracts/category_list/category_view.html" %}
-    {% else %}
-        <h2>{% trans "Categories"%}</h2>
-    {% endif %}
+    <h2>{% trans "Categories"%}</h2>
     {% include "contracts/category_list/categories_loop.html" %}
-    {% if no_code %}
-        <h3>{% trans "Contracts with no category" %}</h3>
-    {% else %}
-        <h3>{% trans "Contracts in this category" %}</h3>
-    {% endif %}
-    {% include "contracts/contract_list/contract_list_template.html" %}
 {% endblock %}

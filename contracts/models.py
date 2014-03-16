@@ -27,7 +27,7 @@ class Category(NS_Node):
         return '%s' % self.code[:8]
 
     def get_absolute_url(self):
-        return reverse('category_view', args=[self.pk])
+        return reverse('category', args=[self.pk])
 
     def _own_contracts_aggregate(self, flush_cache=False):
         cache_name = __name__ + '>_own_contracts_aggregate' + '>%s' % self.code
