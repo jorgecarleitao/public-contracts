@@ -28,7 +28,7 @@
             <a href="{% url "category_contracted" category.id %}">{% trans "Contracted"%}</a>
         {% endif %}
     </li>
-    {% if entity.tender_set.count %}
+    {% if category.tender_set.count %}
     <li>
         {% if tab == 'tenders' %}
             <span>{% trans "Tenders" %}</span>

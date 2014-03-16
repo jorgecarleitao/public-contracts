@@ -122,17 +122,16 @@ def contracted(request, category_id):
     return render(request, 'contracts/category_view/tab_entities/main.html', context)
 
 
+def tenders(request, category_id):
+    category = get_object_or_404(models.Category, pk=category_id)
 
-def tenders(request, entity_id):
-    entity = get_object_or_404(models.Entity, pk=entity_id)
+    tenders = category.tender_set.all()
 
-    all_tenders = entity.tender_set.all()
-
-    context = {'entity': entity,
+    context = {'category': category,
                'tab': 'tenders',
-               'tenders': all_tenders}
+               'tenders': tenders}
 
     ## filter entities by ordering and pagination
     context = build_tender_list_context(context, request.GET)
 
-    return render(request, 'contracts/entity_view/tab_tenders/main.html', context)
+    return render(request, 'contracts/category_view/tab_tenders/main.html', context)
