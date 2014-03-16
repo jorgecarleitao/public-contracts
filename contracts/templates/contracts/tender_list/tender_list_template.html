@@ -3,6 +3,7 @@
     {% if tenders %}
         {% include "contracts/tender_list/pagination.html" %}
     {% endif %}
+    <a id="rss-feed" href="{{ request.path }}{% if request.path|last != "/"%}/{% endif %}rss"></a>
     {% include "contracts/tender_list/search.html" %}
     <div class="list-loop">
         {% include "contracts/tender_list/tenders_loop.html" %}

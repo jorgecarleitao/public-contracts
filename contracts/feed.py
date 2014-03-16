@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 
 from main.domain import SITE_NAME
 
-from .models import Category, Entity, Contract
+from .models import Category, Entity, Contract, Tender
 
 
 class CategoryFeed(Feed):
@@ -25,7 +25,7 @@ class CategoryFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price/100)
+            price_str = str(item.price / 100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -51,7 +51,7 @@ class ContractsFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price/100)
+            price_str = str(item.price / 100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -80,7 +80,7 @@ class EntityFeed(Feed):
     def item_title(self, item):
         price_str = u'unknown'
         if item.price:
-            price_str = str(item.price/100)
+            price_str = str(item.price / 100)
         return price_str + u"€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
@@ -91,3 +91,33 @@ class EntityFeed(Feed):
 
     def items(self, obj):
         return obj.contracts_made.all()
+
+
+class TendersFeed(Feed):
+    def title(self, _):
+        return "Tenders in %s" % SITE_NAME
+
+    def link(self, _):
+        return reverse('tenders_list_feed')
+
+    def description(self, __):
+        return _("Latest tenders in %s" % SITE_NAME)
+
+    def item_title(self, item):
+        price_str = u'unknown'
+        if item.price:
+            price_str = str(item.price / 100)
+        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") + \
+               u" - " + (item.description or "no description")
+
+    def item_link(self, item):
+        return item.get_dre_url()
+
+    def item_description(self, item):
+        result = "Contractors: "
+        for x in item.contractors.all():
+            result += x.name + "; "
+        return result[:-2]
+
+    def items(self, _):
+        return Tender.objects.all()[:200]
