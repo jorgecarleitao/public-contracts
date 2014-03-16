@@ -7,14 +7,14 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-16 13:10+0000\n"
+"POT-Creation-Date: 2014-03-16 15:41+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: contracts/entity_urls.py:9 contracts/entity_urls.py:12
+#: contracts/entity_urls.py:9 contracts/entity_urls.py:10
 #: contracts/entity_views.py:40 contracts/urls.py:17 contracts/urls.py:18
 #: contracts/templates/contracts/category_list/category_summary.html:6
 #: contracts/templates/contracts/category_list/category_view.html:18
@@ -30,11 +30,12 @@ msgstr ""
 msgid "contracts"
 msgstr "contratos"
 
-#: contracts/entity_urls.py:10
+#: contracts/entity_urls.py:12
 msgid "costumers"
 msgstr "clientes"
 
-#: contracts/entity_urls.py:11 contracts/urls.py:23
+#: contracts/entity_urls.py:14 contracts/entity_urls.py:15
+#: contracts/urls.py:23 contracts/urls.py:24
 msgid "tenders"
 msgstr "concursos"
 
@@ -89,7 +90,7 @@ msgstr "ordem"
 #: contracts/templates/contracts/contract_list/contract_list_template.html:20
 #: contracts/templates/contracts/entity_list/entity_list_template.html:19
 #: contracts/templates/contracts/entity_view/tab_costumers/list.html:21
-#: contracts/templates/contracts/tender_list/tender_list_template.html:19
+#: contracts/templates/contracts/tender_list/tender_list_template.html:20
 #: deputies/views.py:43
 #: deputies/templates/deputies/deputy_list_template.html:20
 msgid "page"
@@ -110,6 +111,16 @@ msgstr "Últimos contratos em %s"
 msgid "Contracts with \"%s\""
 msgstr "Contratos com \"%s\""
 
+#: contracts/feed.py:98
+#, python-format
+msgid "Tenders created by \"%s\""
+msgstr "Concursos criados por \"%s\""
+
+#: contracts/feed.py:128
+#, python-format
+msgid "Latest tenders in %s"
+msgstr "Últimos concursos em %s"
+
 #: contracts/urls.py:15
 msgid "about"
 msgstr "acerca"
@@ -118,59 +129,59 @@ msgstr "acerca"
 msgid "categories"
 msgstr "categorias"
 
-#: contracts/urls.py:25
+#: contracts/urls.py:26
 msgid "entities"
 msgstr "entidades"
 
-#: contracts/urls.py:27
+#: contracts/urls.py:28
 msgid "contract"
 msgstr "contrato"
 
-#: contracts/urls.py:29
+#: contracts/urls.py:30
 msgid "entity"
 msgstr "entidade"
 
-#: contracts/urls.py:31 contracts/urls.py:32
+#: contracts/urls.py:32 contracts/urls.py:33
 msgid "category"
 msgstr "categoria"
 
-#: contracts/urls.py:34 contracts/urls.py:35 contracts/urls.py:36
+#: contracts/urls.py:35 contracts/urls.py:36 contracts/urls.py:37
 msgid "entities-category-ranking"
 msgstr "ranking-especificidade-municípios"
 
-#: contracts/urls.py:38 contracts/urls.py:39
+#: contracts/urls.py:39 contracts/urls.py:40
 msgid "contracts-price-histogram"
 msgstr "histograma-precos-contratos"
 
-#: contracts/urls.py:40
+#: contracts/urls.py:41
 msgid "contracts-macro-statistics"
 msgstr ""
 
-#: contracts/urls.py:42 contracts/urls.py:43
+#: contracts/urls.py:43 contracts/urls.py:44
 msgid "procedure-type-time-series"
 msgstr "série-temporal-de-ajuste-direto-vs-concurso-público"
 
-#: contracts/urls.py:45 contracts/urls.py:46 contracts/urls.py:47
+#: contracts/urls.py:46 contracts/urls.py:47 contracts/urls.py:48
 msgid "municipalities-delta-time"
 msgstr "municípios-tempo-médio-publicação-contratos"
 
-#: contracts/urls.py:49 contracts/urls.py:50 contracts/urls.py:51
+#: contracts/urls.py:50 contracts/urls.py:51 contracts/urls.py:52
 msgid "when-do-portugal-contract-most"
 msgstr "quando-e-que-portugal-mais-contrata"
 
-#: contracts/urls.py:53 contracts/urls.py:54
+#: contracts/urls.py:54 contracts/urls.py:55
 msgid "when-do-portuguese-municipalities-contract-most"
 msgstr "quando-e-que-os-municipios-mais-contratam"
 
-#: contracts/urls.py:56 contracts/urls.py:57
+#: contracts/urls.py:57 contracts/urls.py:58
 msgid "how-do-portuguese-municipalities-contract-most"
 msgstr "como-e-que-os-municipios-mais-contratam"
 
-#: contracts/urls.py:59 contracts/urls.py:60
+#: contracts/urls.py:60 contracts/urls.py:61
 msgid "when-do-portuguese-ministries-contract-most"
 msgstr "quando-e-que-os-ministerios-mais-contratam"
 
-#: contracts/urls.py:62 contracts/urls.py:63
+#: contracts/urls.py:63 contracts/urls.py:64
 msgid "how-many-contracts-are-published-too-late"
 msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 
@@ -469,8 +480,8 @@ msgid "Entities"
 msgstr "Entidades"
 
 #: contracts/templates/contracts/base/header.html:11
-#: contracts/templates/contracts/entity_view/main_selector.html:26
-#: contracts/templates/contracts/entity_view/main_selector.html:28
+#: contracts/templates/contracts/entity_view/main_selector.html:27
+#: contracts/templates/contracts/entity_view/main_selector.html:29
 #: contracts/templates/contracts/tender_list/main.html:3
 msgid "Tenders"
 msgstr "Concursos"
