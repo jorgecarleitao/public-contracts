@@ -90,7 +90,7 @@ class EntityContractsFeed(Feed):
         return result[:-2]
 
     def items(self, obj):
-        return obj.contracts_made.all()
+        return obj.last_contracts()
 
 
 class EntityTendersFeed(EntityContractsFeed):
