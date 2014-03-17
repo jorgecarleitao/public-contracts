@@ -27,7 +27,7 @@ class Category(NS_Node):
         return '%s' % self.code[:8]
 
     def get_absolute_url(self):
-        return reverse('category_view', args=[self.pk])
+        return reverse('category', args=[self.pk])
 
     def _own_contracts_aggregate(self, flush_cache=False):
         cache_name = __name__ + '>_own_contracts_aggregate' + '>%s' % self.code
@@ -178,6 +178,20 @@ class ProcedureType(models.Model):
     name = models.CharField(max_length=254)
 
 
+class ActType(models.Model):
+
+    base_id = models.IntegerField(unique=True)
+
+    name = models.CharField(max_length=254)
+
+
+class ModelType(models.Model):
+
+    base_id = models.IntegerField(unique=True)
+
+    name = models.CharField(max_length=254)
+
+
 class Contract(models.Model):
     base_id = models.IntegerField(unique=True)
     added_date = models.DateField()
@@ -222,3 +236,48 @@ class Contract(models.Model):
 
     class Meta:
         ordering = ['-signing_date']
+
+
+class Tender(models.Model):
+    """
+    A tender. It contains lots of meta-data, most of them still not used.
+    Important data:
+    * base_id: the id on the BASE
+    * contractors: the entities that started the tender
+    * description
+    * publication_date: when it was officially published
+    * deadline_date: its official deadline date
+    * category
+    * price
+    """
+    base_id = models.IntegerField(unique=True)
+
+    contractors = models.ManyToManyField('Entity')
+
+    description = models.CharField(max_length=254)
+    model_type = models.ForeignKey('ModelType')
+    act_type = models.ForeignKey('ActType')
+    contract_type = models.ForeignKey('ContractType', null=True)
+
+    announcement_number = models.CharField(max_length=254)
+
+    publication_date = models.DateField()
+    deadline_date = models.DateField()
+
+    cpvs = models.CharField(max_length=254)
+    category = models.ForeignKey('Category', null=True)
+    price = models.BigIntegerField()
+
+    dre_number = models.IntegerField()
+    dre_series = models.IntegerField()
+    dre_document = models.IntegerField()
+
+    def get_dre_url(self):
+        return 'http://dre.pt/util/getpdf.asp?s=udrcp&serie=%d&data=%s&iddr=%d&iddip=%d' %\
+               (self.dre_series,
+                self.publication_date.strftime('%Y-%m-%d'),
+                self.dre_number,
+                self.dre_document)
+
+    class Meta:
+        ordering = ['-publication_date']

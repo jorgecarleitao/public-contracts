@@ -10,14 +10,14 @@ from contracts.crawler import crawler
 from contracts import models
 from contracts.analysis import AnalysisManager
 
-# retrieve latest entities and contracts.
+# retrieve latest data.
 crawler.update_all()
 
-# update entities data
+# update entities cached data
 for entity in models.Entity.objects.all():
     entity.compute_data()
 
-# update categories data
+# update categories cached data
 for category in models.Category.objects.all():
     category.compute_data()
 

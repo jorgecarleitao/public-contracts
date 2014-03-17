@@ -1,0 +1,15 @@
+{% extends "contracts/category_view/main.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block category_content %}
+<div class="category-view">
+    <p>
+        {% trans "In this category:" %}
+    </p>
+    <ul>
+        <li>{{ contract_price|intword }} € (<a href="{% url "category_contracts" category.id %}">{{ contract_count }} {% trans "contracts" %}</a>)</li>
+        <li><a href="{% url "category_contractors" category.id %}">{{ contractors_count }} {% trans "contractors" %}</a></li>
+        <li><a href="{% url "category_contracted" category.id %}">{{ contracted_count }} {% trans "contracted" %}</a></li>
+    </ul>
+</div>
+{% endblock %}

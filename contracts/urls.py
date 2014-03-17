@@ -8,6 +8,7 @@ import views_analysis
 
 import entity_urls
 import contract_urls
+import category_urls
 
 
 urlpatterns = patterns('',
@@ -18,7 +19,9 @@ urlpatterns = patterns('',
                        url(r'^%s/rss$' % _('contracts'), feed.ContractsFeed(), name='contracts_list_feed'),
 
                        url(r'^%s$' % _('categories'), views.categories_list, name='categories_list'),
-                       url(r'^%s/rss$' % _('categories'), feed.ContractsFeed()),
+
+                       url(r'^%s$' % _('tenders'), views.tenders_list, name='tenders_list'),
+                       url(r'^%s/rss$' % _('tenders'), feed.TendersFeed(), name='tenders_list_feed'),
 
                        url(r'^%s$' % _('entities'), views.entities_list, name='entities_list'),
 
@@ -26,8 +29,7 @@ urlpatterns = patterns('',
 
                        url(r'%s/' % _('entity'), include(entity_urls)),
 
-                       url(r'^%s/(\d+)$' % _('category'), views.category_view, name='category_view'),
-                       url(r'^%s/(\d+)/rss$' % _('category'), feed.CategoryFeed(), name='category_feed'),
+                       url(r'%s/' % _('category'), include(category_urls)),
 
                        url(r'^%s$' % _('entities-category-ranking'), views_analysis.entities_category_ranking, name='entities_category_ranking'),
                        url(r'^%s/data$' % _('entities-category-ranking'), views_data.entities_category_ranking_json, name='category_ranking_index_json'),

@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load contracts.humanize %}
+<div class="summary" id="tender-{{tender.id}}">
+    <div class="full">
+        <h2><a href="{{ tender.get_dre_url }}">{{ tender.description }}</a></h2>
+        <div class="age">{{tender.publication_date}}&rarr;{{tender.deadline_date}}</div>
+        <div class="transfer">
+            {% include "contracts/contract_list/colored_price.html" with price=tender.price %}
+            {% for contractor in tender.contractors.all %}
+                {% include "contracts/entity_inline.html" with entity=contractor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

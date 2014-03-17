@@ -1,0 +1,17 @@
+{% if tenders.paginator.num_pages != 1 %}
+    <ul class="pagination horizontal-tab-list">
+        {% if tenders.has_previous %}
+            {% if tenders.previous_page_number != 1 %}
+                <li><a class="page-selector">1</a></li>
+            {% endif %}
+            <li><a class="page-selector">{{ tenders.previous_page_number }}</a></li>
+        {% endif %}
+        <li><span class="active">{{ tenders.number }}</span></li>
+        {% if tenders.has_next %}
+            <li><a class="page-selector">{{ tenders.next_page_number }}</a></li>
+            {% if tenders.next_page_number != tenders.paginator.num_pages %}
+                <li><a class="page-selector">{{ tenders.paginator.num_pages }}</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+{% endif %}

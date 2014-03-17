@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
 import models
-from views import build_contract_list_context
+from views import build_contract_list_context, build_tender_list_context
 
 
 def main_view(request, entity_id, slug=None):
@@ -101,3 +101,18 @@ def costumers(request, entity_id):
     context = build_costumer_list_context(context, request.GET)
 
     return render(request, 'contracts/entity_view/tab_costumers/main.html', context)
+
+
+def tenders(request, entity_id):
+    entity = get_object_or_404(models.Entity, pk=entity_id)
+
+    all_tenders = entity.tender_set.all()
+
+    context = {'entity': entity,
+               'tab': 'tenders',
+               'tenders': all_tenders}
+
+    ## filter entities by ordering and pagination
+    context = build_tender_list_context(context, request.GET)
+
+    return render(request, 'contracts/entity_view/tab_tenders/main.html', context)

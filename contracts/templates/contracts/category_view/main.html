@@ -1,0 +1,34 @@
+{% extends "contracts/one_column_body.html" %}
+{% load i18n %}
+{% block title %}{{ category.description_pt }}{% endblock %}
+{% block content %}
+    <h2>{{ category.description_pt }} ({{ category.code }})</h2>
+    {% with ancentors=category.get_ancestors %}
+        {% if ancentors %}
+            <h4>{% trans "Parent categories"%}:</h4>
+            <ol>
+            {% for ancestor in ancentors %}
+                <li>
+                    {% include "contracts/category_a.html" with category=ancestor %}
+                </li>
+            {% endfor %}
+            </ol>
+        {% endif %}
+    {% endwith %}
+
+    {% with categories=category.get_children %}
+        {% if categories %}
+            <h4>{% trans "Children categories"%}:</h4>
+            <ul>
+            {% for category in categories %}
+                <li>
+                    {% include "contracts/category_a.html" %}
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <hr>
+    {% include "contracts/category_view/selector.html" %}
+    {% block category_content %}{% endblock %}
+{% endblock %}
