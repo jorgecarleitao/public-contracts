@@ -279,5 +279,8 @@ class Tender(models.Model):
                 self.dre_number,
                 self.dre_document)
 
+    def get_base_url(self):
+        return 'http://www.base.gov.pt/base2/html/pesquisas/anuncios.shtml#%d' % self.base_id
+
     class Meta:
         ordering = ['-publication_date']
