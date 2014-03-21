@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-21 07:32+0000\n"
+"POT-Creation-Date: 2014-03-21 08:16+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -489,8 +489,9 @@ msgid ""
 "                Learn how...\n"
 "            "
 msgstr ""
-"No Contratos Públicos pode encontrar qualquer contrato ou concurso público publicado na base de dados official. "
-"O nosso objetivo é dar-lhe ferramentas para você mesmo poder responder às perguntas que tem sobre a contratação "
+"No Contratos Públicos pode encontrar qualquer contrato ou concurso público "
+"publicado na base de dados official. O nosso objetivo é dar-lhe ferramentas "
+"para você mesmo poder responder às perguntas que tem sobre a contratação "
 "pública portuguesa."
 
 #: contracts/templates/contracts/main_page.html:23
@@ -1898,3 +1899,14 @@ msgstr "deputados"
 #: main/templates/base/footer.html:4
 msgid "About"
 msgstr "Acerca"
+
+#: main/templates/base/header.html:7
+#, python-format
+msgid ""
+"\n"
+"                This website is public and free. <a href=\"%(url)s\">Learn</"
+"a> how you can use it.\n"
+"            "
+msgstr ""
+"\n"
+"Este local é público e gratuito. <a href=\"%(url)s\">Conheça</a> como pode usufruir dele."

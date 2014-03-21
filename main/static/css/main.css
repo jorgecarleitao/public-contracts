@@ -3,6 +3,8 @@
 }
 
 .info {
+    float: none;
+    width: 100%;
     border-radius: 5px;
     border: 2px solid green;
     background-color: #e0ffdc;
