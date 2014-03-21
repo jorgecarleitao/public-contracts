@@ -1,64 +1,128 @@
-{% extends "contracts/two_column_body.html" %}
+{% extends "contracts/one_column_body.html" %}
 {% load i18n %}
 {% load static %}
 
 {% block title %}{% trans "Public contracts"%}{% endblock %}
 {% block content %}
-    <div class="rules" itemscope itemtype="http://schema.org/WebPage">
-        <h2 class="center" itemprop="name">{% trans "Welcome to Public Contracts" %}</h2>
+    <div class="main-page" itemscope itemtype="http://schema.org/WebPage">
+        <h2 class="center-title" itemprop="name">
+            {% trans "Welcome to Public Contracts" %}
+        </h2>
+        <img class="main-logo" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
         <p itemprop="description">
-            {% blocktrans with github="https://github.com/jorgecarleitao/public-contracts" %}
-                An <a href="{{ github }}">open source</a>
-                project for collaborative analysis and visualization of the portuguese database of public contracts.
-            {% endblocktrans %}
+            {% trans "A website to understand the portuguese public procurement."%}
         </p>
         <p>
-            {% blocktrans %}
-                In this website you can navigate in the database of all contracts or take a look at
-                our statistical analysis to better understand portuguese public procurement.
+            {% blocktrans with github="https://github.com/jorgecarleitao/public-contracts"%}
+                In Public Contracts you can find any public contract or tender officially published in the portuguese official
+                database. We aim to provide tools for you to extract meaningful answers to questions you have about them.
+                Learn how...
             {% endblocktrans %}
         </p>
-        <h3>{% trans "Analysis of ministries" %}</h3>
-        <ul>
-            <li>
-                <a href="{% url "ministries_contracts_time_series" %}">{% trans "When do portuguese ministries contract most?"%}</a>
-            </li>
-        </ul>
-        <h3>{% trans "Analysis of municipalities" %}</h3>
-        <ul>
-            <li>
-                <a href="{% url "municipalities_contracts_time_series" %}">{% trans "When do portuguese municipalities contract most?"%}</a>
-            </li>
-            <li>
-                <a href="{% url "municipalities_procedure_types_time_series" %}">{% trans "How do portuguese municipalities contract most?"%}</a>
-            </li>
-            <li>
-                <a href="{% url "entities_category_ranking" %}">{% trans "Ranking of specificity of municipalities" %}</a>
-            </li>
-            <li>
-                <a href="{% url "municipalities_delta_time" %}">{% trans "Time of publication of municipalities" %}</a>
-            </li>
-        </ul>
-        <h3>{% trans "Macroscopic analysis"%}</h3>
-        <ul>
-            <li>
-                <a href="{% url "contracts_price_histogram" %}">{% trans "Distribution of prices of contracts" %}</a>
-            </li>
-            <li>
-                <a href="{% url "procedure_types_time_series" %}">{% trans "Percentage of contracts by direct procurement or public tender" %}</a>
-            </li>
-            <li>
-                <a href="{% url "contracts_time_series" %}">{% trans "When do Portugal contract most?" %}</a>
-            </li>
-            <li>
-                <a href="{% url "legislation_application_time_series" %}">{% trans "How many contracts are published too late?" %}</a>
-            </li>
-        </ul>
-        <p>
-            {% blocktrans with mailing_list="https://groups.google.com/forum/#!forum/public-contracts" %}
-                If you want a new analysis or have any suggestion, post it in
-                <a href="{{ mailing_list }}">our mailing list</a>.
-            {% endblocktrans %}
-        </p>
+        <div class="main-block" id="contracts">
+            <h2 class="center-title">{% trans "Contracts" %}</h2>
+            <p class="center-content">
+                {% blocktrans %}
+                    In this website you can find all officially published contracts. You can search,
+                    filter, and order the results according to your objectives.
+                {% endblocktrans %}
+            </p>
+            <div class="left-content">
+                <p>{% trans "For each contract, you can find"%}</p>
+                <ul class="good">
+                    <li><strong>{% trans "who contracted" %}</strong></li>
+                    <li><strong>{% trans "who was contracted" %}</strong></li>
+                    <li><strong>{% trans "what was the price" %}</strong></li>
+                    <li><strong>{% trans "on which economical sector" %}</strong></li>
+                </ul>
+            </div>
+            <h4 class="center-title"><a class="item" href="{% url "contracts_list" %}">{% trans "Contracts" %}</a></h4>
+        </div>
+        <div class="main-block" id="entities">
+            <h2 class="center-title">{% trans "Entities" %}</h2>
+            <p class="center-content">
+                {% blocktrans %}
+                    In this website you have access to all public and private entities that ever participated in a public contract.
+                    Which companies are being publicly contracted in your economical sector? Here you can find them out.
+                {% endblocktrans %}
+            </p>
+            <div class="left-content">
+                <p>{% trans "For each entity, you can find"%}</p>
+                <ul class="good">
+                    <li><strong>{% trans "the contracts where it was contracted" %}</strong></li>
+                    <li><strong>{% trans "the contracts it made" %}</strong></li>
+                    <li><strong>{% trans "Its economical sectors" %}</strong></li>
+                    <li><strong>{% trans "Its clients" %}</strong></li>
+                </ul>
+            </div>
+            <h4 class="center-title"><a class="item" href="{% url "entities_list" %}">{% trans "Entities" %}</a></h4>
+        </div>
+        <div class="main-block" id="tenders">
+            <h2 class="center-title">{% trans "Tenders" %}</h2>
+            <p class="center-content">
+                {% blocktrans %}
+                    In this website you can find all existing public tenders, by economical-sector or by public entity.
+                    We provide direct references to the Diário da República online where you can find the details of the tender.
+                {% endblocktrans %}
+            </p>
+            <div class="left-content">
+                <p>{% trans "For each tender, you can find"%}</p>
+                <ul class="good">
+                    <li><strong>{% trans "who is contracting" %}</strong></li>
+                    <li><strong>{% trans "what and at what price" %}</strong></li>
+                    <li><strong>{% trans "when is the deadline" %}</strong></li>
+                </ul>
+            </div>
+            <h4 class="center-title"><a class="item" href="{% url "tenders_list" %}">{% trans "Tenders" %}</a></h4>
+        </div>
+        <div class="main-block" id="categories">
+            <h2 class="center-title">{% trans "Categories" %} ({%trans "economical sectors"%})</h2>
+            <p class="center-content">
+                {% blocktrans %}
+                    In this website all contracts and tenders are categorized by economical sector.
+                    This way you can focus on what matters for you or your company.
+                {% endblocktrans %}
+            </p>
+            <div class="left-content">
+                <p>{% trans "For each category, you can find:"%}</p>
+                <ul class="good">
+                    <li><strong>{% trans "who contracted in this sector" %}</strong></li>
+                    <li><strong>{% trans "who was contracted in this sector" %}</strong></li>
+                    <li><strong>{% trans "what is the value of the sector" %}</strong></li>
+                </ul>
+            </div>
+            <h4 class="center-title"><a class="item" href="{% url "categories_list" %}">{% trans "Categories" %}</a></h4>
+        </div>
+        <div class="main-block" id="search">
+            <h2 class="center-title">{% trans "Save time" %}</h2>
+            <p class="center-content">
+                {% blocktrans %}
+                    In this website all lists have an RSS-feed available for you to read.
+                    This way, you receive automatic notifications of the new contracts without having to visit us.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% trans "To receive notifications on a list you want to follow, on that list click on the button with this symbol:" %}
+            </p>
+            <div class="center">
+                <div id="rss-feed"></div>
+            </div>
+            <p>
+                {% blocktrans %}
+                    You are sent to a page which you can import using a rss-reader.
+                {% endblocktrans %}
+            </p>
+        </div>
+        <div class="main-block" id="search">
+            <h2 class="center-title">{% trans "What we ask:" %}</h2>
+            <ul>
+                <li>
+                    {% trans "If you think this website is worth to anyone in your network, take 5 seconds to share it." %}
+                </li>
+                <li>
+                    {% trans "Take 1 minute to send any criticism or suggestion you have to our mailing list." %}
+                </li>
+            </ul>
+        </div>
     </div>
 {% endblock %}

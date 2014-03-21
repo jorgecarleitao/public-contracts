@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-16 18:30+0000\n"
+"POT-Creation-Date: 2014-03-21 07:32+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 #: contracts/category_urls.py:9 contracts/category_urls.py:10
 #: contracts/category_views.py:43 contracts/entity_urls.py:9
 #: contracts/entity_urls.py:10 contracts/entity_views.py:40
-#: contracts/urls.py:18 contracts/urls.py:19
+#: contracts/urls.py:19 contracts/urls.py:20
 #: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
 #: contracts/templates/contracts/category_view/tab_entities/search.html:19
 #: contracts/templates/contracts/category_view/tab_entities/search.html:23
@@ -45,6 +45,12 @@ msgstr "contratantes"
 msgid "contracted"
 msgstr "contratados"
 
+#: contracts/category_urls.py:14 contracts/category_urls.py:15
+#: contracts/entity_urls.py:14 contracts/entity_urls.py:15
+#: contracts/urls.py:24 contracts/urls.py:25
+msgid "tenders"
+msgstr "concursos"
+
 #: contracts/category_views.py:43 contracts/entity_views.py:40
 #: contracts/templates/contracts/category_view/tab_entities/search.html:29
 #: contracts/templates/contracts/category_view/tab_entities/search.html:33
@@ -70,7 +76,7 @@ msgid "name"
 msgstr "nome"
 
 #: contracts/category_views.py:63 contracts/entity_views.py:60
-#: contracts/views.py:34 contracts/views.py:129 contracts/views.py:186
+#: contracts/views.py:38 contracts/views.py:133 contracts/views.py:190
 #: contracts/templates/contracts/category_view/tab_entities/search.html:64
 #: contracts/templates/contracts/contract_list/search_contracts.html:52
 #: contracts/templates/contracts/entity_list/search_entities.html:51
@@ -82,8 +88,8 @@ msgstr "procura"
 
 #: contracts/category_views.py:70 contracts/category_views.py:71
 #: contracts/entity_views.py:67 contracts/entity_views.py:68
-#: contracts/views.py:41 contracts/views.py:42 contracts/views.py:136
-#: contracts/views.py:137 contracts/views.py:193 contracts/views.py:194
+#: contracts/views.py:45 contracts/views.py:46 contracts/views.py:140
+#: contracts/views.py:141 contracts/views.py:197 contracts/views.py:198
 #: contracts/templates/contracts/category_view/tab_entities/search.html:48
 #: contracts/templates/contracts/category_view/tab_entities/search.html:50
 #: contracts/templates/contracts/category_view/tab_entities/search.html:52
@@ -103,7 +109,7 @@ msgid "sorting"
 msgstr "ordem"
 
 #: contracts/category_views.py:80 contracts/entity_views.py:77
-#: contracts/views.py:52 contracts/views.py:147 contracts/views.py:204
+#: contracts/views.py:56 contracts/views.py:151 contracts/views.py:208
 #: contracts/templates/contracts/category_view/tab_entities/list.html:21
 #: contracts/templates/contracts/contract_list/contract_list_template.html:20
 #: contracts/templates/contracts/entity_list/entity_list_template.html:19
@@ -118,32 +124,32 @@ msgstr "página"
 msgid "costumers"
 msgstr "clientes"
 
-#: contracts/entity_urls.py:14 contracts/entity_urls.py:15
-#: contracts/urls.py:23 contracts/urls.py:24
-msgid "tenders"
-msgstr "concursos"
-
 #: contracts/feed.py:23
 #, python-format
 msgid "Contracts in \"%s\""
 msgstr "Contracts em \"%s\""
 
-#: contracts/feed.py:49
+#: contracts/feed.py:43
+#, python-format
+msgid "Tenders in \"%s\""
+msgstr "Concursos em \"%s\""
+
+#: contracts/feed.py:73
 #, python-format
 msgid "Latest contracts in %s"
 msgstr "Últimos contratos em %s"
 
-#: contracts/feed.py:78
+#: contracts/feed.py:102
 #, python-format
 msgid "Contracts with \"%s\""
 msgstr "Contratos com \"%s\""
 
-#: contracts/feed.py:98
+#: contracts/feed.py:122
 #, python-format
 msgid "Tenders created by \"%s\""
 msgstr "Concursos criados por \"%s\""
 
-#: contracts/feed.py:128
+#: contracts/feed.py:152
 #, python-format
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
@@ -152,68 +158,72 @@ msgstr "Últimos concursos em %s"
 msgid "about"
 msgstr "acerca"
 
-#: contracts/urls.py:21
+#: contracts/urls.py:17
+msgid "analysis"
+msgstr "analises"
+
+#: contracts/urls.py:22
 msgid "categories"
 msgstr "categorias"
 
-#: contracts/urls.py:26
+#: contracts/urls.py:27
 msgid "entities"
 msgstr "entidades"
 
-#: contracts/urls.py:28
+#: contracts/urls.py:29
 msgid "contract"
 msgstr "contrato"
 
-#: contracts/urls.py:30
+#: contracts/urls.py:31
 msgid "entity"
 msgstr "entidade"
 
-#: contracts/urls.py:32
+#: contracts/urls.py:33
 msgid "category"
 msgstr "categoria"
 
-#: contracts/urls.py:34 contracts/urls.py:35 contracts/urls.py:36
+#: contracts/urls.py:35 contracts/urls.py:36 contracts/urls.py:37
 msgid "entities-category-ranking"
 msgstr "ranking-especificidade-municípios"
 
-#: contracts/urls.py:38 contracts/urls.py:39
+#: contracts/urls.py:39 contracts/urls.py:40
 msgid "contracts-price-histogram"
 msgstr "histograma-precos-contratos"
 
-#: contracts/urls.py:40
+#: contracts/urls.py:41
 msgid "contracts-macro-statistics"
 msgstr ""
 
-#: contracts/urls.py:42 contracts/urls.py:43
+#: contracts/urls.py:43 contracts/urls.py:44
 msgid "procedure-type-time-series"
 msgstr "série-temporal-de-ajuste-direto-vs-concurso-público"
 
-#: contracts/urls.py:45 contracts/urls.py:46 contracts/urls.py:47
+#: contracts/urls.py:46 contracts/urls.py:47 contracts/urls.py:48
 msgid "municipalities-delta-time"
 msgstr "municípios-tempo-médio-publicação-contratos"
 
-#: contracts/urls.py:49 contracts/urls.py:50 contracts/urls.py:51
+#: contracts/urls.py:50 contracts/urls.py:51 contracts/urls.py:52
 msgid "when-do-portugal-contract-most"
 msgstr "quando-e-que-portugal-mais-contrata"
 
-#: contracts/urls.py:53 contracts/urls.py:54
+#: contracts/urls.py:54 contracts/urls.py:55
 msgid "when-do-portuguese-municipalities-contract-most"
 msgstr "quando-e-que-os-municipios-mais-contratam"
 
-#: contracts/urls.py:56 contracts/urls.py:57
+#: contracts/urls.py:57 contracts/urls.py:58
 msgid "how-do-portuguese-municipalities-contract-most"
 msgstr "como-e-que-os-municipios-mais-contratam"
 
-#: contracts/urls.py:59 contracts/urls.py:60
+#: contracts/urls.py:60 contracts/urls.py:61
 msgid "when-do-portuguese-ministries-contract-most"
 msgstr "quando-e-que-os-ministerios-mais-contratam"
 
-#: contracts/urls.py:62 contracts/urls.py:63
+#: contracts/urls.py:63 contracts/urls.py:64
 msgid "how-many-contracts-are-published-too-late"
 msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 
-#: contracts/views.py:20 contracts/views.py:47 contracts/views.py:172
-#: contracts/views.py:199
+#: contracts/views.py:24 contracts/views.py:51 contracts/views.py:176
+#: contracts/views.py:203
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
 #: contracts/templates/contracts/contract_list/search_contracts.html:14
 #: contracts/templates/contracts/contract_list/search_contracts.html:38
@@ -223,8 +233,8 @@ msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 msgid "price"
 msgstr "preço"
 
-#: contracts/views.py:20 contracts/views.py:47 contracts/views.py:172
-#: contracts/views.py:199
+#: contracts/views.py:24 contracts/views.py:51 contracts/views.py:176
+#: contracts/views.py:203
 #: contracts/templates/contracts/contract_list/search_contracts.html:20
 #: contracts/templates/contracts/contract_list/search_contracts.html:24
 #: contracts/templates/contracts/contract_list/search_contracts.html:40
@@ -234,14 +244,14 @@ msgstr "preço"
 msgid "date"
 msgstr "data"
 
-#: contracts/views.py:111 contracts/views.py:117 contracts/views.py:142
+#: contracts/views.py:115 contracts/views.py:121 contracts/views.py:146
 #: contracts/templates/contracts/entity_list/search_entities.html:9
 #: contracts/templates/contracts/entity_list/search_entities.html:13
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:111 contracts/views.py:119 contracts/views.py:142
+#: contracts/views.py:115 contracts/views.py:123 contracts/views.py:146
 #: contracts/templates/contracts/entity_list/search_entities.html:19
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:39
@@ -385,96 +395,66 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">read the docs</a> que aloja a documentação da "
 "base de dados."
 
-#: contracts/templates/contracts/main_page.html:5
-msgid "Public contracts"
-msgstr "Contratos públicos"
+#: contracts/templates/contracts/analysis.html:5
+#: contracts/templates/contracts/base/header.html:12
+msgid "Analysis"
+msgstr "Análises"
 
-#: contracts/templates/contracts/main_page.html:8
-msgid "Welcome to Public Contracts"
-msgstr "Bem vindo ao Contratos Públicos"
-
-#: contracts/templates/contracts/main_page.html:10
-#, python-format
-msgid ""
-"\n"
-"                An <a href=\"%(github)s\">open source</a>\n"
-"                project for collaborative analysis and visualization of the "
-"portuguese database of public contracts.\n"
-"            "
-msgstr ""
-"\n"
-"Um projecto <a href=\"%(github)s\">open source</a> para analizar e "
-"visualizar a base de dados de contratos públicos portugueses."
-
-#: contracts/templates/contracts/main_page.html:16
-msgid ""
-"\n"
-"                In this website you can navigate in the database of all "
-"contracts or take a look at\n"
-"                our statistical analysis to better understand portuguese "
-"public procurement.\n"
-"            "
-msgstr ""
-"\n"
-"Neste website pode navegar na base de dados de todos os contratos ou ver as "
-"nossas análises estatísticas para melhor compreender a contratação pública "
-"portuguesa."
-
-#: contracts/templates/contracts/main_page.html:21
+#: contracts/templates/contracts/analysis.html:8
 msgid "Analysis of ministries"
 msgstr "Análises a ministérios"
 
-#: contracts/templates/contracts/main_page.html:24
+#: contracts/templates/contracts/analysis.html:11
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:4
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:7
 msgid "When do portuguese ministries contract most?"
 msgstr "Quando é que os ministérios mais contratam?"
 
-#: contracts/templates/contracts/main_page.html:27
+#: contracts/templates/contracts/analysis.html:14
 msgid "Analysis of municipalities"
 msgstr "Análises a municípios"
 
-#: contracts/templates/contracts/main_page.html:30
+#: contracts/templates/contracts/analysis.html:17
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:4
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:7
 msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
-#: contracts/templates/contracts/main_page.html:33
+#: contracts/templates/contracts/analysis.html:20
 msgid "How do portuguese municipalities contract most?"
 msgstr "Como é que os municípios mais contratam?"
 
-#: contracts/templates/contracts/main_page.html:36
+#: contracts/templates/contracts/analysis.html:23
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/templates/contracts/main_page.html:39
+#: contracts/templates/contracts/analysis.html:26
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/templates/contracts/main_page.html:42
+#: contracts/templates/contracts/analysis.html:29
 msgid "Macroscopic analysis"
 msgstr "Análises macroscópicas"
 
-#: contracts/templates/contracts/main_page.html:45
+#: contracts/templates/contracts/analysis.html:32
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/templates/contracts/main_page.html:48
+#: contracts/templates/contracts/analysis.html:35
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/templates/contracts/main_page.html:51
+#: contracts/templates/contracts/analysis.html:38
 msgid "When do Portugal contract most?"
 msgstr "Quando é que o estado mais contrata?"
 
-#: contracts/templates/contracts/main_page.html:54
+#: contracts/templates/contracts/analysis.html:41
 #: contracts/templates/contracts/legislation_application_time_series/main.html:4
 #: contracts/templates/contracts/legislation_application_time_series/main.html:7
 msgid "How many contracts are published too late?"
 msgstr "Quantos contratos são publicados demasiado tarde?"
 
-#: contracts/templates/contracts/main_page.html:58
+#: contracts/templates/contracts/analysis.html:45
 #, python-format
 msgid ""
 "\n"
@@ -487,6 +467,34 @@ msgstr ""
 "Se tem uma análise que gostaria de ver feita ou alguma sugestão, <a href="
 "\"%(mailing_list)s\">entre em contacto connosco</a>."
 
+#: contracts/templates/contracts/main_page.html:5
+msgid "Public contracts"
+msgstr "Contratos públicos"
+
+#: contracts/templates/contracts/main_page.html:9
+msgid "Welcome to Public Contracts"
+msgstr "Bem vindo ao Contratos Públicos"
+
+#: contracts/templates/contracts/main_page.html:13
+msgid "A website to understand the portuguese public procurement."
+msgstr "Um local para compreender a contratação pública portuguesa."
+
+#: contracts/templates/contracts/main_page.html:16
+msgid ""
+"\n"
+"                In Public Contracts you can find any public contract or "
+"tender officially published in the portuguese official\n"
+"                database. We aim to provide tools for you to extract "
+"meaningful answers to questions you have about them.\n"
+"                Learn how...\n"
+"            "
+msgstr ""
+"No Contratos Públicos pode encontrar qualquer contrato ou concurso público publicado na base de dados official. "
+"O nosso objetivo é dar-lhe ferramentas para você mesmo poder responder às perguntas que tem sobre a contratação "
+"pública portuguesa."
+
+#: contracts/templates/contracts/main_page.html:23
+#: contracts/templates/contracts/main_page.html:39
 #: contracts/templates/contracts/base/header.html:8
 #: contracts/templates/contracts/category_view/selector.html:12
 #: contracts/templates/contracts/category_view/selector.html:14
@@ -497,17 +505,83 @@ msgstr ""
 msgid "Contracts"
 msgstr "Contratos"
 
-#: contracts/templates/contracts/base/header.html:9
-#: contracts/templates/contracts/category_list/main.html:4
-#: contracts/templates/contracts/category_list/main.html:6
-msgid "Categories"
-msgstr "Categorias"
+#: contracts/templates/contracts/main_page.html:25
+msgid ""
+"\n"
+"                    In this website you can find all officially published "
+"contracts. You can search,\n"
+"                    filter, and order the results according to your "
+"objectives.\n"
+"                "
+msgstr ""
+"\n"
+"Neste website pode encontrar todos os contratos oficialmente públicados. "
+"Pode procurar, filtrar, ou ordenar os resultados de acordo com os seus "
+"objetivos."
 
+#: contracts/templates/contracts/main_page.html:31
+msgid "For each contract, you can find"
+msgstr "Para cada contrato, pode encontrar"
+
+#: contracts/templates/contracts/main_page.html:33
+msgid "who contracted"
+msgstr "quem contratou"
+
+#: contracts/templates/contracts/main_page.html:34
+msgid "who was contracted"
+msgstr "quem foi contratado"
+
+#: contracts/templates/contracts/main_page.html:35
+msgid "what was the price"
+msgstr "por que valor"
+
+#: contracts/templates/contracts/main_page.html:36
+msgid "on which economical sector"
+msgstr "em que sector económico"
+
+#: contracts/templates/contracts/main_page.html:42
+#: contracts/templates/contracts/main_page.html:58
 #: contracts/templates/contracts/base/header.html:10
 #: contracts/templates/contracts/entity_list/main.html:3
 msgid "Entities"
 msgstr "Entidades"
 
+#: contracts/templates/contracts/main_page.html:44
+msgid ""
+"\n"
+"                    In this website you have access to all public and "
+"private entities that ever participated in a public contract.\n"
+"                    Which companies are being publicly contracted in your "
+"economical sector? Here you can find them out.\n"
+"                "
+msgstr ""
+"\n"
+"Neste local tem acesso a todas as entidades públicas e privadas que alguma "
+"vez participaram num contrato público. Que companhias estão a ser "
+"contratadas pelo estado no seu sector económico? Aqui pode conhece-las."
+
+#: contracts/templates/contracts/main_page.html:50
+msgid "For each entity, you can find"
+msgstr "Para cada entidade, pode encontrar"
+
+#: contracts/templates/contracts/main_page.html:52
+msgid "the contracts where it was contracted"
+msgstr "os contratos em que foi contratada"
+
+#: contracts/templates/contracts/main_page.html:53
+msgid "the contracts it made"
+msgstr "os contratos que fez"
+
+#: contracts/templates/contracts/main_page.html:54
+msgid "Its economical sectors"
+msgstr "Os seus sectores económicos"
+
+#: contracts/templates/contracts/main_page.html:55
+msgid "Its clients"
+msgstr "Os seus clientes"
+
+#: contracts/templates/contracts/main_page.html:61
+#: contracts/templates/contracts/main_page.html:76
 #: contracts/templates/contracts/base/header.html:11
 #: contracts/templates/contracts/category_view/selector.html:34
 #: contracts/templates/contracts/category_view/selector.html:36
@@ -516,6 +590,134 @@ msgstr "Entidades"
 #: contracts/templates/contracts/tender_list/main.html:3
 msgid "Tenders"
 msgstr "Concursos"
+
+#: contracts/templates/contracts/main_page.html:63
+msgid ""
+"\n"
+"                    In this website you can find all existing public "
+"tenders, by economical-sector or by public entity.\n"
+"                    We provide direct references to the Diário da República "
+"online where you can find the details of the tender.\n"
+"                "
+msgstr ""
+"\n"
+"Neste website pode encontrar todos os concursos públicos, por sector "
+"económico ou entidade pública. Temos a referência directa para o diário da "
+"república online onde pode encontrar os detalhes do concurso."
+
+#: contracts/templates/contracts/main_page.html:69
+msgid "For each tender, you can find"
+msgstr "Para cada concurso pode encontrar"
+
+#: contracts/templates/contracts/main_page.html:71
+msgid "who is contracting"
+msgstr "Quem o criou"
+
+#: contracts/templates/contracts/main_page.html:72
+msgid "what and at what price"
+msgstr "O quê e a que preço"
+
+#: contracts/templates/contracts/main_page.html:73
+msgid "when is the deadline"
+msgstr "Qual a data limite"
+
+#: contracts/templates/contracts/main_page.html:79
+#: contracts/templates/contracts/main_page.html:94
+#: contracts/templates/contracts/base/header.html:9
+#: contracts/templates/contracts/category_list/main.html:4
+#: contracts/templates/contracts/category_list/main.html:6
+msgid "Categories"
+msgstr "Categorias"
+
+#: contracts/templates/contracts/main_page.html:79
+msgid "economical sectors"
+msgstr "sectores económicos"
+
+#: contracts/templates/contracts/main_page.html:81
+msgid ""
+"\n"
+"                    In this website all contracts and tenders are "
+"categorized by economical sector.\n"
+"                    This way you can focus on what matters for you or your "
+"company.\n"
+"                "
+msgstr ""
+"\n"
+"Neste local todos os contratos e concursos estão categorizados por sector "
+"económico. Desta forma pode-se focar no que lhe interessa para si ou para a "
+"sua empresa."
+
+#: contracts/templates/contracts/main_page.html:87
+msgid "For each category, you can find:"
+msgstr "Para cada categoria, pode encontrar:"
+
+#: contracts/templates/contracts/main_page.html:89
+msgid "who contracted in this sector"
+msgstr "quem contrata neste sector"
+
+#: contracts/templates/contracts/main_page.html:90
+msgid "who was contracted in this sector"
+msgstr "quem é contratado neste sector"
+
+#: contracts/templates/contracts/main_page.html:91
+msgid "what is the value of the sector"
+msgstr "qual o valor do sector"
+
+#: contracts/templates/contracts/main_page.html:97
+msgid "Save time"
+msgstr "Poupe tempo"
+
+#: contracts/templates/contracts/main_page.html:99
+msgid ""
+"\n"
+"                    In this website all lists have an RSS-feed available for "
+"you to read.\n"
+"                    This way, you receive automatic notifications of the new "
+"contracts without having to visit us.\n"
+"                "
+msgstr ""
+"\n"
+"Neste local todas as listas têm um RSS-feed que pode ler. Desta forma pode "
+"receber notificações automáticas de novos contratos ou concursos sem ter de "
+"nos visitar."
+
+#: contracts/templates/contracts/main_page.html:105
+msgid ""
+"To receive notifications on a list you want to follow, on that list click on "
+"the button with this symbol:"
+msgstr ""
+"Para receber notificações de uma lista, na lista clique no botão com este "
+"simbolo:"
+
+#: contracts/templates/contracts/main_page.html:111
+msgid ""
+"\n"
+"                    You are sent to a page which you can import using a rss-"
+"reader.\n"
+"                "
+msgstr ""
+"\n"
+"É enviado para uma página que pode importar usando um rss-reader."
+
+#: contracts/templates/contracts/main_page.html:117
+msgid "What we ask:"
+msgstr "O que pedimos:"
+
+#: contracts/templates/contracts/main_page.html:120
+msgid ""
+"If you think this website is worth to anyone in your network, take 5 seconds "
+"to share it."
+msgstr ""
+"Se acha que este local é vantajoso para alguém na sua rede de contactos, "
+"perca 5s a partilhá-lo."
+
+#: contracts/templates/contracts/main_page.html:123
+msgid ""
+"Take 1 minute to send any criticism or suggestion you have to our mailing "
+"list."
+msgstr ""
+"Use 1 minuto a enviar qualquer crítica ou sugestão para a nossa mailing list "
+"- este site é livre e open source."
 
 #: contracts/templates/contracts/category_view/main.html:8
 msgid "Parent categories"

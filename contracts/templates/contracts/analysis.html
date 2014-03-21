@@ -1,0 +1,51 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Analysis"%}{% endblock %}
+{% block content %}
+    <div class="rules">
+        <h3>{% trans "Analysis of ministries" %}</h3>
+        <ul>
+            <li>
+                <a href="{% url "ministries_contracts_time_series" %}">{% trans "When do portuguese ministries contract most?"%}</a>
+            </li>
+        </ul>
+        <h3>{% trans "Analysis of municipalities" %}</h3>
+        <ul>
+            <li>
+                <a href="{% url "municipalities_contracts_time_series" %}">{% trans "When do portuguese municipalities contract most?"%}</a>
+            </li>
+            <li>
+                <a href="{% url "municipalities_procedure_types_time_series" %}">{% trans "How do portuguese municipalities contract most?"%}</a>
+            </li>
+            <li>
+                <a href="{% url "entities_category_ranking" %}">{% trans "Ranking of specificity of municipalities" %}</a>
+            </li>
+            <li>
+                <a href="{% url "municipalities_delta_time" %}">{% trans "Time of publication of municipalities" %}</a>
+            </li>
+        </ul>
+        <h3>{% trans "Macroscopic analysis"%}</h3>
+        <ul>
+            <li>
+                <a href="{% url "contracts_price_histogram" %}">{% trans "Distribution of prices of contracts" %}</a>
+            </li>
+            <li>
+                <a href="{% url "procedure_types_time_series" %}">{% trans "Percentage of contracts by direct procurement or public tender" %}</a>
+            </li>
+            <li>
+                <a href="{% url "contracts_time_series" %}">{% trans "When do Portugal contract most?" %}</a>
+            </li>
+            <li>
+                <a href="{% url "legislation_application_time_series" %}">{% trans "How many contracts are published too late?" %}</a>
+            </li>
+        </ul>
+        <p>
+            {% blocktrans with mailing_list="https://groups.google.com/forum/#!forum/public-contracts" %}
+                If you want a new analysis or have any suggestion, post it in
+                <a href="{{ mailing_list }}">our mailing list</a>.
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock %}

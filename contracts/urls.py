@@ -14,6 +14,7 @@ import category_urls
 urlpatterns = patterns('',
                        url(r'^$', views.home, name='contracts_home'),
                        url(r'^%s$' % _('about'), views.about, name='contracts_about'),
+                       url(r'^%s$' % _('analysis'), views.analysis, name='contracts_analysis'),
 
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s/rss$' % _('contracts'), feed.ContractsFeed(), name='contracts_list_feed'),

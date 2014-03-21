@@ -15,6 +15,10 @@ def home(request):
     return render(request, 'contracts/main_page.html')
 
 
+def analysis(request):
+    return render(request, 'contracts/analysis.html')
+
+
 def build_contract_list_context(context, GET):
     def apply_order(querySet, order):
         ordering = {_('price'): '-price', _('date'): '-signing_date'}
