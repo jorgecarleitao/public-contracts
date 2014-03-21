@@ -529,55 +529,21 @@ class TendersCrawler(DynamicCrawler):
     """
     tenders_directory = '../../tenders'
 
-    def _get_tenders_block(self, block):
+    def _last_base_id(self):
         """
-        Returns a block of 25 entities from a file.
-        If the file doesn't exist or returns less than 25 entries,
-        it hits BASE's database and updates the file.
-
-        It raises a `NoMoreEntriesError` if the retrieval returned 0 entries i.e. if have we reached
-        the last existing entity in Base's database.
-        """
-
-        def _retrieve_tenders():
-            print '_retrieve_tenders(%d)' % block
-            self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
-            data = self.goToPage("http://www.base.gov.pt/base2/rest/anuncios")
-            if len(data) == 0:
-                raise self.NoMoreEntriesError
-            return data
-
-        file_name = '%s/%d_tenders.dat' % (self.data_directory, block)
-        try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            if len(data) != 25:  # if block is not complete, we retrieve it again to try to complete it.
-                print '_get_tenders_block(%d)' % block,
-                print 'returns len(data) = %d != 25' % len(data)
-                raise IOError
-            f.close()
-        except IOError:
-            data = _retrieve_tenders()
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
-        return data
-
-    def _last_tender_block(self):
-        """
-        Returns the last block we were able to retrieve from the database.
+        Returns the last existent item in the database
         This is computed using the files we saved. The regex expression must be compatible to the
-        name given in `_get_tenders_block`.
+        name given in `_retrieve_and_save_tender_data`.
         """
-        regex = re.compile(r"(\d+)_tenders.dat")
-        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
+        regex = re.compile(r"(\d+).dat")
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.tenders_directory) if re.match(regex, f)]
         files = sorted(files, key=lambda x: int(x), reverse=True)
         if len(files):
             return files[0]
         else:
-            return 0
+            return 1
 
-    def _retrieve_and_save_tender_data(self, base_id):
+    def _retrieve_and_cache_tender_data(self, base_id):
         """
         Returns the data of a tender. It first tries the file. If the file doesn't exist,
         it retrieves the data from Base and saves it in the file.
@@ -638,31 +604,36 @@ class TendersCrawler(DynamicCrawler):
         contractors = clean_entities(item['contractingEntities'])
         tender.contractors.add(*list(contractors))
 
-    def _save_tenders(self, block):
-        print '_save_tenders(%d)' % block
-        raw_tenders = self._get_tenders_block(block)
-
-        for raw_tender in raw_tenders:
+    def _save_tenders(self):
+        base_id = self._last_base_id() - 1000
+        error_counter = 0
+        while True:
             try:
-                data = self._retrieve_and_save_tender_data(raw_tender['id'])
+                data = self._retrieve_and_cache_tender_data(base_id)
+                error_counter = 0
+            except mc.HTTPError:
+                error_counter += 1
+                if error_counter == 100:
+                    return base_id
+                base_id += 1
+                continue
+
+            try:
                 self._save_tender(data)
             # this has given errors before, we print the contract number to gain some information.
             except:
-                print 'error on saving tender %d' % raw_tender['id']
-                #raise
+                print 'error on saving tender %d' % base_id
+                #if base_id != 41407 and base_id != 41445:
+                #    raise
+
+            base_id += 1
 
     def update(self):
         """
         Goes to all blocks and saves all entities in each block.
         Once a block is completely empty, we stop.
         """
-        block = self._last_tender_block()
-        while True:
-            try:
-                self._save_tenders(block)
-                block += 1
-            except self.NoMoreEntriesError:
-                break
+        self._save_tenders()
 
 
 class DynamicDataCrawler():
@@ -673,7 +644,7 @@ class DynamicDataCrawler():
 
     def update_all(self):
         self.entities_crawler.update()
-        self.contracts_crawler.update()
+        #self.contracts_crawler.update()
         self.tenders_crawler.update()
 
 crawler = DynamicDataCrawler()
