@@ -26,7 +26,7 @@
                 {% trans "No category assigned." %}
             {% endif %}
         </p>
-        <p class="summary">
+        <p>
             {% trans "Value:" %} {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
         </p>
         <p>{% trans "Added:" %} {{contract.added_date}}</p>

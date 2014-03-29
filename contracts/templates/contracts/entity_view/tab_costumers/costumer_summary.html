@@ -1,13 +1,12 @@
+{% extends "contracts/summary.html" %}
 {% load i18n %}
 {% load contracts.humanize %}
-<div class="summary" id="entity-{{entity.id}}">
-    <div class="full">
-        <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
-        <div class="price">
-            <p>
-                {% trans "Value:" %}
-                {{ entity.total_expended|intword }} € ({{ entity.total_contracts }} {% trans "contracts" %})
-            </p>
-        </div>
+{% block summary_content %}
+    <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+    <div class="price">
+        <p>
+            {% trans "Value:" %}
+            {{ entity.total_expended|intword }} € ({{ entity.total_contracts }} {% trans "contracts" %})
+        </p>
     </div>
-</div>
+{% endblock %}

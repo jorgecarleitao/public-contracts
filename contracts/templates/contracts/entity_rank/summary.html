@@ -1,16 +1,15 @@
+{% extends "contracts/summary.html" %}
 {% load i18n %}
 {% load contracts.humanize %}
-<div class="summary" id="entity-{{entity.id}}">
-    <div class="full">
-        <div class="counter">
-            <p>{{ entity.rank }}</p>
-        </div>
-        <div class="content">
-            <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
-            <div class="content">
+{% block summary_content %}
+    <div class="counter">
+        <p>{{ entity.rank }}</p>
+    </div>
+    <div class="rank">
+        <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+        <div class="rank">
                 <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
                 ({{ entity.count }} {% trans "contracts" %})</span>
-            </div>
         </div>
     </div>
-</div>
+{% endblock %}

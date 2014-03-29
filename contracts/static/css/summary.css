@@ -1,12 +1,17 @@
 .summary {
-    padding-bottom: 3px;
-    padding-top: 10px;
-    border-bottom: 1px solid #DDDBCE;
+    margin-bottom: 3px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    border: 1px solid #DDDBCE;
     width: 100%;
     clear: both;
 }
 
-.summary .content {
+.summary-content {
+    padding: 5px;
+}
+
+.summary .rank {
     width: 415px;
     float: left;
 }
