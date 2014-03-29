@@ -644,7 +644,7 @@ class DynamicDataCrawler():
 
     def update_all(self):
         self.entities_crawler.update()
-        #self.contracts_crawler.update()
+        self.contracts_crawler.update()
         self.tenders_crawler.update()
 
 crawler = DynamicDataCrawler()
