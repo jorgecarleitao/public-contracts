@@ -9,7 +9,7 @@ project_dir = os.path.dirname(wsgi_dir)
 
 # add project  directory to system's Path
 sys.path.append(project_dir)
-sys.path.append('/home/littlepig/webapps/public_contracts/public-contracts/main')
+sys.path.append(project_dir+"/main")
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
 import django.core.handlers.wsgi
