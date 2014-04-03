@@ -1,5 +1,6 @@
+{% extends "summary.html" %}
 {% load i18n %}
-<li class="summary">
+{% block summary_content %}
     <h4>
         <a href="{{ party.get_absolute_url }}">{{ party.abbrev }}</a>
     </h4>
@@ -16,4 +17,4 @@
             {{ count }} deputies
         {% endblocktrans %}
     </div>
-</li>
+{% endblock %}
