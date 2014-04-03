@@ -11,6 +11,7 @@ DATABASES = {
 
 INSTALLED_APPS = (
     'contracts',
+    'deputies',
 )
 
 # Mandatory in Django, doesn't make a difference in our case.
