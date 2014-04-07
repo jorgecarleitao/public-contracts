@@ -1,0 +1,37 @@
+{% load i18n %}
+{% if laws or search %}
+<div class="sorting">
+    <ul class="horizontal-tab-list">
+        <li {% if search %}class="active"{% endif %}>
+            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search laws" %}" value="{{search}}">
+        </li>
+    </ul>
+</div>
+{% endif %}
+<script>
+    $(document).ready(function() {
+
+        $("a.ordering, a.filter").click(function() {
+            var newURL = null;
+
+            if ($(this).hasClass('order-price'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "price"%}');
+            else if ($(this).hasClass('order-date'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "date"%}');
+
+            window.location.replace(newURL);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $("#search_content").keypress(function(e) {
+            if(e.which == 13)
+            {
+                var newURL = updateURLParameter(window.location.href, "{%trans 'search'%}", $(this).val());
+                window.location.replace(newURL);
+            }
+        });
+    });
+</script>

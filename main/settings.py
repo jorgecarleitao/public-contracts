@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'main',
     'contracts',
     'deputies',
+    'law',
     'treebeard',  # for model in trees
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',

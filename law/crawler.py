@@ -1,26 +1,27 @@
 # coding=utf-8
 import pickle
 import re
+import urllib2
 import mechanize as mc
 import datetime
-import xml.etree.ElementTree
-import xml.dom.minidom
 
 from BeautifulSoup import BeautifulSoup
 
-from models import LawDecree, LawArticle, LawText
+from models import Type, Document
 
 
+def convert_to_url(string):
+    string = string.replace(u'ã', '%E3')
+    string = string.replace(u'á', '%E1')
+    string = string.replace(u'â', '%E2')
 
-def prettify(elem):
-    """Return a pretty-printed XML string for the Element.
+    string = string.replace(u'ç', '%E7')
+    string = string.replace(u'ó', '%F3')
+    string = string.replace(u'ê', '%EA')
+    string = string.replace(u'õ', '%F5')
 
-    see http://stackoverflow.com/a/17402424/931303
-    """
-    rough_string = xml.etree.ElementTree.tostring(elem, 'utf-8')
-    reparsed = xml.dom.minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="\t")
-
+    string = string.replace(u'ú', '%FA')
+    return string
 
 month_name_to_number = {u'Janeiro': 1,
                         u'Fevereiro': 2,
@@ -89,7 +90,6 @@ def clean_type(string):
     if u'Aviso' in string:
         return u'Aviso', None
 
-    print(string)
     parts = string.split(u'n.º ')
     doc_type = parts[0].split(':')[1]
     doc_number = parts[1].split(' ')[0]
@@ -129,6 +129,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         self.data_directory = '../../law_data'
         self.source_directory = self.data_directory + '/source'
 
+        #type = 'Decreto-Lei', 'Lei', etc.
         self._law_url_formatter = 'http://dre.pt/cgi/dr1s.exe?' \
                                   't=dr&' \
                                   'cap=1-1200&' \
@@ -143,7 +144,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                                   'v08=&' \
                                   'v09=&' \
                                   'v10=&' \
-                                  'v11=\'Decreto-Lei\'&' \
+                                  'v11=\'{type}\'&' \
                                   'v12=&' \
                                   'v13=&' \
                                   'v14=&' \
@@ -151,6 +152,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                                   'sort=0&' \
                                   'submit=Pesquisar'
 
+        #type = 'Decreto-Lei', 'Lei', etc.
         self._list_url_formatter = 'http://dre.pt/cgi/dr1s.exe?' \
                                    't=qr&' \
                                    'titp=100&' \
@@ -165,7 +167,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                                    'v08=&' \
                                    'v09=&' \
                                    'v10=&' \
-                                   'v11=\'Decreto-Lei\'&' \
+                                   'v11=\'{type}\'&' \
                                    'v12=&' \
                                    'v13=&' \
                                    'v14=&' \
@@ -173,6 +175,26 @@ class FirstSeriesCrawler(AbstractCrawler):
                                    'sort=0&' \
                                    'submit=Pesquisar'
 
+    def extract_law_types(self):
+        """
+        Retrieves all types of documents and adds others found.
+        Valid for series 1 only
+        """
+        url = 'http://dre.pt/comum/html/janelas/dip1s_ltipos.html'
+
+        html = self.goToPage(url)
+        soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
+
+        for element in soup.findAll('li'):
+            Type.objects.get_or_create(name=element.text)
+
+        # Others meanwhile found
+        Type.objects.get_or_create(name=u"Acórdão doutrinário")
+        Type.objects.get_or_create(name=u"Acórdão - Recurso extraordinário")
+        Type.objects.get_or_create(name=u"Acórdão do Supremo Tribunal de Justiça")
+        Type.objects.get_or_create(name=u"Acórdão do Supremo Tribunal Administrativo")
+        Type.objects.get_or_create(name=u"Acórdão do Tribunal Constitucional")
+        Type.objects.get_or_create(name=u"Acórdão do Tribunal de Contas")
 
     # <li>
     #     1. <a href="dr1s.exe?t=dr&amp;cap=1-1200&amp;doc=19172099&amp;v02=&v01=2&v03=1900-01-01&v04=3000-12-21&v05=&
@@ -188,42 +210,140 @@ class FirstSeriesCrawler(AbstractCrawler):
     #           artigo 44. do decreto-lei de 26 de Maio de 1911
     # </li>
     #
-    def parse_summary(self, element):
+    def parse_list_element(self, element):
         entry = {}
         href = element.find("a", dict(title="Link para o documento da pesquisa."))
-        entry['href'] = href['href']
-        entry['name'] = href.text
-        entry['entity'] = element.find("span", {'class': 'bold'}).text.split(' - ')
+        entry['doc_id'] = self.get_doc_id(href['href'])
+
+        string = href.text
+
+        if u'Aviso (1.ª parte)' in string or u'Aviso (2.ª parte)' in string:
+            return None
+
+        if string == u"Decreto n.º 46054.DG 281/64 SÉRIE I de 1964-11-30":
+            string = u"Decreto n.º 46054. DG 281/64 SÉRIE I de 1964-11-30"
+
+        strings = string.split(u'. ')
+
+        number = re.split(u' n.º ', strings[0])
+        if number == strings[0]:
+            number = None
+        entry['number'] = number
+
+        if strings[0] == u'(Não especificado)':
+            entry['type'] = None
+        else:
+            search = re.search(u"(\w+) de (\d+) de (.*) de (\d+)", strings[0])
+            if strings[0] == u'Declaração de Retificação':
+                strings[0] = u'Declaração de Rectificação'
+            elif search:
+                strings[0] = search.group(1)
+        entry['type'] = Type.objects.get(name=strings[0])
+
+        strings = strings[1].split(u' de ')
+
+        try:
+            entry['date'] = datetime.datetime.strptime(strings[1], "%Y-%m-%d")
+        except UnicodeEncodeError:
+            entry['date'] = None
+            strings[0] = strings[1]
+
+        strings = strings[0].split(u'SÉRIE')
+
+        entry['dr_number'] = strings[0]
+        entry['series'] = strings[1]
 
         return entry
 
-    def get_parsed_summaries(self, page):
-        html = self.goToPage(self._list_url_formatter.format(page=page))
+    def parse_summary_datum(self, datum):
+
+        data = {'number': None}
+
+        strings = datum['data'].split('. ')
+
+        type_name = strings[0]
+
+        if u'Aviso (1.ª parte)' in type_name or u'Aviso (2.ª parte)' in type_name:
+            type_name = u'Aviso'
+
+        if u'n.º' in strings[0]:
+            sub_string = strings[0].split(u' n.º ')
+            type_name = sub_string[0]
+            data['number'] = sub_string[1]
+
+        if type_name == u'(Não especificado)':
+            type_name = None
+        else:
+            search = re.search(u"(\w+) de (\d+) de (.*) de (\d+)", type_name)
+            # Changes in Portuguese orthography has its downsides...
+            if type_name == u'Declaração de Retificação':
+                type_name = u'Declaração de Rectificação'
+            if type_name == u'Declarações':
+                type_name = u'Declaração'
+            elif search:
+                type_name = search.group(1)
+
+        strings = strings[1].split(u' de ')
+
+        data['date'] = datetime.datetime.strptime(strings[1], "%Y-%m-%d").date()
+
+        strings = strings[0].split(u" SÉRIE ")
+
+        data['dr_number'] = strings[0]
+        data['dr_series'] = strings[1]
+
+        if type_name == u'Declaração de Retificação':
+            type_name = u'Declaração de Rectificação'
+
+        if type_name is not None:
+            data['type'] = Type.objects.get(name=type_name)
+        else:
+            data['type'] = None
+
+        data['dr_doc_id'] = datum['doc_id']
+
+        data['summary'] = datum['summary'].strip()
+
+        print data['date']
+        return data
+
+    def extract_from_list_element(self, element):
+        entry = {}
+        href = element.find("a", dict(title="Link para o documento da pesquisa."))
+        entry['doc_id'] = self.get_doc_id(href['href'])
+        entry['data'] = href.text
+        entry['entity'] = element.find("span", {'class': 'bold'}).text
+        entry['summary'] = unicode(element).split('<br />')[-1].replace('</li>', '')
+
+        return entry
+
+    def retrieve_and_extract_summaries(self, page, type):
+        html_encoded_type = convert_to_url(type)
+        html = self.goToPage(self._list_url_formatter.format(page=page, type=html_encoded_type))
         soup = BeautifulSoup(html)
 
         l = soup.find("div", dict(id="lista"))
 
         data = []
         for element in l.findAll("li"):
-            entry = self.parse_summary(element)
-            data.append(entry)
+            data.append(self.extract_from_list_element(element))
 
         return data
 
-    def get_summaries(self, page):
-        print("get_summaries of page %d" % page)
-        file_name = '%s/%d_laws.dat' % (self.data_directory, page)
+    def get_summaries(self, page, type):
+        print("get_summaries(%d, '%s')" % (page, type))
+        file_name = '%s/%s_%d.dat' % (self.data_directory, type, page)
         try:
             f = open(file_name, "rb")
             data = pickle.load(f)
-            if len(data) != 100:  # if page is not complete, we retrieve it again to complete it.
+            if len(data) != 100:  # if page is not complete, we retrieve it again to try to complete it.
                 print '_get_summaries(%d)' % page,
                 print 'returns len(data) = %d != 100' % len(data)
                 raise IOError
             f.close()
         except IOError:
             # online retrieval
-            data = self.get_parsed_summaries(page)
+            data = self.retrieve_and_extract_summaries(page, type)
 
             if len(data) == 1:  # if 1 entry, it means it is a repeated entry and we stop
                 raise self.LastPageError
@@ -233,14 +353,43 @@ class FirstSeriesCrawler(AbstractCrawler):
             f.close()
         return data
 
-    def _retrieve_all_summaries(self):
-        page = 1
-        while True:
-            try:
-                self.get_summaries(page)
-            except self.LastPageError:
-                break
-            page += 1
+    def retrieve_all_summaries(self):
+        for type in Type.objects.all().order_by("-id"):
+            print(u'retrieve_all_summaries: retrieving \'%s\'' % type)
+
+            page = 0
+            while True:
+                page += 1
+                try:
+                    self.get_summaries(page, type.name)
+                except self.LastPageError:
+                    break
+                except urllib2.URLError:
+                    print('error')
+                    break
+
+    def save_all_summaries(self):
+        for type in Type.objects.all():
+            print(u'save_all_summaries: saving \'%s\'' % type)
+            page = 0
+            while True:
+                page += 1
+                try:
+                    summaries = self.get_summaries(page, type.name)
+                except self.LastPageError:
+                    break
+                except urllib2.URLError:
+                    break
+
+                for datum in summaries:
+                    data = self.parse_summary_datum(datum)
+
+                    try:
+                        Document.objects.get(type=data['type'], dr_doc_id=data['dr_doc_id'])
+                    except Document.DoesNotExist:
+                        document = Document(**data)
+                        document.save()
+
 
     def get_source(self, doc_id):
         print("get_source(%d)" % doc_id)
@@ -278,6 +427,8 @@ class FirstSeriesCrawler(AbstractCrawler):
         return self._law_url_formatter.format(doc_id=doc_id)
 
     def get_doc_id(self, url):
+        if "$$N REGISTO" in url:
+            return None
         return int(re.findall(r'doc=(\d+)', url)[0])
 
     def parse_source_data(self, doc_id):
@@ -308,7 +459,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         return data
 
     def parse_source_text(self, doc_id):
-        decree = LawDecree.objects.get(dr_doc_id=doc_id)
+        decree = Document.objects.get(dr_doc_id=doc_id)
 
         html = self.get_source(doc_id)
         soup = BeautifulSoup(html)
@@ -457,5 +608,3 @@ class FirstSeriesCrawler(AbstractCrawler):
 if __name__ == "__main__":
     crawler = FirstSeriesCrawler()
     #crawler.get_all_sources()
-
-    crawler.parse_source_text(20111786)

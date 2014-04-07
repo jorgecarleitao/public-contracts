@@ -1,0 +1,11 @@
+{% extends "base/header.html" %}
+{% load static %}
+{% load i18n %}
+{% block scope_nav %}
+    <div id="scopeNav">
+        <ul class="horizontal-tab-list">
+            <li><a id="hlogo" href=""><img src="{% static "images/logo.png" %}" alt="" /></a></li>
+            <li><a href="{% url "law_law_list" %}">{% trans "Laws" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}

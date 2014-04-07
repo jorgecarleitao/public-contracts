@@ -4,6 +4,7 @@ from django.contrib.sitemaps.views import sitemap
 
 import contracts.urls
 import deputies.urls
+import law.urls
 import views
 from sitemaps import ContractsSitemap
 
@@ -14,6 +15,7 @@ sitemaps = {
 urlpatterns = patterns('',
                        url(r'^', include(contracts.urls)),
                        url(r'^%s' % _('deputies'), include(deputies.urls)),
+                       url(r'^%s' % _('law'), include(law.urls)),
                        (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
                        (r'^robots\.txt$', views.robots),
                        )

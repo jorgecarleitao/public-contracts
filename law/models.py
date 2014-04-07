@@ -1,17 +1,23 @@
 from django.db import models
 
 
-class LawDecree(models.Model):
-    type = models.CharField(max_length=50, null=True)
+class Type(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Document(models.Model):
+    type = models.ForeignKey(Type, null=True)
     date = models.DateField()
     number = models.CharField(max_length=20, null=True)
 
-    dr_doc_id = models.IntegerField(unique=True)
+    dr_doc_id = models.IntegerField(null=True)  # some don't have link... yet, they still are Laws...
     dr_number = models.CharField(max_length=20)
-    dr_series = models.CharField(max_length=20)
-    pages = models.CharField(max_length=50)
+    dr_series = models.CharField(max_length=20)  # "I" or "II"
 
-    text = models.TextField()
+    summary = models.TextField()
 
     def get_base_url(self):
         return 'http://dre.pt/cgi/dr1s.exe?' \
@@ -28,28 +34,28 @@ class LawDecree(models.Model):
                'v08=&' \
                'v09=&' \
                'v10=&' \
-               'v11=\'Decreto-Lei\'&' \
+               'v11={type}&' \
                'v12=&' \
                'v13=&' \
                'v14=&' \
                'v15=&' \
                'sort=0&' \
-               'submit=Pesquisar'.format(doc_id=self.dr_doc_id)
+               'submit=Pesquisar'.format(doc_id=self.dr_doc_id, type=convert_to_url(self.type.name))
 
 
-class LawArticle(models.Model):
-    decree = models.ForeignKey(LawDecree)
-
-    number = models.IntegerField()
-    title = models.TextField()
-
-
-class LawText(models.Model):
-    decree = models.ForeignKey(LawDecree, null=True)
-    article = models.ForeignKey(LawArticle, null=True)
-
-    type = models.CharField(max_length=20)
-    number = models.CharField(max_length=5, null=True)
-    index = models.IntegerField()
-
-    text = models.TextField()
+# class LawArticle(models.Model):
+#     decree = models.ForeignKey(Document)
+#
+#     number = models.IntegerField()
+#     title = models.TextField()
+#
+#
+# class LawText(models.Model):
+#     decree = models.ForeignKey(Document, null=True)
+#     article = models.ForeignKey(LawArticle, null=True)
+#
+#     type = models.CharField(max_length=20)
+#     number = models.CharField(max_length=5, null=True)
+#     index = models.IntegerField()
+#
+#     text = models.TextField()

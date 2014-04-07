@@ -1,0 +1,17 @@
+{% if laws.paginator.num_pages != 1 %}
+    <ul class="pagination horizontal-tab-list">
+        {% if laws.has_previous %}
+            {% if laws.previous_page_number != 1 %}
+                <li><a class="page-selector">1</a></li>
+            {% endif %}
+            <li><a class="page-selector">{{ laws.previous_page_number }}</a></li>
+        {% endif %}
+        <li><span class="active">{{ laws.number }}</span></li>
+        {% if laws.has_next %}
+            <li><a class="page-selector">{{ laws.next_page_number }}</a></li>
+            {% if laws.next_page_number != laws.paginator.num_pages %}
+                <li><a class="page-selector">{{ laws.paginator.num_pages }}</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+{% endif %}

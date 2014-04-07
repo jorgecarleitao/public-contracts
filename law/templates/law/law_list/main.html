@@ -1,0 +1,6 @@
+{% extends "law/one_column_body.html" %}
+{% load i18n %}
+{% block title %}{% trans "Laws"%}{% endblock %}
+{% block content %}
+    {% include "law/law_list/law_list_template.html" %}
+{% endblock %}
