@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-08 19:45+0100\n"
+"POT-Creation-Date: 2014-04-08 20:14+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1916,17 +1916,17 @@ msgid ""
 "            We picked all documents published in the Series I of \"Diário da "
 "república online\" and counted how many\n"
 "            were published in each year. Here is the result:\n"
-"            "
+"        "
 msgstr ""
 "\n"
-"Pegámos em todas a Série I do diário da república online e contámos quantos "
+"Pegámos em toda a Série I do diário da república online e contámos quantos "
 "documentos foram publicados em cada ano. Eis o resultado:"
 
-#: law/templates/law/home.html:22
+#: law/templates/law/home.html:26
 msgid "Details:"
 msgstr "Detalhes:"
 
-#: law/templates/law/home.html:25
+#: law/templates/law/home.html:29
 msgid ""
 "\n"
 "                    This graph was obtained using all the documents "
@@ -1939,7 +1939,7 @@ msgstr ""
 "Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
 "da República Online, série I. São hoje ~200.000 documentos."
 
-#: law/templates/law/home.html:31
+#: law/templates/law/home.html:35
 msgid ""
 "\n"
 "                    We call \"Law\" to be anything that is published in\n"
@@ -1954,16 +1954,18 @@ msgstr ""
 "simplificar, mas poderá chamar-lhes \"documentos publicados na Série I do "
 "Diário da Républica\" se preferir."
 
-#: law/templates/law/home.html:38
+#: law/templates/law/home.html:42
 msgid "Other information:"
 msgstr "Outras informações:"
 
-#: law/templates/law/home.html:40
+#: law/templates/law/home.html:44
 msgid ""
 "This project is in continuous deployment; we use Twitter to announce updates."
-msgstr "Este projecto está em desenvolvimento contínuo; usamos o Twitter para anunciar novidades."
+msgstr ""
+"Este projecto está em desenvolvimento contínuo; usamos o Twitter para "
+"anunciar novidades."
 
-#: law/templates/law/home.html:43
+#: law/templates/law/home.html:47
 #, python-format
 msgid ""
 "\n"
@@ -2034,18 +2036,6 @@ msgstr "Bem vindo ao Públicos"
 #: main/templates/base/footer.html:4
 msgid "About"
 msgstr "Acerca"
-
-#: main/templates/base/header.html:7
-#, python-format
-msgid ""
-"\n"
-"                This website is public and free. <a href=\"%(url)s\">Learn</"
-"a> how you can use it.\n"
-"            "
-msgstr ""
-"\n"
-"Este local é público e gratuito. <a href=\"%(url)s\">Conheça</a> como pode "
-"usufruir dele."
 
 #: main/templates/base/top_header.html:6
 msgid "Law"
