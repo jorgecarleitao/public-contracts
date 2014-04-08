@@ -19,9 +19,9 @@
         {% endblocktrans %}
         </p>
         {% if LANGUAGE_CODE == 'pt' %}
-            <img src="{% static "images/numero_de_leis.png" %}">
+            <img itemprop="primaryImageOfPage" src="{% static "images/numero_de_leis.png" %}">
         {% else %}
-            <img src="{% static "images/number_of_laws.png" %}">
+            <img itemprop="primaryImageOfPage" src="{% static "images/number_of_laws.png" %}">
         {% endif %}
         <p>{% trans "Details:"%}</p>
         <ul>
