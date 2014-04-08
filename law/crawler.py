@@ -7,21 +7,8 @@ import datetime
 
 from BeautifulSoup import BeautifulSoup
 
-from models import Type, Document
+from models import Type, Document, convert_to_url
 
-
-def convert_to_url(string):
-    string = string.replace(u'ã', '%E3')
-    string = string.replace(u'á', '%E1')
-    string = string.replace(u'â', '%E2')
-
-    string = string.replace(u'ç', '%E7')
-    string = string.replace(u'ó', '%F3')
-    string = string.replace(u'ê', '%EA')
-    string = string.replace(u'õ', '%F5')
-
-    string = string.replace(u'ú', '%FA')
-    return string
 
 month_name_to_number = {u'Janeiro': 1,
                         u'Fevereiro': 2,
@@ -195,71 +182,29 @@ class FirstSeriesCrawler(AbstractCrawler):
         Type.objects.get_or_create(name=u"Acórdão do Supremo Tribunal Administrativo")
         Type.objects.get_or_create(name=u"Acórdão do Tribunal Constitucional")
         Type.objects.get_or_create(name=u"Acórdão do Tribunal de Contas")
-
-    # <li>
-    #     1. <a href="dr1s.exe?t=dr&amp;cap=1-1200&amp;doc=19172099&amp;v02=&v01=2&v03=1900-01-01&v04=3000-12-21&v05=&
-    #                 v06=&v07=&v08=&v09=&v10=&v11=%27Decreto-Lei%27&v12=&v13=&v14=&v15=&sort=0&submit=Pesquisar"
-    #           title="Link para o documento da pesquisa.">
-    #           (Nao especificado). DG 226/17 SeRIE I de 1917-12-27 </a><br />
-    #         <span class="bold">
-    #                 Ministerio das Financas -
-    #                 Direccao Geral das Contribuicoes e Impostos -
-    #                 4. Reparticao
-    #         </span><br />
-    #           Nova publicacao, rectificada, da portaria n. 1165, que esclareceu o disposto no 1. de
-    #           artigo 44. do decreto-lei de 26 de Maio de 1911
-    # </li>
-    #
-    def parse_list_element(self, element):
-        entry = {}
-        href = element.find("a", dict(title="Link para o documento da pesquisa."))
-        entry['doc_id'] = self.get_doc_id(href['href'])
-
-        string = href.text
-
-        if u'Aviso (1.ª parte)' in string or u'Aviso (2.ª parte)' in string:
-            return None
-
-        if string == u"Decreto n.º 46054.DG 281/64 SÉRIE I de 1964-11-30":
-            string = u"Decreto n.º 46054. DG 281/64 SÉRIE I de 1964-11-30"
-
-        strings = string.split(u'. ')
-
-        number = re.split(u' n.º ', strings[0])
-        if number == strings[0]:
-            number = None
-        entry['number'] = number
-
-        if strings[0] == u'(Não especificado)':
-            entry['type'] = None
-        else:
-            search = re.search(u"(\w+) de (\d+) de (.*) de (\d+)", strings[0])
-            if strings[0] == u'Declaração de Retificação':
-                strings[0] = u'Declaração de Rectificação'
-            elif search:
-                strings[0] = search.group(1)
-        entry['type'] = Type.objects.get(name=strings[0])
-
-        strings = strings[1].split(u' de ')
-
-        try:
-            entry['date'] = datetime.datetime.strptime(strings[1], "%Y-%m-%d")
-        except UnicodeEncodeError:
-            entry['date'] = None
-            strings[0] = strings[1]
-
-        strings = strings[0].split(u'SÉRIE')
-
-        entry['dr_number'] = strings[0]
-        entry['series'] = strings[1]
-
-        return entry
+        Type.objects.get_or_create(name=u"Decreto de aprovação da Constituição")
+        Type.objects.get_or_create(name=u"Decreto do Representante da República para a Região Autónoma da Madeira")
+        Type.objects.get_or_create(name=u"Decreto do Representante da República para a Região Autónoma dos Açores")
+        Type.objects.get_or_create(name=u"Resolução da Assembleia Legislativa da Região Autónoma dos Açores")
+        Type.objects.get_or_create(name=u"Resolução da Assembleia Legislativa da Região Autónoma da Madeira")
+        Type.objects.get_or_create(name=u"Despacho ministerial")
+        Type.objects.get_or_create(name=u"Despacho do Conselho de Ministros")
+        Type.objects.get_or_create(name=u"Despacho interpretativo")
+        Type.objects.get_or_create(name=u"Despacho do Conselho Superior de Defesa Nacional")
+        Type.objects.get_or_create(name=u"Despacho conjunto regulamentar")
+        Type.objects.get_or_create(name=u"Despacho conjunto")
+        Type.objects.get_or_create(name=u"Despacho ministerial conjunto")
+        Type.objects.get_or_create(name=u"Orçamento")
 
     def parse_summary_datum(self, datum):
 
         data = {'number': None}
 
-        strings = datum['data'].split('. ')
+        strings = datum['data'].replace(u'.DG', u'. DG')
+        strings = strings.replace(u'  ', u' ')
+        strings = strings.split('. ')
+
+        print strings
 
         type_name = strings[0]
 
@@ -274,7 +219,8 @@ class FirstSeriesCrawler(AbstractCrawler):
         if type_name == u'(Não especificado)':
             type_name = None
         else:
-            search = re.search(u"(\w+) de (\d+) de (.*) de (\d+)", type_name)
+            search = re.search(u"^(.*) de (\d+) de (.*) de (\d+)", type_name)
+            search1 = re.search(u"(\w+) de (\d+) de (.*)", type_name)
             # Changes in Portuguese orthography has its downsides...
             if type_name == u'Declaração de Retificação':
                 type_name = u'Declaração de Rectificação'
@@ -282,8 +228,13 @@ class FirstSeriesCrawler(AbstractCrawler):
                 type_name = u'Declaração'
             elif search:
                 type_name = search.group(1)
+            elif search1:
+                type_name = search1.group(1)
 
         strings = strings[1].split(u' de ')
+
+        if u"Assembleia da República" in strings[1]:
+            strings[1] = strings[1].split(' ')[0]
 
         data['date'] = datetime.datetime.strptime(strings[1], "%Y-%m-%d").date()
 
@@ -294,9 +245,22 @@ class FirstSeriesCrawler(AbstractCrawler):
 
         if type_name == u'Declaração de Retificação':
             type_name = u'Declaração de Rectificação'
+        if type_name == u'Decreto do Presidente de República':
+            type_name = u'Decreto do Presidente da República'
+        if type_name == u'Resolução de Assembleia Regional':
+            type_name = u'Resolução da Assembleia Regional'
+        if type_name == u'Resolução de Conselho de Ministros':
+            type_name = u'Resolução do Conselho de Ministros'
+        if type_name == u'Resolução da  Assembleia da República':
+            type_name = u'Resolução da Assembleia da República'
+
 
         if type_name is not None:
-            data['type'] = Type.objects.get(name=type_name)
+            try:
+                data['type'] = Type.objects.get(name=type_name)
+            except Type.DoesNotExist:
+                print type_name, "not found."
+                raise
         else:
             data['type'] = None
 
@@ -354,7 +318,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         return data
 
     def retrieve_all_summaries(self):
-        for type in Type.objects.all().order_by("-id"):
+        for type in Type.objects.all():
             print(u'retrieve_all_summaries: retrieving \'%s\'' % type)
 
             page = 0
@@ -389,7 +353,6 @@ class FirstSeriesCrawler(AbstractCrawler):
                     except Document.DoesNotExist:
                         document = Document(**data)
                         document.save()
-
 
     def get_source(self, doc_id):
         print("get_source(%d)" % doc_id)
@@ -604,7 +567,3 @@ class FirstSeriesCrawler(AbstractCrawler):
                     decree = LawDecree(**data)
                     decree.save()
             page += 1
-
-if __name__ == "__main__":
-    crawler = FirstSeriesCrawler()
-    #crawler.get_all_sources()
