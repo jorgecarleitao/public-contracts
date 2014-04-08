@@ -49,7 +49,7 @@ ALLOWED_HOSTS = ['*']
 SECRET_KEY = settings_local.SECRET_KEY
 
 USE_I18N = True
-USE_L10N = False
+USE_L10N = True
 USE_TZ = True
 LOCALE_PATHS = (site_directory + '/locale',)
 
