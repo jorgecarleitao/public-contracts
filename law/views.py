@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
@@ -20,10 +21,22 @@ def build_laws_list_context(context, GET):
     return context
 
 
+def home(request):
+    return render(request, "law/home.html")
+
+
 def law_list(request):
 
-    context = {'laws': models.LawDecree.objects.all().order_by("-date", "-number")}
+    context = {'laws': models.Document.objects.all().order_by("-date", "-number")}
 
     context = build_laws_list_context(context, request.GET)
 
     return render(request, "law/law_list/main.html", context)
+
+
+def types_list(request):
+    types = models.Type.objects.all().annotate(count=Count('document__id')).filter(count__gt=0).order_by('-count')
+
+    context = {'types': types}
+
+    return render(request, "law/types_list/main.html", context)
