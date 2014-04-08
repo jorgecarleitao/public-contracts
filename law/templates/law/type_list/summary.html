@@ -1,0 +1,12 @@
+{% extends "summary.html" %}
+{% load i18n %}
+{% block summary_content %}
+    <h2>{{ type.name }}</h2>
+    <div class="age">
+        {% blocktrans count doc_number=type.count %}
+            {{ doc_number }} document
+        {% plural %}
+            {{ doc_number }} documents
+        {% endblocktrans %}
+    </div>
+{% endblock %}

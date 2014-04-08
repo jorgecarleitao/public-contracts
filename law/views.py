@@ -39,4 +39,4 @@ def types_list(request):
 
     context = {'types': types}
 
-    return render(request, "law/types_list/main.html", context)
+    return render(request, "law/type_list/main.html", context)

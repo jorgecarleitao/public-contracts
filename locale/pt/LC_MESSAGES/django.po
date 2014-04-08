@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-21 08:16+0000\n"
+"POT-Creation-Date: 2014-04-08 19:45+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: contracts/category_views.py:43 contracts/entity_urls.py:9
 #: contracts/entity_urls.py:10 contracts/entity_views.py:40
 #: contracts/urls.py:19 contracts/urls.py:20
-#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
+#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:10
 #: contracts/templates/contracts/category_view/tab_entities/search.html:19
 #: contracts/templates/contracts/category_view/tab_entities/search.html:23
 #: contracts/templates/contracts/category_view/tab_entities/search.html:52
@@ -31,7 +31,7 @@ msgstr ""
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:19
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:23
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:52
-#: contracts/templates/contracts/municipalities_delta_time/summary.html:12
+#: contracts/templates/contracts/municipalities_delta_time/summary.html:13
 msgid "contracts"
 msgstr "contratos"
 
@@ -83,6 +83,7 @@ msgstr "nome"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:64
 #: contracts/templates/contracts/tender_list/search.html:52
 #: deputies/views.py:25 deputies/templates/deputies/search_bar.html:52
+#: law/templates/law/law_list/search_law.html:32
 msgid "search"
 msgstr "procura"
 
@@ -105,6 +106,8 @@ msgstr "procura"
 #: deputies/views.py:32 deputies/views.py:33
 #: deputies/templates/deputies/search_bar.html:38
 #: deputies/templates/deputies/search_bar.html:40
+#: law/templates/law/law_list/search_law.html:18
+#: law/templates/law/law_list/search_law.html:20
 msgid "sorting"
 msgstr "ordem"
 
@@ -116,7 +119,8 @@ msgstr "ordem"
 #: contracts/templates/contracts/entity_view/tab_costumers/list.html:21
 #: contracts/templates/contracts/tender_list/tender_list_template.html:20
 #: deputies/views.py:43
-#: deputies/templates/deputies/deputy_list_template.html:20
+#: deputies/templates/deputies/deputy_list_template.html:20 law/views.py:11
+#: law/templates/law/law_list/law_list_template.html:22
 msgid "page"
 msgstr "página"
 
@@ -230,6 +234,7 @@ msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 #: contracts/templates/contracts/tender_list/search.html:10
 #: contracts/templates/contracts/tender_list/search.html:14
 #: contracts/templates/contracts/tender_list/search.html:38
+#: law/templates/law/law_list/search_law.html:18
 msgid "price"
 msgstr "preço"
 
@@ -241,6 +246,7 @@ msgstr "preço"
 #: contracts/templates/contracts/tender_list/search.html:20
 #: contracts/templates/contracts/tender_list/search.html:24
 #: contracts/templates/contracts/tender_list/search.html:40
+#: law/templates/law/law_list/search_law.html:20
 msgid "date"
 msgstr "data"
 
@@ -746,7 +752,7 @@ msgstr "Contratantes"
 msgid "Contracted"
 msgstr "Contratados"
 
-#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:8
+#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
 #: contracts/templates/contracts/contract_view/main.html:30
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
 msgid "Value:"
@@ -778,7 +784,7 @@ msgstr "ordenar por valor"
 msgid "In this category:"
 msgstr "Nesta categoria:"
 
-#: contracts/templates/contracts/contract_list/contract_summary.html:9
+#: contracts/templates/contracts/contract_list/contract_summary.html:8
 msgid "Categorized as:"
 msgstr "Categorizado como:"
 
@@ -1047,19 +1053,19 @@ msgstr ""
 "contratos realizados pelos municípios que, por sua vez, influencia o número "
 "de contratos total."
 
-#: contracts/templates/contracts/entity_list/entity_summary.html:11
+#: contracts/templates/contracts/entity_list/entity_summary.html:12
 msgid "Expenses:"
 msgstr "Despesa:"
 
-#: contracts/templates/contracts/entity_list/entity_summary.html:14
+#: contracts/templates/contracts/entity_list/entity_summary.html:15
 msgid "No expenses"
 msgstr "Sem despesa"
 
-#: contracts/templates/contracts/entity_list/entity_summary.html:19
+#: contracts/templates/contracts/entity_list/entity_summary.html:20
 msgid "Earnings:"
 msgstr "Ganhos:"
 
-#: contracts/templates/contracts/entity_list/entity_summary.html:22
+#: contracts/templates/contracts/entity_list/entity_summary.html:23
 msgid "No earnings"
 msgstr "Sem ganhos"
 
@@ -1399,7 +1405,7 @@ msgstr ""
 "Na eleição de 2009, isto quantifica-se em quase o dobro de contratos em "
 "relação a datas posteriores."
 
-#: contracts/templates/contracts/municipalities_delta_time/summary.html:7
+#: contracts/templates/contracts/municipalities_delta_time/summary.html:8
 msgid "days"
 msgstr "dias"
 
@@ -1556,7 +1562,7 @@ msgid_plural "%(value)s quadrillion"
 msgstr[0] "%(value)s quadrilião"
 msgstr[1] "%(value)s quadriliões"
 
-#: deputies/urls.py:9
+#: deputies/urls.py:9 law/urls.py:7
 msgid "home"
 msgstr "início"
 
@@ -1590,23 +1596,24 @@ msgid "in legislature"
 msgstr "activo"
 
 #: deputies/templates/deputies/deputy_summary.html:7
+#: deputies/templates/deputies/parties_list/party_summary.html:8
 #, python-format
 msgid ""
 "\n"
-"                %(count)s mandate\n"
-"            "
+"            %(count)s mandate\n"
+"        "
 msgid_plural ""
 "\n"
-"                %(count)s mandates\n"
-"            "
+"            %(count)s mandates\n"
+"        "
 msgstr[0] ""
 "\n"
 "%(count)s mandato\n"
-"            "
+"        "
 msgstr[1] ""
 "\n"
 "%(count)s mandatos\n"
-"            "
+"        "
 
 #: deputies/templates/deputies/main_page.html:5
 msgid "Public deputies"
@@ -1811,26 +1818,7 @@ msgstr "Número de dias (uma legislatura são ~1500 dias)"
 msgid "Percentage of deputies"
 msgstr "Percentagem de deputados"
 
-#: deputies/templates/deputies/parties_list/party_summary.html:7
-#, python-format
-msgid ""
-"\n"
-"            %(count)s mandate\n"
-"        "
-msgid_plural ""
-"\n"
-"            %(count)s mandates\n"
-"        "
-msgstr[0] ""
-"\n"
-"%(count)s mandato\n"
-"        "
-msgstr[1] ""
-"\n"
-"%(count)s mandatos\n"
-"        "
-
-#: deputies/templates/deputies/parties_list/party_summary.html:13
+#: deputies/templates/deputies/parties_list/party_summary.html:14
 #, python-format
 msgid ""
 "\n"
@@ -1893,9 +1881,155 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
-#: main/urls.py:16
+#: law/urls.py:9
+msgid "types"
+msgstr "tipos"
+
+#: law/templates/law/home.html:5
+msgid "Public Law"
+msgstr "Lei Pública"
+
+#: law/templates/law/home.html:8
+msgid "Welcome to Public Law"
+msgstr "Bem vindo ao Lei Pública"
+
+#: law/templates/law/home.html:10
+#, python-format
+msgid ""
+"\n"
+"                In this project we use the <a href=\"%(dre_url)s\">official "
+"database of the portuguese law</a>\n"
+"                to explore some of its properties.\n"
+"            "
+msgstr ""
+"\n"
+"Neste projecto usamos a <a href=\"%(dre_url)s\">base de dados oficial "
+"portuguesa</a> para explorar algumas das suas propriedades."
+
+#: law/templates/law/home.html:15
+msgid "First question: how many laws are enacted yearly?"
+msgstr "Primeira pergunta: quantas leis são criadas anualmente?"
+
+#: law/templates/law/home.html:16
+msgid ""
+"\n"
+"            We picked all documents published in the Series I of \"Diário da "
+"república online\" and counted how many\n"
+"            were published in each year. Here is the result:\n"
+"            "
+msgstr ""
+"\n"
+"Pegámos em todas a Série I do diário da república online e contámos quantos "
+"documentos foram publicados em cada ano. Eis o resultado:"
+
+#: law/templates/law/home.html:22
+msgid "Details:"
+msgstr "Detalhes:"
+
+#: law/templates/law/home.html:25
+msgid ""
+"\n"
+"                    This graph was obtained using all the documents "
+"available on the official website\n"
+"                    of the portuguese law, under Series I. Currently they "
+"are about ~200.000.\n"
+"                "
+msgstr ""
+"\n"
+"Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
+"da República Online, série I. São hoje ~200.000 documentos."
+
+#: law/templates/law/home.html:31
+msgid ""
+"\n"
+"                    We call \"Law\" to be anything that is published in\n"
+"                    the Series I of Diário da República for simplicity, but "
+"you can call them\n"
+"                    \"documents published in Series I of Diário da República"
+"\" if you prefer.\n"
+"                "
+msgstr ""
+"\n"
+"Chamamos \"Lei\" a qualquer coisa que é publicada na Série I do DR para "
+"simplificar, mas poderá chamar-lhes \"documentos publicados na Série I do "
+"Diário da Républica\" se preferir."
+
+#: law/templates/law/home.html:38
+msgid "Other information:"
+msgstr "Outras informações:"
+
+#: law/templates/law/home.html:40
+msgid ""
+"This project is in continuous deployment; we use Twitter to announce updates."
+msgstr "Este projecto está em desenvolvimento contínuo; usamos o Twitter para anunciar novidades."
+
+#: law/templates/law/home.html:43
+#, python-format
+msgid ""
+"\n"
+"                We thank the contributors of <a href=\"%(tretas_url)s\">dre."
+"tretas</a> and in particular to\n"
+"                Helder Guerreiro, for ideas and discussions that greatly "
+"improved this project.\n"
+"            "
+msgstr ""
+"\n"
+"Agradecemos aos contribuidores do <a href=\"%(tretas_url)s\">dre.tretas</a>, "
+"e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
+"melhorado este projeto."
+
+#: law/templates/law/base/header.html:8
+msgid "Documents"
+msgstr "Leis"
+
+#: law/templates/law/base/header.html:9
+msgid "Types"
+msgstr "Tipos"
+
+#: law/templates/law/law_list/main.html:3
+msgid "Laws"
+msgstr "Leis"
+
+#: law/templates/law/law_list/search_law.html:6
+msgid "search laws"
+msgstr "procurar leis"
+
+#: law/templates/law/type_list/main.html:3
+msgid "Types of laws"
+msgstr "Tipos de leis"
+
+#: law/templates/law/type_list/summary.html:6
+#, python-format
+msgid ""
+"\n"
+"            %(doc_number)s document\n"
+"        "
+msgid_plural ""
+"\n"
+"            %(doc_number)s documents\n"
+"        "
+msgstr[0] ""
+"\n"
+"%(doc_number)s documento"
+msgstr[1] ""
+"\n"
+"%(doc_number)s documentos"
+
+#: main/urls.py:17
 msgid "deputies"
 msgstr "deputados"
+
+#: main/urls.py:18
+msgid "law"
+msgstr "lei"
+
+#: main/templates/main_page.html:5
+msgid "Public"
+msgstr "Público"
+
+#: main/templates/main_page.html:9
+msgid "Welcome to Public"
+msgstr "Bem vindo ao Públicos"
 
 #: main/templates/base/footer.html:4
 msgid "About"
@@ -1910,4 +2044,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Este local é público e gratuito. <a href=\"%(url)s\">Conheça</a> como pode usufruir dele."
+"Este local é público e gratuito. <a href=\"%(url)s\">Conheça</a> como pode "
+"usufruir dele."
+
+#: main/templates/base/top_header.html:6
+msgid "Law"
+msgstr "Lei"

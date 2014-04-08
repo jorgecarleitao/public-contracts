@@ -1,0 +1,8 @@
+{% load i18n %}
+<div class="main-list">
+    <div class="list-loop">
+        {% for type in types %}
+            {% include "law/type_list/summary.html" %}
+        {% endfor %}
+    </div>
+</div>
