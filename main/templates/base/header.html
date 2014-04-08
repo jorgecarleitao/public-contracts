@@ -2,12 +2,6 @@
 {% load i18n %}
 <div id="header">
     {% block message %}
-        <p class="info">
-            {% url "contracts_home" as home %}
-            {% blocktrans with url=home %}
-                This website is public and free. <a href="{{ url }}">Learn</a> how you can use it.
-            {% endblocktrans %}
-        </p>
     {% endblock %}
     <div id="secondaryHeader">
         {% block scope_nav %}{% endblock %}
