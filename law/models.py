@@ -1,4 +1,24 @@
+# coding=utf-8
 from django.db import models
+
+
+def convert_to_url(string):
+    """
+    Converts unicode chars to some exquisite encoding defined in w3school,
+    which the dre uses.
+    """
+    string = string.replace(u'ã', '%E3')
+    string = string.replace(u'á', '%E1')
+    string = string.replace(u'â', '%E2')
+
+    string = string.replace(u'ç', '%E7')
+    string = string.replace(u'ó', '%F3')
+    string = string.replace(u'ê', '%EA')
+    string = string.replace(u'õ', '%F5')
+
+    string = string.replace(u'ú', '%FA')
+    return string
+
 
 
 class Type(models.Model):
