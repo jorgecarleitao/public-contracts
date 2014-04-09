@@ -35,8 +35,14 @@ class Type(models.Model):
             return u'Resolução'
         elif self.name.startswith(u'Declaração'):
             return u'Declaração'
-        elif u'Acórdão' in self.name:
+        elif self.name.startswith(u'Acórdão'):
             return u'Acórdão'
+        elif self.name.startswith(u'Despacho'):
+            return u'Despacho'
+        elif self.name.startswith(u'Assento'):
+            return u'Assento'
+        elif self.name.startswith(u'Rectificação'):
+            return u'Rectificação'
 
         return self.name
 
