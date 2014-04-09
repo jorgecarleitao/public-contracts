@@ -20,11 +20,24 @@ def convert_to_url(string):
     return string
 
 
-
 class Type(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __unicode__(self):
+        return self.name
+
+    def url_name(self):
+        if self.name.startswith(u'Decreto-Lei'):
+            return u'Decreto-Lei'
+        if self.name.startswith(u'Decreto'):
+            return u'Decreto'
+        elif self.name.startswith(u'Resolução'):
+            return u'Resolução'
+        elif self.name.startswith(u'Declaração'):
+            return u'Declaração'
+        elif u'Acórdão' in self.name:
+            return u'Acórdão'
+
         return self.name
 
 
@@ -63,7 +76,7 @@ class Document(models.Model):
                'v14=&' \
                'v15=&' \
                'sort=0&' \
-               'submit=Pesquisar'.format(doc_id=self.dr_doc_id, type=convert_to_url(self.type.name))
+               'submit=Pesquisar'.format(doc_id=self.dr_doc_id, type=convert_to_url(self.type.url_name()))
 
 
 # class LawArticle(models.Model):
