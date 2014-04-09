@@ -11,5 +11,4 @@ from law.crawler import FirstSeriesCrawler
 crawler = FirstSeriesCrawler()
 
 crawler.extract_law_types()
-crawler.retrieve_all_summaries()
 crawler.save_all_summaries()
