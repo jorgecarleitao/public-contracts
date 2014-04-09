@@ -4,7 +4,7 @@ and cache.
 """
 ## setup the Django with its private settings for server.
 import set_up
-set_up.set_up_django_environment('settings')
+set_up.set_up_django_environment('settings_private')
 
 from law.crawler import FirstSeriesCrawler
 
