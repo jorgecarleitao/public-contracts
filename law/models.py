@@ -40,6 +40,9 @@ class Document(models.Model):
     summary = models.TextField()
 
     def get_base_url(self):
+        if self.type is None:
+            return ""
+
         return 'http://dre.pt/cgi/dr1s.exe?' \
                't=dr&' \
                'cap=1-1200&' \
