@@ -1,7 +1,7 @@
 {% extends "summary.html" %}
 {% load i18n %}
 {% block summary_content %}
-    <h2>{{ type.name }}</h2>
+    <h2><a href="{% url "law_type" type.id %}">{{ type.name }}</a></h2>
     <div class="age">
         {% blocktrans count doc_number=type.count %}
             {{ doc_number }} document

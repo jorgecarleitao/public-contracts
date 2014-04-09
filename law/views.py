@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
 import models
@@ -35,8 +35,19 @@ def law_list(request):
 
 
 def types_list(request):
-    types = models.Type.objects.all().annotate(count=Count('document__id')).filter(count__gt=0).order_by('-count')
+    types = models.Type.objects.all().annotate(count=Count('document__id')).filter(count__gt=0).order_by('name')
 
     context = {'types': types}
 
     return render(request, "law/type_list/main.html", context)
+
+
+def type_view(request, type_id):
+    type = get_object_or_404(models.Type, id=type_id)
+
+    context = {'type': type,
+               'laws': type.document_set.order_by("-date", "-number").prefetch_related("type")}
+
+    context = build_laws_list_context(context, request.GET)
+
+    return render(request, "law/type_view/main.html", context)
