@@ -197,6 +197,10 @@ class FirstSeriesCrawler(AbstractCrawler):
         Type.objects.get_or_create(name=u"Despacho conjunto")
         Type.objects.get_or_create(name=u"Despacho ministerial conjunto")
         Type.objects.get_or_create(name=u"Orçamento")
+        Type.objects.get_or_create(name=u"Orçamento ordinário")
+        Type.objects.get_or_create(name=u"Orçamento suplementar")
+        Type.objects.get_or_create(name=u"Moção de censura")
+
 
     def parse_summary_datum(self, datum):
 
@@ -205,8 +209,6 @@ class FirstSeriesCrawler(AbstractCrawler):
         strings = datum['data'].replace(u'.DG', u'. DG')
         strings = strings.replace(u'  ', u' ')
         strings = strings.split('. ')
-
-        print strings
 
         type_name = strings[0]
 
@@ -254,12 +256,20 @@ class FirstSeriesCrawler(AbstractCrawler):
             type_name = u'Resolução do Conselho de Ministros'
         if type_name == u'Resolução da  Assembleia da República':
             type_name = u'Resolução da Assembleia da República'
+        if type_name in (u'1.º orçamento suplementar',
+                         u'1º Orçamento suplementar',
+                         u'1.º Orçamento suplementar',
+                         u'1.° Orçamento suplementar ',
+                         u'2.º Orçamento suplementar',
+                         u'2.º orçamento suplementar',
+                         u'3.º Orçamento suplementar'):
+            type_name = u'Orçamento suplementar'
 
         if type_name is not None:
             try:
                 data['type'] = Type.objects.get(name=type_name)
             except Type.DoesNotExist:
-                print type_name, "not found."
+                print "'%s' not found." % type_name
                 raise
         else:
             data['type'] = None
@@ -268,7 +278,6 @@ class FirstSeriesCrawler(AbstractCrawler):
 
         data['summary'] = datum['summary'].strip()
 
-        print data['date']
         return data
 
     def extract_from_list_element(self, element):
@@ -293,6 +302,17 @@ class FirstSeriesCrawler(AbstractCrawler):
             data.append(self.extract_from_list_element(element))
 
         return data
+
+    def get_last_page(self, type):
+        import os
+        regex = re.compile(r"%s_(\d+).dat" % slugify(type))
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
+
+        files = sorted(files, key=lambda x: int(x), reverse=True)
+        if len(files):
+            return files[0] - 1
+        else:
+            return 0
 
     def get_summaries(self, page, type):
         print("get_summaries(%d, '%s')" % (page, type))
@@ -320,7 +340,7 @@ class FirstSeriesCrawler(AbstractCrawler):
     def retrieve_all_summaries(self):
         for type in Type.objects.all():
             print(u'retrieve_all_summaries: retrieving \'%s\'' % type)
-            page = 0
+            page = self.get_last_page(type.name)
             while True:
                 page += 1
                 try:
@@ -328,13 +348,12 @@ class FirstSeriesCrawler(AbstractCrawler):
                 except self.LastPageError:
                     break
                 except urllib2.URLError:
-                    print('error')
                     break
 
     def save_all_summaries(self):
         for type in Type.objects.all():
-            print(u'save_all_summaries: saving \'%s\'' % type)
-            page = 0
+            print(u'save_all_summaries: saving \'%s\', %d' % (type, type.id))
+            page = self.get_last_page(type.name)
             while True:
                 page += 1
                 try:
@@ -350,6 +369,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                     try:
                         Document.objects.get(type=data['type'], dr_doc_id=data['dr_doc_id'])
                     except Document.DoesNotExist:
+                        print("New '%s' added" % data['type'])
                         document = Document(**data)
                         document.save()
 
