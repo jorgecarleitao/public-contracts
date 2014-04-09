@@ -7,6 +7,8 @@ import datetime
 
 from BeautifulSoup import BeautifulSoup
 
+from django.utils.text import slugify
+
 from models import Type, Document, convert_to_url
 
 
@@ -243,8 +245,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         data['dr_number'] = strings[0]
         data['dr_series'] = strings[1]
 
-        if type_name == u'Declaração de Retificação':
-            type_name = u'Declaração de Rectificação'
+        ## minor typos in the official website
         if type_name == u'Decreto do Presidente de República':
             type_name = u'Decreto do Presidente da República'
         if type_name == u'Resolução de Assembleia Regional':
@@ -253,7 +254,6 @@ class FirstSeriesCrawler(AbstractCrawler):
             type_name = u'Resolução do Conselho de Ministros'
         if type_name == u'Resolução da  Assembleia da República':
             type_name = u'Resolução da Assembleia da República'
-
 
         if type_name is not None:
             try:
@@ -296,7 +296,7 @@ class FirstSeriesCrawler(AbstractCrawler):
 
     def get_summaries(self, page, type):
         print("get_summaries(%d, '%s')" % (page, type))
-        file_name = '%s/%s_%d.dat' % (self.data_directory, type, page)
+        file_name = '%s/%s_%d.dat' % (self.data_directory, slugify(type), page)
         try:
             f = open(file_name, "rb")
             data = pickle.load(f)
@@ -320,7 +320,6 @@ class FirstSeriesCrawler(AbstractCrawler):
     def retrieve_all_summaries(self):
         for type in Type.objects.all():
             print(u'retrieve_all_summaries: retrieving \'%s\'' % type)
-
             page = 0
             while True:
                 page += 1
