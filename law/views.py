@@ -27,7 +27,7 @@ def home(request):
 
 def law_list(request):
 
-    context = {'laws': models.Document.objects.all().order_by("-date", "-number")}
+    context = {'laws': models.Document.objects.all().order_by("-date", "-number").prefetch_related("type")}
 
     context = build_laws_list_context(context, request.GET)
 
