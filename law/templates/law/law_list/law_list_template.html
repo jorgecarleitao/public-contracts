@@ -3,8 +3,6 @@
     {% if laws %}
         {% include "law/law_list/pagination.html" %}
     {% endif %}
-    <a id="rss-feed" href="{{ request.path }}{% if request.path|last != "/"%}/{% endif %}rss"></a>
-    {% include "law/law_list/search_law.html" %}
     <div class="list-loop">
         {% for law in laws %}
             {% include "law/law_list/law_summary.html" %}
