@@ -86,7 +86,7 @@ class DeputiesCrawler(AbstractCrawler):
                               'commissions': 'div',
                               'mandates': 'table'}
 
-        self.data_directory = '../../../deputies_data/'
+        self.data_directory = '../../deputies_data/'
 
     def crawl_deputy(self, bid):
         url = self._deputy_url_formatter % bid
