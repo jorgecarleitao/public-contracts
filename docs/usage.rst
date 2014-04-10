@@ -1,5 +1,5 @@
 Asking questions to the database
-==================================
+================================
 
 This tutorial assumes you already :doc:`installed <installation>` the source.
 
@@ -14,7 +14,7 @@ but here we limit the usage of Django to accessing the database.
 We will assume you are in directory "contracts/tools", as the installation part ended there.
 
 Setup
----------
+-----
 
 In Python, to use a package, we have to import it.
 To use Django, we have to setup it first. In this tutorial we will skip this part since it is very technical.
@@ -50,7 +50,7 @@ good, now, what do we want to know about the contract? Lets start with its price
 
     print contract.price
 
-Its kind of powerful right? (see also :doc:`responsibility <code_of_conduct>`). Now its category::
+Now its category::
 
     print contract.category
 
@@ -61,7 +61,6 @@ there can be more: a contract has a ManyToMany_ relationship with entities becau
 entities (a joint contract), but also each entity can have several contracts.
 
 In fact, each contract has two many to many: the entities that paid, and the entities that were paid.
-Why would you care? Because you have to tell python which ones you want.
 
 Lets say we want the entity that paid contract 791452. In that case, we pick the set of all entities that paid,
 and just choose the first one::
@@ -69,7 +68,7 @@ and just choose the first one::
     entity = contract.contractors.all()[0]
     print entity
 
-Good. Let's see the contracts this entity paid. To that, we use the "contracts_made" of the entity.
+Let's see the contracts this entity paid. To that, we use the "contracts_made" of the entity.
 
     entity_contracts = entity.contracts_made.all()
 
@@ -110,5 +109,3 @@ The "price__gt" means price (g)reater (t)han. The full set of options can be fou
 .. _mailing list: https://groups.google.com/forum/#!forum/public-contracts
 
 If you need any help, drop by our public `mailing list`_.
-
-That's it. From now on, the boundaries are only limited by those of your imagination...

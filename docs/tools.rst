@@ -1,5 +1,5 @@
 Other tools
-=============
+===========
 
 .. toctree::
    :maxdepth: 1

@@ -1,5 +1,5 @@
-Public contracts documentation
-============================================
+Publics' documentation
+======================
 
 Contents:
 

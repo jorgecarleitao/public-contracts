@@ -1,5 +1,5 @@
 Contribute
-===============
+==========
 
 This document explains how you can contribute to this project.
 
@@ -7,7 +7,7 @@ It assumes you know a minimum of Python and Git.
 
 
 The mailing-list
------------------
+----------------
 
 .. _mailing-list: https://groups.google.com/forum/#!forum/public-contracts
 
@@ -15,7 +15,7 @@ The mailing-list_ is the place to communicate in this project.
 
 
 Ticket system
------------------
+-------------
 
 .. _`ticket system`: https://github.com/jorgecarleitao/public-contracts/issues
 
@@ -31,7 +31,7 @@ We prefer using the ticket system to communicate about specific
 issues, and the mailing-list_ to broader topics such as new features or changing the existing API.
 
 Adding tickets
-:::::::::::::::::
+::::::::::::::
 
 We write tickets with clear, concise and specific information about issue we are addressing
 and, as rule of thumb, we add a label of each color to the ticket.
@@ -39,7 +39,7 @@ and, as rule of thumb, we add a label of each color to the ticket.
 We address tickets the same way we would like a ticket of ours to be addressed.
 
 Ticket triage
-:::::::::::::::::
+:::::::::::::
 
 When a ticket is added, it enters a triage phase. In this process, the fate of the ticket is decided.
 
@@ -54,7 +54,7 @@ specially when you think the ticket should be rejected. For instance, suggest th
 if he is really passionate about his idea.
 
 Working tickets
-::::::::::::::::::
+:::::::::::::::
 
 Working on the ticket means the contributor is committing himself to modify to the source to fulfill the ticket
 expectations.
@@ -66,20 +66,20 @@ he should have priority on doing it, even if this means having the ticket open f
 If there is more than one contributor interested in working on a ticket, they should make an effort to work together.
 
 Closing tickets
-::::::::::::::::
+:::::::::::::::
 
 When a ticket is fixed, normally by a commit or set of commits, it is closed as fixed. A ticket can be re-opened
 if there is no consensus that it was solved.
 
 Obtaining and modifying the source
------------------------------------
+----------------------------------
 
 .. _GitHub: https://github.com/jorgecarleitao/public-contracts
 
 The source can be obtained by forking or cloning it in GitHub_.
 
 Code styling
-::::::::::::::::::
+::::::::::::
 
 1. We follow PEP 8
 2. We capitalize the first letter of classes.
@@ -102,7 +102,7 @@ I.e. the big picture is documented in this documentation.
     you read code and try to make it more clear when you don't understand it.
 
 Documentation
-::::::::::::::::::
+:::::::::::::
 
 The API of this project is expected to be fully documented, i.e., this documentation **is**
 part of the project. If you find a mistake, please help us out by filling a ticket in the `ticket system`_.
@@ -115,12 +115,12 @@ has to be accompanied by the respective change in documentation to be incorporat
 
 
 Committing
----------------------
+----------
 
 When you feel that your changes provide value to the existing code, you should commit them.
 
 Commit message
-:::::::::::::::::::
+::::::::::::::
 
 We use 72 characters limit to the first line of the commit message. If you see that you are passing
 this number, consider dividing the commit in two, as most likely it represents two different things.
@@ -131,14 +131,14 @@ changed specifically. The actual code changes of the commit support what the com
 When the commit fixes a given ticket, it must contain that information on the commit message.
 
 Pull requests
-----------------
+-------------
 
 When you have a commit or set of commits that you fell they are worth to be incorporated (most likely
 because they close a specific ticket), you should make a pull request to announce that you have value that can be
 added to the project.
 
 requesting a pull
-::::::::::::::::::
+:::::::::::::::::
 
 We prefer the GitHub way: you push your local commits to your GitHub fork, and create a pull request from there.
 
@@ -148,7 +148,7 @@ message that explains that set of commits (and not the commit itself).
 In case you don't use GitHub, you can also create a patch and attach it to a ticket to submit it.
 
 Pull request/patch review
-::::::::::::::::::::::::::
+:::::::::::::::::::::::::
 
 The idea of the pull request is that you are notifying other contributors that you have a set of commits that
 are worth adding to the project.

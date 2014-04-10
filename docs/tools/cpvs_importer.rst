@@ -1,5 +1,5 @@
 CPVS importer
-==============
+=============
 
 .. currentmodule:: cpvs
 

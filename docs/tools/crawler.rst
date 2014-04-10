@@ -1,5 +1,5 @@
-Crawler
-=======
+Crawler for Contracts and Tenders
+=================================
 
 .. currentmodule:: contracts.crawler
 
@@ -9,11 +9,14 @@ Crawler
 This document explains how Base_ provides its data and what our crawler works.
 
 .. important::
-    Please, avoid using the crawler on your own as it can generate Denial of Service (DoS) to Base_ database.
-    We provide remote access to ours exactly to avoid that.
+    Please, take precautions on using the crawler on your own as it can generate Denial of
+    Service (DoS) to Base_ database. We provide remote access to ours exactly to avoid that.
+
+.. important::
+    Crawling the Base_ from scratch can take more than 2 days as of Jan. 2014.
 
 Base database
----------------
+-------------
 
 Base_ uses the following urls to expose its data
 
@@ -36,7 +39,7 @@ we have an abstract crawler for retrieving json from urls:
 The lists of entities and contracts grow over time, the others are constant and only have to be retrieved once.
 
 What our crawler does
--------------------------
+---------------------
 
 The crawler accesses Base_ urls using the following procedure:
 
@@ -55,12 +58,21 @@ API
 
 .. class::AbstractCrawler
 
-    An object able to retrieve JSON content from an url. When initialized, it initializes a mechanize_ browser.
+    An object able to retrieve content from an url. When initialized, it initializes a mechanize_ browser.
     It has one method:
 
     .. method:: goToPage(url)
 
-        Returns a dictionary loaded with json from the url.
+        Returns the html of the url.
+
+.. class::JSONCrawler
+
+    A subclass of AbstractCrawler able to retrieve JSON content from an url.
+    It has one method:
+
+    .. method:: goToPage(url)
+
+        Returns a dictionary corresponding to the json content of the url.
 
 For retrieving data, the procedure is separated in three steps:
 
@@ -70,9 +82,10 @@ For retrieving data, the procedure is separated in three steps:
 
 For static data, this is relatively easy. We provide a specific crawler for this:
 
-.. class:: StaticDataCrawler
+.. class:: ContractsStaticDataCrawler
 
-    This crawler only needs to be run once. It is used to populate the database:
+    A subclass JSONCrawler for static data of contracts. This crawler only needs to be run once and
+    is used to populate the database the first time.
 
     .. method:: retrieve_and_save_contracts_types()
     .. method:: retrieve_and_save_procedures_types()
@@ -80,64 +93,89 @@ For static data, this is relatively easy. We provide a specific crawler for this
     .. method:: retrieve_and_save_districts(country)
     .. method:: retrieve_and_save_councils(district)
 
-        Methods to retrieve specifc static data.
+        Methods to retrieve specific static data.
 
     .. method:: retrieve_and_save_all
+
+        Retrieves and saves all static data of contracts.
+
+
+.. class:: TendersStaticDataCrawler
+
+    A subclass JSONCrawler for static data of tenders. This crawler only needs to be run once and
+    is used to populate the database the first time.
+
+    .. method:: retrieve_and_save_act_types()
+    .. method:: retrieve_and_save_model_types()
+
+        Methods to retrieve specific static data.
+
+    .. method:: retrieve_and_save_all()
+
+        Retrieves and saves all static data of tenders.
+
+.. class:: StaticDataCrawler
+
+    A crawler that uses composite design pattern to just extract all static date (tenders and contracts).
+
+    .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data.
 
 For dynamic data, and given the size of the database, the approach is more complex.
 
-.. class:: Crawler
+.. class:: DynamicCrawler
 
-    A crawler for entities and contracts. This class has one public method, :meth:`update_all` that does
-    all the heavy lifting. Here we explain in detail what it does.
-
-    It requires the existence of two directories:
+    A subclass JSONCrawler (abstract) that conceptually uses a directory to store files with lists of 25 summaries.
 
     .. attribute:: data_directory = '../../data'
+
+
+.. class:: EntitiesCrawler
+
+    A subclass of DynamicCrawler to crawl entities.
+
+    It goes to all lists of entities in Base_, each with 25 elements, and store them in files in :attr:`data_directory`.
+    Uses the stored pages to create/update :class:`Entities <models.Entity>` in the database.
+
+    .. method:: update()
+
+        The entry point of this crawler; given the existence of :attr:`data_directory`,
+        updates :class:`Entities <models.Entity>` until database is fully synchronized with Base_.
+
+
+.. class:: ContractsCrawler
+
+    A subclass of DynamicCrawler to crawl contracts.
+
+    It goes to all lists of entities in Base_, each with 25 elements, and store the ids in files in :attr:`data_directory`.
+
+    Goes to the page of each :class:`models.Contract`, obtained from the stored ids, and stores the information in
+
     .. attribute:: contracts_directory = '../../contracts'
 
-    .. warning:: These directories will be filled with millions of files,
-        with total size of the order of 1.7 GB as of Jan. of 2013.
+        directory of cached information of contracts.
 
-    .. method:: update_all()
+    .. warning:: This directory will be filled with lots of files,
+        with total size of ~1.7 GB as of Jan. of 2014.
 
-        Updates the database with the latest entities and contracts by calling :meth:`update_entities` and
-        :meth:`update_contracts`, respectively and in this order.
-        All data retrieved from BASE is file-cached in :attr:`data_directory` and :attr:`contracts_directory`.
+    .. method:: update()
 
-    Base_ exposes the list of contracts and entities using blocks of 25 elements.
-    For entities, the blocks have all the required information, so, we
-    save 25 entities per hit. For contracts, we need to go to the url
-    of each contract of the block, so we need 26 hits (1+25).
+        Entry point of this crawler, given the existence of :attr:`contracts_directory` and :attr:`data_directory`,
+        downloads, caches and saves contracts until the database is fully synchronized with Base_.
 
-    In both cases, the idea is the same: we start in the first block, and we retrieve blocks consecutively
-    until a block returns no data. To minimize hitting Base_, the JSON content from a retrieved
-    full block is cached in a file and subsequent calls use the cached data.
 
-    To update contracts:
+.. class:: TenderCrawler
 
-    .. method:: update_contracts()
+    A subclass of DynamicCrawler to crawl tenders.
 
-        Updates the database by retrieving :class:`contracts <contracts.models.Contract>` from Base_.
+    It sequentially searches for tenders with a given id, retrieves it, and caches the results in
 
-        First, it hits Base_ database to retrieve 25 contracts :attr:`~contracts.models.Contract.base_id`,
-        saving these on a file.
-        Next, it hits the Base_ database for each contract in the block, saving these on a file.
-        Finally, it creates a database entry (if it doesn't exist) for each :class:`contract <contracts.models.Contract>`
-        on the block. This is repeated until a retrieved block returns no entries.
+    .. attribute:: tenders_directory = '../../tenders'
 
-        Subsequent calls of this function start from the last block, avoiding further hits on Base_ database.
+    Used to synchronized tenders with Base_.
 
-    To update entities:
+    .. method:: update()
 
-    .. method:: update_entities()
-
-        Updates the database by retrieving :class:`entities <contracts.models.Entity>` from Base_.
-
-        Similar to :meth:`update_contracts` but for :class:`entities <contracts.models.Entity>`.
-        It only hits Base_ database for getting the block of 25 entities because Base_ interface already provides
-        the relevant information of the entity in the list.
-
-        Like update_contracts, this method also saves the retrieved information in files.
+        Entry point of this crawler, given the existence of :attr:`tenders_directory` and :attr:`data_directory`,
+        downloads, caches and saves :class:`tenders <models.Tender>` until the database is fully synchronized with Base_.

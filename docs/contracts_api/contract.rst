@@ -1,5 +1,5 @@
 Contract
-=========
+========
 
 .. _Base: http://www.base.gov.pt/base2
 
@@ -8,7 +8,7 @@ This document provides the API references for the contracts in the database.
 .. currentmodule:: contracts
 
 API
-------
+----
 
 .. class:: models.Contract
 

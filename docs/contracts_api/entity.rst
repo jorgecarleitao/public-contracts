@@ -8,7 +8,7 @@ This document provides the API references for the entities in the database.
 .. currentmodule:: contracts
 
 API
-------
+----
 
 .. class:: models.Entity
 
@@ -93,7 +93,7 @@ API
         The money, in cents, the entity expended so far.
 
 Usage
--------
+-----
 
 Because an entity is a subclass of a Django model, you can retrieve
 information about it using Django's ORM principle.
