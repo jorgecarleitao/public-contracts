@@ -1,0 +1,115 @@
+{% extends "one_column_body.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Publics"%}{% endblock %}
+{% block content %}
+    <div class="rules main-page" itemscope itemtype="http://schema.org/WebPage">
+        <h2 class="center-title" itemprop="name">
+            Bem vindo ao Públicos
+        </h2>
+        <img class="main-logo" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
+        <p itemprop="description">
+            Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os <strong>deputados</strong>
+            do estado português.
+        </p>
+        <h3>
+            O problema
+        </h3>
+        <p>
+            O estado português não apresenta uma forma simples de cruzar informação de diferentes fontes. Dois exemplos:
+        </p>
+        <ul>
+            <li>
+                Quando uma lei é publicada, não é fácil saber quem foram os deputados que a proposeram.
+            </li>
+            <li>
+                Quando um deputado declara um conflito de interesses com uma entidade privada,
+                não é claro qual a relação dessa entidade com o estado.
+            </li>
+        </ul>
+        <p>
+            Este website combina informação pública de
+            diferentes fontes oficiais e unifica-a, criando relações directas entre:
+        </p>
+        <ul>
+            <li>
+                Contratos
+            </li>
+            <li>
+                Leis
+            </li>
+            <li>
+                Deputados
+            </li>
+        </ul>
+        <h3>
+            Contratos
+        </h3>
+        <p>
+            Neste website pode encontrar todas as entidades, concursos públicos e contratos públicos presentes na <a href="http://base.gov.pt">base de dados oficial de contratos públicos</a>.
+        </p>
+        <ul>
+            <li>
+                Pode conhecer que empresas são mais contractadas, que empresas contractam e em que sector económico.
+            </li>
+            <li>
+                Pode conhecer os últimos concursos públicos, ou que entidades públicas estão a contratar mais.
+            </li>
+            <li>
+                Pode estar actualizado das últimas novidades sem ter de nos visitar: temos RSS de todas as listas.
+            </li>
+        </ul>
+        <p>Para mais informações, consulte <a href="{% url "contracts_home" %}">esta página</a>.</p>
+        <h3>
+            Leis
+        </h3>
+        <p>
+            Este site tem todas as leis presentes no <a href="http://dre.pt">site oficial do Diário da República</a>.
+        </p>
+        <ul>
+            <li>
+                [Em construção] Pode procurar no texto integral da lei.
+            </li>
+            <li>
+                [Em construção] Temos RSSs das listas de leis, caso queira receber actualizações no seu computador
+                quando novas leis surgem.
+            </li>
+        </ul>
+        <p>Para mais informações, consulte <a href="{% url "law_home" %}">esta página</a>.</p>
+        <h3>
+            Deputados
+        </h3>
+        <p>
+            Este website tem a lista de todos os deputados presente no <a href="http://parlamento.pt">site do parlamento português</a>.
+        </p>
+        <ul>
+            <li>
+                Divulgamos a lista de todos os deputados que passaram pelo parlamento.
+            </li>
+            <li>
+                [Em construção]: temos os registos de interesses de todos os deputados, incluindo ligações para
+                as entidades presentes em contratos públicos.
+            </li>
+            <li>
+                [Em construção]: Temos os registo de que leis os deputados proposeram, ligando com
+                as leis já existentes.
+            </li>
+        </ul>
+        <p>Para mais informações, consulte <a href="{% url "deputies_home" %}">esta página</a>.</p>
+        <h4>Outras informações:</h4>
+        <ul>
+            <li>
+                Este website é open source, público e não-governamental.
+            </li>
+            <li>
+                Todos os dados aqui apresentados estão
+                sincronizados com os dados oficiais com o máximo de 24h de erro.
+            </li>
+            <li>
+                Toda a base de dados presente neste website é pública. Consulte a documentação
+                deste site para a aceder.
+            </li>
+        </ul>
+    </div>
+{% endblock %}
