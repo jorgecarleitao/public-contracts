@@ -17,8 +17,8 @@ except:
     print("contracts_schedule failed")
     raise
 
-try:
-    deputies_schedule.update()
-except:
-    print("deputies_schedule failed")
-    raise
+#try:
+#    deputies_schedule.update()
+#except:
+#    print("deputies_schedule failed")
+#    raise
