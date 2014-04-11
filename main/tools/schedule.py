@@ -9,13 +9,16 @@ try:
     law_schedule.update()
 except:
     print("law_schedule failed")
+    raise
 
 try:
     contracts_schedule.update()
 except:
     print("contracts_schedule failed")
+    raise
 
 try:
     deputies_schedule.update()
 except:
     print("deputies_schedule failed")
+    raise
