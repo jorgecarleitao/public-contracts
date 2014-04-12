@@ -37,25 +37,25 @@
     height: 30px;
 }
 
-.box {
+.sidebar-box {
     width: 230px;
     float: right;
     background-color: #f5f5f5;
     padding-left: 5px;
 }
 
-.box a,
-.box p,
-.box .title,
-.box li {
+.sidebar-box a,
+.sidebar-box p,
+.sidebar-box .title,
+.sidebar-box li {
     width: 100%;
 }
 
-.box li {
+.sidebar-box li {
     margin-bottom: 13px;
 }
 
-.box .title {
+.sidebar-box .title {
     color: #656565;
     margin-bottom: 5px;
     font-size: 18px;
