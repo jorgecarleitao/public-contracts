@@ -316,232 +316,47 @@ class FirstSeriesCrawler(AbstractCrawler):
                         document = Document(**data)
                         document.save()
 
-    def get_source(self, doc_id):
+    def retrieve_text_source(self, doc_id, type_name):
         """
-        Not being used.
+        Retrieves the source of the document.
         """
         print("get_source(%d)" % doc_id)
-        file_name = '%s/source/%d.dat' % (self.data_directory, doc_id)
+        file_name = '%s/source/%d_%s.dat' % (self.data_directory, doc_id, slugify(type_name))
         try:
             f = open(file_name, "rb")
             html = pickle.load(f)
             f.close()
         except IOError:
             # online retrieval
-            html = self.goToPage(self._law_url_formatter.format(doc_id=doc_id))
+
+            html_encoded_type = convert_to_url(type_name)
+            html = self.goToPage(self._law_url_formatter.format(doc_id=doc_id, type=html_encoded_type))
+
+            soup = BeautifulSoup(html)
+
+            html = unicode(soup.find("div", dict(id='centro_total')))
 
             f = open(file_name, "wb")
             pickle.dump(html, f)
             f.close()
         return html
 
-    def get_all_sources(self):
+    def retrieve_all_text_sources(self):
         """
         Not being used.
         """
-        page = 0
-        while True:
-            try:
-                entries = self.get_summaries(page)
-            except self.LastPageError:
-                break
-
-            for entry in entries:
+        for type in Type.objects.all():
+            print(u'save_all_summaries: saving \'%s\', %d' % (type, type.id))
+            page = 0
+            while True:
+                page += 1
                 try:
-                    self.get_source(self.get_doc_id(entry['href']))
-                except IndexError:
-                    print("fail to parse entry with url %s" % entry['href'])
+                    summaries = self.get_summaries(page, type.name)
+                except self.LastPageError:
+                    break
 
-            page += 1
-
-    def get_law_url(self, doc_id):
-        return self._law_url_formatter.format(doc_id=doc_id)
-
-    def parse_source_data(self, doc_id):
-        """
-        Not being used.
-        """
-        print('parse_source_data(%d)' % doc_id)
-
-        data = {'dr_doc_id': doc_id}
-
-        html = self.get_source(doc_id)
-        soup = BeautifulSoup(html)
-
-        data_element = soup.find('div', {'id': 'doc_data'})
-
-        for element in data_element.findAll('p'):
-            if u"DATA" in element.text:
-                data['date'] = clean_date(element.text)
-                continue
-            if u'NÚMERO' in element.text:
-                data['dr_number'], data['dr_series'] = clean_series(element.text)
-                continue
-            if u"DIPLOMA / ATO" in element.text:
-                data['type'], data['number'] = clean_type(element.text)
-                continue
-            if u"PÁGINAS" in element.text:
-                search = re.search('([0-9\(-\)]+) a ([0-9\(-\)]+)', element.text)
-                data['pages'] = u"[%s, %s]" % (search.group(1), search.group(2))
-                continue
-
-        return data
-
-    def parse_source_text(self, doc_id):
-        """
-        Not being used.
-        """
-        decree = Document.objects.get(dr_doc_id=doc_id)
-
-        html = self.get_source(doc_id)
-        soup = BeautifulSoup(html)
-
-        text_element = soup.find('div', {'id': 'doc_texto'})
-
-        state = {'quote': False}
-
-        previously_created = None
-        current_article = None
-
-        index = 0
-        for element in text_element.findAll('p'):
-            text = element.text
-
-            if u'TEXTO' in text:
-                continue
-
-            index += 1
-
-            # 'quote' implies the text is being parsed as a change in other text.
-            if text[0] == u'«':
-                state['quote'] = True
-                text = text[1:]
-            elif text[-1] == u'»':
-                state['quote'] = False
-                text = text[:1]
-                continue
-
-            if state['quote']:
-                previously_created, created = LawText.objects.get_or_create(type='quote',
-                                                                            text=text,
-                                                                            article=current_article,
-                                                                            decree=decree,
-                                                                            index=index)
-                continue
-
-            # identify articles
-            search_article = re.search('^Artigo (\d+).\xba$', text)
-            if search_article:
-                previously_created, created = LawArticle.objects.get_or_create(decree=decree,
-                                                                               number=int(search_article.group(1)))
-                current_article = previously_created
-                continue
-
-            if previously_created is not None and isinstance(previously_created, LawArticle):
-                previously_created.title = text
-                previously_created.save()
-                previously_created = None
-                continue
-
-            search_numeral_bullet = re.search('^(\d+) - (.*)', text)
-            if search_numeral_bullet:
-                previously_created, created = LawText.objects.get_or_create(type='numeral',
-                                                                            text=search_numeral_bullet.group(2),
-                                                                            article=current_article,
-                                                                            decree=decree,
-                                                                            number=int(search_numeral_bullet.group(1)),
-                                                                            index=index)
-
-                continue
-
-            search_alphabetic_bullet = re.search('^(\w)\) (.*)', text)
-            if search_alphabetic_bullet:
-                previously_created, created = LawText.objects.get_or_create(type='alphabetic',
-                                                                            text=search_alphabetic_bullet.group(2),
-                                                                            article=current_article,
-                                                                            decree=decree,
-                                                                            number=search_alphabetic_bullet.group(1),
-                                                                            index=index)
-                continue
-
-
-            previously_created, created = LawText.objects.get_or_create(type='other',
-                                                                        text=text,
-                                                                        article=current_article,
-                                                                        decree=decree,
-                                                                        index=index)
-
-    def parse_changes(self, doc_id):
-        """
-        Not being used.
-        """
-        decree = LawDecree.objects.get(dr_doc_id=doc_id)
-
-        for article in decree.lawarticle_set.all():
-            entries = LawText.objects.filter(article=article)
-            print(u"Article nº %d" % article.number)
-
-            ## we see if this article changes any decree
-            search = re.search(u'n.º (.*),', article.title)
-            if u'Alteração' in article.title and search:
-                changing_decree = LawDecree.objects.get(number=search.group(1))
-            else:
-                continue
-
-            ## we now start constructing the changes
-            changing_article = None
-            for entry in entries:
-                print entry.text
-
-                search = re.search('^Artigo (\d+).\xba$', entry.text)
-                if search and changing_article is None:
-                    changing_article = LawArticle.objects.get(number=search.group(1), decree=changing_decree)
-
-                if changing_article is None:
-                    continue
-
-    def parse_all(self):
-        """
-        Not being used.
-        """
-        page = 1
-        while True:
-            try:
-                entries = self.get_summaries(page)
-            except self.LastPageError:
-                break
-
-            for entry in entries:
-                try:
-                    doc_id = self.get_doc_id(entry['href'])
-                except IndexError:
-                    continue
-
-                self.parse_source_text(doc_id)
-            page += 1
-
-    def save_data(self):
-        """
-        Not being used.
-        """
-        page = 1
-        while True:
-            try:
-                entries = self.get_summaries(page)
-            except self.LastPageError:
-                break
-
-            for entry in entries:
-                try:
-                    doc_id = self.get_doc_id(entry['href'])
-                except IndexError:
-                    continue
-
-                data = self.parse_source_data(doc_id)
-
-                try:
-                    LawDecree.objects.get(dr_doc_id=doc_id)
-                except LawDecree.DoesNotExist:
-                    decree = LawDecree(**data)
-                    decree.save()
-            page += 1
+                for summary in summaries:
+                    try:
+                        self.retrieve_text_source(summary['doc_id'], type.name)
+                    except IndexError:
+                        print(u"fail to parse summary of doc_id=%s" % summary['doc_id'])
