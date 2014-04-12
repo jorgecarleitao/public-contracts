@@ -28,18 +28,11 @@ def build_contract_list_context(context, GET):
 
         return querySet.order_by(ordering[order]), True
 
-    def filter_search(search):
-        words = search.split(' ')
-        _filter = Q()
-        for word in words:
-            _filter &= Q(description__icontains=word)
-        return _filter
-
     key = _('search')
     if key in GET and GET[key]:
-        search_Q = filter_search(GET[key])
         context[key] = GET[key]
-        context['contracts'] = context['contracts'].filter(search_Q)
+        context['contracts'] = context['contracts'].filter(description__search=GET[key],
+                                                           contract_description__search=GET[key])
         context['search'] = GET[key]
 
     if _('sorting') in GET:
