@@ -7,6 +7,13 @@ import models
 
 
 def build_laws_list_context(context, GET):
+
+    key = _('search')
+    if key in GET and GET[key]:
+        context[key] = GET[key]
+        context['laws'] = context['laws'].filter(summary__search=GET[key])
+        context['search'] = GET[key]
+
     paginator = Paginator(context['laws'], 20)
     page = GET.get(_('page'))
     try:

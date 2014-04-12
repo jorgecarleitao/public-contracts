@@ -3,6 +3,7 @@
     {% if laws %}
         {% include "law/law_list/pagination.html" %}
     {% endif %}
+    {% include "law/law_list/search_law.html" %}
     <div class="list-loop">
         {% for law in laws %}
             {% include "law/law_list/law_summary.html" %}
