@@ -4,8 +4,10 @@ from django.db import models
 
 def convert_to_url(string):
     """
-    Converts unicode chars to some exquisite encoding defined in w3school,
+    Converts unicode chars to a exquisite encoding defined in w3school,
     which the dre uses.
+
+    See also http://stackoverflow.com/q/22898926/931303.
     """
     string = string.replace(u'ã', '%E3')
     string = string.replace(u'á', '%E1')

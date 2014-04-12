@@ -2,112 +2,26 @@
 import pickle
 import re
 import urllib2
-import mechanize as mc
 import datetime
 
 from BeautifulSoup import BeautifulSoup
 
 from django.utils.text import slugify
 
+from contracts.crawler import AbstractCrawler
+
 from models import Type, Document, convert_to_url
 
 
-month_name_to_number = {u'Janeiro': 1,
-                        u'Fevereiro': 2,
-                        u'Março': 3,
-                        u'Abril': 4,
-                        u'Maio': 5,
-                        u'Junho': 6,
-                        u'Julho': 7,
-                        u'Agosto': 8,
-                        u'Setembro': 9,
-                        u'Outubro': 10,
-                        u'Novembro': 11,
-                        u'Dezembro': 12}
-
-
-def clean_date(date_string):
-    """
-    Assumes date of the form
-    "Quinta-feira, 17 de Novembro de 2011"
-
-    or
-
-    "17 de Novembro de 2011"
-    """
-    if ',' in date_string:
-        date_string = date_string.split(', ')[1]
-
-    search_date = re.search(u'(\d+) de (\w+) de (\d+)', date_string, re.UNICODE)
-
-    return datetime.date(day=int(search_date.group(1)),
-                         month=month_name_to_number[search_date.group(2).title()],
-                         year=int(search_date.group(3)))
-
-
-def clean_series(series_string):
-    """
-    Assumes string of the form
-
-    "NÚMERO :245/55 SÉRIE I"
-    or
-    "NÚMERO :250-A SÉRIE I"
-
-    returns ("245/55", "I")
-    or
-    returns ("250-A", "I")
-    """
-    search = re.search(u'([0-9/]+) SÉRIE (\w+)', series_string)
-
-    if not search:
-        search = re.search(u'([0-9/]+-\w+) SÉRIE (\w+)', series_string)
-        return search.group(1), search.group(2)
-
-    return search.group(1), search.group(2)
-
-
-def clean_type(string):
-    if u'(Não especificado)' in string:
-        return None, None
-
-    if u'Rectificação' in string:
-        return u'Rectificação', None
-
-    if u'Declaração' in string:
-        return u'Declaração', None
-
-    if u'Aviso' in string:
-        return u'Aviso', None
-
-    parts = string.split(u'n.º ')
-    doc_type = parts[0].split(':')[1]
-    doc_number = parts[1].split(' ')[0]
-    return doc_type, doc_number
-
-
-class AbstractCrawler(object):
-
-    class NoMoreEntriesError:
-        pass
-
-    def __init__(self):
-        # Browser
-        br = mc.Browser()
-
-        br.set_handle_robots(False)
-
-        # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
-        br.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
-                                        'AppleWebKit/537.36 (KHTML, like Gecko)'),
-                         ('Range', "items=0-24")]
-        self.browser = br
-
-    def goToPage(self, url):
-        response = self.browser.open(url)
-        return response.read()
-
-
 class FirstSeriesCrawler(AbstractCrawler):
+    """
+    A crawler for the Series I of DRE. It goes to all known lists
+    and creates a list of ids.
+
+    Next, it parses each list and stores the result in the DB.
+
+    The lists are also file-cached, to avoid hitting DRE.
+    """
 
     class LastPageError:
         pass
@@ -164,10 +78,15 @@ class FirstSeriesCrawler(AbstractCrawler):
                                    'sort=0&' \
                                    'submit=Pesquisar'
 
+    @staticmethod
+    def get_doc_id(url):
+        if "$$N REGISTO" in url:
+            return None
+        return int(re.findall(r'doc=(\d+)', url)[0])
+
     def extract_law_types(self):
         """
-        Retrieves all types of documents and adds others found.
-        Valid for series 1 only
+        Retrieves all types of documents from the list in DR website. Adds others found.
         """
         url = 'http://dre.pt/comum/html/janelas/dip1s_ltipos.html'
 
@@ -201,8 +120,19 @@ class FirstSeriesCrawler(AbstractCrawler):
         Type.objects.get_or_create(name=u"Orçamento suplementar")
         Type.objects.get_or_create(name=u"Moção de censura")
 
+    @staticmethod
+    def clear_and_save_summary(datum):
+        """
+        Parses and cleans a given datum obtained from extract_from_list_element.
 
-    def parse_summary_datum(self, datum):
+        Returns a dictionary with
+         - 'type': The type of the document, a 'Type'
+         - 'number': None or the number of the document, a string.
+         - 'dr_doc_id': The document number in the official database, an int.
+         - 'dr_series': the series (typically 'I')
+         - 'dr_number': the number of the series
+         - 'summary': the official summary of the document.
+        """
 
         data = {'number': None}
 
@@ -280,32 +210,44 @@ class FirstSeriesCrawler(AbstractCrawler):
 
         return data
 
-    def extract_from_list_element(self, element):
+    def scrape_summary(self, summary):
+        """
+        Scrapes a (soup) summary of the list parsed from html.
+        Returns a dictionary of non-validated strings.
+        """
         entry = {}
-        href = element.find("a", dict(title="Link para o documento da pesquisa."))
+        href = summary.find("a", dict(title="Link para o documento da pesquisa."))
         entry['doc_id'] = self.get_doc_id(href['href'])
         entry['data'] = href.text
-        entry['entity'] = element.find("span", {'class': 'bold'}).text
-        entry['summary'] = unicode(element).split('<br />')[-1].replace('</li>', '')
+        entry['entity'] = summary.find("span", {'class': 'bold'}).text
+        entry['summary'] = unicode(summary).split('<br />')[-1].replace('</li>', '')
 
         return entry
 
-    def retrieve_and_extract_summaries(self, page, type):
-        html_encoded_type = convert_to_url(type)
+    def retrieve_and_scrape_summaries(self, page, type_name):
+        """
+        Given a page and a type name, returns a list of non-validated summaries.
+        """
+        print(u"retrieve_and_scrape_summaries(%d, '%s')" % (page, slugify(type_name)))
+
+        html_encoded_type = convert_to_url(type_name)
         html = self.goToPage(self._list_url_formatter.format(page=page, type=html_encoded_type))
         soup = BeautifulSoup(html)
 
         l = soup.find("div", dict(id="lista"))
 
         data = []
-        for element in l.findAll("li"):
-            data.append(self.extract_from_list_element(element))
+        for summary in l.findAll("li"):
+            data.append(self.scrape_summary(summary))
 
         return data
 
-    def get_last_page(self, type):
+    def get_last_page(self, type_name):
+        """
+        Returns the last parsed page, searching the last cached file.
+        """
         import os
-        regex = re.compile(r"%s_(\d+).dat" % slugify(type))
+        regex = re.compile(r"%s_(\d+).dat" % slugify(type_name))
         files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
 
         files = sorted(files, key=lambda x: int(x), reverse=True)
@@ -314,9 +256,19 @@ class FirstSeriesCrawler(AbstractCrawler):
         else:
             return 0
 
-    def get_summaries(self, page, type):
-        print(u"get_summaries(%d, '%s')" % (page, slugify(type)))
-        file_name = '%s/%s_%d.dat' % (self.data_directory, slugify(type), page)
+    def get_summaries(self, page, type_name):
+        """
+         Given a page and type_name, downloads and scrapes the list of
+         non-validated summaries in it.
+
+         The result is cached such that there is only one download per (page, type_name).
+
+         - If list is not complete (100 elements), downloads it again and re-saves it.
+         - If there is only 1 element, we skip it since every list in DRE returns at least one element.
+        """
+        # fixme: the 1 element condition makes the crawler to skip type names that only have one element.
+
+        file_name = '%s/%s_%d.dat' % (self.data_directory, slugify(type_name), page)
         try:
             f = open(file_name, "rb")
             data = pickle.load(f)
@@ -327,7 +279,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             f.close()
         except IOError:
             # online retrieval
-            data = self.retrieve_and_extract_summaries(page, type)
+            data = self.retrieve_and_scrape_summaries(page, type_name)
 
             if len(data) == 1:  # if 1 entry, it means it is a repeated entry and we stop
                 raise self.LastPageError
@@ -337,20 +289,11 @@ class FirstSeriesCrawler(AbstractCrawler):
             f.close()
         return data
 
-    def retrieve_all_summaries(self):
-        for type in Type.objects.all():
-            print(u'retrieve_all_summaries: retrieving \'%s\'' % type)
-            page = self.get_last_page(type.name)
-            while True:
-                page += 1
-                try:
-                    self.get_summaries(page, type.name)
-                except self.LastPageError:
-                    break
-                except urllib2.URLError:
-                    break
-
-    def save_all_summaries(self):
+    def update_all(self):
+        """
+        Entry point of this crawler. For all known types, retrieves, scrapes, clears, and saves
+        new documents.
+        """
         for type in Type.objects.all():
             print(u'save_all_summaries: saving \'%s\', %d' % (type, type.id))
             page = self.get_last_page(type.name)
@@ -364,7 +307,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                     break
 
                 for datum in summaries:
-                    data = self.parse_summary_datum(datum)
+                    data = self.clear_and_save_summary(datum)
 
                     try:
                         Document.objects.get(type=data['type'], dr_doc_id=data['dr_doc_id'])
@@ -374,6 +317,9 @@ class FirstSeriesCrawler(AbstractCrawler):
                         document.save()
 
     def get_source(self, doc_id):
+        """
+        Not being used.
+        """
         print("get_source(%d)" % doc_id)
         file_name = '%s/source/%d.dat' % (self.data_directory, doc_id)
         try:
@@ -390,7 +336,10 @@ class FirstSeriesCrawler(AbstractCrawler):
         return html
 
     def get_all_sources(self):
-        page = 300
+        """
+        Not being used.
+        """
+        page = 0
         while True:
             try:
                 entries = self.get_summaries(page)
@@ -408,12 +357,10 @@ class FirstSeriesCrawler(AbstractCrawler):
     def get_law_url(self, doc_id):
         return self._law_url_formatter.format(doc_id=doc_id)
 
-    def get_doc_id(self, url):
-        if "$$N REGISTO" in url:
-            return None
-        return int(re.findall(r'doc=(\d+)', url)[0])
-
     def parse_source_data(self, doc_id):
+        """
+        Not being used.
+        """
         print('parse_source_data(%d)' % doc_id)
 
         data = {'dr_doc_id': doc_id}
@@ -441,6 +388,9 @@ class FirstSeriesCrawler(AbstractCrawler):
         return data
 
     def parse_source_text(self, doc_id):
+        """
+        Not being used.
+        """
         decree = Document.objects.get(dr_doc_id=doc_id)
 
         html = self.get_source(doc_id)
@@ -522,6 +472,9 @@ class FirstSeriesCrawler(AbstractCrawler):
                                                                         index=index)
 
     def parse_changes(self, doc_id):
+        """
+        Not being used.
+        """
         decree = LawDecree.objects.get(dr_doc_id=doc_id)
 
         for article in decree.lawarticle_set.all():
@@ -548,6 +501,9 @@ class FirstSeriesCrawler(AbstractCrawler):
                     continue
 
     def parse_all(self):
+        """
+        Not being used.
+        """
         page = 1
         while True:
             try:
@@ -565,6 +521,9 @@ class FirstSeriesCrawler(AbstractCrawler):
             page += 1
 
     def save_data(self):
+        """
+        Not being used.
+        """
         page = 1
         while True:
             try:
