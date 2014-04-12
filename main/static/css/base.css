@@ -97,3 +97,15 @@
 .right {
     float: right;
 }
+
+.clear {
+    clear: both;
+}
+
+.good {
+    color: green;
+}
+
+.bad {
+    color: #ad0000;
+}

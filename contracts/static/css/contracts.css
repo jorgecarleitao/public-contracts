@@ -14,10 +14,3 @@
     margin-left: 0;
     border-bottom: 1px solid gray;
 }
-
-#rss-feed {
-    float: right;
-    background: url(../images/rss.png) 0 0;
-    width: 30px;
-    height: 30px;
-}
