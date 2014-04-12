@@ -3,7 +3,7 @@
 {% load static %}
 {% block title %}{% trans "When Portugal contract most?"%}{% endblock %}
 {% block content %}
-    <div class="rules" itemscope itemtype="http://schema.org/Article">
+    <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{% trans "When Portugal contract most?" %}</h2>
         <p itemprop="description">
             {% blocktrans with url="http://www.base.gov.pt/base2/" %}
@@ -22,7 +22,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
     {% include "contracts/contracts_time_series/graph.html" with url="contracts_time_series_json" %}
-    <div class="rules">
+    <div class="text-element">
         <h4>{% trans "Observations and context" %}</h4>
         <p>
             {% blocktrans %}

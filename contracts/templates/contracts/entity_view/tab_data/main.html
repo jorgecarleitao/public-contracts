@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block entity_content %}
-    <div class="rules">
+    <div class="text-element">
         <ul>
             <li>
                 {% trans "NIF:"%} {{ entity.nif }}
@@ -19,10 +19,10 @@
         </ul>
     </div>
     <hr>
-    <h3 class="rules">{% trans "Last contracts" %}</h3>
+    <h3 class="text-element">{% trans "Last contracts" %}</h3>
     {% include "contracts/contract_list/contracts_loop.html" with contracts=last_contracts%}
     <h4><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></h4>
     <hr>
-    <h3 class="rules">{% trans "Last categories" %}</h3>
+    <h3 class="text-element">{% trans "Last categories" %}</h3>
     {% include "contracts/category_list/categories_loop.html" with categories=last_categories%}
 {% endblock %}
