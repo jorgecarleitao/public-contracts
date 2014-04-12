@@ -5,9 +5,9 @@
 {% block title %}{% trans "Publics"%}{% endblock %}
 {% block content %}
     <div class="text-element main-page" itemscope itemtype="http://schema.org/WebPage">
-        <h2 class="center-title" itemprop="name">
+        <h1 class="center-title" itemprop="name">
             Bem vindo ao Públicos
-        </h2>
+        </h1>
         <img class="main-logo" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
         <p itemprop="description">
             Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os <strong>deputados</strong>
@@ -17,38 +17,24 @@
             Este website combina informação pública de
             diferentes fontes oficiais e unifica-a. Em particular, estamos interessados em:
         </p>
-        <ul>
-            <li>
-                Contratos
-            </li>
-            <li>
-                Leis
-            </li>
-            <li>
-                Deputados
-            </li>
-        </ul>
-        <h3>
-            Contratos
-        </h3>
+        <h2 class="center-title">Contratos</h2>
         <p>
-            Neste website pode encontrar todas as entidades, concursos públicos e contratos públicos presentes na <a href="http://base.gov.pt">base de dados oficial</a>.
+            Neste website pode encontrar todas as entidades, contratos e concursos públicos existentes na <a href="http://base.gov.pt">base de dados oficial</a>.
+            Pode ainda conhecer:
         </p>
         <ul>
             <li>
-                Pode conhecer que empresas são mais contratadas, que empresas contractam e em que sector económico.
+                que empresas são mais contratadas, que empresas mais contratam e em que sector económico.
             </li>
             <li>
-                Pode conhecer os últimos concursos públicos, ou que entidades públicas estão a contratar mais.
+                os últimos concursos públicos, ou que entidades públicas estão a contratar mais.
             </li>
             <li>
-                Pode estar actualizado das últimas novidades sem ter de nos visitar: temos RSS de todas as listas.
+                evolução temporal de alguns indicadores macroscópicos da contratação pública portuguesa.
             </li>
         </ul>
-        <p>Para mais informações, consulte <a href="{% url "contracts_home" %}">esta página</a>.</p>
-        <h3>
-            Leis
-        </h3>
+        <p><a href="{% url "contracts_home" %}">Mais informações</a></p>
+        <h2 class="center-title">Leis</h2>
         <p>
             Este website tem todas as leis presentes no <a href="http://dre.pt">site oficial do Diário da República</a>.
         </p>
@@ -61,12 +47,10 @@
                 quando novas leis surgem.
             </li>
         </ul>
-        <p>Para mais informações, consulte <a href="{% url "law_home" %}">esta página</a>.</p>
-        <h3>
-            Deputados
-        </h3>
+        <p><a href="{% url "law_home" %}">Mais informações</a></p>
+        <h2 class="center-title">Deputados</h2>
         <p>
-            Este website tem a lista de todos os deputados presente no <a href="http://parlamento.pt">site do parlamento português</a>.
+            Este website tem a lista de todos os deputados no <a href="http://parlamento.pt">site oficial do Parlamento Português</a>.
         </p>
         <ul>
             <li>
@@ -81,8 +65,8 @@
                 as leis já existentes.
             </li>
         </ul>
-        <p>Para mais informações, consulte <a href="{% url "deputies_home" %}">esta página</a>.</p>
-        <h4>Outras informações:</h4>
+        <p><a href="{% url "deputies_home" %}">Mais informações</a></p>
+        <h3>Outras informações:</h3>
         <ul>
             <li>
                 Este website é open source, público e não-governamental.
@@ -92,7 +76,7 @@
                 sincronizados com os dados oficiais com o máximo de 24h de erro.
             </li>
             <li>
-                Toda a base de dados presente neste website é pública. Consulte a documentação
+                A base de dados deste website é <strong>pública</strong>. Consulte a documentação
                 do website para a aceder.
             </li>
         </ul>
