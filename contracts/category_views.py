@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
 import models
-from views import build_contract_list_context, build_tender_list_context, build_entity_list_context
+from views import build_contract_list_context, build_tender_list_context
 
 
 def main_view(request, category_id):
