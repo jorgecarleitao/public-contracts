@@ -1,4 +1,7 @@
 # coding=utf-8
+import re
+from BeautifulSoup import BeautifulSoup
+
 from django.db import models
 
 
@@ -54,7 +57,7 @@ class Document(models.Model):
     date = models.DateField()
     number = models.CharField(max_length=20, null=True)
 
-    dr_doc_id = models.IntegerField(null=True)  # some don't have link... yet, they still are Laws...
+    dr_doc_id = models.IntegerField(null=True, db_index=True)  # some don't have link, yet, they still are Laws...
     dr_number = models.CharField(max_length=20)
     dr_series = models.CharField(max_length=20)  # "I" or "II"
 
@@ -78,7 +81,7 @@ class Document(models.Model):
                'v08=&' \
                'v09=&' \
                'v10=&' \
-               'v11={type}&' \
+               'v11=%27{type}%27&' \
                'v12=&' \
                'v13=&' \
                'v14=&' \
@@ -86,6 +89,22 @@ class Document(models.Model):
                'sort=0&' \
                'submit=Pesquisar'.format(doc_id=self.dr_doc_id, type=convert_to_url(self.type.url_name()))
 
+    def compose_summary(self):
+
+        soup = BeautifulSoup(self.summary)
+
+        summary = self.summary
+        for element in soup.findAll('a'):
+            tag = element
+
+            print element
+            try:
+                doc_id = element['href'].split('=')[1]
+            except:
+                continue
+            document = Document.objects.get(dr_doc_id=doc_id)
+            element['href'] = document.get_base_url()
+        return soup
 
 # class LawArticle(models.Model):
 #     decree = models.ForeignKey(Document)
