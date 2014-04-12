@@ -2,7 +2,7 @@ from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.utils.translation import ugettext as _
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 import models
 
@@ -128,14 +128,16 @@ def build_entity_list_context(context, GET):
         _filter = Q()
         for word in words:
             _filter &= Q(name__icontains=word)
-        return _filter
+        return _filter | Q(nif__contains=search)
 
     key = _('search')
     if key in GET and GET[key]:
-        search_Q = filter_search(GET[key])
-        context[key] = GET[key]
+        search_string = GET[key]
+
+        search_Q = filter_search(search_string)
+        context[key] = search_string
         context['entities'] = context['entities'].filter(search_Q)
-        context['search'] = GET[key]
+        context['search'] = search_string
 
     if _('sorting') in GET:
         order = GET[_('sorting')]
@@ -167,6 +169,10 @@ def entities_list(request):
     context = {'entities': entities}
 
     context = build_entity_list_context(context, request.GET)
+
+    # if we find only one, we redirect.
+    if len(context['entities']) == 1:
+        return redirect(context['entities'][0].get_absolute_url())
 
     return render(request, 'contracts/entity_list/main.html', context)
 
