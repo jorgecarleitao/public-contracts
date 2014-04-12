@@ -1,5 +1,4 @@
 # coding=utf-8
-import re
 from BeautifulSoup import BeautifulSoup
 
 from django.db import models
@@ -93,13 +92,9 @@ class Document(models.Model):
 
         soup = BeautifulSoup(self.summary)
 
-        summary = self.summary
         for element in soup.findAll('a'):
-            tag = element
-
-            print element
             try:
-                doc_id = element['href'].split('=')[1]
+                doc_id = int(element['href'].split('=')[1])
             except:
                 continue
             document = Document.objects.get(dr_doc_id=doc_id)
