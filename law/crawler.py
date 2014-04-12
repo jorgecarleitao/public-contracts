@@ -315,7 +315,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             return 0
 
     def get_summaries(self, page, type):
-        print("get_summaries(%d, '%s')" % (page, type))
+        print(u"get_summaries(%d, '%s')" % (page, slugify(type)))
         file_name = '%s/%s_%d.dat' % (self.data_directory, slugify(type), page)
         try:
             f = open(file_name, "rb")
