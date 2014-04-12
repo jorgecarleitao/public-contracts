@@ -21,14 +21,14 @@ Ticket system
 
 This project uses a `ticket system`_ for documenting issues.
 
-The system's idea is to keep track of the issues the project has,
-which are being address, and by whom.
-
-Adding tickets is thus a fundamental part of this project:
-any improvement starts by finding something that can be improved.
+The system's idea is to keep track of the issues the
+project has and by whom they are being addressed.
 
 We prefer using the ticket system to communicate about specific
-issues, and the mailing-list_ to broader topics such as new features or changing the existing API.
+issues, and the mailing-list_ to broader topics such as new features.
+
+Given the size and time of the project, we prefer to use tickets for problems
+that require some time to be solved.
 
 Adding tickets
 ::::::::::::::
@@ -62,8 +62,6 @@ expectations.
 We give the chance to contributors - specially to new contributors -
 to go thought the full process: if the person who submitted the ticket is willing to work on it,
 he should have priority on doing it, even if this means having the ticket open for a longer time.
-
-If there is more than one contributor interested in working on a ticket, they should make an effort to work together.
 
 Closing tickets
 :::::::::::::::
@@ -104,9 +102,6 @@ I.e. the big picture is documented in this documentation.
 Documentation
 :::::::::::::
 
-The API of this project is expected to be fully documented, i.e., this documentation **is**
-part of the project. If you find a mistake, please help us out by filling a ticket in the `ticket system`_.
-
 A modification on the code that changes semantics of the project
 has to be accompanied by the respective change in documentation to be incorporated.
 
@@ -133,7 +128,7 @@ When the commit fixes a given ticket, it must contain that information on the co
 Pull requests
 -------------
 
-When you have a commit or set of commits that you fell they are worth to be incorporated (most likely
+When you have a commit or set of commits that you fell they are worth to be incorporated (e.g.
 because they close a specific ticket), you should make a pull request to announce that you have value that can be
 added to the project.
 
