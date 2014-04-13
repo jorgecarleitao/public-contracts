@@ -1,4 +1,3 @@
-from datetime import date
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.utils.translation import ugettext as _
@@ -67,10 +66,6 @@ def contracts_list(request):
     context = {'contracts': contracts}
 
     context = build_contract_list_context(context, request.GET)
-
-    today = date.today()
-    contracts_year = contracts.filter(signing_date__year=today.year)
-    contracts_month = contracts_year.filter(signing_date__month=today.month)
 
     return render(request, 'contracts/contract_list/main.html', context)
 
