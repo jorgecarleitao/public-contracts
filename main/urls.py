@@ -14,9 +14,9 @@ sitemaps = {
 
 urlpatterns = patterns('',
                        url(r'^$', views.home, name='home'),
-                       url(r'^', include(contracts.urls)),
-                       url(r'^', include(deputies.urls)),
-                       url(r'^', include(law.urls)),
+                       url(r'^', include(contracts.urls, app_name='contracts')),
+                       url(r'^', include(deputies.urls, app_name='deputies')),
+                       url(r'^', include(law.urls, app_name='law')),
                        (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
                        (r'^robots\.txt$', views.robots),
                        )
