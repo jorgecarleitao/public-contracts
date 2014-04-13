@@ -346,7 +346,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         Not being used.
         """
         for type in Type.objects.all():
-            print(u'save_all_summaries: saving \'%s\', %d' % (type, type.id))
+            print(u'save_all_summaries: saving \'%s\', %d' % (slugify(type), type.id))
             page = 0
             while True:
                 page += 1
