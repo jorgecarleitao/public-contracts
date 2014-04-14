@@ -6,15 +6,15 @@ from contracts.tools import schedule as contracts_schedule
 from law.tools import schedule as law_schedule
 
 try:
-    law_schedule.update()
-except:
-    print("law_schedule failed")
-    raise
-
-try:
     contracts_schedule.update()
 except:
     print("contracts_schedule failed")
+    raise
+
+try:
+    law_schedule.update()
+except:
+    print("law_schedule failed")
     raise
 
 #try:
