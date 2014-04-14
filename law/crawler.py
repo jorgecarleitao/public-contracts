@@ -295,7 +295,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         new documents.
         """
         for type in Type.objects.all():
-            print(u'save_all_summaries: saving \'%s\', %d' % (type, type.id))
+            print(u'save_all_summaries: saving \'%s\', %d' % (slugify(type), type.id))
             page = self.get_last_page(type.name)
             while True:
                 page += 1
@@ -360,3 +360,98 @@ class FirstSeriesCrawler(AbstractCrawler):
                         self.retrieve_text_source(summary['doc_id'], type.name)
                     except IndexError:
                         print(u"fail to parse summary of doc_id=%s" % summary['doc_id'])
+
+
+class NewFirstSeriesCrawler(AbstractCrawler):
+
+    data_directory = '../../law_data'
+
+    # document_id is represented by 8 numbers: year#### (e.g. 19971111)
+    _law_url_formatter = "http://dre.pt/cgi/dr1s.exe?" \
+                         "t=d" \
+                         "&cap=" \
+                         "&doc={document_id}" \
+                         "&v01=" \
+                         "&v02=" \
+                         "&v03=" \
+                         "&v04=" \
+                         "&v05=" \
+                         "&v06=" \
+                         "&v07=" \
+                         "&v08=" \
+                         "&v09=" \
+                         "&v10=" \
+                         "&v11=" \
+                         "&v12=" \
+                         "&v13=" \
+                         "&v14=" \
+                         "&v15=" \
+                         "&v16=" \
+                         "&v17=" \
+                         "&v18=" \
+                         "&v19=" \
+                         "&v20=" \
+                         "&v21=" \
+                         "&v22=" \
+                         "&v23=" \
+                         "&v24=" \
+                         "&v25=" \
+                         "&sort=0" \
+                         "&submit=Pesquisar"
+
+    class DocumentNotFound(Exception):
+        pass
+
+    def __init__(self):
+        super(NewFirstSeriesCrawler, self).__init__()
+
+    def retrieve_document(self, document_id):
+        """
+        Retrieves the source of the document.
+        """
+        file_name = '%s/%s.dat' % (self.data_directory, document_id)
+        try:
+            f = open(file_name, "rb")
+            html = pickle.load(f)
+            f.close()
+        except IOError:
+            # online retrieval
+            html = self.goToPage(self._law_url_formatter.format(document_id=document_id))
+
+            soup = BeautifulSoup(html)
+
+            html = soup.find("div", dict(id='centro_total'))
+
+            if not html.find('div', {'id': 'doc_data'}):
+                raise self.DocumentNotFound
+
+            print(u"saving document_id %d" % document_id)
+            f = open(file_name, "wb")
+            pickle.dump(html, f)
+            f.close()
+        return html
+
+    def get_documents(self, year):
+        print(u"get_documents(%d)" % year)
+
+        document_number = 1
+        fails = 0
+        while True:
+            try:
+                self.retrieve_document(int("%04d%04d" % (year, document_number)))
+                fails = 0
+            except self.DocumentNotFound:
+                fails += 1
+                print("DocumentNotFound: %d" % fails)
+
+            if fails == 10:
+                break
+
+            document_number += 1
+
+    def retrieve_all(self):
+        first_year = 1910
+        last_year = datetime.datetime.now().date().year
+
+        for year in xrange(first_year, last_year + 1):
+            self.get_documents(year)
