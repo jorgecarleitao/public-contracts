@@ -6,7 +6,7 @@
         <p>{{ entity.rank }}</p>
     </div>
     <div class="rank">
-        <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+        <h4><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
         <div class="rank">
                 <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
                 ({{ entity.count }} {% trans "contracts" %})</span>

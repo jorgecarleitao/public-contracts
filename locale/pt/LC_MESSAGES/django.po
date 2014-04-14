@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 06:43+0100\n"
+"POT-Creation-Date: 2014-04-14 06:40+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,30 +18,25 @@ msgstr ""
 #: contracts/category_views.py:43 contracts/entity_urls.py:9
 #: contracts/entity_urls.py:10 contracts/entity_views.py:40
 #: contracts/urls.py:15 contracts/urls.py:19 contracts/urls.py:20
-#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:10
-#: contracts/templates/contracts/category_view/tab_entities/search.html:19
-#: contracts/templates/contracts/category_view/tab_entities/search.html:23
-#: contracts/templates/contracts/category_view/tab_entities/search.html:52
-#: contracts/templates/contracts/category_view/tab_summary/main.html:10
-#: contracts/templates/contracts/contract_list/sidebar.html:4
-#: contracts/templates/contracts/contract_list/sidebar.html:5
-#: contracts/templates/contracts/contract_list/sidebar.html:6
+#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
+#: contracts/templates/contracts/category_view/tab_entities/search.html:14
+#: contracts/templates/contracts/category_view/tab_entities/search.html:35
+#: contracts/templates/contracts/category_view/tab_summary/main.html:9
 #: contracts/templates/contracts/entity_rank/summary.html:12
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:9
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:19
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:23
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:52
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:14
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:35
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:13
 msgid "contracts"
 msgstr "contratos"
 
 #: contracts/category_urls.py:11
-#: contracts/templates/contracts/category_view/tab_summary/main.html:11
+#: contracts/templates/contracts/category_view/tab_summary/main.html:10
 msgid "contractors"
 msgstr "contratantes"
 
 #: contracts/category_urls.py:12
-#: contracts/templates/contracts/category_view/tab_summary/main.html:12
+#: contracts/templates/contracts/category_view/tab_summary/main.html:11
 msgid "contracted"
 msgstr "contratados"
 
@@ -52,75 +47,62 @@ msgid "tenders"
 msgstr "concursos"
 
 #: contracts/category_views.py:43 contracts/entity_views.py:40
-#: contracts/templates/contracts/category_view/tab_entities/search.html:29
+#: contracts/templates/contracts/category_view/tab_entities/search.html:19
 #: contracts/templates/contracts/category_view/tab_entities/search.html:33
-#: contracts/templates/contracts/category_view/tab_entities/search.html:50
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:29
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:19
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:33
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:50
 msgid "value"
 msgstr "valor"
 
 #: contracts/category_views.py:43 contracts/entity_views.py:40
 #: contracts/templates/contracts/category_view/tab_entities/search.html:9
-#: contracts/templates/contracts/category_view/tab_entities/search.html:13
-#: contracts/templates/contracts/category_view/tab_entities/search.html:48
+#: contracts/templates/contracts/category_view/tab_entities/search.html:31
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:9
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:13
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:48
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:31
 #: deputies/views.py:11 deputies/views.py:38
-#: deputies/templates/deputies/search_bar.html:10
-#: deputies/templates/deputies/search_bar.html:14
-#: deputies/templates/deputies/search_bar.html:38
+#: deputies/templates/deputies/search_bar.html:9
+#: deputies/templates/deputies/search_bar.html:26
 msgid "name"
 msgstr "nome"
 
 #: contracts/category_views.py:63 contracts/entity_views.py:60
-#: contracts/views.py:38 contracts/views.py:133 contracts/views.py:190
-#: contracts/templates/contracts/category_view/tab_entities/search.html:64
-#: contracts/templates/contracts/contract_list/search_contracts.html:52
-#: contracts/templates/contracts/entity_list/search_entities.html:51
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:64
+#: contracts/views.py:30 contracts/views.py:121 contracts/views.py:184
+#: contracts/templates/contracts/category_view/tab_entities/search.html:47
+#: contracts/templates/contracts/contract_list/search_contracts.html:45
+#: contracts/templates/contracts/entity_list/search_entities.html:40
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:47
 #: contracts/templates/contracts/tender_list/search.html:52
-#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:52
-#: law/templates/law/law_list/search_law.html:32
+#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:40
+#: law/views.py:11 law/templates/law/law_list/search_law.html:15
 msgid "search"
 msgstr "procura"
 
 #: contracts/category_views.py:70 contracts/category_views.py:71
 #: contracts/entity_views.py:67 contracts/entity_views.py:68
-#: contracts/views.py:45 contracts/views.py:46 contracts/views.py:140
-#: contracts/views.py:141 contracts/views.py:197 contracts/views.py:198
-#: contracts/templates/contracts/category_view/tab_entities/search.html:48
-#: contracts/templates/contracts/category_view/tab_entities/search.html:50
-#: contracts/templates/contracts/category_view/tab_entities/search.html:52
-#: contracts/templates/contracts/contract_list/search_contracts.html:38
-#: contracts/templates/contracts/contract_list/search_contracts.html:40
-#: contracts/templates/contracts/entity_list/search_entities.html:37
-#: contracts/templates/contracts/entity_list/search_entities.html:39
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:48
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:50
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:52
+#: contracts/views.py:37 contracts/views.py:38 contracts/views.py:130
+#: contracts/views.py:131 contracts/views.py:191 contracts/views.py:192
+#: contracts/templates/contracts/category_view/tab_entities/search.html:31
+#: contracts/templates/contracts/category_view/tab_entities/search.html:33
+#: contracts/templates/contracts/category_view/tab_entities/search.html:35
+#: contracts/templates/contracts/contract_list/search_contracts.html:31
+#: contracts/templates/contracts/contract_list/search_contracts.html:33
+#: contracts/templates/contracts/entity_list/search_entities.html:26
+#: contracts/templates/contracts/entity_list/search_entities.html:28
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:31
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:33
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:35
 #: contracts/templates/contracts/tender_list/search.html:38
 #: contracts/templates/contracts/tender_list/search.html:40
 #: deputies/views.py:32 deputies/views.py:33
-#: deputies/templates/deputies/search_bar.html:38
-#: deputies/templates/deputies/search_bar.html:40
-#: law/templates/law/law_list/search_law.html:18
-#: law/templates/law/law_list/search_law.html:20
+#: deputies/templates/deputies/search_bar.html:26
+#: deputies/templates/deputies/search_bar.html:28
 msgid "sorting"
 msgstr "ordem"
 
 #: contracts/category_views.py:80 contracts/entity_views.py:77
-#: contracts/views.py:56 contracts/views.py:151 contracts/views.py:208
-#: contracts/templates/contracts/category_view/tab_entities/list.html:21
-#: contracts/templates/contracts/contract_list/contract_list_template.html:20
-#: contracts/templates/contracts/entity_list/entity_list_template.html:19
-#: contracts/templates/contracts/entity_view/tab_costumers/list.html:21
-#: contracts/templates/contracts/tender_list/tender_list_template.html:20
-#: deputies/views.py:43
-#: deputies/templates/deputies/deputy_list_template.html:20 law/views.py:11
-#: law/templates/law/law_list/law_list_template.html:20
+#: contracts/views.py:48 contracts/views.py:141 contracts/views.py:202
+#: contracts/templates/contracts/entity_list/entity_list_template.html:18
+#: deputies/views.py:43 law/views.py:18 main/templates/pagination.html:26
 msgid "page"
 msgstr "página"
 
@@ -230,41 +212,35 @@ msgstr "quando-e-que-os-ministerios-mais-contratam"
 msgid "how-many-contracts-are-published-too-late"
 msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 
-#: contracts/views.py:24 contracts/views.py:51 contracts/views.py:176
-#: contracts/views.py:203
-#: contracts/templates/contracts/contract_list/search_contracts.html:10
-#: contracts/templates/contracts/contract_list/search_contracts.html:14
-#: contracts/templates/contracts/contract_list/search_contracts.html:38
+#: contracts/views.py:23 contracts/views.py:43 contracts/views.py:170
+#: contracts/views.py:197
+#: contracts/templates/contracts/contract_list/search_contracts.html:9
+#: contracts/templates/contracts/contract_list/search_contracts.html:31
+#: contracts/templates/contracts/entity_list/search_entities.html:26
 #: contracts/templates/contracts/tender_list/search.html:10
 #: contracts/templates/contracts/tender_list/search.html:14
 #: contracts/templates/contracts/tender_list/search.html:38
-#: law/templates/law/law_list/search_law.html:18
 msgid "price"
 msgstr "preço"
 
-#: contracts/views.py:24 contracts/views.py:51 contracts/views.py:176
-#: contracts/views.py:203
-#: contracts/templates/contracts/contract_list/search_contracts.html:20
-#: contracts/templates/contracts/contract_list/search_contracts.html:24
-#: contracts/templates/contracts/contract_list/search_contracts.html:40
+#: contracts/views.py:23 contracts/views.py:43 contracts/views.py:170
+#: contracts/views.py:197
+#: contracts/templates/contracts/contract_list/search_contracts.html:14
+#: contracts/templates/contracts/contract_list/search_contracts.html:33
+#: contracts/templates/contracts/entity_list/search_entities.html:28
 #: contracts/templates/contracts/tender_list/search.html:20
 #: contracts/templates/contracts/tender_list/search.html:24
 #: contracts/templates/contracts/tender_list/search.html:40
-#: law/templates/law/law_list/search_law.html:20
 msgid "date"
 msgstr "data"
 
-#: contracts/views.py:115 contracts/views.py:121 contracts/views.py:146
+#: contracts/views.py:103 contracts/views.py:109 contracts/views.py:136
 #: contracts/templates/contracts/entity_list/search_entities.html:9
-#: contracts/templates/contracts/entity_list/search_entities.html:13
-#: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:115 contracts/views.py:123 contracts/views.py:146
-#: contracts/templates/contracts/entity_list/search_entities.html:19
-#: contracts/templates/contracts/entity_list/search_entities.html:23
-#: contracts/templates/contracts/entity_list/search_entities.html:39
+#: contracts/views.py:103 contracts/views.py:111 contracts/views.py:136
+#: contracts/templates/contracts/entity_list/search_entities.html:14
 msgid "expenses"
 msgstr "despesa"
 
@@ -406,7 +382,7 @@ msgstr ""
 "base de dados."
 
 #: contracts/templates/contracts/analysis.html:5
-#: contracts/templates/contracts/base/header.html:12
+#: contracts/templates/contracts/base/header.html:8
 msgid "Analysis"
 msgstr "Análises"
 
@@ -481,15 +457,15 @@ msgstr ""
 msgid "Public contracts"
 msgstr "Contratos públicos"
 
-#: contracts/templates/contracts/main_page.html:9
+#: contracts/templates/contracts/main_page.html:10
 msgid "Welcome to Public Contracts"
 msgstr "Bem vindo ao Contratos Públicos"
 
-#: contracts/templates/contracts/main_page.html:13
+#: contracts/templates/contracts/main_page.html:14
 msgid "A website to understand the portuguese public procurement."
 msgstr "Um local para compreender a contratação pública portuguesa."
 
-#: contracts/templates/contracts/main_page.html:16
+#: contracts/templates/contracts/main_page.html:18
 msgid ""
 "\n"
 "                In Public Contracts you can find any public contract or "
@@ -505,26 +481,23 @@ msgstr ""
 "para você mesmo poder responder às perguntas que tem sobre a contratação "
 "pública portuguesa."
 
-#: contracts/templates/contracts/main_page.html:23
-#: contracts/templates/contracts/main_page.html:39
-#: contracts/templates/contracts/base/header.html:8
-#: contracts/templates/contracts/category_view/selector.html:12
-#: contracts/templates/contracts/category_view/selector.html:14
+#: contracts/templates/contracts/main_page.html:24
+#: contracts/templates/contracts/main_page.html:38
+#: contracts/templates/contracts/base/header.html:4
+#: contracts/templates/contracts/category_view/selector.html:7
 #: contracts/templates/contracts/contract_list/main.html:3
-#: contracts/templates/contracts/entity_view/main_selector.html:12
-#: contracts/templates/contracts/entity_view/main_selector.html:14
-#: main/templates/base/top_header.html:4
+#: contracts/templates/contracts/entity_view/selector.html:7
+#: main/templates/base/top_header.html:8
 msgid "Contracts"
 msgstr "Contratos"
 
-#: contracts/templates/contracts/main_page.html:25
+#: contracts/templates/contracts/main_page.html:26
 msgid ""
 "\n"
-"                    In this website you can find all officially published "
+"                In this website you can find all officially published "
 "contracts. You can search,\n"
-"                    filter, and order the results according to your "
-"objectives.\n"
-"                "
+"                filter, and order the results according to your objectives.\n"
+"            "
 msgstr ""
 "\n"
 "Neste website pode encontrar todos os contratos oficialmente públicados. "
@@ -551,171 +524,164 @@ msgstr "por que valor"
 msgid "on which economical sector"
 msgstr "em que sector económico"
 
-#: contracts/templates/contracts/main_page.html:42
-#: contracts/templates/contracts/main_page.html:58
-#: contracts/templates/contracts/base/header.html:10
+#: contracts/templates/contracts/main_page.html:39
+#: contracts/templates/contracts/main_page.html:55
+#: contracts/templates/contracts/base/header.html:6
 #: contracts/templates/contracts/entity_list/main.html:3
 msgid "Entities"
 msgstr "Entidades"
 
-#: contracts/templates/contracts/main_page.html:44
+#: contracts/templates/contracts/main_page.html:41
 msgid ""
 "\n"
-"                    In this website you have access to all public and "
-"private entities that ever participated in a public contract.\n"
-"                    Which companies are being publicly contracted in your "
+"                In this website you have access to all public and private "
+"entities that ever participated in a public contract.\n"
+"                Which companies are being publicly contracted in your "
 "economical sector? Here you can find them out.\n"
-"                "
+"            "
 msgstr ""
 "\n"
 "Neste local tem acesso a todas as entidades públicas e privadas que alguma "
 "vez participaram num contrato público. Que companhias estão a ser "
-"contratadas pelo estado no seu sector económico? Aqui pode conhece-las."
+"contratadas pelo estado no seu sector económico? Aqui pode conhecê-las."
 
-#: contracts/templates/contracts/main_page.html:50
+#: contracts/templates/contracts/main_page.html:47
 msgid "For each entity, you can find"
 msgstr "Para cada entidade, pode encontrar"
 
-#: contracts/templates/contracts/main_page.html:52
+#: contracts/templates/contracts/main_page.html:49
 msgid "the contracts where it was contracted"
 msgstr "os contratos em que foi contratada"
 
-#: contracts/templates/contracts/main_page.html:53
+#: contracts/templates/contracts/main_page.html:50
 msgid "the contracts it made"
 msgstr "os contratos que fez"
 
-#: contracts/templates/contracts/main_page.html:54
-msgid "Its economical sectors"
-msgstr "Os seus sectores económicos"
+#: contracts/templates/contracts/main_page.html:51
+msgid "its economical sectors"
+msgstr "os seus sectores económicos"
 
-#: contracts/templates/contracts/main_page.html:55
-msgid "Its clients"
-msgstr "Os seus clientes"
+#: contracts/templates/contracts/main_page.html:52
+msgid "its clients"
+msgstr "os seus clientes"
 
-#: contracts/templates/contracts/main_page.html:61
-#: contracts/templates/contracts/main_page.html:76
-#: contracts/templates/contracts/base/header.html:11
-#: contracts/templates/contracts/category_view/selector.html:34
-#: contracts/templates/contracts/category_view/selector.html:36
-#: contracts/templates/contracts/entity_view/main_selector.html:27
-#: contracts/templates/contracts/entity_view/main_selector.html:29
+#: contracts/templates/contracts/main_page.html:56
+#: contracts/templates/contracts/main_page.html:71
+#: contracts/templates/contracts/base/header.html:7
+#: contracts/templates/contracts/category_view/selector.html:17
+#: contracts/templates/contracts/entity_view/selector.html:14
 #: contracts/templates/contracts/tender_list/main.html:3
 msgid "Tenders"
 msgstr "Concursos"
 
-#: contracts/templates/contracts/main_page.html:63
+#: contracts/templates/contracts/main_page.html:58
 msgid ""
 "\n"
-"                    In this website you can find all existing public "
-"tenders, by economical-sector or by public entity.\n"
-"                    We provide direct references to the Diário da República "
+"                In this website you can find all existing public tenders, by "
+"economical-sector or by public entity.\n"
+"                We provide direct references to the Diário da República "
 "online where you can find the details of the tender.\n"
-"                "
+"            "
 msgstr ""
 "\n"
 "Neste website pode encontrar todos os concursos públicos, por sector "
-"económico ou entidade pública. Temos a referência directa para o diário da "
-"república online onde pode encontrar os detalhes do concurso."
+"económico ou entidade pública. Temos a referência directa para o Diário da "
+"República online onde pode encontrar os detalhes do concurso."
 
-#: contracts/templates/contracts/main_page.html:69
+#: contracts/templates/contracts/main_page.html:64
 msgid "For each tender, you can find"
 msgstr "Para cada concurso pode encontrar"
 
-#: contracts/templates/contracts/main_page.html:71
+#: contracts/templates/contracts/main_page.html:66
 msgid "who is contracting"
 msgstr "Quem o criou"
 
-#: contracts/templates/contracts/main_page.html:72
+#: contracts/templates/contracts/main_page.html:67
 msgid "what and at what price"
 msgstr "O quê e a que preço"
 
-#: contracts/templates/contracts/main_page.html:73
+#: contracts/templates/contracts/main_page.html:68
 msgid "when is the deadline"
 msgstr "Qual a data limite"
 
-#: contracts/templates/contracts/main_page.html:79
-#: contracts/templates/contracts/main_page.html:94
-#: contracts/templates/contracts/base/header.html:9
+#: contracts/templates/contracts/main_page.html:72
+#: contracts/templates/contracts/main_page.html:87
+#: contracts/templates/contracts/base/header.html:5
 #: contracts/templates/contracts/category_list/main.html:4
 #: contracts/templates/contracts/category_list/main.html:6
 msgid "Categories"
 msgstr "Categorias"
 
-#: contracts/templates/contracts/main_page.html:79
+#: contracts/templates/contracts/main_page.html:72
 msgid "economical sectors"
 msgstr "sectores económicos"
 
-#: contracts/templates/contracts/main_page.html:81
+#: contracts/templates/contracts/main_page.html:74
 msgid ""
 "\n"
-"                    In this website all contracts and tenders are "
-"categorized by economical sector.\n"
-"                    This way you can focus on what matters for you or your "
+"                In this website all contracts and tenders are categorized by "
+"economical sector.\n"
+"                This way you can focus on what matters for you or your "
 "company.\n"
-"                "
+"            "
 msgstr ""
 "\n"
 "Neste local todos os contratos e concursos estão categorizados por sector "
 "económico. Desta forma pode-se focar no que lhe interessa para si ou para a "
 "sua empresa."
 
-#: contracts/templates/contracts/main_page.html:87
+#: contracts/templates/contracts/main_page.html:80
 msgid "For each category, you can find:"
 msgstr "Para cada categoria, pode encontrar:"
 
-#: contracts/templates/contracts/main_page.html:89
+#: contracts/templates/contracts/main_page.html:82
 msgid "who contracted in this sector"
 msgstr "quem contrata neste sector"
 
-#: contracts/templates/contracts/main_page.html:90
+#: contracts/templates/contracts/main_page.html:83
 msgid "who was contracted in this sector"
 msgstr "quem é contratado neste sector"
 
-#: contracts/templates/contracts/main_page.html:91
+#: contracts/templates/contracts/main_page.html:84
 msgid "what is the value of the sector"
 msgstr "qual o valor do sector"
 
-#: contracts/templates/contracts/main_page.html:97
+#: contracts/templates/contracts/main_page.html:88
 msgid "Save time"
 msgstr "Poupe tempo"
 
-#: contracts/templates/contracts/main_page.html:99
+#: contracts/templates/contracts/main_page.html:90
 msgid ""
 "\n"
-"                    In this website all lists have an RSS-feed available for "
-"you to read.\n"
-"                    This way, you receive automatic notifications of the new "
+"                In this website all lists have an RSS-feed available for you "
+"to read.\n"
+"                This way, you receive automatic notifications of the new "
 "contracts without having to visit us.\n"
-"                "
+"            "
 msgstr ""
 "\n"
 "Neste local todas as listas têm um RSS-feed que pode ler. Desta forma pode "
 "receber notificações automáticas de novos contratos ou concursos sem ter de "
 "nos visitar."
 
-#: contracts/templates/contracts/main_page.html:105
-msgid ""
-"To receive notifications on a list you want to follow, on that list click on "
-"the button with this symbol:"
-msgstr ""
-"Para receber notificações de uma lista, na lista clique no botão com este "
-"simbolo:"
-
-#: contracts/templates/contracts/main_page.html:111
+#: contracts/templates/contracts/main_page.html:96
 msgid ""
 "\n"
-"                    You are sent to a page which you can import using a rss-"
+"                To receive notifications on a list you want to follow, on "
+"that list click on \"RSS\".\n"
+"                You are sent to a page which you can import using a rss-"
 "reader.\n"
-"                "
+"            "
 msgstr ""
 "\n"
-"É enviado para uma página que pode importar usando um rss-reader."
+"Para receber notificações de uma lista que quer seguir, "
+"ness lista clique em \"RSS\". É enviado para uma página que pode importar usando um rss-reader."
 
-#: contracts/templates/contracts/main_page.html:117
+#: contracts/templates/contracts/main_page.html:101
 msgid "What we ask:"
 msgstr "O que pedimos:"
 
-#: contracts/templates/contracts/main_page.html:120
+#: contracts/templates/contracts/main_page.html:104
 msgid ""
 "If you think this website is worth to anyone in your network, take 5 seconds "
 "to share it."
@@ -723,7 +689,7 @@ msgstr ""
 "Se acha que este local é vantajoso para alguém na sua rede de contactos, "
 "perca 5s a partilhá-lo."
 
-#: contracts/templates/contracts/main_page.html:123
+#: contracts/templates/contracts/main_page.html:107
 msgid ""
 "Take 1 minute to send any criticism or suggestion you have to our mailing "
 "list."
@@ -739,24 +705,20 @@ msgstr "categorias pai"
 msgid "Children categories"
 msgstr "categorias filho"
 
-#: contracts/templates/contracts/category_view/selector.html:5
-#: contracts/templates/contracts/category_view/selector.html:7
-#: contracts/templates/contracts/entity_view/main_selector.html:5
-#: contracts/templates/contracts/entity_view/main_selector.html:7
+#: contracts/templates/contracts/category_view/selector.html:4
+#: contracts/templates/contracts/entity_view/selector.html:4
 msgid "Summary"
 msgstr "Sumário"
 
-#: contracts/templates/contracts/category_view/selector.html:19
-#: contracts/templates/contracts/category_view/selector.html:21
+#: contracts/templates/contracts/category_view/selector.html:10
 msgid "Contractors"
 msgstr "Contratantes"
 
-#: contracts/templates/contracts/category_view/selector.html:26
-#: contracts/templates/contracts/category_view/selector.html:28
+#: contracts/templates/contracts/category_view/selector.html:13
 msgid "Contracted"
 msgstr "Contratados"
 
-#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
+#: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:8
 #: contracts/templates/contracts/contract_view/main.html:30
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
 msgid "Value:"
@@ -768,23 +730,23 @@ msgstr "Valor:"
 msgid "search entities"
 msgstr "procurar entidades"
 
-#: contracts/templates/contracts/category_view/tab_entities/search.html:12
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:12
-#: deputies/templates/deputies/search_bar.html:13
+#: contracts/templates/contracts/category_view/tab_entities/search.html:8
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:8
+#: deputies/templates/deputies/search_bar.html:8
 msgid "order by name"
 msgstr "ordenar por nome"
 
-#: contracts/templates/contracts/category_view/tab_entities/search.html:22
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:22
+#: contracts/templates/contracts/category_view/tab_entities/search.html:13
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:13
 msgid "order by number of contracts"
 msgstr "ordenar por número de contratos"
 
-#: contracts/templates/contracts/category_view/tab_entities/search.html:32
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:32
+#: contracts/templates/contracts/category_view/tab_entities/search.html:18
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:18
 msgid "order by value"
 msgstr "ordenar por valor"
 
-#: contracts/templates/contracts/category_view/tab_summary/main.html:7
+#: contracts/templates/contracts/category_view/tab_summary/main.html:6
 msgid "In this category:"
 msgstr "Nesta categoria:"
 
@@ -792,35 +754,19 @@ msgstr "Nesta categoria:"
 msgid "Categorized as:"
 msgstr "Categorizado como:"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:6
+#: contracts/templates/contracts/contract_list/search_contracts.html:5
 msgid "search contracts"
 msgstr "procurar contratos"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:13
+#: contracts/templates/contracts/contract_list/search_contracts.html:8
 #: contracts/templates/contracts/tender_list/search.html:13
 msgid "order by price"
 msgstr "ordenar por preço"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:23
+#: contracts/templates/contracts/contract_list/search_contracts.html:13
 #: contracts/templates/contracts/tender_list/search.html:23
 msgid "order by date"
 msgstr "ordenar por data"
-
-#: contracts/templates/contracts/contract_list/sidebar.html:3
-msgid "Totals:"
-msgstr "Totais:"
-
-#: contracts/templates/contracts/contract_list/sidebar.html:4
-msgid "All:"
-msgstr "Todos:"
-
-#: contracts/templates/contracts/contract_list/sidebar.html:5
-msgid "Last year:"
-msgstr "Neste ano:"
-
-#: contracts/templates/contracts/contract_list/sidebar.html:6
-msgid "Last month:"
-msgstr "Neste mês"
 
 #: contracts/templates/contracts/contract_view/main.html:21
 msgid "Signed:"
@@ -1073,11 +1019,11 @@ msgstr "Ganhos:"
 msgid "No earnings"
 msgstr "Sem ganhos"
 
-#: contracts/templates/contracts/entity_list/search_entities.html:12
+#: contracts/templates/contracts/entity_list/search_entities.html:8
 msgid "order by earnings"
 msgstr "ordenar por ganhos"
 
-#: contracts/templates/contracts/entity_list/search_entities.html:22
+#: contracts/templates/contracts/entity_list/search_entities.html:13
 msgid "order by expenses"
 msgstr "ordenar por despesa"
 
@@ -1089,9 +1035,7 @@ msgstr "Ranking de especificidade de municípios"
 msgid "Average depth:"
 msgstr "Especificidade média:"
 
-#: contracts/templates/contracts/entity_view/main_selector.html:19
-#: contracts/templates/contracts/entity_view/main_selector.html:21
-#: contracts/templates/contracts/entity_view/tab_costumers/main.html:5
+#: contracts/templates/contracts/entity_view/selector.html:10
 msgid "Costumers"
 msgstr "Clientes"
 
@@ -1583,23 +1527,22 @@ msgid "deputies-time-distribution"
 msgstr "distribuicao-de-tempos-de-deputados"
 
 #: deputies/views.py:11 deputies/views.py:38
-#: deputies/templates/deputies/search_bar.html:20
-#: deputies/templates/deputies/search_bar.html:24
-#: deputies/templates/deputies/search_bar.html:40
+#: deputies/templates/deputies/search_bar.html:14
+#: deputies/templates/deputies/search_bar.html:28
 msgid "mandates"
 msgstr "mandatos"
 
 #: deputies/templates/deputies/deputies_list.html:3
-#: deputies/templates/deputies/base/header.html:8
-#: main/templates/base/top_header.html:5
+#: deputies/templates/deputies/base/header.html:5
+#: main/templates/base/top_header.html:11
 msgid "Deputies"
 msgstr "Deputados"
 
-#: deputies/templates/deputies/deputy_summary.html:5
+#: deputies/templates/deputies/deputy_summary.html:6
 msgid "in legislature"
 msgstr "activo"
 
-#: deputies/templates/deputies/deputy_summary.html:7
+#: deputies/templates/deputies/deputy_summary.html:8
 #: deputies/templates/deputies/parties_list/party_summary.html:8
 #, python-format
 msgid ""
@@ -1623,28 +1566,29 @@ msgstr[1] ""
 msgid "Public deputies"
 msgstr "Deputados Públicos"
 
-#: deputies/templates/deputies/main_page.html:8
+#: deputies/templates/deputies/main_page.html:10
 msgid "Welcome to Public Deputies"
 msgstr "Bem vindo ao Deputados Públicos"
 
-#: deputies/templates/deputies/main_page.html:10
+#: deputies/templates/deputies/main_page.html:14
 #, python-format
 msgid ""
 "\n"
-"                In this sub-project we use the official database of deputies "
-"from the\n"
-"                <a href=\"%(parliament_url)s\">portuguese parliament</a>\n"
-"                to try to understand the relationship between political "
+"                    In this sub-project we use the official database of "
+"deputies from the\n"
+"                    <a href=\"%(parliament_url)s\">portuguese parliament</"
+"a>\n"
+"                    to try to understand the relationship between political "
 "agents (deputies)\n"
-"                and economical agents (entities).\n"
-"            "
+"                    and economical agents (entities).\n"
+"                "
 msgstr ""
 "\n"
 "Neste sub-projeto usamos a base de dados oficial de deputados do <a href="
 "\"%(parliament_url)s\">parlamento</a> para compreendermos melhor a relação "
 "entre agentes políticos (deputados) e agentes económicos (entidades)."
 
-#: deputies/templates/deputies/main_page.html:18
+#: deputies/templates/deputies/main_page.html:23
 msgid ""
 "\n"
 "                We are working on a way to map the declarations of conflicts "
@@ -1656,7 +1600,7 @@ msgstr ""
 "Estamos a trabalhar numa forma de mapear as declarações de interesses dos "
 "deputados em entidades da base de dados de contratos públicos."
 
-#: deputies/templates/deputies/main_page.html:24
+#: deputies/templates/deputies/main_page.html:29
 msgid ""
 "\n"
 "                Meanwhile, we provide some analysis of the deputies.\n"
@@ -1665,7 +1609,7 @@ msgstr ""
 "\n"
 "Entretanto, apresentamos algumas análises sobre o parlamento."
 
-#: deputies/templates/deputies/main_page.html:27
+#: deputies/templates/deputies/main_page.html:32
 msgid ""
 "\n"
 "                The first analysis is:\n"
@@ -1674,11 +1618,11 @@ msgstr ""
 "\n"
 "A primeira análise é:"
 
-#: deputies/templates/deputies/main_page.html:31
+#: deputies/templates/deputies/main_page.html:36
 msgid "How long a portuguese deputy stays in the parliament?"
 msgstr "Quanto tempo um deputado está no parlamento?"
 
-#: deputies/templates/deputies/main_page.html:33
+#: deputies/templates/deputies/main_page.html:38
 #, python-format
 msgid ""
 "\n"
@@ -1698,7 +1642,7 @@ msgstr ""
 "\">site oficial</a> do parlamento, colocámos a questão de quanto tempo um "
 "deputado está no parlamento. Eis o resultado:"
 
-#: deputies/templates/deputies/main_page.html:44
+#: deputies/templates/deputies/main_page.html:49
 msgid ""
 "\n"
 "                The data accounts for ~750 deputies since 1992. For each "
@@ -1716,7 +1660,7 @@ msgstr ""
 "deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento "
 "(eixo-x), cada barra corresponde a 50 dias."
 
-#: deputies/templates/deputies/main_page.html:52
+#: deputies/templates/deputies/main_page.html:57
 msgid ""
 "\n"
 "                For instance, if a deputy has 2 mandates (consecutives or "
@@ -1729,7 +1673,7 @@ msgstr ""
 "Por exemplo, se um deputado tem 2 mandados (consecutivos ou não), um de 1500 "
 "dias e outro de 1010 dias, pertence ao intervalo [2050, 2100]."
 
-#: deputies/templates/deputies/main_page.html:58
+#: deputies/templates/deputies/main_page.html:63
 msgid ""
 "\n"
 "                The data seems to show an exponential decay with an half-"
@@ -1740,7 +1684,7 @@ msgstr ""
 "Os dados parecem ter um decaimento exponencial, com um tempo de semi-vida de "
 "~1500 dias (1 legislatura completa)."
 
-#: deputies/templates/deputies/main_page.html:64
+#: deputies/templates/deputies/main_page.html:69
 #, python-format
 msgid ""
 "\n"
@@ -1756,7 +1700,7 @@ msgstr ""
 "\"%(url)s?ordem=mandatos\">aqui</a>.\n"
 "            "
 
-#: deputies/templates/deputies/main_page.html:70
+#: deputies/templates/deputies/main_page.html:75
 #, python-format
 msgid ""
 "\n"
@@ -1771,11 +1715,11 @@ msgstr ""
 "legislatura (E.g. eleições antecipadas). Obrigado ao João Miranda e Pedro "
 "Magalhães, discussão <a href=\"%(url)s\">aqui</a>."
 
-#: deputies/templates/deputies/main_page.html:75
+#: deputies/templates/deputies/main_page.html:80
 msgid "Other informations about this project"
 msgstr "Outras informações sobre este projeto"
 
-#: deputies/templates/deputies/main_page.html:79
+#: deputies/templates/deputies/main_page.html:84
 msgid ""
 "\n"
 "                        We use Twitter to announce updates and new "
@@ -1785,7 +1729,7 @@ msgstr ""
 "\n"
 "Usamos o Twitter para anunciar novas análises e resultados."
 
-#: deputies/templates/deputies/main_page.html:86
+#: deputies/templates/deputies/main_page.html:91
 #, python-format
 msgid ""
 "\n"
@@ -1801,15 +1745,15 @@ msgstr ""
 "cratica</a> ser um projeto de código aberto. Agradecemos aos seus "
 "contribuidores por isso e pelas ideias que usámos do seu código."
 
-#: deputies/templates/deputies/search_bar.html:6
+#: deputies/templates/deputies/search_bar.html:5
 msgid "search deputies"
 msgstr "procurar deputados"
 
-#: deputies/templates/deputies/search_bar.html:23
+#: deputies/templates/deputies/search_bar.html:13
 msgid "order by mandates"
 msgstr "ordenar por número de mandatos"
 
-#: deputies/templates/deputies/base/header.html:9
+#: deputies/templates/deputies/base/header.html:6
 #: deputies/templates/deputies/parties_list/main.html:3
 msgid "Parties"
 msgstr "Partidos"
@@ -1901,11 +1845,11 @@ msgstr "tipo"
 msgid "Public Law"
 msgstr "Lei Pública"
 
-#: law/templates/law/home.html:8
+#: law/templates/law/home.html:10
 msgid "Welcome to Public Law"
 msgstr "Bem vindo ao Lei Pública"
 
-#: law/templates/law/home.html:10
+#: law/templates/law/home.html:14
 #, python-format
 msgid ""
 "\n"
@@ -1918,11 +1862,11 @@ msgstr ""
 "Neste projecto usamos a <a href=\"%(dre_url)s\">base de dados oficial "
 "portuguesa</a> para explorar algumas das suas propriedades."
 
-#: law/templates/law/home.html:15
+#: law/templates/law/home.html:20
 msgid "First question: how many laws are enacted yearly?"
 msgstr "Primeira pergunta: quantas leis são criadas anualmente?"
 
-#: law/templates/law/home.html:16
+#: law/templates/law/home.html:21
 msgid ""
 "\n"
 "            We picked all documents published in the Series I of \"Diário da "
@@ -1934,11 +1878,11 @@ msgstr ""
 "Pegámos em toda a Série I do diário da república online e contámos quantos "
 "documentos foram publicados em cada ano. Eis o resultado:"
 
-#: law/templates/law/home.html:26
+#: law/templates/law/home.html:31
 msgid "Details:"
 msgstr "Detalhes:"
 
-#: law/templates/law/home.html:29
+#: law/templates/law/home.html:34
 msgid ""
 "\n"
 "                    This graph was obtained using all the documents "
@@ -1951,7 +1895,7 @@ msgstr ""
 "Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
 "da República Online, série I. São hoje ~200.000 documentos."
 
-#: law/templates/law/home.html:35
+#: law/templates/law/home.html:40
 msgid ""
 "\n"
 "                    We call \"Law\" to be anything that is published in\n"
@@ -1966,18 +1910,18 @@ msgstr ""
 "simplificar, mas poderá chamar-lhes \"documentos publicados na Série I do "
 "Diário da Républica\" se preferir."
 
-#: law/templates/law/home.html:42
+#: law/templates/law/home.html:47
 msgid "Other information:"
 msgstr "Outras informações:"
 
-#: law/templates/law/home.html:44
+#: law/templates/law/home.html:49
 msgid ""
 "This project is in continuous deployment; we use Twitter to announce updates."
 msgstr ""
 "Este projecto está em desenvolvimento contínuo; usamos o Twitter para "
 "anunciar novidades."
 
-#: law/templates/law/home.html:47
+#: law/templates/law/home.html:52
 #, python-format
 msgid ""
 "\n"
@@ -1992,11 +1936,11 @@ msgstr ""
 "e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
 "melhorado este projeto."
 
-#: law/templates/law/base/header.html:8
+#: law/templates/law/base/header.html:5
 msgid "Documents"
 msgstr "Leis"
 
-#: law/templates/law/base/header.html:9
+#: law/templates/law/base/header.html:6
 msgid "Types"
 msgstr "Tipos"
 
@@ -2004,7 +1948,7 @@ msgstr "Tipos"
 msgid "Laws"
 msgstr "Leis"
 
-#: law/templates/law/law_list/search_law.html:6
+#: law/templates/law/law_list/search_law.html:5
 msgid "search laws"
 msgstr "procurar leis"
 
@@ -2030,7 +1974,7 @@ msgstr[1] ""
 "\n"
 "%(doc_number)s documentos"
 
-#: main/templates/main_page.html:5
+#: main/templates/main_page.html:4 main/templates/base/top_header.html:5
 msgid "Publics"
 msgstr "Públicos"
 
@@ -2038,6 +1982,6 @@ msgstr "Públicos"
 msgid "About"
 msgstr "Acerca"
 
-#: main/templates/base/top_header.html:6
+#: main/templates/base/top_header.html:14
 msgid "Law"
 msgstr "Lei"

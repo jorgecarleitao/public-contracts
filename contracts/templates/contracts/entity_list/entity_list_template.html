@@ -1,16 +1,15 @@
 {% load i18n %}
-<div class="main-list">
-    {% if entities %}
-        {% include "contracts/entity_list/pagination.html" %}
-    {% endif %}
-    {% include "contracts/entity_list/search_entities.html" %}
-    <div class="list-loop">
-        {% include "contracts/entity_list/entities_loop.html" %}
-    </div>
-    {% if entities %}
-        {% include "contracts/entity_list/pagination.html" %}
-    {% endif %}
-</div>
+{% include "contracts/entity_list/search_entities.html" %}
+{% if entities %}
+    {% include "pagination.html" with items=entities%}
+{% endif %}
+{% for entity in entities %}
+    {% include "contracts/entity_list/entity_summary.html" %}
+{% endfor %}
+{% if entities %}
+    {% include "pagination.html" with items=entities%}
+{% endif %}
+
 <script>
     $(document).ready(function() {
         $("a.page-selector").click(function() {

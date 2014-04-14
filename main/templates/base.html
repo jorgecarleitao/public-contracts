@@ -6,22 +6,19 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     {% include "google_analytics.html" %}
-    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/contracts.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/body.css' %}" rel="stylesheet" type="text/css"/>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/summary.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/misc.css' %}" rel="stylesheet" type="text/css"/>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
 
     <script src="{% static 'js/change_get_parameters.js' %}" ></script>
     {% block forejs %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body>
 
 {% include "base/top_header.html" %}
-<div class="content-wrapper">
+<div class="container">
     {% block header %}{% include "base/header.html" %}{% endblock %}
     {% block body %}{% endblock %}
 </div>

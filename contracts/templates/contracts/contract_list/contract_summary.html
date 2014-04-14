@@ -1,7 +1,7 @@
 {% extends "summary.html" %}
 {% load i18n %}
 {% block summary_content %}
-    <h2><a href="{{ contract.get_absolute_url }}">{{ contract.contract_description }}</a></h2>
+    <h4><a href="{{ contract.get_absolute_url }}">{{ contract.contract_description }}</a></h4>
     <div class="age">{{contract.signing_date}}</div>
     {% with category=contract.category %}
         <div class="category">

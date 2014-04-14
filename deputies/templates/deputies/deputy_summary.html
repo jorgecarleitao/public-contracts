@@ -1,16 +1,14 @@
 {% extends "summary.html" %}
 {% load i18n %}
 {% block summary_content %}
-    <div><img src="{{ deputy.get_image_url }}" height="100"></div>
-    <div>
-    <h2><a href="{{ deputy.get_absolute_url }}">{{ deputy.name }}</a>
-        ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}<a href="{{ deputy.party.get_absolute_url }}">{{deputy.party.abbrev}}</a>)</h2>
+    <img src="{{ deputy.get_image_url }}" height="100">
+    <h4><a href="{{ deputy.get_absolute_url }}">{{ deputy.name }}</a>
+        ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}<a href="{{ deputy.party.get_absolute_url }}">{{deputy.party.abbrev}}</a>)</h4>
     <div class="age">
         {% blocktrans count count=deputy.mandate_count %}
             {{ count }} mandate
         {% plural %}
             {{ count }} mandates
         {% endblocktrans %}
-    </div>
     </div>
 {% endblock %}

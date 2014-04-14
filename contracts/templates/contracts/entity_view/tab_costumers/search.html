@@ -1,47 +1,30 @@
 {% load i18n %}
-<div class="sorting">
-    <ul class="horizontal-tab-list">
+{% if entities or search %}
+    <ul class="nav nav-pills pull-right">
         <li {% if search %}class="active"{% endif %}>
             <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
         </li>
-    <li>
-            {% if sorting == 'name' %}
-                <span>{% trans "name" %}</span>
-            {% else %}
-                <a class="sorting order-name"
-                   title="{% trans "order by name" %}">
-                    {% trans "name" %}
-                </a>
-            {% endif %}
+        <li {% if ordering == 'name' %}class="active"{% endif %}>
+            <a class="sorting order-name" title="{% trans "order by name" %}" href="#">
+                {% trans "name" %}
+            </a>
         </li>
-    <li>
-            {% if sorting == 'contracts' %}
-                <span>{% trans "contracts" %}</span>
-            {% else %}
-                <a class="sorting order-contracts"
-                   title="{% trans "order by number of contracts" %}">
-                    {% trans "contracts" %}
-                </a>
-            {% endif %}
+        <li {% if ordering == 'contracts' %}class="active"{% endif %}>
+            <a class="sorting order-contracts" title="{% trans "order by number of contracts" %}" href="#">
+                {% trans "contracts" %}
+            </a>
         </li>
-        <li>
-            {% if sorting == 'value' %}
-                <span>{% trans "value" %}</span>
-            {% else %}
-                <a class="sorting order-value"
-                   title="{% trans "order by value" %}">
-                    {% trans "value" %}
-                </a>
-            {% endif %}
+        <li {% if ordering == 'value' %}class="active"{% endif %}>
+            <a class="sorting order-value" title="{% trans "order by value" %}" href="#">
+                {% trans "value" %}
+            </a>
         </li>
-
     </ul>
-</div>
-
+{% endif %}
 <script>
     $(document).ready(function() {
-
-        $("a.sorting, a.filter").click(function() {
+        $("a.ordering, a.filter").click(function(e) {
+            e.preventDefault();
             var newURL = null;
 
             if ($(this).hasClass('order-name'))
@@ -57,10 +40,10 @@
 </script>
 <script>
     $(document).ready(function() {
-
         $("#search_content").keypress(function(e) {
             if(e.which == 13)
             {
+                e.preventDefault();
                 var newURL = updateURLParameter(window.location.href, "{%trans 'search'%}", $(this).val());
                 window.location.replace(newURL);
             }

@@ -1,18 +1,17 @@
 {% load i18n %}
 {% if laws or search %}
-<div class="sorting">
-    <ul class="horizontal-tab-list">
+    <ul class="nav nav-pills pull-right">
         <li {% if search %}class="active"{% endif %}>
             <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search laws" %}" value="{{search}}">
         </li>
     </ul>
-</div>
 {% endif %}
 <script>
     $(document).ready(function() {
         $("#search_content").keypress(function(e) {
             if(e.which == 13)
             {
+                e.preventDefault();
                 var newURL = updateURLParameter(window.location.href, "{%trans 'search'%}", $(this).val());
                 window.location.replace(newURL);
             }

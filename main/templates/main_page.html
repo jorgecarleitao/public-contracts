@@ -1,23 +1,20 @@
 {% extends "one_column_body.html" %}
 {% load i18n %}
 {% load static %}
-
 {% block title %}{% trans "Publics"%}{% endblock %}
 {% block content %}
-    <div class="text-element main-page" itemscope itemtype="http://schema.org/WebPage">
-        <h1 class="center-title" itemprop="name">
-            Bem vindo ao Públicos
-        </h1>
-        <img class="main-logo" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
-        <p itemprop="description">
-            Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os <strong>deputados</strong>
-            do estado português.
-        </p>
-        <p>
-            Este website combina informação pública de
-            diferentes fontes oficiais e unifica-a. Em particular, estamos interessados em:
-        </p>
-        <h2 class="center-title">Contratos</h2>
+    <div itemscope itemtype="http://schema.org/WebPage">
+        <div class="text-center">
+            <h1 itemprop="name">
+                Bem vindo ao Públicos
+            </h1>
+            <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
+            <p itemprop="description">
+                Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os <strong>deputados</strong>
+                do estado português.
+            </p>
+        </div>
+        <h2>Contratos</h2>
         <p>
             Neste website pode encontrar todas as entidades, contratos e concursos públicos existentes na <a href="http://base.gov.pt">base de dados oficial</a>.
             Pode ainda conhecer:
@@ -34,7 +31,7 @@
             </li>
         </ul>
         <p><a href="{% url "contracts_home" %}">Mais informações</a></p>
-        <h2 class="center-title">Leis</h2>
+        <h2>Leis</h2>
         <p>
             Este website tem todas as leis presentes no <a href="http://dre.pt">site oficial do Diário da República</a>.
         </p>
@@ -48,7 +45,7 @@
             </li>
         </ul>
         <p><a href="{% url "law_home" %}">Mais informações</a></p>
-        <h2 class="center-title">Deputados</h2>
+        <h2>Deputados</h2>
         <p>
             Este website tem a lista de todos os deputados no <a href="http://parlamento.pt">site oficial do Parlamento Português</a>.
         </p>

@@ -4,16 +4,21 @@
 
 {% block title %}{% trans "Public deputies"%}{% endblock %}
 {% block content %}
-    <div class="text-element" itemscope itemtype="http://schema.org/WebPage">
-        <h2 class="center" itemprop="name">{% trans "Welcome to Public Deputies" %}</h2>
-        <p itemprop="description">
-            {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" parliament_url="http://www.parlamento.pt/" %}
-                In this sub-project we use the official database of deputies from the
-                <a href="{{ parliament_url }}">portuguese parliament</a>
-                to try to understand the relationship between political agents (deputies)
-                and economical agents (entities).
-            {% endblocktrans %}
-        </p>
+    <div itemscope itemtype="http://schema.org/WebPage">
+        <div class="text-center">
+            <h1 itemprop="name">
+                {% trans "Welcome to Public Deputies" %}
+            </h1>
+            <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
+            <p itemprop="description">
+                {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" parliament_url="http://www.parlamento.pt/" %}
+                    In this sub-project we use the official database of deputies from the
+                    <a href="{{ parliament_url }}">portuguese parliament</a>
+                    to try to understand the relationship between political agents (deputies)
+                    and economical agents (entities).
+                {% endblocktrans %}
+            </p>
+        </div>
         <p>
             {% blocktrans %}
                 We are working on a way to map the declarations of conflicts of interests of the deputies

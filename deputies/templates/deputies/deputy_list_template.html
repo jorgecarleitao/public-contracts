@@ -1,24 +1,9 @@
 {% load i18n %}
-{% load i18n %}
-<div class="main-list">
-    {% if deputies %}
-        {% include "deputies/pagination.html" %}
-    {% endif %}
-    {% include "deputies/search_bar.html" %}
-    <div class="list-loop">
-        {% include "deputies/deputies_loop.html" %}
-    </div>
-    {% if deputies %}
-        {% include "deputies/pagination.html" %}
-    {% endif %}
-</div>
-<script>
-    $(document).ready(function() {
-        $("a.page-selector").click(function() {
-            var me = $(this);
-            var newURL = null;
-            newURL = updateURLParameter(window.location.href, '{% trans "page" %}', me.html());
-            window.location.replace(newURL);
-        });
-    });
-</script>
+{% include "deputies/search_bar.html" %}
+{% if deputies %}
+    {% include "pagination.html" with items=deputies%}
+{% endif %}
+{% include "deputies/deputies_loop.html" %}
+{% if deputies %}
+    {% include "pagination.html" with items=deputies %}
+{% endif %}

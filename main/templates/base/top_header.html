@@ -1,11 +1,18 @@
 {% load i18n %}
-<div id="top-header">
-    <div class="content-wrapper">
-        <a href="{% url "home" %}">{% trans "Publics" %}</a>
-        <a href="{% url "contracts_home" %}">{% trans "Contracts" %}</a>
-        <a href="{% url "deputies_home" %}">{% trans "Deputies" %}</a>
-        <a href="{% url "law_home" %}">{% trans "Law" %}</a>
-        <a href="https://twitter.com/publicos_pt" class="twitter-follow-button" data-show-count="false"></a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav">
+            <li {% if not main_navigation_tab %}class="active"{% endif %}><a href="{% url "home" %}">{% trans "Publics" %}</a></li>
+            <li class="divider-vertical"></li>
+            <li {% if main_navigation_tab == 'contracts' %}class="active"{% endif %}>
+                <a href="{% url "contracts_home" %}">{% trans "Contracts" %}</a>
+            </li>
+            <li {% if main_navigation_tab == 'deputies' %}class="active"{% endif %}>
+                <a href="{% url "deputies_home" %}">{% trans "Deputies" %}</a>
+            </li>
+            <li {% if main_navigation_tab == 'law' %}class="active"{% endif %}>
+                <a href="{% url "law_home" %}">{% trans "Law" %}</a>
+            </li>
+        </ul>
     </div>
 </div>

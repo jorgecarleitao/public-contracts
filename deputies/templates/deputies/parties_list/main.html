@@ -2,5 +2,7 @@
 {% load i18n %}
 {% block title %}{% trans "Parties"%}{% endblock %}
 {% block content %}
-    {% include "deputies/parties_list/parties_loop.html" %}
+    {% for party in parties %}
+        {% include "deputies/parties_list/party_summary.html" %}
+    {% endfor %}
 {% endblock %}

@@ -4,14 +4,19 @@
 
 {% block title %}{% trans "Public Law"%}{% endblock %}
 {% block content %}
-    <div class="text-element" itemscope itemtype="http://schema.org/WebPage">
-        <h2 class="center" itemprop="name">{% trans "Welcome to Public Law" %}</h2>
-        <p itemprop="description">
-            {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" dre_url="http://dre.pt/" %}
+    <div itemscope itemtype="http://schema.org/WebPage">
+        <div class="text-center">
+            <h1 itemprop="name">
+                {% trans "Welcome to Public Law" %}
+            </h1>
+            <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
+            <p itemprop="description">
+                {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" dre_url="http://dre.pt/" %}
                 In this project we use the <a href="{{ dre_url }}">official database of the portuguese law</a>
                 to explore some of its properties.
             {% endblocktrans %}
-        </p>
+            </p>
+        </div>
         <h4>{% trans "First question: how many laws are enacted yearly?" %}</h4>
         <p>{% blocktrans %}
             We picked all documents published in the Series I of "Diário da república online" and counted how many

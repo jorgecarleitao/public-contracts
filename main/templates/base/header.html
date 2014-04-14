@@ -1,9 +1,6 @@
 {% load static %}
 {% load i18n %}
-<div id="header">
-    {% block message %}
-    {% endblock %}
-    <div id="secondaryHeader">
-        {% block scope_nav %}{% endblock %}
-    </div>
-</div>
+{% block message %}{% endblock %}
+<ul class="nav nav-tabs">
+    {% block scope_nav %}{% endblock %}
+</ul>

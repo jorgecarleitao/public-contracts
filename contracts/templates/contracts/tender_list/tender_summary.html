@@ -1,7 +1,7 @@
 {% extends "summary.html" %}
 {% load i18n %}
 {% block summary_content %}
-    <h2><a href="{{ tender.get_dre_url }}">{{ tender.description }}</a> (<a href="{{ tender.get_base_url }}">BASE</a>)</h2>
+    <h4><a href="{{ tender.get_dre_url }}">{{ tender.description }}</a> (<a href="{{ tender.get_base_url }}">BASE</a>)</h4>
     <div class="age">{{tender.publication_date}}&rarr;{{tender.deadline_date}}</div>
     <div class="transfer">
         {% include "contracts/contract_list/colored_price.html" with price=tender.price %}

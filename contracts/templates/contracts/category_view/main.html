@@ -19,7 +19,7 @@
     {% with categories=category.get_children %}
         {% if categories %}
             <h4>{% trans "Children categories"%}:</h4>
-            <ul>
+            <ul class="nav nav-stacked">
             {% for category in categories %}
                 <li>
                     {% include "contracts/category_a.html" %}

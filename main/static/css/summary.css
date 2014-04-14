@@ -3,12 +3,7 @@
     background-color: #f0f0f0;
     border-radius: 10px;
     border: 1px solid #DDDBCE;
-    width: 100%;
-    clear: both;
-}
-
-.summary-content {
-    padding: 5px;
+    padding-left: 5px;
 }
 
 .summary .rank {
@@ -16,32 +11,11 @@
     float: left;
 }
 
-.summary h2 {
-    font-weight: bold;
-    font-size: 16px;
-    padding: 0;
-    margin-bottom: 2px;
-}
-
-.summary .categories {
-    clear: both;
-    float: left;
-}
-
 .summary .age {
-    float: left;
-    clear: both;
     color: rgb(180,180,180);
 }
 
-.summary .category {
-    float: left;
-    margin-left: 10px;
-}
-
 .summary .transfer {
-    float: left;
-    clear: both;
     margin-top: 2px;
 }
 

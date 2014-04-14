@@ -1,0 +1,17 @@
+{% load i18n %}
+<ul class="nav nav-tabs">
+    <li {% if tab == 'summary' %}class="active"{% endif %}>
+        <a href="{{ entity.get_absolute_url }}">{% trans "Summary"%}</a>
+    </li>
+    <li {% if tab == 'contracts' %}class="active"{% endif %}>
+        <a href="{% url "entity_contracts" entity.id %}">{% trans "Contracts"%}</a>
+    </li>
+    <li {% if tab == 'costumers' %}class="active"{% endif %}>
+        <a href="{% url "entity_costumers" entity.id %}">{% trans "Costumers"%}</a>
+    </li>
+    {% if entity.tender_set.count %}
+        <li {% if tab == 'tenders' %}class="active"{% endif %}>
+            <a href="{% url "entity_tenders" entity.id %}">{% trans "Tenders"%}</a>
+        </li>
+    {% endif %}
+</ul>

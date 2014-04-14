@@ -1,0 +1,31 @@
+{% load i18n %}
+{% if items.paginator.num_pages != 1 %}
+    <div class="pagination">
+        <ul>
+            {% if items.has_previous %}
+                {% if items.previous_page_number != 1 %}
+                    <li><a class="page-selector" href="#">1</a></li>
+                {% endif %}
+                <li><a class="page-selector" href="#">{{ items.previous_page_number }}</a></li>
+            {% endif %}
+            <li class="active"><a class="page-selector" href="#">{{ items.number }}</a></li>
+            {% if items.has_next %}
+                <li><a class="page-selector" href="#">{{ items.next_page_number }}</a></li>
+                {% if items.next_page_number != items.paginator.num_pages %}
+                    <li><a class="page-selector" href="#">{{ items.paginator.num_pages }}</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $("a.page-selector").click(function(e) {
+                e.preventDefault();
+                var me = $(this);
+                var newURL = null;
+                newURL = updateURLParameter(window.location.href, '{% trans "page"%}', me.html());
+                window.location.replace(newURL);
+            });
+        });
+    </script>
+{% endif %}

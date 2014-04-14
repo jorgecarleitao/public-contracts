@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block summary_content %}
-    <h2><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h2>
+    <h4><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
     <div class="price">
         <p>
             {% trans "Value:" %}
