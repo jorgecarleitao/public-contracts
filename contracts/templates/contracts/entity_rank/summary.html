@@ -2,14 +2,7 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block summary_content %}
-    <div class="counter">
-        <p>{{ entity.rank }}</p>
-    </div>
-    <div class="rank">
-        <h4><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
-        <div class="rank">
-                <span>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
-                ({{ entity.count }} {% trans "contracts" %})</span>
-        </div>
-    </div>
+    <h4>{{ entity.rank }}: <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
+    <p>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
+        ({{ entity.count }} {% trans "contracts" %})</p>
 {% endblock %}

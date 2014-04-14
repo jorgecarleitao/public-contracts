@@ -1,17 +1,7 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% load contracts.humanize %}
-
 {% block summary_content %}
-    <div class="counter">
-        <p>{{ entity.average_delta_time|floatformat:1 }}</p>
-        <p class="label">{% trans "days" %}</p>
-    </div>
-    <div class="content">
-        <h4><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
-        <div class="content">
-                <span> {{ entity.contracts_number }} {% trans "contracts" %}
-                </span>
-        </div>
-    </div>
+    <h4>{{ entity.average_delta_time|floatformat:1 }}: <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
+    <p>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
+        ({{ entity.count }} {% trans "contracts" %})</p>
 {% endblock %}
