@@ -7,3 +7,7 @@ def robots(request):
 
 def home(request):
     return render(request, 'main_page.html')
+
+
+def about(request):
+    return render(request, 'about.html')

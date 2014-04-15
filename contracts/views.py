@@ -6,10 +6,6 @@ from django.shortcuts import render, redirect
 import models
 
 
-def about(request):
-    return render(request, 'contracts/about.html')
-
-
 def home(request):
     return render(request, 'contracts/main_page.html')
 

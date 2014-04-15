@@ -14,6 +14,7 @@ sitemaps = {
 
 urlpatterns = patterns('',
                        url(r'^$', views.home, name='home'),
+                       url(r'^%s$' % _('about'), views.about, name='about'),
                        url(r'^', include(contracts.urls, app_name='contracts')),
                        url(r'^', include(deputies.urls, app_name='deputies')),
                        url(r'^', include(law.urls, app_name='law')),
