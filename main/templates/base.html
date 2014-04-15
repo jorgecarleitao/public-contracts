@@ -10,18 +10,17 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/summary.css' %}" rel="stylesheet" type="text/css"/>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="jscript"></script>
 
-    <script src="{% static 'js/change_get_parameters.js' %}" ></script>
+    <script src="{% static 'js/change_get_parameters.js' %}" type="jscript"></script>
     {% block forejs %}{% endblock %}
 </head>
 <body>
 
 {% include "base/top_header.html" %}
 <div class="container">
-    {% block header %}{% include "base/header.html" %}{% endblock %}
-    {% block content %}
-    {% endblock %}
+    {% block header %}{% endblock %}
+    {% block content %}{% endblock %}
 </div>
 {% include "base/footer.html" %}
 </body>
