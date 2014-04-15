@@ -11,7 +11,10 @@ def home(request):
 
 
 def analysis(request):
-    return render(request, 'contracts/analysis.html')
+
+    context = {'navigation_tab': 'analysis'}
+
+    return render(request, 'contracts/analysis.html', context)
 
 
 def build_contract_list_context(context, GET):
@@ -59,7 +62,7 @@ def contracts_list(request):
     View that controls the contracts list.
     """
     contracts = models.Contract.objects.all().prefetch_related("contracted", "contractors", "category")
-    context = {'contracts': contracts}
+    context = {'contracts': contracts, 'navigation_tab': 'contracts'}
 
     context = build_contract_list_context(context, request.GET)
 
@@ -72,9 +75,11 @@ def categories_list(request):
     """
     categories = models.Category.objects.filter(depth=1)
 
-    context = {'categories': categories,
+    context = {'navigation_tab': 'categories',
+               'categories': categories,
                'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors", "category"),
-               'no_code': True}
+               'no_code': True,
+               }
 
     context = build_contract_list_context(context, request.GET)
 
@@ -86,7 +91,8 @@ def category_view(request, category_id):
     View that controls the view of a specific category.
     """
     category = models.Category.objects.get(pk=category_id)
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'categories': category.get_children(),
                'contracts': category.contract_set.all().prefetch_related("contracted", "contractors", "category")}
 
@@ -150,7 +156,8 @@ def build_entity_list_context(context, GET):
 def entities_list(request):
     entities = models.Entity.objects.all().select_related("data")
 
-    context = {'entities': entities}
+    context = {'navigation_tab': 'entities',
+               'entities': entities}
 
     context = build_entity_list_context(context, request.GET)
 
@@ -211,7 +218,8 @@ def build_tender_list_context(context, GET):
 def tenders_list(request):
     tenders = models.Tender.objects.all()
 
-    context = {'tenders': tenders}
+    context = {'navigation_tab': 'tenders',
+               'tenders': tenders}
 
     context = build_tender_list_context(context, request.GET)
 

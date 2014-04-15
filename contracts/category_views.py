@@ -10,7 +10,8 @@ from views import build_contract_list_context, build_tender_list_context
 def main_view(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
 
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'categories': category.get_children(),
                'tab': 'summary'}
 
@@ -29,7 +30,8 @@ def contracts(request, category_id):
 
     contracts = category.contract_set.all().prefetch_related("contracted", "contractors", "category")
 
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'tab': 'contracts',
                'contracts': contracts}
 
@@ -96,7 +98,8 @@ def contractors(request, category_id):
     entities = models.Entity.objects.filter(contracts_made__category__id=category_id).distinct()\
                .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
 
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'tab': 'contractors',
                'entities': entities}
 
@@ -112,7 +115,8 @@ def contracted(request, category_id):
     entities = models.Entity.objects.filter(contract__category__id=category_id).distinct()\
                .annotate(total_expended=Sum("contract__price"), total_contracts=Count("contract__price"))
 
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'tab': 'contracted',
                'entities': entities}
 
@@ -127,7 +131,8 @@ def tenders(request, category_id):
 
     tenders = category.tender_set.all()
 
-    context = {'category': category,
+    context = {'navigation_tab': 'categories',
+               'category': category,
                'tab': 'tenders',
                'tenders': tenders}
 

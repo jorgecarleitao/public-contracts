@@ -1,9 +1,19 @@
 {% extends "base/header.html" %}
 {% load i18n %}
 {% block scope_nav %}
-    <li><a href="{% url "contracts_list" %}">{% trans "Contracts" %}</a></li>
-    <li><a href="{% url "categories_list" %}">{% trans "Categories" %}</a></li>
-    <li><a href="{% url "entities_list" %}">{% trans "Entities" %}</a></li>
-    <li><a href="{% url "tenders_list" %}">{% trans "Tenders" %}</a></li>
-    <li><a href="{% url "contracts_analysis" %}">{% trans "Analysis" %}</a></li>
+    <li {% if navigation_tab == 'contracts' %}class="active"{% endif %}>
+        <a href="{% url "contracts_list" %}">{% trans "Contracts" %}</a>
+    </li>
+    <li {% if navigation_tab == 'categories' %}class="active"{% endif %}>
+        <a href="{% url "categories_list" %}">{% trans "Categories" %}</a>
+    </li>
+    <li {% if navigation_tab == 'entities' %}class="active"{% endif %}>
+        <a href="{% url "entities_list" %}">{% trans "Entities" %}</a>
+    </li>
+    <li {% if navigation_tab == 'tenders' %}class="active"{% endif %}>
+        <a href="{% url "tenders_list" %}">{% trans "Tenders" %}</a>
+    </li>
+    <li {% if navigation_tab == 'analysis' %}class="active"{% endif %}>
+        <a href="{% url "contracts_analysis" %}">{% trans "Analysis" %}</a>
+    </li>
 {% endblock %}

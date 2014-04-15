@@ -13,7 +13,8 @@ def main_view(request, entity_id, slug=None):
     contracts = entity.last_contracts(5).prefetch_related("contracted", "contractors", "category")
     categories = models.Category.objects.filter(pk__in=list(contracts.values_list('category__id', flat=True)))
 
-    context = {'entity': entity,
+    context = {'navigation_tab': 'entities',
+               'entity': entity,
                'tab': 'summary',
                'last_contracts': contracts,
                'last_categories': categories}
@@ -26,7 +27,8 @@ def contracts(request, entity_id):
 
     all_contracts = entity.last_contracts().prefetch_related("contracted", "contractors", "category")
 
-    context = {'entity': entity,
+    context = {'navigation_tab': 'entities',
+               'entity': entity,
                'tab': 'contracts',
                'contracts': all_contracts}
 
@@ -93,7 +95,8 @@ def costumers(request, entity_id):
     all_costumers = models.Entity.objects.filter(contracts_made__contracted__id=entity_id).distinct()\
                    .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
 
-    context = {'entity': entity,
+    context = {'navigation_tab': 'entities',
+               'entity': entity,
                'tab': 'costumers',
                'entities': all_costumers}
 
@@ -108,7 +111,8 @@ def tenders(request, entity_id):
 
     all_tenders = entity.tender_set.all()
 
-    context = {'entity': entity,
+    context = {'navigation_tab': 'entities',
+               'entity': entity,
                'tab': 'tenders',
                'tenders': all_tenders}
 
