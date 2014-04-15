@@ -1848,7 +1848,7 @@ msgid ""
 msgstr ""
 "\n"
 "Este projeto está sobre a responsabilidade de %(author)s, "
-"href=\"mailto:%(email)s\">através de email</a>.\n"
+"<a href=\"mailto:%(email)s\">através de email</a>."
 
 #: main/templates/about.html:11
 msgid ""
