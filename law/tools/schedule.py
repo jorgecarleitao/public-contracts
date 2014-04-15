@@ -13,7 +13,7 @@ from law.crawler import FirstSeriesCrawler
 def update():
     crawler = FirstSeriesCrawler()
     crawler.extract_law_types()
-    crawler.update_all()
+    crawler.retrieve_all()
 
 if __name__ == "__main__":
     update()
