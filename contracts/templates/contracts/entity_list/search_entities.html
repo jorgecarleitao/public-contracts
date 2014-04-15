@@ -4,14 +4,14 @@
         <li {% if search %}class="active"{% endif %}>
             <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
         </li>
-        <li {% if sorting == 'earnings' %}class="active"{% endif %}>
-            <a class="sorting order-earnings" title="{% trans "order by earnings" %}">
+        <li {% if ordering == 'earnings' %}class="active"{% endif %}>
+            <a class="ordering order-earnings" title="{% trans "order by earnings" %}" href="#">
                 {% trans "earnings" %}
             </a>
         </li>
-        <li {% if sorting == 'expenses' %}class="active"{% endif %}>
-            <a class="sorting order-expenses" title="{% trans "order by expenses" %}">
-                    {% trans "expenses" %}
+        <li {% if ordering == 'expenses' %}class="active"{% endif %}>
+            <a class="ordering order-expenses" title="{% trans "order by expenses" %}" href="#">
+                {% trans "expenses" %}
             </a>
         </li>
     </ul>
@@ -22,10 +22,10 @@
             e.preventDefault();
             var newURL = null;
 
-            if ($(this).hasClass('order-price'))
-                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "price"%}');
-            else if ($(this).hasClass('order-date'))
-                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "date"%}');
+            if ($(this).hasClass('order-earnings'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "earnings"%}');
+            else if ($(this).hasClass('order-expenses'))
+                newURL = updateURLParameter(window.location.href, '{% trans "sorting"%}', '{% trans "expenses"%}');
 
             window.location.replace(newURL);
         });

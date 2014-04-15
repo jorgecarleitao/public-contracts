@@ -5,17 +5,17 @@
             <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
         </li>
         <li {% if ordering == 'name' %}class="active"{% endif %}>
-            <a class="sorting order-name" title="{% trans "order by name" %}" href="#">
+            <a class="ordering order-name" title="{% trans "order by name" %}" href="#">
                 {% trans "name" %}
             </a>
         </li>
         <li {% if ordering == 'contracts' %}class="active"{% endif %}>
-            <a class="sorting order-contracts" title="{% trans "order by number of contracts" %}" href="#">
+            <a class="ordering order-contracts" title="{% trans "order by number of contracts" %}" href="#">
                 {% trans "contracts" %}
             </a>
         </li>
         <li {% if ordering == 'value' %}class="active"{% endif %}>
-            <a class="sorting order-value" title="{% trans "order by value" %}" href="#">
+            <a class="ordering order-value" title="{% trans "order by value" %}" href="#">
                 {% trans "value" %}
             </a>
         </li>
