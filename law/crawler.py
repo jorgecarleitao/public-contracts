@@ -49,7 +49,7 @@ class FirstSeriesCrawler(AbstractCrawler):
         pass
 
     def __init__(self):
-        super(NewFirstSeriesCrawler, self).__init__()
+        super(FirstSeriesCrawler, self).__init__()
 
     def retrieve_document(self, document_id):
         """
