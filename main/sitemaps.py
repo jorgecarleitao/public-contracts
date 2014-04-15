@@ -2,10 +2,9 @@ from django.contrib import sitemaps
 from django.core.urlresolvers import reverse
 
 priorities = {'contracts_home': 1.0,
-              'contracts_list': 0.9,
-              'entities_list': 0.9,
-              'categories_list': 0.9,
-              'contracts_about': 0.5}
+              'deputies_home': 1.0,
+              'law_home': 1.0,
+              'about': 0.5}
 
 
 class ContractsSitemap(sitemaps.Sitemap):
