@@ -6,4 +6,3 @@ Other tools
 
    tools/crawler
    tools/database
-

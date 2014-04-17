@@ -40,7 +40,7 @@ Our remote database is in mysql. To Python communicate with it, we need a bindin
 treebeard
 ^^^^^^^^^
 
-The categories in our database are organized in a :doc:`tree structure <api/category>`.
+The categories in our database are organized in a :doc:`tree structure <contracts_api/category>`.
 We use django-treebeard to efficiently storage them in our database.
 
 Install using::
@@ -54,8 +54,8 @@ Running the database API
 
 Once you have the dependencies installed, enter in its directory and run::
 
-    cd contracts/tools
-    python example.py
+    cd contracts
+    python -m tools.example
 
 If everything went well, it outputs two numbers:
 
@@ -64,5 +64,5 @@ If everything went well, it outputs two numbers:
 
 If some problem occur, please drop by our mailing-list_ so we can help you.
 
-For more information, see section :doc:`usage` for a tutorial, and section :doc:`API` for its complete
+From here, you can see section :doc:`usage` for a tutorial, and section :doc:`API` for its complete
 documentation.

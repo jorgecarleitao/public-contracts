@@ -8,37 +8,24 @@ This tutorial assumes you already :doc:`installed <installation>` the source.
 .. _queries API: https://docs.djangoproject.com/en/1.6/ref/models/querysets/
 .. _models: https://docs.djangoproject.com/en/dev/topics/db/models/
 
-We use Django_ for accessing the database. Django is a web framework,
-but here we limit the usage of Django to accessing the database.
-
-We will assume you are in directory "contracts/tools", as the installation part ended there.
+We will assume you are in directory "contracts", as the installation part ended there.
 
 Setup
 -----
 
-In Python, to use a package, we have to import it.
-To use Django, we have to setup it first. In this tutorial we will skip this part since it is very technical.
-Assume the setup we provide is correct::
+To use Django, we have to setup it first. In the module set_up in package tools,
+we provide a function to that, which we use::
 
-    import set_up
-    set_up.set_up_django_environment()
+    from tools.set_up import set_up_django_environment
+    set_up_django_environment('tools.settings')
 
 Accessing the database
 ----------------------
 
-Django is setup, we are ready to use it.
-
-In Django, models_ are Python classes that can be represented in the database.
-We need to import the models for this API::
+In Django, models_ are Python classes that are stored in the database.
+To use them, we need to import them::
 
     from contracts import models
-
-with this, you have just gained a piece of intellectual freedom:
-
-From now on, each contract, entity or category is an instance of a Python class,
-and we can access its data using standard Python notation for a class.
-
-But how do we pick a contract from the database?
 
 .. _`this contract`: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#791452
 
@@ -46,21 +33,21 @@ Look at `this contract`_ in the official database. It has the number "791452". L
 
     contract = models.Contract.objects.get(base_id=791452)
 
-good, now, what do we want to know about the contract? Lets start with its price::
+Now, lets start with its price::
 
     print contract.price
 
-Now its category::
+and its description::
 
-    print contract.category
+    print contract.description
 
 .. _ManyToMany: https://docs.djangoproject.com/en/dev/topics/db/examples/many_to_many/
 
-Lets now pick the entity that made this contract. Well, in this case there is only one, but in general
+Lets now pick the entity that made this contract. In this case there is only one, but in general
 there can be more: a contract has a ManyToMany_ relationship with entities because each contract can have several
 entities (a joint contract), but also each entity can have several contracts.
 
-In fact, each contract has two many to many: the entities that paid, and the entities that were paid.
+In fact, each contract has two ManyToMany: the entities that paid, and the entities that were paid.
 
 Lets say we want the entity that paid contract 791452. In that case, we pick the set of all entities that paid,
 and just choose the first one::
@@ -79,14 +66,14 @@ Lets count the number of these contracts:
 .. _can check: http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#23537
 
 You `can check`_ that the number matches the number in the official database.
-(there can be an error of 1 or 2 when there were contracts added today;
-our database is only synchronized in the end of the day).
+(there can be small error when there were contracts added today;
+our database is synchronized in the end of the day).
 
-Ok, now a more difficult question: how much is the price of all those contracts?
+Now a more difficult question: how much is the price of all those contracts?
 
 .. _aggregate: https://docs.djangoproject.com/en/dev/topics/db/aggregation/
 
-To answer that, we have to use aggregate_: we are aggregating a result over a set of contracts. The syntax
+To answer that, we have to use aggregate_: we are aggregating a result over a set of contracts. The Django syntax
 is the following::
 
     from django.db.models import Sum
@@ -94,9 +81,7 @@ is the following::
     total_price = entity_contracts.aggregate(our_sum=Sum('price'))['our_sum']
     print total_price
 
-Remember calling "contract.price" before? Well, this is doing almost the same:
-we are aggregating the sum of all contract prices, which we call "our_sum", and them
-we get our sum (...)['our_sum'] back. Again, you `can check`_.
+Again, you `can check`_ on the official website.
 
 As a final example, we are going to use a filter. Lets say you want all the above
 contracts, but restricted to prices higher than 10.000€. For this, we need to "filter" the contracts::
@@ -106,6 +91,12 @@ contracts, but restricted to prices higher than 10.000€. For this, we need to 
 
 The "price__gt" means price (g)reater (t)han. The full set of options can be found in Django queries_.
 
+Notes:
+
+ - The syntax we use here (e.g. "contracts_made") **is** Django API.
+ - If you don't know Django, you can look at the existing source code of the website and copy from it.
+ - The API documentation is still not complete. You can find it :doc:`here <api>` or :doc:`help <contribute>` finishing it.
+
 .. _mailing list: https://groups.google.com/forum/#!forum/public-contracts
 
-If you need any help, drop by our public `mailing list`_.
+In any case, if you need help, drop by our `mailing list`_.
