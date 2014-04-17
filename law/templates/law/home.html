@@ -12,9 +12,12 @@
             <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
             <p itemprop="description">
                 {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" dre_url="http://dre.pt/" %}
-                In this project we use the <a href="{{ dre_url }}">official database of the portuguese law</a>
-                to explore some of its properties.
-            {% endblocktrans %}
+                    In this project we use the <a href="{{ dre_url }}">official database of the portuguese law</a>
+                    to explore some of its properties.
+                {% endblocktrans %}
+            </p>
+            <p class="alert-error">
+                Database is still not completed. Data below is preliminary.
             </p>
         </div>
         <h4>{% trans "First question: how many laws are enacted yearly?" %}</h4>
