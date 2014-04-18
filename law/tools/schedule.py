@@ -10,10 +10,8 @@ if __name__ == "__main__":
 from law.crawler import FirstSeriesCrawler
 
 
-def update():
-    crawler = FirstSeriesCrawler()
-    crawler.extract_law_types()
-    crawler.retrieve_all()
-
 if __name__ == "__main__":
-    update()
+    for year in range(1910, 2015):
+        crawler = FirstSeriesCrawler()
+        crawler.get_documents(year)
+        del crawler

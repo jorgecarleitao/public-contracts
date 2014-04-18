@@ -1,11 +1,13 @@
 # coding=utf-8
-import pickle
 import datetime
+import re
+import os
 
 from BeautifulSoup import BeautifulSoup
 from contracts.crawler import AbstractCrawler
 
-from models import Type
+from models import Type, Creator, Document
+import models
 
 
 class FirstSeriesCrawler(AbstractCrawler):
@@ -13,37 +15,6 @@ class FirstSeriesCrawler(AbstractCrawler):
     data_directory = '../../law_data'
 
     # document_id is represented by 8 numbers: year#### (e.g. 19971111)
-    _law_url_formatter = "http://dre.pt/cgi/dr1s.exe?" \
-                         "t=d" \
-                         "&cap=" \
-                         "&doc={document_id}" \
-                         "&v01=" \
-                         "&v02=" \
-                         "&v03=" \
-                         "&v04=" \
-                         "&v05=" \
-                         "&v06=" \
-                         "&v07=" \
-                         "&v08=" \
-                         "&v09=" \
-                         "&v10=" \
-                         "&v11=" \
-                         "&v12=" \
-                         "&v13=" \
-                         "&v14=" \
-                         "&v15=" \
-                         "&v16=" \
-                         "&v17=" \
-                         "&v18=" \
-                         "&v19=" \
-                         "&v20=" \
-                         "&v21=" \
-                         "&v22=" \
-                         "&v23=" \
-                         "&v24=" \
-                         "&v25=" \
-                         "&sort=0" \
-                         "&submit=Pesquisar"
 
     class DocumentNotFound(Exception):
         pass
@@ -58,11 +29,13 @@ class FirstSeriesCrawler(AbstractCrawler):
         file_name = '%s/%s.dat' % (self.data_directory, document_id)
         try:
             f = open(file_name, "rb")
-            html = pickle.load(f)
-            f.close()
+            try:
+                html = f.read()
+            finally:
+                f.close()
         except IOError:
             # online retrieval
-            html = self.goToPage(self._law_url_formatter.format(document_id=document_id))
+            html = self.goToPage(models.dre_url_formater.format(document_id=document_id))
 
             soup = BeautifulSoup(html)
 
@@ -73,14 +46,24 @@ class FirstSeriesCrawler(AbstractCrawler):
 
             print(u"saving document_id %d" % document_id)
             f = open(file_name, "wb")
-            pickle.dump(html, f)
-            f.close()
+            try:
+                f.write(str(html))
+            finally:
+                f.close()
         return html
 
-    def get_documents(self, year):
-        print(u"get_documents(%d)" % year)
+    def last_document_id(self, year):
+        regex = re.compile(r"%04d(\d+).dat" % year)
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
+        files = sorted(files, key=lambda x: int(x), reverse=True)
+        if len(files):
+            return files[0]
+        else:
+            return 1
 
-        document_number = 1
+    def get_documents(self, year):
+        print(u"get_documents(year=%d)" % year)
+        document_number = self.last_document_id(year)
         fails = 0
         while True:
             try:
@@ -90,7 +73,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                 fails += 1
                 print("DocumentNotFound: %d" % fails)
 
-            if fails == 10:
+            if fails == 50:
                 break
 
             document_number += 1
@@ -99,41 +82,157 @@ class FirstSeriesCrawler(AbstractCrawler):
         first_year = 1910
         last_year = datetime.datetime.now().date().year
 
-        for year in xrange(first_year, last_year + 1):
+        for year in range(first_year, last_year + 1):
             self.get_documents(year)
 
-    def extract_law_types(self):
-        """
-        Retrieves all types of documents from the list in DR website. Adds others found.
-        """
-        url = 'http://dre.pt/comum/html/janelas/dip1s_ltipos.html'
 
-        html = self.goToPage(url)
-        soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
+def clean_data(data_string):
+    soup = BeautifulSoup(data_string)
 
-        for element in soup.findAll('li'):
-            Type.objects.get_or_create(name=element.text)
+    doc_data = soup.find('div', {'id': 'doc_data'})
 
-        # Others meanwhile found
-        Type.objects.get_or_create(name=u"Acórdão doutrinário")
-        Type.objects.get_or_create(name=u"Acórdão - Recurso extraordinário")
-        Type.objects.get_or_create(name=u"Acórdão do Supremo Tribunal de Justiça")
-        Type.objects.get_or_create(name=u"Acórdão do Supremo Tribunal Administrativo")
-        Type.objects.get_or_create(name=u"Acórdão do Tribunal Constitucional")
-        Type.objects.get_or_create(name=u"Acórdão do Tribunal de Contas")
-        Type.objects.get_or_create(name=u"Decreto de aprovação da Constituição")
-        Type.objects.get_or_create(name=u"Decreto do Representante da República para a Região Autónoma da Madeira")
-        Type.objects.get_or_create(name=u"Decreto do Representante da República para a Região Autónoma dos Açores")
-        Type.objects.get_or_create(name=u"Resolução da Assembleia Legislativa da Região Autónoma dos Açores")
-        Type.objects.get_or_create(name=u"Resolução da Assembleia Legislativa da Região Autónoma da Madeira")
-        Type.objects.get_or_create(name=u"Despacho ministerial")
-        Type.objects.get_or_create(name=u"Despacho do Conselho de Ministros")
-        Type.objects.get_or_create(name=u"Despacho interpretativo")
-        Type.objects.get_or_create(name=u"Despacho do Conselho Superior de Defesa Nacional")
-        Type.objects.get_or_create(name=u"Despacho conjunto regulamentar")
-        Type.objects.get_or_create(name=u"Despacho conjunto")
-        Type.objects.get_or_create(name=u"Despacho ministerial conjunto")
-        Type.objects.get_or_create(name=u"Orçamento")
-        Type.objects.get_or_create(name=u"Orçamento ordinário")
-        Type.objects.get_or_create(name=u"Orçamento suplementar")
-        Type.objects.get_or_create(name=u"Moção de censura")
+    data = {}
+    for element in doc_data.findAll('p'):
+        identifier = element.find('span').extract()
+        string = ' '.join(element.text.split()).strip()  # remove double white spaces
+
+        if identifier.text.startswith(u'DATA'):
+            data['date'] = clean_date(string)
+        elif identifier.text.startswith(u'DIPLOMA'):
+            data['type'], data['number'] = clean_type_and_number(string)
+        elif identifier.text.startswith(u'NÚMERO'):
+            data['series'], data['series_number'], data['series_other'] = clean_series(string)
+        elif identifier.text.startswith(u'EMISSOR'):
+            data['creator'] = clean_creator(string)
+        elif identifier.text.startswith(u'PÁGINAS'):
+            data['series_pages'] = clean_pages(string)
+        elif identifier.text.startswith(u'SUMÁRIO'):
+            data['summary'] = clean_summary(element)
+        elif element.text == u'':
+            pass
+        else:
+            print [element.text]
+            raise IndexError(element.text)
+    return data
+
+
+def clean_date(string):
+    if ',' in string:
+        string = string.split(u', ')[-1]
+    elif string[0] in [str(x) for x in range(1, 9)] or string[0:2] in [str(x) for x in range(10, 30)]:
+        pass
+    else:
+        string = ' '.join(string.split(u' ')[1:])
+
+    if u'Nota:' in string:
+        string = string.split(u' Nota:')[0]
+
+    date = datetime.datetime.strptime(string.encode('utf-8'), u'%d de %B de %Y').date()
+    return date
+
+
+def clean_type_and_number(string):
+    if u'n.º' in string:
+        matches = re.search(u'(.*) n\.º (.*) \(?', string)
+        type_name = matches.group(1).strip()
+        number = matches.group(2).strip()
+    else:
+        type_name = string.strip()
+        number = None
+
+    type, created = Type.objects.get_or_create(name=type_name)
+
+    return type.id, number
+
+
+def clean_series(string):
+    strings = string.split(u' SÉRIE ')
+
+    series_number = strings[0]
+    series_string = strings[1]
+
+    if series_string[0] == 'I':
+        series = 1
+        series_other = series_string[1:]
+    elif series_string[0:1] == 'II':
+        series = 2
+        series_other = series_string[2:]
+    else:
+        raise IndexError(series_string)
+
+    return series, series_number, series_other
+
+
+def clean_creator(string):
+    creator_name = string.strip()
+
+    creator, created = Creator.objects.get_or_create(name=creator_name[:254])
+    return creator.id
+
+
+def clean_pages(string):
+    return string
+
+
+def clean_summary(element):
+    search = re.search("<p>(.*)</p>", str(element).strip())
+    return search.group(1).strip()
+
+
+class Populator:
+
+    data_directory = '../../law_data'
+
+    def __init__(self):
+        import locale
+        locale.setlocale(locale.LC_TIME, "pt_pt")
+        pass
+
+    class DocumentNotFound(Exception):
+        pass
+
+    def get_document(self, document_id):
+        file_name = '%s/%d.dat' % (self.data_directory, document_id)
+
+        try:
+            f = open(file_name, "r")
+            try:
+                return f.read()
+            finally:
+                f.close()
+        except IOError:
+            raise self.DocumentNotFound
+
+    def populate_from_document(self, document_id, data):
+        print("populate_from_document(%d)" % document_id)
+        data = clean_data(data)
+        data['dre_doc_id'] = document_id
+
+        try:
+            document = Document.objects.get(dre_doc_id=document_id)
+        except Document.DoesNotExist:
+            document = Document()
+
+        for attr, value in data.iteritems():
+            setattr(document, attr, value)
+        document.save()
+
+        return document
+
+    def get_cached_documents_id_list(self, year):
+        regex = re.compile(r"%04d(\d+).dat" % year)
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
+        files = sorted(files, key=lambda x: int(x))
+        return files
+
+    def populate_documents(self, year):
+        for document_id in self.get_cached_documents_id_list(year):
+            data = self.get_document(document_id)
+            self.populate_from_document(document_id, data)
+
+    def populate_all(self, first_year=1910):
+        #Document.objects.all().delete()
+        Type.objects.all().delete()
+        last_year = datetime.datetime.now().date().year
+        for year in xrange(first_year, last_year + 1):
+            self.populate_documents(year)
