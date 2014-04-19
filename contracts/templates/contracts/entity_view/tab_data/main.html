@@ -2,22 +2,40 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block entity_content %}
-    <div>
+    {% with count_contracts=entity.count_contracts count_contracts_received=entity.count_contracts_received %}
+        {% trans "Number of contracts as hiring" as hiring_string %}
+        {% trans "Number of contracts as hired" as hired_string %}
+
+        {% if count_contracts or count_contracts_received %}
+            <script src="http://d3js.org/d3.v3.min.js"></script>
+        {% endif %}
         <ul>
             <li>
-                {% trans "NIF:"%} {{ entity.nif }}
+                {% trans "Fiscal Number" %}: {{ entity.nif }}
             </li>
             <li>
-                {% trans "Total earned:"%} {{ entity.total_earned|intword }} €
+                {% trans "Total earned" %}: {{ entity.total_earned|intword }} €
             </li>
             <li>
-                {% trans "Total expended:"%} {{ entity.total_expended|intword }} €
+                {% trans "Total expended" %}: {{ entity.total_expended|intword }} €
             </li>
             <li>
-                {% trans "Number of contracts made:"%} {{ entity.count_contracts }}
+                {{ hiring_string }}: {{ count_contracts }}
+            </li>
+            <li>
+                {{ hired_string }}: {{ count_contracts_received }}
             </li>
         </ul>
-    </div>
+        {% if count_contracts %}
+            {% url 'entity_contracts_made_time_series' entity.id as the_url %}
+            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url y_axis_label=hiring_string%}
+        {% endif %}
+
+        {% if count_contracts_received %}
+            {% url 'entity_contracts_received_time_series' entity.id as the_url %}
+            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url y_axis_label=hired_string %}
+        {% endif %}
+    {% endwith %}
     <hr>
     <h3>{% trans "Last contracts" %}</h3>
     {% include "contracts/contract_list/contracts_loop.html" with contracts=last_contracts%}

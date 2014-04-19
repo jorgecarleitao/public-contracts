@@ -1,0 +1,161 @@
+{% load i18n %}
+<svg class="graph" id="graph-{{ url|slugify }}"></svg>
+<style>
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    {# Line of the plot #}
+    .line {
+        fill: none;
+        stroke: #000;
+        stroke-width: 2;
+    }
+
+    .grid .tick {
+        stroke: lightgrey;
+        shape-rendering: crispEdges;
+    }
+
+    .grid .tick text {
+        stroke: none;
+        fill: lightgrey;
+        shape-rendering: crispEdges;
+    }
+</style>
+<script>
+    (function () {
+        {% block margin %}
+        var margin = {top: 13, right: 25, bottom: 40, left: 30},
+                width = 915/2. - margin.left - margin.right,
+                height = 350/2. - margin.top - margin.bottom;
+        {% endblock %}
+
+        var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+        var x = d3.time.scale()
+                .range([0, width]);
+
+        var y = d3.scale.linear()
+                .range([height, 0]);
+
+        {% block x-axis %}
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(d3.time.year)
+                .tickFormat(d3.time.format("%Y"));
+
+        var xAxisTop = d3.svg.axis()
+                .scale(x)
+                .orient("top")
+                .ticks(0);
+        {% endblock %}
+
+        {% block y-axis %}
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var yAxisRight = d3.svg.axis()
+                .scale(y)
+                .orient("right")
+                .ticks(0);
+        {% endblock %}
+
+        var line = d3.svg.line()
+                .x(function(d) { return x(d.from); })
+                .y(function(d) { return y(d.count); });
+
+        var svg = d3.select("#graph-{{ url|slugify }}")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        {% block x-axis-grid %}
+        function make_x_grid() {
+            return d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .tickSize(-height, 0, 0)
+                    .tickFormat("")
+        }
+        {% endblock %}
+        {% block y-axis-grid %}
+        function make_y_grid() {
+            return d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+        }
+        {% endblock %}
+        d3.json("{{ url }}", function(error, data) {
+
+            data.forEach(function(d) {
+                d.from = parseDate(d.from);
+                d.count = (+d.count);
+            });
+
+            var max_y = d3.max(data, function(d) { return d.count; });
+
+            x.domain(d3.extent(data, function(d) { return d.from; }));
+            y.domain([0, max_y + 1]);
+
+            // grid lines
+            svg.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(make_x_grid());
+            // grid lines
+            svg.append("g")
+                    .attr("class", "grid")
+                    .call(make_y_grid());
+
+            // paths
+            svg.append("path").datum(data)
+                    .attr("class", "line")
+                    .attr("d", line);
+
+            // points
+            svg.selectAll("circle")
+                    .data(data).enter()
+                    .append("svg:circle")
+                    .attr("cx", function(d, i) { return x(d.from) })
+                    .attr("cy", function(d, i) { return y(d.count) })
+                    .attr("r", 3);
+
+            // x axis
+            svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis)
+                    .append("text")
+                    .text("{% trans "month"%}")
+                    .attr("transform", "translate(" + width/2 + ","+ 35 + ")")
+                    .style("text-anchor", "middle");
+
+            svg.append("g")
+                    .attr("class", "x axis")
+                    .call(xAxisTop);
+
+            // y axis
+            svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                    .append("text")
+                    .text("{% spaceless %}{% block y_axis_block_label %}{{ y_axis_label }}{% endblock %}{% endspaceless %}")
+                    .attr("transform", "translate(" + width/2 + ","+ -2 + ")")
+                    .style("text-anchor", "middle");
+
+            svg.append("g")
+                    .attr("class", "y axis")
+                    .attr("transform", "translate(" + width + ",0)")
+                    .call(yAxisRight);
+        });
+    }());
+</script>

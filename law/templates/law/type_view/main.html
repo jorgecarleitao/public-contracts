@@ -3,12 +3,5 @@
 {% block title %}{{ type.name }}{% endblock %}
 {% block content %}
     <h2>{{ type.name }}</h2>
-    <p>
-        {% blocktrans count doc_number=laws.count %}
-            {{ doc_number }} document
-        {% plural %}
-            {{ doc_number }} documents
-        {% endblocktrans %}
-    </p>
     {% include "law/law_list/law_list_template.html" %}
 {% endblock %}

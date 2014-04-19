@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-15 18:33+0100\n"
+"POT-Creation-Date: 2014-04-19 07:20+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,8 +58,9 @@ msgid "how-many-contracts-are-published-too-late"
 msgstr "quantos-contratos-são-publicados-demasidado-tarde"
 
 #: contracts/category_urls.py:9 contracts/category_urls.py:10
-#: contracts/category_views.py:43 contracts/entity_urls.py:9
-#: contracts/entity_urls.py:10 contracts/entity_views.py:40
+#: contracts/category_views.py:45 contracts/entity_urls.py:9
+#: contracts/entity_urls.py:10 contracts/entity_urls.py:11
+#: contracts/entity_urls.py:14 contracts/entity_views.py:47
 #: contracts/urls.py:14 contracts/urls.py:17 contracts/urls.py:18
 #: contracts/templates/contracts/category_view/tab_entities/entity_summary.html:9
 #: contracts/templates/contracts/category_view/tab_entities/search.html:14
@@ -84,12 +85,12 @@ msgid "contracted"
 msgstr "contratados"
 
 #: contracts/category_urls.py:14 contracts/category_urls.py:15
-#: contracts/entity_urls.py:14 contracts/entity_urls.py:15
+#: contracts/entity_urls.py:20 contracts/entity_urls.py:21
 #: contracts/urls.py:22 contracts/urls.py:23
 msgid "tenders"
 msgstr "concursos"
 
-#: contracts/category_views.py:43 contracts/entity_views.py:40
+#: contracts/category_views.py:45 contracts/entity_views.py:47
 #: contracts/templates/contracts/category_view/tab_entities/search.html:19
 #: contracts/templates/contracts/category_view/tab_entities/search.html:33
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:19
@@ -97,7 +98,7 @@ msgstr "concursos"
 msgid "value"
 msgstr "valor"
 
-#: contracts/category_views.py:43 contracts/entity_views.py:40
+#: contracts/category_views.py:45 contracts/entity_views.py:47
 #: contracts/templates/contracts/category_view/tab_entities/search.html:9
 #: contracts/templates/contracts/category_view/tab_entities/search.html:31
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:9
@@ -108,8 +109,8 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/category_views.py:63 contracts/entity_views.py:60
-#: contracts/views.py:26 contracts/views.py:117 contracts/views.py:180
+#: contracts/category_views.py:65 contracts/entity_views.py:67
+#: contracts/views.py:29 contracts/views.py:123 contracts/views.py:187
 #: contracts/templates/contracts/category_view/tab_entities/search.html:47
 #: contracts/templates/contracts/contract_list/search_contracts.html:45
 #: contracts/templates/contracts/entity_list/search_entities.html:40
@@ -120,10 +121,10 @@ msgstr "nome"
 msgid "search"
 msgstr "procura"
 
-#: contracts/category_views.py:70 contracts/category_views.py:71
-#: contracts/entity_views.py:67 contracts/entity_views.py:68
-#: contracts/views.py:33 contracts/views.py:34 contracts/views.py:126
-#: contracts/views.py:127 contracts/views.py:187 contracts/views.py:188
+#: contracts/category_views.py:72 contracts/category_views.py:73
+#: contracts/entity_views.py:74 contracts/entity_views.py:75
+#: contracts/views.py:36 contracts/views.py:37 contracts/views.py:132
+#: contracts/views.py:133 contracts/views.py:194 contracts/views.py:195
 #: contracts/templates/contracts/category_view/tab_entities/search.html:31
 #: contracts/templates/contracts/category_view/tab_entities/search.html:33
 #: contracts/templates/contracts/category_view/tab_entities/search.html:35
@@ -142,14 +143,14 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/category_views.py:80 contracts/entity_views.py:77
-#: contracts/views.py:44 contracts/views.py:137 contracts/views.py:198
+#: contracts/category_views.py:82 contracts/entity_views.py:84
+#: contracts/views.py:47 contracts/views.py:143 contracts/views.py:205
 #: contracts/templates/contracts/entity_list/entity_list_template.html:18
 #: deputies/views.py:43 law/views.py:18 main/templates/pagination.html:26
 msgid "page"
 msgstr "página"
 
-#: contracts/entity_urls.py:12
+#: contracts/entity_urls.py:18
 msgid "costumers"
 msgstr "clientes"
 
@@ -211,8 +212,8 @@ msgstr "entidade"
 msgid "category"
 msgstr "categoria"
 
-#: contracts/views.py:19 contracts/views.py:39 contracts/views.py:166
-#: contracts/views.py:193
+#: contracts/views.py:22 contracts/views.py:42 contracts/views.py:173
+#: contracts/views.py:200
 #: contracts/templates/contracts/contract_list/search_contracts.html:9
 #: contracts/templates/contracts/contract_list/search_contracts.html:31
 #: contracts/templates/contracts/tender_list/search.html:9
@@ -220,8 +221,8 @@ msgstr "categoria"
 msgid "price"
 msgstr "preço"
 
-#: contracts/views.py:19 contracts/views.py:39 contracts/views.py:166
-#: contracts/views.py:193
+#: contracts/views.py:22 contracts/views.py:42 contracts/views.py:173
+#: contracts/views.py:200
 #: contracts/templates/contracts/contract_list/search_contracts.html:14
 #: contracts/templates/contracts/contract_list/search_contracts.html:33
 #: contracts/templates/contracts/tender_list/search.html:14
@@ -229,20 +230,20 @@ msgstr "preço"
 msgid "date"
 msgstr "data"
 
-#: contracts/views.py:99 contracts/views.py:105 contracts/views.py:132
+#: contracts/views.py:105 contracts/views.py:111 contracts/views.py:138
 #: contracts/templates/contracts/entity_list/search_entities.html:9
 #: contracts/templates/contracts/entity_list/search_entities.html:26
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:99 contracts/views.py:107 contracts/views.py:132
+#: contracts/views.py:105 contracts/views.py:113 contracts/views.py:138
 #: contracts/templates/contracts/entity_list/search_entities.html:14
 #: contracts/templates/contracts/entity_list/search_entities.html:28
 msgid "expenses"
 msgstr "despesa"
 
 #: contracts/templates/contracts/analysis.html:5
-#: contracts/templates/contracts/base/header.html:8
+#: contracts/templates/contracts/base/header.html:17
 msgid "Analysis"
 msgstr "Análises"
 
@@ -343,7 +344,7 @@ msgstr ""
 
 #: contracts/templates/contracts/main_page.html:24
 #: contracts/templates/contracts/main_page.html:38
-#: contracts/templates/contracts/base/header.html:4
+#: contracts/templates/contracts/base/header.html:5
 #: contracts/templates/contracts/category_view/selector.html:7
 #: contracts/templates/contracts/contract_list/main.html:3
 #: contracts/templates/contracts/entity_view/selector.html:7
@@ -386,7 +387,7 @@ msgstr "em que sector económico"
 
 #: contracts/templates/contracts/main_page.html:39
 #: contracts/templates/contracts/main_page.html:55
-#: contracts/templates/contracts/base/header.html:6
+#: contracts/templates/contracts/base/header.html:11
 #: contracts/templates/contracts/entity_list/main.html:3
 msgid "Entities"
 msgstr "Entidades"
@@ -427,7 +428,7 @@ msgstr "os seus clientes"
 
 #: contracts/templates/contracts/main_page.html:56
 #: contracts/templates/contracts/main_page.html:71
-#: contracts/templates/contracts/base/header.html:7
+#: contracts/templates/contracts/base/header.html:14
 #: contracts/templates/contracts/category_view/selector.html:17
 #: contracts/templates/contracts/entity_view/selector.html:14
 #: contracts/templates/contracts/tender_list/main.html:3
@@ -466,7 +467,7 @@ msgstr "Qual a data limite"
 
 #: contracts/templates/contracts/main_page.html:72
 #: contracts/templates/contracts/main_page.html:87
-#: contracts/templates/contracts/base/header.html:5
+#: contracts/templates/contracts/base/header.html:8
 #: contracts/templates/contracts/category_list/main.html:4
 #: contracts/templates/contracts/category_list/main.html:6
 msgid "Categories"
@@ -700,17 +701,8 @@ msgstr ""
 "A distribuição é larga, i.e. tem várias ordens de grandeza, com contratos "
 "desde euros até milhões de euros."
 
-#: contracts/templates/contracts/contracts_time_series/graph.html:127
-#: contracts/templates/contracts/legislation_application_time_series/graph.html:102
-#: contracts/templates/contracts/ministries_contracts_time_series/graph.html:128
-#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:128
-msgid "month"
-msgstr "mês"
-
-#: contracts/templates/contracts/contracts_time_series/graph.html:134
-#: contracts/templates/contracts/ministries_contracts_time_series/graph.html:135
-#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:135
-msgid "number of signed contracts"
+#: contracts/templates/contracts/contracts_time_series/graph.html:44
+msgid "Number of signed contracts"
 msgstr "Número de contratos assinados"
 
 #: contracts/templates/contracts/contracts_time_series/main.html:4
@@ -746,12 +738,12 @@ msgstr ""
 "Pegámos em todos os contratos e contámos quantos foram assinados em cada "
 "mês. Eis o resultado:"
 
-#: contracts/templates/contracts/contracts_time_series/main.html:26
+#: contracts/templates/contracts/contracts_time_series/main.html:27
 #: contracts/templates/contracts/legislation_application_time_series/main.html:27
 msgid "Observations and context"
 msgstr "Observações e contexto"
 
-#: contracts/templates/contracts/contracts_time_series/main.html:28
+#: contracts/templates/contracts/contracts_time_series/main.html:29
 msgid ""
 "\n"
 "                The database only started to be populated in 2008-2009. This "
@@ -765,12 +757,12 @@ msgstr ""
 "União Europeia entrou em efeito. Isto explica o crescimento inicial durante "
 "2008-2009."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:32
+#: contracts/templates/contracts/contracts_time_series/main.html:33
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:51
 msgid "Expand technical details..."
 msgstr "Expandir detalhes técnicos..."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:36
+#: contracts/templates/contracts/contracts_time_series/main.html:37
 #: contracts/templates/contracts/legislation_application_time_series/main.html:30
 msgid ""
 "\n"
@@ -785,7 +777,7 @@ msgstr ""
 "uma assunção importante que fazemos é que esta percentagem não depende da "
 "data de assinatura."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:42
+#: contracts/templates/contracts/contracts_time_series/main.html:43
 #: contracts/templates/contracts/legislation_application_time_series/main.html:36
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:44
 msgid ""
@@ -807,7 +799,7 @@ msgstr ""
 "variância da soma pode ser ilimitada porque a distribuição de valores é "
 "broad."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:52
+#: contracts/templates/contracts/contracts_time_series/main.html:53
 msgid ""
 "\n"
 "                We see that there is a non-negligible peak in september of "
@@ -824,11 +816,11 @@ msgstr ""
 "contratos em dois: os que foram feitos apenas por municípios, e todos "
 "excepto os contratos por municípios."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:59
+#: contracts/templates/contracts/contracts_time_series/main.html:60
 msgid "Municipalities only:"
 msgstr "Apenas municípios:"
 
-#: contracts/templates/contracts/contracts_time_series/main.html:64
+#: contracts/templates/contracts/contracts_time_series/main.html:66
 #, python-format
 msgid ""
 "\n"
@@ -842,11 +834,11 @@ msgstr ""
 "<a href=\"%(the_url)s\">Nesta análise</a> justificámos que este gráfico é "
 "consistente com a existência das eleições municipais em 10-2009 e 10-2013."
 
-#: contracts/templates/contracts/contracts_time_series/main.html:70
+#: contracts/templates/contracts/contracts_time_series/main.html:72
 msgid "Non-Municipalities only:"
 msgstr "Excluindo municípios:"
 
-#: contracts/templates/contracts/contracts_time_series/main.html:73
+#: contracts/templates/contracts/contracts_time_series/main.html:76
 msgid ""
 "\n"
 "                If we exclude all contracts from municipalities, this peak "
@@ -900,31 +892,42 @@ msgstr "Especificidade média:"
 msgid "Costumers"
 msgstr "Clientes"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:8
-msgid "NIF:"
-msgstr "NIF:"
+#: contracts/templates/contracts/entity_view/tab_data/graph.html:138
+#: contracts/templates/contracts/legislation_application_time_series/graph.html:102
+#: contracts/templates/contracts/ministries_contracts_time_series/graph.html:128
+#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:128
+msgid "month"
+msgstr "mês"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:11
-msgid "Total earned:"
-msgstr "Ganho:"
+#: contracts/templates/contracts/entity_view/tab_data/main.html:6
+msgid "Number of contracts as hiring"
+msgstr "Número de contratos como contratante"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:7
+msgid "Number of contracts as hired"
+msgstr "Número de contratos como contratado"
 
 #: contracts/templates/contracts/entity_view/tab_data/main.html:14
-msgid "Total expended:"
-msgstr "Despesa:"
+msgid "Fiscal Number"
+msgstr "NIF"
 
 #: contracts/templates/contracts/entity_view/tab_data/main.html:17
-msgid "Number of contracts made:"
-msgstr "Número de contratos como contratante:"
+msgid "Total earned"
+msgstr "Ganho"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:22
+#: contracts/templates/contracts/entity_view/tab_data/main.html:20
+msgid "Total expended"
+msgstr "Despesa"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:40
 msgid "Last contracts"
 msgstr "Últimos contratos"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:24
+#: contracts/templates/contracts/entity_view/tab_data/main.html:42
 msgid "Full list"
 msgstr "Lista completa"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:26
+#: contracts/templates/contracts/entity_view/tab_data/main.html:44
 msgid "Last categories"
 msgstr "Últimas categorias"
 
@@ -992,6 +995,11 @@ msgstr ""
 "Embora isto não signifique que a lei dos contratos públicos esteja a ser "
 "aplicada na integra, mostra que o requerimento de 10 dias está a ser "
 "cumprido em mais de 99%% dos casos."
+
+#: contracts/templates/contracts/ministries_contracts_time_series/graph.html:135
+#: contracts/templates/contracts/municipalities_contracts_time_series/graph.html:135
+msgid "number of signed contracts"
+msgstr "Número de contratos assinados"
 
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:9
 #, python-format
@@ -1707,23 +1715,23 @@ msgid "Welcome to Public Law"
 msgstr "Bem vindo ao Lei Pública"
 
 #: law/templates/law/home.html:14
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
-"                In this project we use the <a href=\"%(dre_url)s\">official "
-"database of the portuguese law</a>\n"
-"                to explore some of its properties.\n"
-"            "
+"                    In this project we use the <a href=\"%(dre_url)s"
+"\">official database of the portuguese law</a>\n"
+"                    to explore some of its properties.\n"
+"                "
 msgstr ""
 "\n"
 "Neste projecto usamos a <a href=\"%(dre_url)s\">base de dados oficial "
 "portuguesa</a> para explorar algumas das suas propriedades."
 
-#: law/templates/law/home.html:20
+#: law/templates/law/home.html:23
 msgid "First question: how many laws are enacted yearly?"
 msgstr "Primeira pergunta: quantas leis são criadas anualmente?"
 
-#: law/templates/law/home.html:21
+#: law/templates/law/home.html:24
 msgid ""
 "\n"
 "            We picked all documents published in the Series I of \"Diário da "
@@ -1735,11 +1743,11 @@ msgstr ""
 "Pegámos em toda a Série I do diário da república online e contámos quantos "
 "documentos foram publicados em cada ano. Eis o resultado:"
 
-#: law/templates/law/home.html:31
+#: law/templates/law/home.html:34
 msgid "Details:"
 msgstr "Detalhes:"
 
-#: law/templates/law/home.html:34
+#: law/templates/law/home.html:37
 msgid ""
 "\n"
 "                    This graph was obtained using all the documents "
@@ -1752,7 +1760,7 @@ msgstr ""
 "Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
 "da República Online, série I. São hoje ~200.000 documentos."
 
-#: law/templates/law/home.html:40
+#: law/templates/law/home.html:43
 msgid ""
 "\n"
 "                    We call \"Law\" to be anything that is published in\n"
@@ -1767,18 +1775,18 @@ msgstr ""
 "simplificar, mas poderá chamar-lhes \"documentos publicados na Série I do "
 "Diário da Républica\" se preferir."
 
-#: law/templates/law/home.html:47
+#: law/templates/law/home.html:50
 msgid "Other information:"
 msgstr "Outras informações:"
 
-#: law/templates/law/home.html:49
+#: law/templates/law/home.html:52
 msgid ""
 "This project is in continuous deployment; we use Twitter to announce updates."
 msgstr ""
 "Este projecto está em desenvolvimento contínuo; usamos o Twitter para "
 "anunciar novidades."
 
-#: law/templates/law/home.html:52
+#: law/templates/law/home.html:55
 #, python-format
 msgid ""
 "\n"
@@ -1814,7 +1822,6 @@ msgid "Types of laws"
 msgstr "Tipos de leis"
 
 #: law/templates/law/type_list/summary.html:6
-#: law/templates/law/type_view/main.html:7
 #, python-format
 msgid ""
 "\n"

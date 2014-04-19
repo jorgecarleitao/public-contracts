@@ -1,41 +1,11 @@
+{% extends "contracts/entity_view/tab_data/graph.html" %}
 {% load i18n %}
-<svg class="graph" id="graph-{{ url }}"></svg>
-<style>
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-
-    .line {
-        fill: none;
-        stroke: #000;
-    }
-
-    .grid .tick {
-        stroke: lightgrey;
-        opacity: 0.7;
-        shape-rendering: crispEdges;
-    }
-    .grid path {
-        stroke-width: 0;
-    }
-</style>
-<script>
-(function () {
+{% block margin %}
     var margin = {top: 40, right: 60, bottom: 40, left: 60},
             width = 720 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
-
-    var parseDate = d3.time.format("%Y-%m-%d").parse;
-
-    var x = d3.time.scale()
-            .range([0, width]);
-
-    var y = d3.scale.linear()
-            .range([height, 0]);
-
+{% endblock %}
+{% block x-axis %}
     var xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom").tickValues([
@@ -48,90 +18,28 @@
             ])
             .tickFormat(d3.time.format("%m-%Y"));
 
-    var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-    var yAxis1 = d3.svg.axis()
-            .scale(y)
-            .orient("right");
-
-    var line = d3.svg.line()
-            .x(function(d) { return x(d.from); })
-            .y(function(d) { return y(d.count); });
-
-    var svg = d3.select("#graph-{{ url }}")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    function make_x_axis() {
+    var xAxisTop = d3.svg.axis()
+                .scale(x)
+                .orient("top")
+                .ticks(0);
+{% endblock %}
+{% block x-axis-grid %}
+    function make_x_grid() {
         return d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
+                .tickSize(-height, 0, 0)
     }
-
-    function make_y_axis() {
+{% endblock %}
+{% block y-axis-grid %}
+    function make_y_grid() {
         return d3.svg.axis()
                 .scale(y)
                 .orient("left")
+                .tickSize(-width, 0, 0)
+                .tickFormat("")
     }
-    d3.json("{% url url %}", function(error, data) {
-
-        data.forEach(function(d) {
-            d.from = parseDate(d.from);
-            d.count = (+d.count);
-        });
-
-        var max_y = d3.max(data, function(d) { return d.count; });
-
-        x.domain(d3.extent(data, function(d) { return d.from; }));
-        y.domain([0, max_y*1.1]);
-
-        // grid lines
-        svg.append("g")
-                .attr("class", "grid")
-                .attr("transform", "translate(0," + height + ")")
-                .call(make_x_axis()
-                        .tickSize(-height, 0, 0)
-                );
-        // grid lines
-        svg.append("g")
-                .attr("class", "grid")
-                .call(make_y_axis()
-                        .tickSize(-width, 0, 0)
-                        .tickFormat("")
-                );
-
-        // paths
-        svg.append("path").datum(data)
-                .attr("class", "line")
-                .attr("d", line)
-                .attr("stroke-width", 2)
-                .attr("fill", "none");
-
-        // points
-        svg.selectAll("circle")
-                .data(data).enter()
-                .append("svg:circle")
-                .attr("cx", function(d, i) { return x(d.from) })
-                .attr("cy", function(d, i) { return y(d.count) })
-                .attr("r", 3);
-
-        svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .append("text")
-                .text("{% trans "month"%}")
-                .attr("transform", "translate(" + width/2 + ","+ 35 + ")");
-
-        svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .text("{% trans "number of signed contracts"%}");
-    });
-}());
-</script>
+{% endblock %}
+{% block y_axis_block_label %}
+    {% trans "Number of signed contracts" %}
+{% endblock %}

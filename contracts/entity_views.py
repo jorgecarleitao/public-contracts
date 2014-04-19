@@ -1,10 +1,15 @@
+import datetime
+import json
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, connection
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
 import models
 from views import build_contract_list_context, build_tender_list_context
+from analysis.analysis import add_months
 
 
 def main_view(request, entity_id, slug=None):
@@ -120,3 +125,77 @@ def tenders(request, entity_id):
     context = build_tender_list_context(context, request.GET)
 
     return render(request, 'contracts/entity_view/tab_tenders/main.html', context)
+
+
+def contracts_made_time_series(request, entity_id):
+    """
+    Computes the time series of number of contracts of entry with entity_id
+    starting with startswith_string.
+    """
+    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+                       MONTH(`contracts_contract`.`signing_date`),
+                       COUNT(`contracts_contract`.`id`)
+                FROM `contracts_contract`
+                     INNER JOIN `contracts_contract_contractors`
+                         ON ( `contracts_contract`.`id` = `contracts_contract_contractors`.`contract_id` )
+                     INNER JOIN `contracts_entity`
+                         ON ( `contracts_contract_contractors`.`entity_id` = `contracts_entity`.`id` )
+                WHERE `contracts_entity`.`id` = %s
+                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+                '''
+
+    cursor = connection.cursor()
+    cursor.execute(query, entity_id)
+
+    data = []
+    for row in cursor.fetchall():
+        year, month, value = row
+        if year is None:
+            continue
+
+        min_date = datetime.date(int(year), int(month), 1)
+        max_date = add_months(min_date, 1)
+
+        entry = {'from': str(min_date),
+                 'to': str(max_date),
+                 'count': int(value)}
+        data.append(entry)
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+def contracts_received_time_series(request, entity_id):
+    """
+    Computes the time series of number of contracts of entry with entity_id
+    starting with startswith_string.
+    """
+    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+                       MONTH(`contracts_contract`.`signing_date`),
+                       COUNT(`contracts_contract`.`id`)
+                FROM `contracts_contract`
+                     INNER JOIN `contracts_contract_contracted`
+                         ON ( `contracts_contract`.`id` = `contracts_contract_contracted`.`contract_id` )
+                     INNER JOIN `contracts_entity`
+                         ON ( `contracts_contract_contracted`.`entity_id` = `contracts_entity`.`id` )
+                WHERE `contracts_entity`.`id` = %s
+                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+                '''
+
+    cursor = connection.cursor()
+    cursor.execute(query, entity_id)
+
+    data = []
+    for row in cursor.fetchall():
+        year, month, value = row
+        if year is None:
+            continue
+
+        min_date = datetime.date(int(year), int(month), 1)
+        max_date = add_months(min_date, 1)
+
+        entry = {'from': str(min_date),
+                 'to': str(max_date),
+                 'count': int(value)}
+        data.append(entry)
+
+    return HttpResponse(json.dumps(data), content_type="application/json")

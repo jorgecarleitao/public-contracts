@@ -125,6 +125,9 @@ class Entity(models.Model):
     def count_contracts(self):
         return self.contracts_made.count()
 
+    def count_contracts_received(self):
+        return self.contract_set.count()
+
     def add_contract_as_contracted(self, contract):
         self.data.total_earned += contract.price
         self.data.save()
