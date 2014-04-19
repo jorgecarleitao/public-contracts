@@ -21,7 +21,8 @@
     </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-    {% include "contracts/contracts_time_series/graph.html" with url="municipalities_contracts_time_series_json" %}
+    {% url "municipalities_contracts_time_series_json" as the_url %}
+    {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
     <div class="text-element">
         <p>
             {% blocktrans %}
