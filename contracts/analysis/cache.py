@@ -19,6 +19,7 @@ class Analysis:
         return result
 
     def update(self):
+        print('Updating analysis "%s"' % self.name)
         result = self.function(*self.args, **self.kwargs)
         cache.set(self.name, result, 60*60*24)
         return result
