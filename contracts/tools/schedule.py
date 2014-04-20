@@ -5,7 +5,7 @@ and cache.
 ## setup the Django with its private settings for server.
 if __name__ == "__main__":
     import set_up
-    set_up.set_up_django_environment('settings_private')
+    set_up.set_up_django_environment('tools.settings_private')
 
 from contracts.crawler import crawler
 from contracts import models
@@ -14,10 +14,10 @@ from contracts.analysis import AnalysisManager
 
 def update():
     # retrieve latest data.
-    crawler.update_all()
+    affected_entities = crawler.update_all()
 
     # update entities cached data
-    for entity in models.Entity.objects.all():
+    for entity in affected_entities:
         entity.compute_data()
 
     # update categories cached data

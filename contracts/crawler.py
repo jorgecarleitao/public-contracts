@@ -353,6 +353,8 @@ class EntitiesCrawler(DynamicCrawler):
         If an entity already exists, it updates its data.
         """
         print '_save_entities(%d)' % block
+
+        created_entities = []
         for data in self._get_entities_block(block):
             country = clean_country(data)
 
@@ -365,23 +367,30 @@ class EntitiesCrawler(DynamicCrawler):
                 entity.save()
             # else, we create it with the data
             except models.Entity.DoesNotExist:
-                models.Entity.objects.create(name=data['description'],
-                                             base_id=int(data['id']),
-                                             country=country,
-                                             nif=data['nif'])
+                entity = models.Entity.objects.create(name=data['description'],
+                                                      base_id=int(data['id']),
+                                                      country=country,
+                                                      nif=data['nif'])
+                created_entities.append(entity)
+
+        return created_entities
 
     def update(self):
         """
         Goes to all blocks and saves all entities in each block.
         Once a block is completely empty, we stop.
         """
+        created_entities = []
+
         block = self._last_entity_block()
         while True:
             try:
-                self._save_entities(block)
+                created_entities += self._save_entities(block)
                 block += 1
             except self.NoMoreEntriesError:
                 break
+
+        return created_entities
 
 
 class ContractsCrawler(DynamicCrawler):
@@ -500,27 +509,36 @@ class ContractsCrawler(DynamicCrawler):
         contract.contracted.add(*list(contracted))
         contract.contractors.add(*list(contractors))
 
+        return list(contracted) + list(contractors)
+
     def _save_contracts(self, block):
         print 'save_contracts(%d)' % block
         raw_contracts = self._get_contracts_block(block)
 
+        affected_entities = []
         for raw_contract in raw_contracts:
             try:
                 data = self._retrieve_and_save_contract_data(raw_contract['id'])
-                self._save_contract(data)
+                affected_entities += self._save_contract(data)
             # this has given errors before, we print the contract number to gain some information.
             except:
                 print 'error on saving contract %d' % raw_contract['id']
                 raise
 
+        return affected_entities
+
     def update(self):
+        modified_entities = []
+
         block = self._last_contract_block()
         while True:
             try:
-                self._save_contracts(block)
+                modified_entities += self._save_contracts(block)
                 block += 1
             except self.NoMoreEntriesError:
                 break
+
+        return modified_entities
 
 
 class TendersCrawler(DynamicCrawler):
@@ -643,8 +661,19 @@ class DynamicDataCrawler():
         self.tenders_crawler = TendersCrawler()
 
     def update_all(self):
-        self.entities_crawler.update()
-        self.contracts_crawler.update()
+        modified_entities = []
+
+        modified_entities += self.entities_crawler.update()
+        modified_entities += self.contracts_crawler.update()
         self.tenders_crawler.update()
+
+        # see http://stackoverflow.com/a/7961390/931303
+        def distinct(items):
+            """
+            Returns distinct a list of distinct elements
+            """
+            return list(set(items))
+
+        return distinct(modified_entities)
 
 crawler = DynamicDataCrawler()
