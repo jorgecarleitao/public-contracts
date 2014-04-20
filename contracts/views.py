@@ -86,21 +86,6 @@ def categories_list(request):
     return render(request, 'contracts/category_list/main.html', context)
 
 
-def category_view(request, category_id):
-    """
-    View that controls the view of a specific category.
-    """
-    category = models.Category.objects.get(pk=category_id)
-    context = {'navigation_tab': 'categories',
-               'category': category,
-               'categories': category.get_children(),
-               'contracts': category.contract_set.all().prefetch_related("contracted", "contractors", "category")}
-
-    context = build_contract_list_context(context, request.GET)
-
-    return render(request, 'contracts/category_list/main.html', context)
-
-
 def build_entity_list_context(context, GET):
     ordering = {_('earnings'): None, _('expenses'): None}
 
