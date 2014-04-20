@@ -46,11 +46,11 @@ This documentation is serious. If you find any mistake, please don't hesitate in
 
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
 
-Enter in the directory `cd public-contracts/contracts/tools`.
+Enter in the directory `cd public-contracts/contracts`.
 
 4- Run the example:
 
-`python example.py`
+`python -m tools.example`
 
 If something went wrong, please drop by our [mailing-list](https://groups.google.com/forum/#!forum/public-contracts)
 so we can help you, or report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
