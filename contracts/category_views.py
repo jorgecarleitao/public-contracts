@@ -9,26 +9,28 @@ from views import build_contract_list_context, build_tender_list_context
 
 def main_view(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
+    categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
     context = {'navigation_tab': 'categories',
                'category': category,
                'categories': category.get_children(),
                'tab': 'summary'}
 
-    result = category.contract_set.aggregate(count=Count('id'), price=Sum('price'))
+    result = models.Contract.objects.filter(category_id__in=categories_ids).aggregate(count=Count('id'), price=Sum('price'))
     context['contract_count'] = result['count']
     context['contract_price'] = result['price']
 
-    context['contractors_count'] = models.Entity.objects.filter(contracts_made__category__id=category_id).distinct().count()
-    context['contracted_count'] = models.Entity.objects.filter(contract__category__id=category_id).distinct().count()
+    context['contractors_count'] = models.Entity.objects.filter(contracts_made__category_id__in=categories_ids).distinct().count()
+    context['contracted_count'] = models.Entity.objects.filter(contract__category_id__in=categories_ids).distinct().count()
 
     return render(request, 'contracts/category_view/tab_summary/main.html', context)
 
 
 def contracts(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
+    categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    contracts = category.contract_set.all().prefetch_related("contracted", "contractors", "category")
+    contracts = models.Contract.objects.filter(category_id__in=categories_ids).prefetch_related("contracted", "contractors", "category")
 
     context = {'navigation_tab': 'categories',
                'category': category,
@@ -94,8 +96,9 @@ def build_costumer_list_context(context, GET):
 
 def contractors(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
+    categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    entities = models.Entity.objects.filter(contracts_made__category__id=category_id).distinct()\
+    entities = models.Entity.objects.filter(contracts_made__category_id__in=categories_ids).distinct()\
                .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
 
     context = {'navigation_tab': 'categories',
@@ -111,8 +114,9 @@ def contractors(request, category_id):
 
 def contracted(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
+    categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    entities = models.Entity.objects.filter(contract__category__id=category_id).distinct()\
+    entities = models.Entity.objects.filter(contract__category_id__in=category_id).distinct()\
                .annotate(total_expended=Sum("contract__price"), total_contracts=Count("contract__price"))
 
     context = {'navigation_tab': 'categories',
@@ -128,8 +132,9 @@ def contracted(request, category_id):
 
 def tenders(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
+    categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    tenders = category.tender_set.all()
+    tenders = models.Tender.objects.filter(category_id__in=categories_ids)
 
     context = {'navigation_tab': 'categories',
                'category': category,
