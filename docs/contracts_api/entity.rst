@@ -12,7 +12,8 @@ API
 
 .. class:: models.Entity
 
-    An entity is any company or institution that is enrolled in the database.
+    An entity is any company or institution that is enrolled in the database that are related
+    trough :class:`contracts <models.Contract>`.
 
     All the fields of this model are directly retrieved from Base_.
     They are:
@@ -37,13 +38,13 @@ API
 
     .. method:: total_earned()
 
-        Returns the total earned, in €, a value stored in :class:`~models.EntityData`.
+        Returns the total earned, in € cents, a value stored in :class:`~models.EntityData`.
 
     .. method:: total_expended()
 
-        Returns the total expended, in €, a value stored in :class:`~models.EntityData`.
+        Returns the total expended, in € cents, a value stored in :class:`~models.EntityData`.
 
-    .. method:: get_absolute_url()
+    .. method:: get_base_url()
 
         Returns the url of this entity in Base_.
 
@@ -91,28 +92,3 @@ API
     .. attribute:: total_expended
 
         The money, in cents, the entity expended so far.
-
-Usage
------
-
-Because an entity is a subclass of a Django model, you can retrieve
-information about it using Django's ORM principle.
-
-For instance, if you want to select a specific entity by a NIF, you can use::
-
-    from contracts.models import Entity
-
-    entity = Entity.objects.get(nif=12345678)
-
-if you want to know all the contracts it already made, you can use::
-
-    contracts = entity.contracts_made.all()
-
-if you want to know the total expenses of the entity, you can use::
-
-    total_expenses = contracts.aggregate(total=Sum('price'))['total']
-
-    # or
-
-    total_expenses = entity.total_expenses()
-

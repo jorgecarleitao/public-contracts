@@ -8,7 +8,7 @@ Category
 This document provides the API references for the categories of contracts in the database.
 
 From CPVS to categories
--------------------------
+-----------------------
 
 .. _CPVS: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
 .. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
@@ -32,7 +32,7 @@ API
 .. class:: models.Category
 
     A category is an OneToMany relationship to :class:`~models.Contract`: each contract has one category,
-    each category can have more than one contract.
+    each category can have more than one contract. This relationship is thus defined in the contract model.
 
     It has the following attributes:
 
@@ -43,7 +43,7 @@ API
     .. attribute:: description_en
     .. attribute:: description_pt
 
-        The official descriptions of the category in portuguese and english, respectively.
+        The official descriptions of the category in english and portuguese, respectively.
 
     .. attribute:: depth
 

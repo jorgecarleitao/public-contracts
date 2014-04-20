@@ -13,9 +13,10 @@ API
 .. class:: models.Contract
 
     A contract is a relationship between :doc:`entities <entity>` enrolled in the database.
-    Each contract has a set of contractors (who paid), and contracted, along with other information about it.
+    Each contract has a set of contractors (who paid), and contracted (who were paid),
+    and relevant information about the contract.
 
-    All the fields of this model are retrieved from Base_ using the :doc:`crawler`. Except for :attr:`base_id`
+    All the fields of this model are retrieved from Base_. Except for :attr:`base_id`
     and :attr:`added_date`, all entries can be null if they don't exist in
     Base_. They are:
 
@@ -25,19 +26,19 @@ API
 
     .. attribute:: price
 
-        The price of the contract, in cents (to an integer).
+        The price of the contract, in cents (to be an integer).
 
     .. attribute:: category
 
-        A Foreign key to the contract's :doc:`category`.
+        A Foreign key to the contract :doc:`category`.
 
     .. attribute:: contractors
 
-        A ManyToMany relationship to :doc:`entities <entity>`. Related name "contracts_made".
+        A ManyToMany relationship with :doc:`entities <entity>`. Related name "contracts_made".
 
     .. attribute:: contracted
 
-        A ManyToMany relationship to :doc:`entities <entity>`.
+        A ManyToMany relationship with :doc:`entities <entity>`.
 
     .. attribute:: added_date
 
@@ -45,17 +46,16 @@ API
 
     .. attribute:: signing_date
 
-        The date is was signed (?).
+        The date it was signed.
 
     .. attribute:: close_date
 
-        The date is was closed (?).
-        It is normally null.
+        The date is was closed. It is normally null.
 
     .. attribute:: base_id
 
         The primary key of the contract on the Base_ database.
-        It is "unique".
+        It is "unique" and can used to create the link to Base (see :meth:`get_base_url`)
 
     .. attribute:: contract_type
 
@@ -77,6 +77,6 @@ API
 
     This model has a getter:
 
-    .. method:: get_absolute_url()
+    .. method:: get_base_url()
 
         Returns the url of this entity in Base_.

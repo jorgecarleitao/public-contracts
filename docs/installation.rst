@@ -14,14 +14,17 @@ Getting the source
 .. _downloaded: https://github.com/jorgecarleitao/public-contracts/archive/master.zip
 .. _mailing-list: https://groups.google.com/forum/#!forum/public-contracts
 
-The source can be either downloaded_ or cloned from the GitHub_ repository.
-The source doesn't need to be installed: once you downloaded it, you just have to put it
+The source can be either downloaded_ or cloned from the GitHub_ repository using::
+
+    git clone https://github.com/jorgecarleitao/public-contracts.git
+
+Like most Python code, the source doesn't need to be installed; you just have to put it
 somewhere in your computer.
 
 Dependencies
 ------------
 
-For accessing the API, you need to install three python packages.
+For using the code, you need to install three python packages.
 
 Django
 ^^^^^^
@@ -40,7 +43,7 @@ Our remote database is in mysql. To Python communicate with it, we need a bindin
 treebeard
 ^^^^^^^^^
 
-The categories in our database are organized in a :doc:`tree structure <contracts_api/category>`.
+The categories in the database are organized in a :doc:`tree structure <contracts_api/category>`.
 We use django-treebeard to efficiently storage them in our database.
 
 Install using::
@@ -60,9 +63,9 @@ Once you have the dependencies installed, enter in its directory and run::
 If everything went well, it outputs two numbers:
 
     1. the total number of contracts in the database, that you can corroborate with the `official number`_.
-    2. the monetary value of all contracts in the database.
+    2. the sum of the values of all contracts.
 
 If some problem occur, please drop by our mailing-list_ so we can help you.
 
-From here, you can see section :doc:`usage` for a tutorial, and section :doc:`API` for its complete
+From here, you can see section :doc:`usage` for a tutorial, and section :doc:`API` for a complete
 documentation.

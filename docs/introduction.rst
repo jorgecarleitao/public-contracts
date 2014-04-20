@@ -8,13 +8,13 @@ Publics
 
 This place documents the backend of our website_.
 
-The website provides a consistent and homogeneous way to have complete access to three distinct portuguese databases:
+This backend provides a consistent and homogeneous way to have complete access to three distinct portuguese databases:
 
 - Public procurements (Base_)
 - MPs and parliament procedures (parliament_)
 - Law (law_)
 
-We build and maintain an open source website and API for querying the these databases.
+We build and maintain an open source website and API for querying these databases.
 Specifically, this project consists on the following components:
 
 - A database in mysql and driven by Django ORM, remotely accessible.

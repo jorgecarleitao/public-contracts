@@ -38,4 +38,4 @@ In the terminal, run::
 
     mysqldump -h 5.153.9.51 -upublic_contracts -pread-only --lock-tables=false contracts > dump.sql
 
-This will create a file "dump.sql" that you can load to your own computer.
+This creates a file "dump.sql" (it can take a while) that you can load to a database in your own computer.

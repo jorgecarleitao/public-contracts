@@ -33,28 +33,10 @@ that require some time to be solved.
 Adding tickets
 ::::::::::::::
 
-We write tickets with clear, concise and specific information about issue we are addressing
-and, as rule of thumb, we add a label of each color to the ticket.
+We write tickets with clear, concise and specific information about issue we are addressing.
 
-We address tickets the same way we would like a ticket of ours to be addressed.
-
-Ticket triage
-:::::::::::::
-
-When a ticket is added, it enters a triage phase. In this process, the fate of the ticket is decided.
-
-There are 3 main possible outcomes for the ticket:
-
-- The ticket is rejected: it is a duplicate, invalid, or it does not show to be of enough value to the project.
-- The ticket is postponed: the ticket is valid but the cost of addressing it is far higher than the value it provides, thus becoming something that should be discussed on a later time.
-- The ticket is accepted: the ticket is valid and shows a high value over cost ratio that makes it appealing to work in.
-
-No one likes to have a ticket rejected, so, please, consider giving constructive suggestions to the ticket,
-specially when you think the ticket should be rejected. For instance, suggest the user to use the mailing list
-if he is really passionate about his idea.
-
-Working tickets
-:::::::::::::::
+Working on tickets
+::::::::::::::::::
 
 Working on the ticket means the contributor is committing himself to modify to the source to fulfill the ticket
 expectations.
@@ -69,12 +51,8 @@ Closing tickets
 When a ticket is fixed, normally by a commit or set of commits, it is closed as fixed. A ticket can be re-opened
 if there is no consensus that it was solved.
 
-Obtaining and modifying the source
-----------------------------------
-
-.. _GitHub: https://github.com/jorgecarleitao/public-contracts
-
-The source can be obtained by forking or cloning it in GitHub_.
+The Source Code
+---------------
 
 Code styling
 ::::::::::::
@@ -112,7 +90,7 @@ has to be accompanied by the respective change in documentation to be incorporat
 Committing
 ----------
 
-When you feel that your changes provide value to the existing code, you should commit them.
+When you feel that your changes provide value to the existing code, commit it.
 
 Commit message
 ::::::::::::::
@@ -128,7 +106,7 @@ When the commit fixes a given ticket, it must contain that information on the co
 Pull requests
 -------------
 
-When you have a commit or set of commits that you fell they are worth to be incorporated (e.g.
+When you have a commit or set of commits that you fell are worth being incorporated (e.g.
 because they close a specific ticket), you should make a pull request to announce that you have value that can be
 added to the project.
 
@@ -137,13 +115,10 @@ requesting a pull
 
 We prefer the GitHub way: you push your local commits to your GitHub fork, and create a pull request from there.
 
-The message of the pull request should be equivalent to a message for a commit, except that it should now be a
-message that explains that set of commits (and not the commit itself).
+The message of the pull request should be a message that explains that commit or set of commits.
 
-In case you don't use GitHub, you can also create a patch and attach it to a ticket to submit it.
-
-Pull request/patch review
-:::::::::::::::::::::::::
+Pull request review
+:::::::::::::::::::
 
 The idea of the pull request is that you are notifying other contributors that you have a set of commits that
 are worth adding to the project.
@@ -151,6 +126,4 @@ are worth adding to the project.
 As such, it is worth to have the pull request reviewed by other contributors before entering
 the project's source. The idea is that other persons can check what you did.
 
-A pull request is a big step for any contributor. It is a piece of work that deserves respect.
-Consequently, we ask everyone to be particularly constructive in the review process, specially
-when addressing mistakes.
+If you have any question, *please* place it in the mailing-list. We would love to help you.
