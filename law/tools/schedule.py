@@ -7,11 +7,16 @@ if __name__ == "__main__":
     import set_up
     set_up.set_up_django_environment('law.tools.settings_private')
 
-from law.crawler import FirstSeriesCrawler
+from law.crawler import FirstSeriesCrawler, Populator
 
 
-if __name__ == "__main__":
+def update():
     for year in range(1910, 2015):
         crawler = FirstSeriesCrawler()
         crawler.get_documents(year)
         del crawler
+
+
+if __name__ == "__main__":
+    p = Populator()
+    p.populate_all()

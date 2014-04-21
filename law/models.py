@@ -59,14 +59,19 @@ class Document(models.Model):
     date = models.DateField()
     number = models.CharField(max_length=20, null=True)
 
-    dre_doc_id = models.IntegerField(unique=True, db_index=True)
+    summary = models.TextField()
 
+    text = models.TextField(null=True)
+
+    # Where it can be found in the internet (DRE)
+    dre_doc_id = models.IntegerField(unique=True, db_index=True)
+    pdf_url = models.CharField(max_length=200)
+
+    # Where it can be found in the official book (DR)
     series = models.IntegerField(db_index=True)
     series_number = models.CharField(max_length=10)
     series_other = models.CharField(max_length=30, blank=True)
     series_pages = models.CharField(max_length=50)
-
-    summary = models.TextField()
 
     def get_base_url(self):
         return dre_url_formater.format(document_id=self.dre_doc_id)

@@ -93,7 +93,10 @@ def clean_data(data_string):
 
     data = {}
     for element in doc_data.findAll('p'):
-        identifier = element.find('span').extract()
+        if element.find('span'):
+            identifier = element.find('span').extract()
+        else:
+            continue
         string = ' '.join(element.text.split()).strip()  # remove double white spaces
 
         if identifier.text.startswith(u'DATA'):
@@ -113,6 +116,16 @@ def clean_data(data_string):
         else:
             print [element.text]
             raise IndexError(element.text)
+
+    doc_text = soup.find('div', {'id': 'doc_texto'})
+    data['text'] = clean_text(doc_text)
+
+    doc_boxes = soup.find('div', {'id': 'doc_caixas'})
+    if doc_boxes is not None:
+        doc_pdf = doc_boxes.find('div', {'class': 'cx_pdf'})
+        pdf_anchor = doc_pdf.find('a')
+        data['pdf_url'] = pdf_anchor['href']
+
     return data
 
 
@@ -140,9 +153,17 @@ def clean_type_and_number(string):
         type_name = string.strip()
         number = None
 
+    # synonymous and typos check
+    if type_name == u'Declaração de Retificação':
+        type_name = u'Declaração de Reticficação'
+    if type_name == u'Decreto do Presidente de República':
+        type_name = u'Decreto do Presidente da República'
+    if type_name == u'Resolução da  Assembleia da República':
+        type_name = u'Resolução da Assembleia da República'
+
     type, created = Type.objects.get_or_create(name=type_name)
 
-    return type.id, number
+    return type, number
 
 
 def clean_series(string):
@@ -167,7 +188,7 @@ def clean_creator(string):
     creator_name = string.strip()
 
     creator, created = Creator.objects.get_or_create(name=creator_name[:254])
-    return creator.id
+    return creator
 
 
 def clean_pages(string):
@@ -177,6 +198,18 @@ def clean_pages(string):
 def clean_summary(element):
     search = re.search("<p>(.*)</p>", str(element).strip())
     return search.group(1).strip()
+
+
+def clean_text(doc_text):
+    if 'TEXTO' in str(doc_text.find('p')):
+        doc_text.find('p').extract()
+    else:
+        return None
+
+    text = str(doc_text).strip()
+    text = text.replace('<div id="doc_texto">', '')
+    text = text.replace('</div>', '')
+    return text
 
 
 class Populator:
@@ -220,7 +253,7 @@ class Populator:
         return document
 
     def get_cached_documents_id_list(self, year):
-        regex = re.compile(r"%04d(\d+).dat" % year)
+        regex = re.compile(r"(%04d\w+).dat" % year)
         files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
         files = sorted(files, key=lambda x: int(x))
         return files
@@ -231,7 +264,6 @@ class Populator:
             self.populate_from_document(document_id, data)
 
     def populate_all(self, first_year=1910):
-        #Document.objects.all().delete()
         Type.objects.all().delete()
         last_year = datetime.datetime.now().date().year
         for year in xrange(first_year, last_year + 1):
