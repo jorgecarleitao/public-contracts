@@ -218,7 +218,7 @@ class Populator:
 
     def __init__(self):
         import locale
-        locale.setlocale(locale.LC_TIME, "pt_pt")
+        locale.setlocale(locale.LC_TIME, "pt_PT.utf8")
         pass
 
     class DocumentNotFound(Exception):
