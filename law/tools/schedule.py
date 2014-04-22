@@ -16,7 +16,5 @@ def update():
         crawler.get_documents(year)
         del crawler
 
-
-if __name__ == "__main__":
     p = Populator()
-    p.populate_all()
+    p.populate_all(1910)
