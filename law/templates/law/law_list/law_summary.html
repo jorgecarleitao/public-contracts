@@ -1,7 +1,7 @@
 {% extends "summary.html" %}
 {% load i18n %}
 {% block summary_content %}
-    <h4><a href="{{ law.get_base_url }}">{{ law.type }} {% if law.number %}{{ law.number }}{% endif %}</a></h4>
+    <h4><a href="{{ law.get_absolute_url }}">{{ law.type }} {% if law.number %}{{ law.number }}{% endif %}</a></h4>
     <div class="age">{{law.date}}</div>
     <p>{{ law.compose_summary|safe }}</p>
 {% endblock %}

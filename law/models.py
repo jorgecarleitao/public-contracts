@@ -1,6 +1,8 @@
 # coding=utf-8
-from BeautifulSoup import BeautifulSoup
+import re
+from BeautifulSoup import BeautifulSoup, Tag
 
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -76,14 +78,130 @@ class Document(models.Model):
     def get_base_url(self):
         return dre_url_formater.format(document_id=self.dre_doc_id)
 
+    def get_pdf_url(self):
+        return "http://dre.pt/%s" % self.pdf_url
+
+    def get_absolute_url(self):
+        return reverse('law_view', args=[self.pk])
+
     def compose_summary(self):
         soup = BeautifulSoup(self.summary)
 
         for element in soup.findAll('a'):
             try:
                 dre_doc_id = int(element['href'].split('=')[1])
+                document = Document.objects.get(dre_doc_id=dre_doc_id)
             except:
                 ## other link
                 continue
-            element['href'] = dre_url_formater.format(document_id=dre_doc_id)
+            element['href'] = document.get_absolute_url()
         return soup
+
+    def _compose_text(self):
+        self.text = ' '.join(self.text.split())
+
+        ## to substitute <br> by </p><p>
+        self.text = self.text.replace("<br />", "</p><p>")
+        self.text = unicode(self.text)
+
+        # create <p>'s specifically for start of articles
+        self.text = re.sub(u"<p> Artigo (\d+)\.º (.*)</p>",
+                           lambda m: u"<p>Artigo %s.º</p><p>%s</p>" % m.group(1, 2),
+                           self.text)
+
+        ## to create references
+        types = list(Type.objects.exclude(name__contains='('))
+
+        def create_regex():
+            regex = u'('
+            for name in [type.name for type in types]:
+                regex += name + u'|'
+            regex = regex[:-1]
+            regex += ur') n.º (.*?/\d+)'
+            return regex
+
+        def replace_docs(match):
+            matched_type_name, matched_number = match.group(1, 2)
+            matched_type = next(type for type in types if type.name == matched_type_name)
+            matched_number = matched_number.strip()
+
+            default = u'%s n.º %s' % (matched_type_name, matched_number)
+
+            try:
+                doc = Document.objects.get(type_id=matched_type.id, number=matched_number)
+            except Document.DoesNotExist:
+                return default
+
+            return u'<a class="reference-%d" href=%s>%s</a>' % (doc.id, doc.get_absolute_url(),default)
+
+        self.text = re.sub(create_regex(), replace_docs, self.text)
+
+        ## to add blockquote to changes
+        self.text = re.sub(u"<p>«(.*?)» </p>",
+                           lambda m: u"<blockquote><p>%s</p></blockquote>" % m.group(1),
+                           self.text, flags=re.MULTILINE)
+
+        ## general formatting
+        def scrape_article_number(element):
+            article_number = re.search(u'Artigo (.*)', element.text).group(1)
+            return article_number
+
+        soup = BeautifulSoup(self.text)
+
+        soup.find('p').extract()  # name
+        soup.find('p').extract()  # date
+
+        previous_element = None
+        current_article = None
+        current_number = None
+
+        format_headers = {u'CAPÍTULO': 'h3',
+                          u'SECÇÃO': 'h4',
+                          u'ANEXO': 'h4',
+                          u'Artigo': 'h5'}
+
+        for element in soup.findAll('p'):
+            # format headers
+            for format in format_headers:
+                if element.text.startswith(format):
+                    element.name = format_headers[format]
+                    element['class'] = 'text-center'
+                    break
+
+            # format the headers's title
+            for format in format_headers:
+                if previous_element and previous_element.text.startswith(format):
+                    element.name = format_headers[format]
+                    element['class'] = 'text-center'
+                    break
+
+            if element.text.startswith(u'Artigo'):
+                # if not quoting, we define which article we are
+                if not element.findParents('blockquote'):
+                    current_article = scrape_article_number(element)
+                    element['id'] = 'article-%s' % current_article
+
+            search = re.search(r"^(\d+) - ", element.text)
+            if search:
+                current_number = search.group(1)
+
+            if element.text == u'(ver documento original)':
+                anchor = Tag(soup, "a")
+                anchor['href'] = self.get_pdf_url()
+                anchor.string = u'(ver documento original)'
+
+                element.clear()
+                element.append(anchor)
+
+            previous_element = element
+
+        return soup
+
+    def compose_text(self):
+        """
+        Wrapper to avoid errors, since compose_text is experimental at this point.
+        """
+        try:
+            return self._compose_text()
+        except:
+            return self.text

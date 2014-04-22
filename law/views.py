@@ -58,3 +58,11 @@ def type_view(request, type_id):
     context = build_laws_list_context(context, request.GET)
 
     return render(request, "law/type_view/main.html", context)
+
+
+def law_view(request, law_id):
+    law = get_object_or_404(models.Document, id=law_id)
+
+    context = {'law': law}
+
+    return render(request, "law/document_view/main.html", context)
