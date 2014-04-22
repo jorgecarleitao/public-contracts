@@ -137,7 +137,10 @@ class Document(models.Model):
         self.text = re.sub(create_regex(), replace_docs, self.text)
 
         ## to add blockquote to changes
-        self.text = re.sub(u"<p>«(.*?)» </p>",
+        self.text = self.text.replace(u'» </p>', u'»</p>')
+        self.text = self.text.replace(u'<p> «', u'<p>«')
+
+        self.text = re.sub(u"<p>«(.*?)»</p>",
                            lambda m: u"<blockquote><p>%s</p></blockquote>" % m.group(1),
                            self.text, flags=re.MULTILINE)
 
