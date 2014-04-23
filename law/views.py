@@ -33,8 +33,7 @@ def home(request):
 
 
 def law_list(request):
-
-    context = {'laws': models.Document.objects.all().order_by("-date", "-number").prefetch_related("type")}
+    context = {'laws': models.Document.objects.exclude(type_id__in=[95, 97, 145, 150]).order_by("-dre_doc_id").prefetch_related("type")}
 
     context = build_laws_list_context(context, request.GET)
 
@@ -42,7 +41,7 @@ def law_list(request):
 
 
 def types_list(request):
-    types = models.Type.objects.all().annotate(count=Count('document__id')).filter(count__gt=0).order_by('name')
+    types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document__id')).filter(count__gt=0).order_by('name')
 
     context = {'types': types}
 
