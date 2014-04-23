@@ -264,7 +264,6 @@ class Populator:
             self.populate_from_document(document_id, data)
 
     def populate_all(self, first_year=1910):
-        Type.objects.all().delete()
         last_year = datetime.datetime.now().date().year
         for year in xrange(first_year, last_year + 1):
             self.populate_documents(year)
