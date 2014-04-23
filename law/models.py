@@ -126,6 +126,9 @@ class Document(models.Model):
 
         blockquote_state = False
 
+        annex_prefix = u''
+        article_prefix = u''
+
         format_headers = {u'Capítulo': 'h3',
                           u'Secção': 'h4',
                           u'Anexo': 'h4',
@@ -156,9 +159,15 @@ class Document(models.Model):
                 # if not quoting, we define which article we are
                 if not blockquote_state:
                     current_article = scrape_article_number(element)
-                    element['id'] = 'article-%s' % current_article
+
+                    article_prefix = u'artigo-%s' % current_article
+                    if annex_prefix:
+                        article_prefix = annex_prefix + u'-' + article_prefix
+                    element['id'] = article_prefix
             elif element.text.startswith(u'Anexo'):
                 current_article = None
+                annex_prefix = u'anexo'
+                article_prefix = annex_prefix
 
             # identify numbers
             number_search = re.search(r"^(\d+) - ", element.text)
@@ -191,7 +200,11 @@ class Document(models.Model):
                 # there is a new number, we create a new <li>
                 elif number_search:
                     print('created new item')
-                    current_number_list_element = Tag(soup, 'li', {'id': 'article-%s-number-%d' % (current_article, current_number)})
+                    number_prefix = u'numero-%d' % current_number
+                    if article_prefix:
+                        number_prefix = article_prefix + u'-' + number_prefix
+
+                    current_number_list_element = Tag(soup, 'li', {'id': number_prefix})
                     current_number_list.append(current_number_list_element)
                     current_number_list_element.append(element)
                 else:
