@@ -167,7 +167,7 @@ class Document(models.Model):
             elif element.text.startswith(u'Anexo'):
                 current_article = None
                 annex_prefix = u'anexo'
-                article_prefix = annex_prefix
+                element['id'] = annex_prefix
 
             # identify numbers
             number_search = re.search(r"^(\d+) - ", element.text)
