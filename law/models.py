@@ -108,7 +108,7 @@ class Document(models.Model):
 
         ## general formatting and items identification
         def scrape_article_number(element):
-            article_number = re.search(u'Artigo (.*)', element.text).group(1)
+            article_number = re.search(u'Artigo (.*)\.º', element.text).group(1)
             return article_number
 
         soup = BeautifulSoup(text)
