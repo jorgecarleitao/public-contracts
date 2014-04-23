@@ -5,6 +5,8 @@ from BeautifulSoup import BeautifulSoup, Tag
 from django.core.urlresolvers import reverse
 from django.db import models
 
+import composer
+
 
 # document_id is represented by 8 numbers: year#### (e.g. 19971111)
 dre_url_formater = "http://dre.pt/cgi/dr1s.exe?" \
@@ -98,69 +100,35 @@ class Document(models.Model):
         return soup
 
     def _compose_text(self):
-        self.text = ' '.join(self.text.split())
+        ## normalize all text
+        text = composer.normalize(self.text)
 
-        ## to substitute <br> by </p><p>
-        self.text = self.text.replace("<br />", "</p><p>")
-        self.text = unicode(self.text)
+        ## create references to other documents
+        text = composer.add_references(text)
 
-        # create <p>'s specifically for start of articles
-        self.text = re.sub(u"<p> Artigo (\d+)\.º (.*)</p>",
-                           lambda m: u"<p>Artigo %s.º</p><p>%s</p>" % m.group(1, 2),
-                           self.text)
-
-        ## to create references
-        types = list(Type.objects.exclude(name__contains='('))
-
-        def create_regex():
-            regex = u'('
-            for name in [type.name for type in types]:
-                regex += name + u'|'
-            regex = regex[:-1]
-            regex += ur') n.º (.*?/\d+)'
-            return regex
-
-        def replace_docs(match):
-            matched_type_name, matched_number = match.group(1, 2)
-            matched_type = next(type for type in types if type.name == matched_type_name)
-            matched_number = matched_number.strip()
-
-            default = u'%s n.º %s' % (matched_type_name, matched_number)
-
-            try:
-                doc = Document.objects.get(type_id=matched_type.id, number=matched_number)
-            except Document.DoesNotExist:
-                return default
-
-            return u'<a class="reference-%d" href=%s>%s</a>' % (doc.id, doc.get_absolute_url(),default)
-
-        self.text = re.sub(create_regex(), replace_docs, self.text)
-
-        ## to add blockquote to changes
-        self.text = self.text.replace(u'» </p>', u'»</p>')
-        self.text = self.text.replace(u'<p> «', u'<p>«')
-
-        self.text = re.sub(u"<p>«(.*?)»</p>",
-                           lambda m: u"<blockquote><p>%s</p></blockquote>" % m.group(1),
-                           self.text, flags=re.MULTILINE)
-
-        ## general formatting
+        ## general formatting and items identification
         def scrape_article_number(element):
             article_number = re.search(u'Artigo (.*)', element.text).group(1)
             return article_number
 
-        soup = BeautifulSoup(self.text)
+        soup = BeautifulSoup(text)
 
         soup.find('p').extract()  # name
         soup.find('p').extract()  # date
 
         previous_element = None
-        current_article = None
-        current_number = None
 
-        format_headers = {u'CAPÍTULO': 'h3',
-                          u'SECÇÃO': 'h4',
-                          u'ANEXO': 'h4',
+        current_article = None
+
+        current_number = None
+        current_number_list = None
+        current_number_list_element = None
+
+        blockquote_state = False
+
+        format_headers = {u'Capítulo': 'h3',
+                          u'Secção': 'h4',
+                          u'Anexo': 'h4',
                           u'Artigo': 'h5'}
 
         for element in soup.findAll('p'):
@@ -178,16 +146,58 @@ class Document(models.Model):
                     element['class'] = 'text-center'
                     break
 
+            if element.findParents('blockquote'):
+                blockquote_state = True
+            if blockquote_state and not element.findParents('blockquote'):
+                blockquote_state = False
+
+            # identify articles
             if element.text.startswith(u'Artigo'):
                 # if not quoting, we define which article we are
-                if not element.findParents('blockquote'):
+                if not blockquote_state:
                     current_article = scrape_article_number(element)
                     element['id'] = 'article-%s' % current_article
+            elif element.text.startswith(u'Anexo'):
+                current_article = None
 
-            search = re.search(r"^(\d+) - ", element.text)
-            if search:
-                current_number = search.group(1)
+            # identify numbers
+            number_search = re.search(r"^(\d+) - ", element.text)
+            if number_search and not blockquote_state:
+                current_number = int(number_search.group(1))
 
+            if current_number == 1 and current_number_list is None:
+                current_number_list = Tag(soup, 'ol')
+                element.replaceWith(current_number_list)
+
+            if not blockquote_state:
+                for format in format_headers:
+                    ## if a new element starts, the numbering is re-set.
+                    if element.text.startswith(format):
+                        current_number = None
+                        current_number_list = None
+                        current_number_list_element = None
+                        break
+
+            if current_number is not None:
+                if blockquote_state:
+                    blockquote_number_list_element = current_number_list_element.find('blockquote')
+
+                    # if there isn't a blockquote, we add it
+                    if not blockquote_number_list_element:
+                        blockquote_number_list_element = Tag(soup, 'blockquote')
+                        current_number_list_element.append(blockquote_number_list_element)
+
+                    blockquote_number_list_element.append(element)
+                # there is a new number, we create a new <li>
+                elif number_search:
+                    print('created new item')
+                    current_number_list_element = Tag(soup, 'li', {'id': 'article-%s-number-%d' % (current_article, current_number)})
+                    current_number_list.append(current_number_list_element)
+                    current_number_list_element.append(element)
+                else:
+                    current_number_list_element.append(element)
+
+            # add anchors to link statements
             if element.text == u'(ver documento original)':
                 anchor = Tag(soup, "a")
                 anchor['href'] = self.get_pdf_url()
@@ -198,13 +208,17 @@ class Document(models.Model):
 
             previous_element = element
 
-        return soup
+        text = unicode(soup)
+        return text
 
     def compose_text(self):
         """
         Wrapper to avoid errors, since compose_text is experimental at this point.
         """
+        import traceback
         try:
             return self._compose_text()
-        except:
-            return self.text
+        except Exception, e:
+            print str(e)
+            print traceback.format_exc()
+            return composer.normalize(self.text)
