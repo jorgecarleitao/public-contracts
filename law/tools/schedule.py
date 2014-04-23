@@ -11,10 +11,15 @@ from law.crawler import FirstSeriesCrawler, Populator
 
 
 def update():
-    for year in range(1910, 2015):
+    import datetime
+    current_year = datetime.datetime.now().date().year
+    for year in range(current_year - 1, current_year + 1):
         crawler = FirstSeriesCrawler()
         crawler.get_documents(year)
         del crawler
 
     p = Populator()
-    p.populate_all(1910)
+    p.populate_all(current_year - 1)
+
+if __name__ == "__main__":
+    update()
