@@ -48,6 +48,12 @@ def normalize(text):
                   lambda m: u"<blockquote><p>%s</p></blockquote>" % m.group(1),
                   text, flags=re.MULTILINE)
 
+    # normalize bullets to "# -" (substituting the ones using #.)
+    print text
+    text = re.sub(ur"<p>(\d+)\.",
+                  lambda m: u"<p>%s -" % m.group(1),
+                  text)
+
     return text
 
 
