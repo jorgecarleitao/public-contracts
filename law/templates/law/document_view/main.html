@@ -1,9 +1,9 @@
 {% extends "law/base.html" %}
 {% load i18n %}
-{% block title %}{{ law.type.name }} {{ law.number }}{% endblock %}
+{% block title %}{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}{% endblock %}
 {% block content %}
     <div class="text-center">
-        <h2>{{ law.type.name }} {{ law.number }}</h2>
+        <h2>{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
         <p>
             <small>
                 <a href="http://dre.pt/{{ law.pdf_url }}">PDF do Diário da República</a>,
