@@ -154,8 +154,10 @@ def clean_type_and_number(string):
         number = None
 
     # synonymous and typos check
-    if type_name == u'Declaração de Retificação':
-        type_name = u'Declaração de Reticficação'
+    if type_name == u'Declaração de Rectificação':
+        type_name = u'Declaração de Retificação'
+    if type_name == u'Declaração de rectificação':
+        type_name = u'Declaração de Retificação'
     if type_name == u'Decreto do Presidente de República':
         type_name = u'Decreto do Presidente da República'
     if type_name == u'Resolução da  Assembleia da República':
@@ -218,8 +220,7 @@ class Populator:
 
     def __init__(self):
         import locale
-        locale.setlocale(locale.LC_TIME, "pt_PT.utf8")
-        pass
+        locale.setlocale(locale.LC_TIME, "pt_PT.UTF-8")
 
     class DocumentNotFound(Exception):
         pass
@@ -260,10 +261,13 @@ class Populator:
 
     def populate_documents(self, year):
         for document_id in self.get_cached_documents_id_list(year):
-            data = self.get_document(document_id)
-            self.populate_from_document(document_id, data)
+            self.populate_document(document_id)
 
     def populate_all(self, first_year=1910):
         last_year = datetime.datetime.now().date().year
         for year in xrange(first_year, last_year + 1):
             self.populate_documents(year)
+
+    def populate_document(self, document_id):
+        data = self.get_document(document_id)
+        self.populate_from_document(document_id, data)
