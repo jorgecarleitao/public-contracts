@@ -41,7 +41,7 @@ def law_list(request):
 
 
 def types_list(request):
-    types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document__id')).filter(count__gt=0).order_by('name')
+    types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document')).order_by('name')
 
     context = {'types': types}
 
