@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-22 09:13+0100\n"
+"POT-Creation-Date: 2014-04-23 08:49+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1801,7 +1801,7 @@ msgstr ""
 
 #: law/templates/law/base/header.html:5
 msgid "Documents"
-msgstr "Leis"
+msgstr "Documentos"
 
 #: law/templates/law/base/header.html:6
 msgid "Types"
