@@ -1,6 +1,7 @@
 # coding=utf-8
 import re
 from BeautifulSoup import BeautifulSoup, Tag
+from django.utils.text import slugify
 
 import models
 
@@ -51,10 +52,23 @@ def normalize(text):
                   text, flags=re.MULTILINE)
 
     # normalize bullets to "# -" (substituting the ones using #.)
-    print text
     text = re.sub(ur"<p>(\d+)\.",
                   lambda m: u"<p>%s -" % m.group(1),
                   text)
+
+    return text
+
+
+def add_pdf_references(text, document):
+    """
+    Adds link to pdf when document asks to see the original document.
+    """
+    document.get_pdf_url()
+
+    def replace_docs(match):
+        return u'<a href=%s>(ver documento original)</a>' % document.get_pdf_url()
+
+    text = re.sub(u'\(ver documento original\)', replace_docs, text)
 
     return text
 
@@ -93,129 +107,156 @@ def add_references(text):
     return re.sub(create_regex(), replace_docs, text)
 
 
+hierarchy_priority = [u'Anexo',
+                      u'Capítulo',
+                      u'Secção',
+                      u'Sub-Secção',
+                      u'Artigo',
+                      u'Número',
+                      u'Alínea']
+
+hierarchy_classes = {u'Anexo': 'anexo',
+                     u'Capítulo': 'capitulo',
+                     u'Secção': 'seccao',
+                     u'Sub-Secção': 'subseccao',
+                     u'Artigo': 'artigo',
+                     u'Número': 'numero',
+                     u'Alínea': 'alinea'}
+
+hierarchy_classes_with_titles = ['anexo', 'capitulo', 'seccao', 'subseccao', 'artigo']
+
+hierarchy_html_titles = {u'Capítulo': 'h3',
+                         u'Secção': 'h4',
+                         u'Sub-Secção': 'h5',
+                         u'Anexo': 'h2',
+                         u'Artigo': 'h5'}
+
+hierarchy_html_lists = {u'Número': 'li', u'Alínea': 'li'}
+
+hierarchy_regex = {u'Anexo': u'^Anexo(.*)',
+                   u'Capítulo': u'^Capítulo (.*)',
+                   u'Secção': u'^Secção (.*)',
+                   u'Sub-Secção': u'^SUBSecção (.*)',
+                   u'Artigo': u'^Artigo (.*)\.º$',
+                   u'Número': u'^(\d+) - .*',
+                   u'Alínea': u'^(\w+)\) .*',
+                   }
+
+
 def compose_text(document):
     ## normalize all text
     text = normalize(document.text)
-
-    ## create references to other documents
-    text = add_references(text)
-
-    ## general formatting and items identification
-    def scrape_article_number(element):
-        article_number = re.search(u'Artigo (.*)\.º', element.text).group(1)
-        return article_number
 
     soup = BeautifulSoup(text)
 
     soup.find('p').extract()  # name
     soup.find('p').extract()  # date
 
-    previous_element = None
-
-    current_article = None
-
-    current_number = None
-    current_number_list = None
-    current_number_list_element = None
-
-    blockquote_state = False
-
-    annex_prefix = u''
-    article_prefix = u''
-
-    format_headers = {u'Capítulo': 'h3',
-                          u'Secção': 'h4',
-                          u'Anexo': 'h4',
-                          u'Artigo': 'h5'}
-
-    for element in soup.findAll('p'):
-        # format headers
-        for format in format_headers:
-            if element.text.startswith(format):
-                element.name = format_headers[format]
-                element['class'] = 'text-center'
-                break
-
-        # format the headers's title
-        for format in format_headers:
-            if previous_element and previous_element.text.startswith(format):
-                element.name = format_headers[format]
-                element['class'] = 'text-center'
-                break
-
-        if element.findParents('blockquote'):
-            blockquote_state = True
-        if blockquote_state and not element.findParents('blockquote'):
-            blockquote_state = False
-
-        # identify articles
-        if element.text.startswith(u'Artigo'):
-            # if not quoting, we define which article we are
-            if not blockquote_state:
-                current_article = scrape_article_number(element)
-
-                article_prefix = u'artigo-%s' % current_article
-                if annex_prefix:
-                    article_prefix = annex_prefix + u'-' + article_prefix
-                element['id'] = article_prefix
-        elif element.text.startswith(u'Anexo'):
-            current_article = None
-            annex_prefix = u'anexo'
-            element['id'] = annex_prefix
-
-        # identify numbers
-        number_search = re.search(r"^(\d+) - ", element.text)
-        if number_search and not blockquote_state:
-            current_number = int(number_search.group(1))
-
-        if current_number and current_number_list is None:
-            current_number_list = Tag(soup, 'ol')
-            element.replaceWith(current_number_list)
-
-        if not blockquote_state:
-            for format in format_headers:
-                ## if a new element starts, the numbering is re-set.
-                if element.text.startswith(format):
-                    current_number = None
-                    current_number_list = None
-                    current_number_list_element = None
-                    break
-
-        if current_number is not None:
-            if blockquote_state:
-                blockquote_number_list_element = current_number_list_element.find('blockquote')
-
-                # if there isn't a blockquote, we add it
-                if not blockquote_number_list_element:
-                    blockquote_number_list_element = Tag(soup, 'blockquote')
-                    current_number_list_element.append(blockquote_number_list_element)
-
-                blockquote_number_list_element.append(element)
-            # there is a new number, we create a new <li>
-            elif number_search:
-                number_prefix = u'numero-%d' % current_number
-                if article_prefix:
-                    number_prefix = article_prefix + u'-' + number_prefix
-
-                current_number_list_element = Tag(soup, 'li', {'id': number_prefix})
-                current_number_list.append(current_number_list_element)
-                current_number_list_element.append(element)
-            else:
-                current_number_list_element.append(element)
-
-        # add anchors to link statements
-        if element.text == u'(ver documento original)':
-            anchor = Tag(soup, "a")
-            anchor['href'] = document.get_pdf_url()
-            anchor.string = u'(ver documento original)'
-
-            element.clear()
-            element.append(anchor)
-
-        previous_element = element
+    soup = organize_soup(soup)
 
     text = unicode(soup)
+
+    ## create references to same document
+    text = add_pdf_references(text, document)
+
+    ## create references to other documents
+    text = add_references(text)
     return text
+
+
+def organize_soup(soup):
+
+    last_element = Tag(soup, 'p', {'text': 'Anexo'})
+    soup.append(last_element)
+
+    current_element = dict([(format, None) for format in hierarchy_classes])
+
+    previous_element = None
+
+    def add_element(format_to_move, format_to_receive):
+        # if format_to_move is an item of lists
+        if format_to_move in hierarchy_html_lists:
+            # and format_to_receive does not have a list, we create it:
+            if current_element[format_to_receive].contents[-1].name != 'ol':
+                # we create the list
+                current_element[format_to_receive].append(Tag(soup, 'ol'))
+            # we add the current_element to the list
+            current_element[format_to_receive].contents[-1].append(current_element[format_to_move])
+        else:
+            current_element[format_to_receive].append(current_element[format_to_move])
+
+    for element in soup.findAll(True, recursive=False):
+
+        for format in hierarchy_priority:
+            search = re.search(hierarchy_regex[format], element.text)
+            if not search:
+                continue
+
+            # moving elements to inside other elements
+            format_to_move = format
+            format_to_receive_index = hierarchy_priority.index(format) - 1
+            while format_to_receive_index != -1:
+                format_to_receive = hierarchy_priority[format_to_receive_index]
+
+                if current_element[format_to_receive] is not None and current_element[format] is not None:
+                    add_element(format_to_move, format_to_receive)
+                    break
+                format_to_receive_index -= 1
+
+            for format_to_move in reversed(hierarchy_priority[hierarchy_priority.index(format)+1:]):
+                if current_element[format_to_move] is None:
+                    continue
+
+                for format_to_receive_index in reversed(range(hierarchy_priority.index(format_to_move))):
+                    format_to_receive = hierarchy_priority[format_to_receive_index]
+                    if current_element[format_to_receive] is not None:
+                        add_element(format_to_move, format_to_receive)
+                        break
+
+            if format in hierarchy_html_lists:
+                current_element[format] = Tag(soup, hierarchy_html_lists[format],
+                                              {'class': hierarchy_classes[format]})
+            else:
+                current_element[format] = Tag(soup, 'div',
+                                              {'class': hierarchy_classes[format]})
+
+            element.replaceWith(current_element[format])
+            if format in hierarchy_html_titles:
+                current_element_title = Tag(soup, hierarchy_html_titles[format], {'class': 'title'})
+                current_element[format].append(current_element_title)
+                current_element_title.append(element)
+            else:
+                current_element[format].append(element)
+
+            sufix = ''
+            if search.group(1):
+                sufix = '-' + slugify(search.group(1).strip())
+            current_element[format]['id'] = hierarchy_classes[format] + sufix
+
+            # reset all current_element in lower hierarchy
+            for format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
+                current_element[format] = None
+
+            break
+        else:
+            # is just text
+            for format in reversed(hierarchy_priority):
+                if current_element[format] is not None:
+                    current_element[format].append(element)
+                    break
+
+            if previous_element and previous_element.parent:
+                try:
+                    klass = previous_element.parent["class"]
+                except KeyError:
+                    klass = None
+                if klass == 'title'\
+                   and previous_element.parent.contents\
+                   and previous_element.parent.contents[0] == previous_element:
+                    previous_element.parent.append(element)
+        previous_element = element
+
+    return soup
 
 
 def compose_summary(summary):
