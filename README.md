@@ -1,34 +1,43 @@
-# Public contracts
+# Publics pt
 
-Public contracts is an open source Django website and API to analyse and visualise the database of (portuguese) public contracts.
+Publics pt is an open source Django website and API to query and analyse data of the portuguese state.
 Thanks for checking it out.
 
-## Motivation
+## The problem we aim to solve
 
-Every public entity in European Union has to publicly disclose its
-contracts in an [official website](http://simap.europa.eu/supplier/national-procurement-databases/index_en.htm).
+The portuguese state does not provide a consistent way to query public data, nor relating this data.
+This website aims to:
 
-The [portuguese database](http://www.base.gov.pt/base2/), with about 400.000 contracts,
-spamms orders of magnitude between their prices.
+ 1. Provide a consistent way to query portuguese public data using Django ORM
+ 2. Interrelate different public data
+ 3. Extract and present statistical features of the data
 
-We have a crawler that daily retrieves information from the official database to a database we host,
-and we provide read access to anyone. This way, anyone can query it using mysql.
+This project consists of 4 components:
 
-Our [website](http://contratos.publicos.pt) hosts a website (whose code is in this repository)
-with analysis of the database.
+1. A set of crawlers and validators that retrieve information from official databases and store them in Django models
+2. A set of Django models (in Django Apps) to store the data in a database
+3. A database with read access to anyone so anyone can query it by git-cloning this code.
+4. A [website](http://publicos.pt) that uses the above points to provide some statistical features of the databases
+
+## Scope
+
+We focus on three aspects of the portuguese state:
+
+1- Public Contracts: **contracts** between **entities** with a **value** and other fields.
+2- Members of the Parliament: **Persons** that have **mandates** in **legislatures** of the parliament.
+3- Laws: **documents** that are officially published as laws.
 
 ## The code
 
 We use [Django](https://www.djangoproject.com/) ORM for the API and database
-and JQuery and d3.js for visualisations of statistical quantities of the database.
-The official website is translated to portuguese (via i18n), also hosted here.
+and d3.js for visualisations of statistical quantities of the database.
+The official website is written in English and translated to portuguese (via i18n), also hosted here.
 
 The code is licenced under BSD.
 
 ## Documentation
 
 The API and the crawler are [documented](http://public-contracts.readthedocs.org/en/latest/).
-This documentation is serious. If you find any mistake, please don't hesitate in filling an issue on github.
 
 ## Pre-requisites and installation
 
@@ -52,6 +61,7 @@ Enter in the directory `cd public-contracts/contracts`.
 
 `python -m tools.example`
 
-If something went wrong, please drop by our [mailing-list](https://groups.google.com/forum/#!forum/public-contracts)
-so we can help you, or report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
+you should see two numbers.
+
+If something went wrong, please report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
 so we can improve these instructions.
