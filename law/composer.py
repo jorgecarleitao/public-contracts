@@ -102,7 +102,10 @@ def add_references(text):
         except models.Document.DoesNotExist:
             return default
 
-        return u'<a class="reference-%d" href=%s>%s</a>' % (doc.id, doc.get_absolute_url(), default)
+        return u'<a class="reference-%d" title="%s "href=%s>%s</a>' % (doc.id,
+                                                                       doc.summary,
+                                                                       doc.get_absolute_url(),
+                                                                       default)
 
     return re.sub(create_regex(), replace_docs, text)
 
