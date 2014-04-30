@@ -201,7 +201,7 @@ class Contract(models.Model):
     signing_date = models.DateField(null=True)
     close_date = models.DateField(null=True)
     contract_type = models.ForeignKey('ContractType', null=True)
-    procedure_type = models.ForeignKey('ProcedureType')
+    procedure_type = models.ForeignKey('ProcedureType', null=True)
     description = models.TextField(null=True)
     contract_description = models.TextField()
     cpvs = models.CharField(max_length=254)
