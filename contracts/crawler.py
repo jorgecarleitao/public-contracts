@@ -9,12 +9,20 @@ import models
 
 
 def clean_price(item):
+    """
+    Transforms a string like '1.002,54 \eurochar'
+    into 100254 (cents).
+    """
     price = item.split(' ')[0]
     price = price.replace(".", "").replace(",", "")
     return int(price)
 
 
 def clean_entities(items):
+    """
+    items is a list of dictionaries with key 'id'.
+    We pick them all, or raise an IndexError if any of them doesn't exist (critical error).
+    """
     entities = models.Entity.objects.filter(base_id__in=[item['id'] for item in items])
 
     # we check that all entities are there
@@ -48,8 +56,8 @@ def clean_deadline(string_date, string_days):
 
 def clean_cpvs(item):
     """
-    It is like {u'cpvs': u'79822500-7, Servi\xe7os de concep\xe7\xe3o gr\xe1fica'}
-    we want '79822500-7'
+    It is like u'79822500-7, Servi\xe7os de concep\xe7\xe3o gr\xe1fica'
+    we want u'79822500-7'
     """
     return item.split(',')[0]
 
@@ -121,9 +129,11 @@ def clean_country(item):
     return country
 
 
-def clean_dre_document(item):
-    # Todo: document this function with an example.
-    return int(item.split('=')[-1])
+def clean_dre_document(url):
+    """
+    we want the integer value of the last argument of the url
+    """
+    return int(url.split('=')[-1])
 
 
 class AbstractCrawler(object):
@@ -149,7 +159,9 @@ class AbstractCrawler(object):
 
 
 class JSONCrawler(AbstractCrawler):
-
+    """
+    A crawler specific for retrieving JSON content.
+    """
     def goToPage(self, url):
         return json.loads(super(JSONCrawler, self).goToPage(url))
 
@@ -234,8 +246,11 @@ class ContractsStaticDataCrawler(JSONCrawler):
     def retrieve_and_save_all(self):
         self.retrieve_and_save_contracts_types()
         self.retrieve_and_save_procedures_types()
+        # Countries first
         self.retrieve_and_save_countries()
+        # Districts second
         self.retrieve_and_save_districts()
+        # Councils third
         self.retrieve_and_save_councils()
 
 
@@ -378,7 +393,7 @@ class EntitiesCrawler(DynamicCrawler):
     def update(self):
         """
         Goes to all blocks and saves all entities in each block.
-        Once a block is completely empty, we stop.
+        Once a retrieved block is completely empty, we stop.
         """
         created_entities = []
 
@@ -451,7 +466,7 @@ class ContractsCrawler(DynamicCrawler):
     def _retrieve_and_save_contract_data(self, base_id):
         """
         Returns the data of a contract. It first tries the file. If the file doesn't exist,
-        it retrieves the data from Base and saves it in the file.
+        it retrieves the data from BASE and saves it in the file.
         """
 
         def _retrieve_contract_data():
