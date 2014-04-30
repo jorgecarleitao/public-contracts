@@ -63,7 +63,7 @@ def clean_contract_type(item):
 
 def clean_procedure_type(item):
     try:
-        return models.ProcedureType.objects.get(name=item[u'contractingProcedureType'])
+        return models.ProcedureType.objects.get(name=item)
     except models.ProcedureType.DoesNotExist:
         return None
 
@@ -479,8 +479,8 @@ class ContractsCrawler(DynamicCrawler):
     def _save_contract(item):
         print '_save_contract(%s):' % item['id'],
         data = {'base_id': item['id'],
-                'procedure_type': clean_procedure_type(item),
-                'contract_type': clean_contract_type(item),
+                'procedure_type': clean_procedure_type(item['contractingProcedureType']),
+                'contract_type': clean_contract_type(item['contractType']),
                 'contract_description': item['objectBriefDescription'],
                 'description': item['description'],
                 'signing_date': clean_date(item['signingDate']),
