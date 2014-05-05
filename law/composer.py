@@ -104,10 +104,11 @@ def add_references(text):
         except models.Document.DoesNotExist:
             return default
 
-        return u'<a class="reference-%d" title="%s "href=%s>%s</a>' % (doc.id,
-                                                                       doc.summary,
-                                                                       doc.get_absolute_url(),
-                                                                       default)
+        summary_soup = BeautifulSoup(doc.summary)
+        return u'<a class="reference-%d" title="%s" href="%s">%s</a>' % (doc.id,
+                                                                         summary_soup.getText(),
+                                                                         doc.get_absolute_url(),
+                                                                         default)
 
     return re.sub(create_regex(), replace_docs, text)
 
