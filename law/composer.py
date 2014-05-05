@@ -155,6 +155,8 @@ hierarchy_regex = {u'Anexo': u'^Anexo(.*)',
                    u'Alínea': u'^(\w+)\) .*',
                    }
 
+formal_hierarchy_elements = [u'Anexo', u'Artigo', u'Número', u'Alínea']
+
 
 def compose_text(document):
     ## normalize all text
@@ -241,10 +243,19 @@ def organize_soup(soup):
             else:
                 current_element[format].append(element)
 
-            sufix = ''
-            if search.group(1):
-                sufix = '-' + slugify(search.group(1).strip())
-            current_element[format]['id'] = hierarchy_classes[format] + sufix
+            # Create ids of elements
+            if format in formal_hierarchy_elements:
+                prefix = ''
+                for index in reversed(range(formal_hierarchy_elements.index(format))):
+                    temp_format = formal_hierarchy_elements[index]
+                    if current_element[temp_format]:
+                        prefix = current_element[temp_format]['id'] + '-'
+                        break
+
+                sufix = ''
+                if search.group(1):
+                    sufix = '-' + slugify(search.group(1).strip())
+                current_element[format]['id'] = prefix + hierarchy_classes[format] + sufix
 
             # reset all current_element in lower hierarchy
             for format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
