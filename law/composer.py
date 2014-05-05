@@ -22,6 +22,8 @@ def normalize(text):
     text = text.replace(u' </p>', u'</p>')
 
     text = text.replace(u'ARTIGO', u'Artigo')
+    text = text.replace(u'PARTE', u'Parte')
+    text = text.replace(u'TÍTULO', u'Título')
     text = text.replace(u'CAPÍTULO', u'Capítulo')
     text = text.replace(u'SECÇÃO', u'Secção')
     text = text.replace(u'ANEXO', u'Anexo')
@@ -111,6 +113,8 @@ def add_references(text):
 
 
 hierarchy_priority = [u'Anexo',
+                      u'Parte',
+                      u'Título',
                       u'Capítulo',
                       u'Secção',
                       u'Sub-Secção',
@@ -119,6 +123,8 @@ hierarchy_priority = [u'Anexo',
                       u'Alínea']
 
 hierarchy_classes = {u'Anexo': 'anexo',
+                     u'Parte': 'parte',
+                     u'Título': 'titulo',
                      u'Capítulo': 'capitulo',
                      u'Secção': 'seccao',
                      u'Sub-Secção': 'subseccao',
@@ -126,9 +132,11 @@ hierarchy_classes = {u'Anexo': 'anexo',
                      u'Número': 'numero',
                      u'Alínea': 'alinea'}
 
-hierarchy_classes_with_titles = ['anexo', 'capitulo', 'seccao', 'subseccao', 'artigo']
+hierarchy_classes_with_titles = ['anexo', 'parte', 'titulo', 'capitulo', 'seccao', 'subseccao', 'artigo']
 
-hierarchy_html_titles = {u'Capítulo': 'h3',
+hierarchy_html_titles = {u'Parte': 'h2',
+                         u'Título': 'h3',
+                         u'Capítulo': 'h3',
                          u'Secção': 'h4',
                          u'Sub-Secção': 'h5',
                          u'Anexo': 'h2',
@@ -137,6 +145,8 @@ hierarchy_html_titles = {u'Capítulo': 'h3',
 hierarchy_html_lists = {u'Número': 'li', u'Alínea': 'li'}
 
 hierarchy_regex = {u'Anexo': u'^Anexo(.*)',
+                   u'Parte': u'^Parte(.*)',
+                   u'Título': u'^Título(.*)',
                    u'Capítulo': u'^Capítulo (.*)',
                    u'Secção': u'^Secção (.*)',
                    u'Sub-Secção': u'^SUBSecção (.*)',
