@@ -59,7 +59,7 @@ def type_view(request, type_id):
     return render(request, "law/type_view/main.html", context)
 
 
-def law_view(request, law_id):
+def law_view(request, law_id, slug=None):
     law = get_object_or_404(models.Document, id=law_id)
 
     context = {'law': law}

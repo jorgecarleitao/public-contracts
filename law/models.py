@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.text import slugify
 
 import composer
 
@@ -80,7 +81,12 @@ class Document(models.Model):
         return "http://dre.pt/%s" % self.pdf_url
 
     def get_absolute_url(self):
-        return reverse('law_view', args=[self.pk])
+        name = u"%s" % slugify(self.type.name)
+        if self.number:
+            name += u'-%s' % self.number
+        else:
+            name += u'-de-' + self.date.strftime(u'%d/%m/%Y')
+        return reverse('law_view', args=[self.pk, name])
 
     def compose_summary(self):
         return composer.compose_summary(self.summary)
