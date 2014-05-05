@@ -11,3 +11,7 @@
 .alinea {
     list-style-type: none;
 }
+
+*:target {
+    background-color: rgba(0, 136, 204, 0.5);
+}
