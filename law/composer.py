@@ -1,6 +1,6 @@
 # coding=utf-8
 import re
-from BeautifulSoup import BeautifulSoup, Tag
+from BeautifulSoup import BeautifulSoup, Tag, NavigableString
 from django.utils.text import slugify
 
 import models
@@ -256,6 +256,17 @@ def organize_soup(soup):
                 if search.group(1):
                     sufix = '-' + slugify(search.group(1).strip())
                 current_element[format]['id'] = prefix + hierarchy_classes[format] + sufix
+
+                anchor_tag = Tag(soup, 'a', {'class': 'headerlink', 'href': u'#%s' % current_element[format]['id']})
+                anchor_tag.insert(0, NavigableString(u' ¶'))
+
+                if format in hierarchy_html_titles:
+                    current_element_title.contents[0].append(anchor_tag)
+                else:
+                    try:
+                        current_element[format].contents[0].contents[0].append(anchor_tag)
+                    except AttributeError:
+                        current_element[format].contents[0].append(anchor_tag)
 
             # reset all current_element in lower hierarchy
             for format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
