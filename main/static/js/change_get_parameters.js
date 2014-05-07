@@ -20,7 +20,7 @@ function updateURLParameter(url, param, paramVal){
     }
 
     var rows_txt = temp + "" + param + "=" + paramVal;
-    if (paramVal != undefined)
+    if (paramVal != undefined && paramVal != "")
         return baseURL + "?" + newAdditionalURL + rows_txt;
     if (newAdditionalURL)
         return baseURL + "?" + newAdditionalURL;
