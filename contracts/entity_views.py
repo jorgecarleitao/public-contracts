@@ -57,18 +57,18 @@ def build_costumer_list_context(context, GET):
         elif ordering[order] == 'contracts':
             return querySet.order_by('-total_contracts'), True
 
-    def filter_search(search):
-        words = search.split(' ')
-        _filter = Q()
-        for word in words:
-            _filter &= Q(name__icontains=word)
-        return _filter
-
     key = _('search')
     if key in GET and GET[key]:
-        search_Q = filter_search(GET[key])
         context[key] = GET[key]
-        context['entities'] = context['entities'].filter(search_Q)
+
+        try:
+            nif = int(GET[key])
+            context['entities'] = context['entities'].filter(nif__contains=nif)
+        except ValueError:
+            nif = None
+        if not nif:
+            context['entities'] = context['entities'].filter(name__search=GET[key])
+
         context['search'] = GET[key]
 
     if _('sorting') in GET:

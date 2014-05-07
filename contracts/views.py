@@ -98,21 +98,19 @@ def build_entity_list_context(context, GET):
         elif order == _('expenses'):
             return querySet.order_by('-data__total_expended'), True
 
-    def filter_search(search):
-        words = search.split(' ')
-        _filter = Q()
-        for word in words:
-            _filter &= Q(name__icontains=word)
-        return _filter | Q(nif__contains=search)
-
     key = _('search')
     if key in GET and GET[key]:
-        search_string = GET[key]
+        context[key] = GET[key]
 
-        search_Q = filter_search(search_string)
-        context[key] = search_string
-        context['entities'] = context['entities'].filter(search_Q)
-        context['search'] = search_string
+        try:
+            nif = int(GET[key])
+            context['entities'] = context['entities'].filter(nif__contains=nif)
+        except ValueError:
+            nif = None
+        if not nif:
+            context['entities'] = context['entities'].filter(name__search=GET[key])
+
+        context['search'] = GET[key]
 
     if _('sorting') in GET:
         order = GET[_('sorting')]
@@ -162,18 +160,10 @@ def build_tender_list_context(context, GET):
 
         return querySet.order_by(ordering[order]), True
 
-    def filter_search(search):
-        words = search.split(' ')
-        _filter = Q()
-        for word in words:
-            _filter &= Q(description__icontains=word)
-        return _filter
-
     key = _('search')
     if key in GET and GET[key]:
-        search_Q = filter_search(GET[key])
         context[key] = GET[key]
-        context['tenders'] = context['tenders'].filter(search_Q)
+        context['tenders'] = context['tenders'].filter(description__search=GET[key])
         context['search'] = GET[key]
 
     if _('sorting') in GET:

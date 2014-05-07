@@ -1,25 +1,30 @@
 {% load i18n %}
 {% if contracts or search %}
-    <ul class="nav nav-pills pull-right">
-        <li {% if search %}class="active"{% endif %}>
-            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search contracts" %}" value="{{search}}">
-        </li>
-        <li {% if ordering == 'price' %}class="active"{% endif %}>
-            <a class="ordering order-price" title="{% trans "order by price" %}" href="#">
+    <div class="pagination btn-toolbar pull-right">
+        <div class="btn-group">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control{% if search %} active{% endif %}"
+                       autofocus="1"
+                       id="search_content"
+                       placeholder="{% trans "search tenders" %}"
+                       value="{{search}}">
+            </div>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default ordering order-price{% if ordering == 'price' %} active{% endif %}"
+               title="{% trans "order by price" %}"
+               href="#">
                 {% trans "price" %}
             </a>
-        </li>
-        <li {% if ordering == 'date' %}class="active"{% endif %}>
-            <a class="ordering order-date" title="{% trans "order by date" %}" href="#">
+            <a class="btn btn-default ordering order-date{% if ordering == 'date' or not ordering %} active{% endif %}"
+               title="{% trans "order by date" %}"
+               href="#">
                 {% trans "date" %}
             </a>
-        </li>
-        <li>
-            <a href="{{ request.path }}{% if request.path|last != "/"%}/{% endif %}rss">
-                <i class="icon-download"></i>RSS
-            </a>
-        </li>
-    </ul>
+        </div>
+        {% include "rss_btn_group.html" %}
+    </div>
 {% endif %}
 <script>
     $(document).ready(function() {

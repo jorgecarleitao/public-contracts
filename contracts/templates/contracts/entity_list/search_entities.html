@@ -1,20 +1,29 @@
 {% load i18n %}
 {% if entities or search %}
-    <ul class="nav nav-pills pull-right">
-        <li {% if search %}class="active"{% endif %}>
-            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
-        </li>
-        <li {% if ordering == 'earnings' %}class="active"{% endif %}>
-            <a class="ordering order-earnings" title="{% trans "order by earnings" %}" href="#">
+    <div class="pagination btn-toolbar pull-right">
+        <div class="btn-group">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control{% if search %} active{% endif %}"
+                       autofocus="1"
+                       id="search_content"
+                       placeholder="{% trans "search entities" %}"
+                       value="{{search}}">
+            </div>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default ordering order-earnings{% if ordering == 'earnings' %} active{% endif %}"
+               title="{% trans "order by earnings" %}"
+               href="#">
                 {% trans "earnings" %}
             </a>
-        </li>
-        <li {% if ordering == 'expenses' %}class="active"{% endif %}>
-            <a class="ordering order-expenses" title="{% trans "order by expenses" %}" href="#">
+            <a class="btn btn-default ordering order-expenses{% if ordering == 'expenses' %} active{% endif %}"
+               title="{% trans "order by expenses" %}"
+               href="#">
                 {% trans "expenses" %}
             </a>
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endif %}
 <script>
     $(document).ready(function() {

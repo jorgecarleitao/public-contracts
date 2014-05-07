@@ -1,25 +1,34 @@
 {% load i18n %}
 {% if entities or search %}
-    <ul class="nav nav-pills pull-right">
-        <li {% if search %}class="active"{% endif %}>
-            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search entities" %}" value="{{search}}">
-        </li>
-        <li {% if ordering == 'name' %}class="active"{% endif %}>
-            <a class="ordering order-name" title="{% trans "order by name" %}" href="#">
+    <div class="pagination btn-toolbar pull-right">
+        <div class="btn-group">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control{% if search %} active{% endif %}"
+                       autofocus="1"
+                       id="search_content"
+                       placeholder="{% trans "search entities" %}"
+                       value="{{search}}">
+            </div>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default ordering order-name{% if ordering == 'name' %} active{% endif %}"
+               title="{% trans "order by name" %}"
+               href="#">
                 {% trans "name" %}
             </a>
-        </li>
-        <li {% if ordering == 'contracts' %}class="active"{% endif %}>
-            <a class="ordering order-contracts" title="{% trans "order by number of contracts" %}" href="#">
+            <a class="btn btn-default ordering order-contracts{% if ordering == 'contracts' %} active{% endif %}"
+               title="{% trans "order by number of contracts" %}"
+               href="#">
                 {% trans "contracts" %}
             </a>
-        </li>
-        <li {% if ordering == 'value' %}class="active"{% endif %}>
-            <a class="ordering order-value" title="{% trans "order by value" %}" href="#">
+            <a class="btn btn-default ordering order-value{% if ordering == 'value' %} active{% endif %}"
+               title="{% trans "order by value" %}"
+               href="#">
                 {% trans "value" %}
             </a>
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endif %}
 <script>
     $(document).ready(function() {

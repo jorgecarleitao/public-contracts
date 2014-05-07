@@ -1,18 +1,16 @@
 {% load i18n %}
-<div class="navbar">
-    <div class="navbar-inner">
-        <ul class="nav">
-            <li {% if not main_navigation_tab %}class="active"{% endif %}><a href="{% url "home" %}">{% trans "Publics" %}</a></li>
-            <li class="divider-vertical"></li>
-            <li {% if main_navigation_tab == 'contracts' %}class="active"{% endif %}>
-                <a href="{% url "contracts_home" %}">{% trans "Contracts" %}</a>
-            </li>
-            <li {% if main_navigation_tab == 'deputies' %}class="active"{% endif %}>
-                <a href="{% url "deputies_home" %}">{% trans "Deputies" %}</a>
-            </li>
-            <li {% if main_navigation_tab == 'law' %}class="active"{% endif %}>
-                <a href="{% url "law_home" %}">{% trans "Law" %}</a>
-            </li>
-        </ul>
-    </div>
-</div>
+<nav class="navbar navbar-default">
+    <ul class="nav navbar-nav">
+        <li {% if not main_navigation_tab %}class="active"{% endif %}>
+            <a href="{% url "home" %}">{% trans "Publics" %}</a></li>
+        <li {% if main_navigation_tab == 'contracts' %}class="active"{% endif %}>
+            <a href="{% url "contracts_home" %}">{% trans "Contracts" %}</a>
+        </li>
+        <li {% if main_navigation_tab == 'deputies' %}class="active"{% endif %}>
+            <a href="{% url "deputies_home" %}">{% trans "Deputies" %}</a>
+        </li>
+        <li {% if main_navigation_tab == 'law' %}class="active"{% endif %}>
+            <a href="{% url "law_home" %}">{% trans "Law" %}</a>
+        </li>
+    </ul>
+</nav>

@@ -1,22 +1,13 @@
 {% load i18n %}
-{% include "contracts/entity_list/search_entities.html" %}
-{% if entities %}
-    {% include "pagination.html" with items=entities%}
-{% endif %}
+<div class="container">
+    {% include "contracts/entity_list/search_entities.html" %}
+    {% if entities %}
+        {% include "pagination.html" with items=entities%}
+    {% endif %}
+</div>
 {% for entity in entities %}
     {% include "contracts/entity_list/entity_summary.html" %}
 {% endfor %}
 {% if entities %}
     {% include "pagination.html" with items=entities%}
 {% endif %}
-
-<script>
-    $(document).ready(function() {
-        $("a.page-selector").click(function() {
-            var me = $(this);
-            var newURL = null;
-            newURL = updateURLParameter(window.location.href, '{% trans "page"%}', me.html());
-            window.location.replace(newURL);
-        });
-    });
-</script>
