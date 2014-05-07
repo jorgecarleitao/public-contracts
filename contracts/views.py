@@ -1,9 +1,8 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 
-import models
+from . import models
 
 
 def home(request):

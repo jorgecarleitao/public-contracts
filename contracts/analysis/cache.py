@@ -1,7 +1,9 @@
 # coding=utf-8
+from __future__ import unicode_literals
+
 from django.core.cache import cache
 
-import analysis
+from . import analysis
 
 
 class Analysis:
@@ -36,23 +38,23 @@ class AnalysisManager(dict):
 AnalysisManager = AnalysisManager()
 
 _allAnalysis = [Analysis('municipalities_delta_time', analysis.get_entities_delta_time,
-                         u'Município'),
+                         'Município'),
                 Analysis('municipalities_contracts_time_series', analysis.get_entities_contracts_time_series,
-                         u'Município'),
+                         'Município'),
                 Analysis('excluding_municipalities_contracts_time_series', analysis.get_excluding_entities_contracts_time_series,
-                         u'Município'),
+                         'Município'),
                 Analysis('municipalities_categories_ranking', analysis.get_entities_specificity,
-                         u'Município'),
+                         'Município'),
                 Analysis('municipalities_procedure_types_time_series', analysis.get_procedure_types_time_series,
-                         u'Município'),
+                         'Município'),
                 Analysis('procedure_type_time_series', analysis.get_all_procedure_types_time_series),
                 Analysis('contracts_time_series', analysis.get_contracts_price_time_series),
                 Analysis('contracts_macro_statistics', analysis.get_contracts_macro_statistics),
                 Analysis('contracts_price_distribution', analysis.get_price_histogram),
                 Analysis('ministries_contracts_time_series', analysis.get_entities_contracts_time_series,
-                         u'Secretaria-Geral do Ministério'),
+                         'Secretaria-Geral do Ministério'),
                 Analysis('ministries_delta_time', analysis.get_entities_delta_time,
-                         u'Secretaria-Geral do Ministério'),
+                         'Secretaria-Geral do Ministério'),
 
                 Analysis('legislation_application_time_series', analysis.get_legislation_application_time_series)
 ]

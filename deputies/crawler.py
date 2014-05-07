@@ -3,8 +3,7 @@ import os
 import re
 from datetime import datetime
 
-from socket import error as SocketError
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 from contracts.crawler import AbstractCrawler
 

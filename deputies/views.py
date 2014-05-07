@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.db.models import Q, Count
 from django.utils.translation import ugettext as _
 
-import models
+from . import models
 
 
 def build_deputies_list_context(context, GET):

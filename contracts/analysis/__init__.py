@@ -1,1 +1,1 @@
-from cache import AnalysisManager
+from .cache import AnalysisManager

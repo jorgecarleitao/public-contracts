@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 
-import composer
+from .composer import compose_text, compose_summary, normalize
 
 
 # document_id is represented by 8 numbers: year#### (e.g. 19971111)
@@ -81,15 +81,15 @@ class Document(models.Model):
         return "http://dre.pt/%s" % self.pdf_url
 
     def get_absolute_url(self):
-        name = u"%s" % slugify(self.type.name)
+        name = "%s" % slugify(self.type.name)
         if self.number:
-            name += u'-%s' % self.number
+            name += '-%s' % self.number
         else:
-            name += u'-de-' + self.date.strftime(u'%d/%m/%Y')
+            name += '-de-' + self.date.strftime('%d/%m/%Y')
         return reverse('law_view', args=[self.pk, name])
 
     def compose_summary(self):
-        return composer.compose_summary(self.summary)
+        return compose_summary(self.summary)
 
     def compose_text(self):
         """
@@ -100,11 +100,11 @@ class Document(models.Model):
 
         import traceback
         try:
-            return composer.compose_text(self)
-        except Exception, e:
-            print str(e)
-            print traceback.format_exc()
-            return composer.normalize(self.text)
+            return compose_text(self)
+        except Exception as e:
+            print(str(e))
+            print(traceback.format_exc())
+            return normalize(self.text)
 
     def name(self):
         name = self.type.name

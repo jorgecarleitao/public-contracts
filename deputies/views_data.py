@@ -1,6 +1,8 @@
 import json
+
 from django.http import HttpResponse
-from analysis import AnalysisManager
+
+from .analysis import AnalysisManager
 
 
 def deputies_time_distribution_json(request):

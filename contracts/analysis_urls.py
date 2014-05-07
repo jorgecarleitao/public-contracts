@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-import views_data
-import views_analysis
+from . import views_data
+from . import views_analysis
 
 
 urlpatterns = patterns('',

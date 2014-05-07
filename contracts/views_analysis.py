@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
-from analysis import AnalysisManager
+from .analysis import AnalysisManager
 
 
 @cache_page(60 * 60 * 24)

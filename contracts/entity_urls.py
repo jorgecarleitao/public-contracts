@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-import entity_views
-import feed
+from . import entity_views
+from . import feed
 
 urlpatterns = patterns('',
                        url(r'(\d+)$', entity_views.main_view, name='entity_canonical'),

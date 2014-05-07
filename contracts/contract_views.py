@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-import models
+from . import models
 
 
 def main_view(request, contract_id):

@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-import category_views
-import feed
+from . import category_views
+from . import feed
 
 urlpatterns = patterns('',
                        url(r'(\d+)$', category_views.main_view, name='category'),

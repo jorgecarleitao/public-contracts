@@ -2,14 +2,14 @@ import datetime
 import json
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Sum, Count, Q, connection
+from django.db.models import Sum, Count, connection
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
-import models
-from views import build_contract_list_context, build_tender_list_context
-from analysis.analysis import add_months
+from . import models
+from .views import build_contract_list_context, build_tender_list_context
+from .analysis.analysis import add_months
 
 
 def main_view(request, entity_id, slug=None):
@@ -97,8 +97,8 @@ def build_costumer_list_context(context, GET):
 def costumers(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    all_costumers = models.Entity.objects.filter(contracts_made__contracted__id=entity_id).distinct()\
-                   .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
+    all_costumers = models.Entity.objects.filter(contracts_made__contracted__id=entity_id).distinct() \
+        .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
 
     context = {'navigation_tab': 'entities',
                'entity': entity,
@@ -132,7 +132,7 @@ def contracts_made_time_series(request, entity_id):
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
     """
-    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
                        MONTH(`contracts_contract`.`signing_date`),
                        COUNT(`contracts_contract`.`id`)
                 FROM `contracts_contract`
@@ -169,7 +169,7 @@ def contracts_received_time_series(request, entity_id):
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
     """
-    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
                        MONTH(`contracts_contract`.`signing_date`),
                        COUNT(`contracts_contract`.`id`)
                 FROM `contracts_contract`

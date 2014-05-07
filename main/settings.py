@@ -1,7 +1,7 @@
-# e.g. SITE_DOMAIN = u'www.example.com'
-from domain import SITE_DOMAIN
+# e.g. SITE_DOMAIN = 'www.example.com'
+from .domain import SITE_DOMAIN
 # This file has a set of private settings dependent on the particular host.
-import settings_local
+from . import settings_local
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

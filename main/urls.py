@@ -5,8 +5,8 @@ from django.contrib.sitemaps.views import sitemap
 import contracts.urls
 import deputies.urls
 import law.urls
-import views
-from sitemaps import ContractsSitemap
+from . import views
+from .sitemaps import ContractsSitemap
 
 sitemaps = {
     'contracts': ContractsSitemap,

@@ -1,13 +1,15 @@
 # coding=utf-8
+from __future__ import unicode_literals
+
 import datetime
 import re
 import os
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from contracts.crawler import AbstractCrawler
 
-from models import Type, Creator, Document
-import models
+from .models import Type, Creator, Document
+from . import models
 
 
 class FirstSeriesCrawler(AbstractCrawler):
@@ -44,10 +46,10 @@ class FirstSeriesCrawler(AbstractCrawler):
             if not html.find('div', {'id': 'doc_data'}):
                 raise self.DocumentNotFound
 
-            print(u"saving document_id %d" % document_id)
+            print("saving document_id %d" % document_id)
             f = open(file_name, "wb")
             try:
-                f.write(str(html))
+                f.write(html)
             finally:
                 f.close()
         return html
@@ -62,7 +64,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             return 1
 
     def get_documents(self, year):
-        print(u"get_documents(year=%d)" % year)
+        print("get_documents(year=%d)" % year)
         document_number = self.last_document_id(year)
         fails = 0
         while True:
@@ -99,22 +101,22 @@ def clean_data(data_string):
             continue
         string = ' '.join(element.text.split()).strip()  # remove double white spaces
 
-        if identifier.text.startswith(u'DATA'):
+        if identifier.text.startswith('DATA'):
             data['date'] = clean_date(string)
-        elif identifier.text.startswith(u'DIPLOMA'):
+        elif identifier.text.startswith('DIPLOMA'):
             data['type'], data['number'] = clean_type_and_number(string)
-        elif identifier.text.startswith(u'NÚMERO'):
+        elif identifier.text.startswith('NÚMERO'):
             data['series'], data['series_number'], data['series_other'] = clean_series(string)
-        elif identifier.text.startswith(u'EMISSOR'):
+        elif identifier.text.startswith('EMISSOR'):
             data['creator'] = clean_creator(string)
-        elif identifier.text.startswith(u'PÁGINAS'):
+        elif identifier.text.startswith('PÁGINAS'):
             data['series_pages'] = clean_pages(string)
-        elif identifier.text.startswith(u'SUMÁRIO'):
+        elif identifier.text.startswith('SUMÁRIO'):
             data['summary'] = clean_summary(element)
-        elif element.text == u'':
+        elif element.text == '':
             pass
         else:
-            print [element.text]
+            print([element.text])
             raise IndexError(element.text)
 
     doc_text = soup.find('div', {'id': 'doc_texto'})
@@ -131,22 +133,22 @@ def clean_data(data_string):
 
 def clean_date(string):
     if ',' in string:
-        string = string.split(u', ')[-1]
+        string = string.split(', ')[-1]
     elif string[0] in [str(x) for x in range(1, 9)] or string[0:2] in [str(x) for x in range(10, 30)]:
         pass
     else:
-        string = ' '.join(string.split(u' ')[1:])
+        string = ' '.join(string.split(' ')[1:])
 
-    if u'Nota:' in string:
-        string = string.split(u' Nota:')[0]
+    if 'Nota:' in string:
+        string = string.split(' Nota:')[0]
 
-    date = datetime.datetime.strptime(string.encode('utf-8'), u'%d de %B de %Y').date()
+    date = datetime.datetime.strptime(string, '%d de %B de %Y').date()
     return date
 
 
 def clean_type_and_number(string):
-    if u'n.º' in string:
-        matches = re.search(u'(.*) n\.º (.*) \(?', string)
+    if 'n.º' in string:
+        matches = re.search('(.*) n\.º (.*) \(?', string)
         type_name = matches.group(1).strip()
         number = matches.group(2).strip()
     else:
@@ -154,14 +156,14 @@ def clean_type_and_number(string):
         number = None
 
     # synonymous and typos check
-    if type_name == u'Declaração de Rectificação':
-        type_name = u'Declaração de Retificação'
-    if type_name == u'Declaração de rectificação':
-        type_name = u'Declaração de Retificação'
-    if type_name == u'Decreto do Presidente de República':
-        type_name = u'Decreto do Presidente da República'
-    if type_name == u'Resolução da  Assembleia da República':
-        type_name = u'Resolução da Assembleia da República'
+    if type_name == 'Declaração de Rectificação':
+        type_name = 'Declaração de Retificação'
+    if type_name == 'Declaração de rectificação':
+        type_name = 'Declaração de Retificação'
+    if type_name == 'Decreto do Presidente de República':
+        type_name = 'Decreto do Presidente da República'
+    if type_name == 'Resolução da  Assembleia da República':
+        type_name = 'Resolução da Assembleia da República'
 
     type, created = Type.objects.get_or_create(name=type_name)
 
@@ -169,7 +171,7 @@ def clean_type_and_number(string):
 
 
 def clean_series(string):
-    strings = string.split(u' SÉRIE ')
+    strings = string.split(' SÉRIE ')
 
     series_number = strings[0]
     series_string = strings[1]
@@ -237,7 +239,8 @@ class Populator:
         except IOError:
             raise self.DocumentNotFound
 
-    def populate_from_document(self, document_id, data):
+    @staticmethod
+    def populate_from_document(document_id, data):
         print("populate_from_document(%d)" % document_id)
         data = clean_data(data)
         data['dre_doc_id'] = document_id
@@ -247,7 +250,7 @@ class Populator:
         except Document.DoesNotExist:
             document = Document()
 
-        for attr, value in data.iteritems():
+        for attr, value in data.items():
             setattr(document, attr, value)
         document.save()
 
@@ -265,7 +268,7 @@ class Populator:
 
     def populate_all(self, first_year=1910):
         last_year = datetime.datetime.now().date().year
-        for year in xrange(first_year, last_year + 1):
+        for year in range(first_year, last_year + 1):
             self.populate_documents(year)
 
     def populate_document(self, document_id):

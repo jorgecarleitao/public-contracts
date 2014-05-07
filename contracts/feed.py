@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import unicode_literals
+
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -23,10 +25,10 @@ class CategoryContractsFeed(Feed):
         return _("Contracts in \"%s\"" % obj.description_pt)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - " + (item.contract_description or "no description")
+        return price_str + "€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -43,11 +45,11 @@ class CategoryTendersFeed(CategoryContractsFeed):
         return _("Tenders in \"%s\"" % obj.description_pt)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
-               u" - " + (item.description or "no description")
+        return price_str + "€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
+               " - " + (item.description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -73,10 +75,10 @@ class ContractsFeed(Feed):
         return _("Latest contracts in %s" % SITE_NAME)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - " + (item.contract_description or "no description")
+        return price_str + "€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -102,10 +104,10 @@ class EntityContractsFeed(Feed):
         return _("Contracts with \"%s\"" % obj.name)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - " + (item.contract_description or "no description")
+        return price_str + "€ - " + (item.contract_description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -122,11 +124,11 @@ class EntityTendersFeed(EntityContractsFeed):
         return _("Tenders created by \"%s\"" % obj.name)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
-               u" - " + (item.description or "no description")
+        return price_str + "€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
+               " - " + (item.description or "no description")
 
     def item_description(self, item):
         result = "Contractors: "
@@ -152,11 +154,11 @@ class TendersFeed(Feed):
         return _("Latest tenders in %s" % SITE_NAME)
 
     def item_title(self, item):
-        price_str = u'unknown'
+        price_str = 'unknown'
         if item.price:
             price_str = str(item.price/100)
-        return price_str + u"€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
-               u" - " + (item.description or "no description")
+        return price_str + "€ - DEADLINE: " + item.deadline_date.strftime("%Y-%m-%d") +\
+               " - " + (item.description or "no description")
 
     def item_link(self, item):
         return item.get_dre_url()

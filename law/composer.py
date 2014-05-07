@@ -1,9 +1,10 @@
 # coding=utf-8
-import re
-from BeautifulSoup import BeautifulSoup, Tag, NavigableString
-from django.utils.text import slugify
+from __future__ import unicode_literals
 
-import models
+import re
+from bs4 import BeautifulSoup, Tag, NavigableString
+
+from django.utils.text import slugify
 
 
 def normalize(text):
@@ -11,51 +12,50 @@ def normalize(text):
     text = ' '.join(text.split())
 
     ## to substitute <br/> by </p><p>
-    text = text.replace(u"<br />", u"<br/>")
-    text = text.replace(u"<br/>", u"</p><p>")
-    text = text.replace(u"<br >", u"<br>")
-    text = text.replace(u"<br>", u"</p><p>")
-    text = unicode(text)
+    text = text.replace("<br />", "<br/>")
+    text = text.replace("<br/>", "</p><p>")
+    text = text.replace("<br >", "<br>")
+    text = text.replace("<br>", "</p><p>")
 
     ## strip inside tags
-    text = text.replace(u'<p> ', u'<p>')
-    text = text.replace(u' </p>', u'</p>')
+    text = text.replace('<p> ', '<p>')
+    text = text.replace(' </p>', '</p>')
 
-    text = text.replace(u'ARTIGO', u'Artigo')
-    text = text.replace(u'PARTE', u'Parte')
-    text = text.replace(u'TÍTULO', u'Título')
-    text = text.replace(u'CAPÍTULO', u'Capítulo')
-    text = text.replace(u'SECÇÃO', u'Secção')
-    text = text.replace(u'ANEXO', u'Anexo')
+    text = text.replace('ARTIGO', 'Artigo')
+    text = text.replace('PARTE', 'Parte')
+    text = text.replace('TÍTULO', 'Título')
+    text = text.replace('CAPÍTULO', 'Capítulo')
+    text = text.replace('SECÇÃO', 'Secção')
+    text = text.replace('ANEXO', 'Anexo')
 
     # older documents use "Art." instead of "Artigo"; change it
-    text = re.sub(u'Art\. (\d+)\.º (.*?)',
-                  lambda m: u"Artigo %s.º %s" % m.group(1, 2),
+    text = re.sub('Art\. (\d+)\.º (.*?)',
+                  lambda m: "Artigo %s.º %s" % m.group(1, 2),
                   text
     )
 
     # older documents use "Artigo #.º - 1 -" instead of "Artigo #.º 1 -"; change it
-    text = re.sub(u'Artigo (\d+)\.º - (.*?)',
-                  lambda m: u"Artigo %s.º %s" % m.group(1, 2),
+    text = re.sub('Artigo (\d+)\.º - (.*?)',
+                  lambda m: "Artigo %s.º %s" % m.group(1, 2),
                   text
     )
 
     # create <p>'s specifically for start of articles
-    text = re.sub(u"<p>Artigo (\d+)\.º (.*?)</p>",
-                  lambda m: u"<p>Artigo %s.º</p><p>%s</p>" % m.group(1, 2),
+    text = re.sub("<p>Artigo (\d+)\.º (.*?)</p>",
+                  lambda m: "<p>Artigo %s.º</p><p>%s</p>" % m.group(1, 2),
                   text)
 
     ## add blockquote to changes
-    text = text.replace(u'» </p>', u'»</p>')
-    text = text.replace(u'<p> «', u'<p>«')
+    text = text.replace('» </p>', '»</p>')
+    text = text.replace(r'<p> «', r'<p>«')
 
-    text = re.sub(u"<p>«(.*?)»</p>",
-                  lambda m: u"<blockquote><p>%s</p></blockquote>" % m.group(1),
+    text = re.sub("<p>«(.*?)»</p>",
+                  lambda m: "<blockquote><p>%s</p></blockquote>" % m.group(1),
                   text, flags=re.MULTILINE)
 
     # normalize bullets to "# -" (substituting the ones using #.)
-    text = re.sub(ur"<p>(\d+)\.",
-                  lambda m: u"<p>%s -" % m.group(1),
+    text = re.sub(r"<p>(\d+)\.",
+                  lambda m: "<p>%s -" % m.group(1),
                   text)
 
     return text
@@ -68,25 +68,26 @@ def add_pdf_references(text, document):
     document.get_pdf_url()
 
     def replace_docs(match):
-        return u'<a href=%s>(ver documento original)</a>' % document.get_pdf_url()
+        return '<a href=%s>(ver documento original)</a>' % document.get_pdf_url()
 
-    text = re.sub(u'\(ver documento original\)', replace_docs, text)
+    text = re.sub('\(ver documento original\)', replace_docs, text)
 
     return text
 
 
 def add_references(text):
-    types = list(models.Type.objects.exclude(name__contains='('))
+    from .models import Type, Document
+    types = list(Type.objects.exclude(name__contains='('))
 
     def create_regex():
         """
         Regex to catch expressions of the form "type.name (\d+).º".
         """
-        regex = u'('
+        regex = '('
         for name in [type.name for type in types]:
-            regex += name + u'|'
+            regex += name + '|'
         regex = regex[:-1]
-        regex += ur') n.º (.*?/\d+)'
+        regex += r') n.º (.*?/\d+)'
         return regex
 
     def replace_docs(match):
@@ -97,66 +98,66 @@ def add_references(text):
         matched_type = next(type for type in types if type.name == matched_type_name)
         matched_number = matched_number.strip()
 
-        default = u'%s n.º %s' % (matched_type_name, matched_number)
+        default = '%s n.º %s' % (matched_type_name, matched_number)
 
         try:
-            doc = models.Document.objects.get(type_id=matched_type.id, number=matched_number)
-        except models.Document.DoesNotExist:
+            doc = Document.objects.get(type_id=matched_type.id, number=matched_number)
+        except Document.DoesNotExist:
             return default
 
         summary_soup = BeautifulSoup(doc.summary)
-        return u'<a class="reference-%d" title="%s" href="%s">%s</a>' % (doc.id,
-                                                                         summary_soup.getText(),
-                                                                         doc.get_absolute_url(),
-                                                                         default)
+        return '<a class="reference-%d" title="%s" href="%s">%s</a>' % (doc.id,
+                                                                        summary_soup.getText(),
+                                                                        doc.get_absolute_url(),
+                                                                        default)
 
     return re.sub(create_regex(), replace_docs, text)
 
 
-hierarchy_priority = [u'Anexo',
-                      u'Parte',
-                      u'Título',
-                      u'Capítulo',
-                      u'Secção',
-                      u'Sub-Secção',
-                      u'Artigo',
-                      u'Número',
-                      u'Alínea']
+hierarchy_priority = ['Anexo',
+                      'Parte',
+                      'Título',
+                      'Capítulo',
+                      'Secção',
+                      'Sub-Secção',
+                      'Artigo',
+                      'Número',
+                      'Alínea']
 
-hierarchy_classes = {u'Anexo': 'anexo',
-                     u'Parte': 'parte',
-                     u'Título': 'titulo',
-                     u'Capítulo': 'capitulo',
-                     u'Secção': 'seccao',
-                     u'Sub-Secção': 'subseccao',
-                     u'Artigo': 'artigo',
-                     u'Número': 'numero',
-                     u'Alínea': 'alinea'}
+hierarchy_classes = {'Anexo': 'anexo',
+                     'Parte': 'parte',
+                     'Título': 'titulo',
+                     'Capítulo': 'capitulo',
+                     'Secção': 'seccao',
+                     'Sub-Secção': 'subseccao',
+                     'Artigo': 'artigo',
+                     'Número': 'numero',
+                     'Alínea': 'alinea'}
 
 hierarchy_classes_with_titles = ['anexo', 'parte', 'titulo', 'capitulo', 'seccao', 'subseccao', 'artigo']
 
-hierarchy_html_titles = {u'Parte': 'h2',
-                         u'Título': 'h3',
-                         u'Capítulo': 'h3',
-                         u'Secção': 'h4',
-                         u'Sub-Secção': 'h5',
-                         u'Anexo': 'h2',
-                         u'Artigo': 'h5'}
+hierarchy_html_titles = {'Parte': 'h2',
+                         'Título': 'h3',
+                         'Capítulo': 'h3',
+                         'Secção': 'h4',
+                         'Sub-Secção': 'h5',
+                         'Anexo': 'h2',
+                         'Artigo': 'h5'}
 
-hierarchy_html_lists = {u'Número': 'li', u'Alínea': 'li'}
+hierarchy_html_lists = {'Número': 'li', 'Alínea': 'li'}
 
-hierarchy_regex = {u'Anexo': u'^Anexo(.*)',
-                   u'Parte': u'^Parte(.*)',
-                   u'Título': u'^Título(.*)',
-                   u'Capítulo': u'^Capítulo (.*)',
-                   u'Secção': u'^Secção (.*)',
-                   u'Sub-Secção': u'^SUBSecção (.*)',
-                   u'Artigo': u'^Artigo (.*)\.º$',
-                   u'Número': u'^(\d+) - .*',
-                   u'Alínea': u'^(\w+)\) .*',
+hierarchy_regex = {'Anexo': '^Anexo(.*)',
+                   'Parte': '^Parte(.*)',
+                   'Título': '^Título(.*)',
+                   'Capítulo': '^Capítulo (.*)',
+                   'Secção': '^Secção (.*)',
+                   'Sub-Secção': '^SUBSecção (.*)',
+                   'Artigo': '^Artigo (.*)\.º$',
+                   'Número': '^(\d+) - .*',
+                   'Alínea': '^(\w+)\) .*',
                    }
 
-formal_hierarchy_elements = [u'Anexo', u'Artigo', u'Número', u'Alínea']
+formal_hierarchy_elements = ['Anexo', 'Artigo', 'Número', 'Alínea']
 
 
 def compose_text(document):
@@ -170,7 +171,7 @@ def compose_text(document):
 
     soup = organize_soup(soup)
 
-    text = unicode(soup)
+    text = str(soup)
 
     ## create references to same document
     text = add_pdf_references(text, document)
@@ -258,8 +259,8 @@ def organize_soup(soup):
                     sufix = '-' + slugify(search.group(1).strip())
                 current_element[format]['id'] = prefix + hierarchy_classes[format] + sufix
 
-                anchor_tag = Tag(soup, 'a', {'class': 'headerlink', 'href': u'#%s' % current_element[format]['id']})
-                anchor_tag.insert(0, NavigableString(u' ¶'))
+                anchor_tag = Tag(soup, 'a', {'class': 'headerlink', 'href': '#%s' % current_element[format]['id']})
+                anchor_tag.insert(0, NavigableString(' ¶'))
 
                 if format in hierarchy_html_titles:
                     current_element_title.contents[0].append(anchor_tag)
@@ -270,8 +271,8 @@ def organize_soup(soup):
                         current_element[format].contents[0].append(anchor_tag)
 
             # reset all current_element in lower hierarchy
-            for format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
-                current_element[format] = None
+            for lower_format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
+                current_element[lower_format] = None
 
             break
         else:
@@ -286,9 +287,9 @@ def organize_soup(soup):
                     klass = previous_element.parent["class"]
                 except KeyError:
                     klass = None
-                if klass == 'title'\
-                   and previous_element.parent.contents\
-                   and previous_element.parent.contents[0] == previous_element:
+                if klass == 'title' \
+                        and previous_element.parent.contents \
+                        and previous_element.parent.contents[0] == previous_element:
                     previous_element.parent.append(element)
         previous_element = element
 
@@ -296,12 +297,14 @@ def organize_soup(soup):
 
 
 def compose_summary(summary):
+    from .models import Document
+
     soup = BeautifulSoup(summary)
 
     for element in soup.findAll('a'):
         try:
             dre_doc_id = int(element['href'].split('=')[1])
-            document = models.Document.objects.get(dre_doc_id=dre_doc_id)
+            document = Document.objects.get(dre_doc_id=dre_doc_id)
         except:
             ## other link
             continue

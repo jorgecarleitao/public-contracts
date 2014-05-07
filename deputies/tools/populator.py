@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import unicode_literals
 
 import datetime
 from deputies import models
@@ -58,12 +59,12 @@ class DeputiesDBPopulator(object):
             district = contracts.models.District.objects.get(name=mandate_data['constituency'])
         except contracts.models.District.DoesNotExist:
             # the districts have slightly different names
-            if mandate_data['constituency'] == u"Fora da Europa" or mandate_data['constituency'] == u"Europa":
+            if mandate_data['constituency'] == "Fora da Europa" or mandate_data['constituency'] == "Europa":
                 district = None
-            elif mandate_data['constituency'] == u"Madeira":
-                district = contracts.models.District.objects.get(name=u"Região Autónoma da Madeira")
-            elif mandate_data['constituency'] == u"Açores":
-                district = contracts.models.District.objects.get(name=u"Região Autónoma dos Açores")
+            elif mandate_data['constituency'] == "Madeira":
+                district = contracts.models.District.objects.get(name="Região Autónoma da Madeira")
+            elif mandate_data['constituency'] == "Açores":
+                district = contracts.models.District.objects.get(name="Região Autónoma dos Açores")
             else:
                 raise
 
@@ -88,10 +89,10 @@ class DeputiesDBPopulator(object):
         print('clean_deputy %d' % data['id']),
         try:
             deputy = models.Deputy.objects.get(official_id=data['id'])
-            print 'already exists'
+            print('already exists')
         except models.Deputy.DoesNotExist:
             deputy = models.Deputy()
-            print 'creating entry'
+            print('creating entry')
 
         # validate data
         deputy.official_id = data['id']

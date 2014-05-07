@@ -31,7 +31,7 @@ class Deputy(models.Model):
         self.save()
 
     def get_image_url(self):
-        return 'http://app.parlamento.pt/webutils/getimage.aspx?id=%d&type=deputado'  % self.official_id
+        return 'http://app.parlamento.pt/webutils/getimage.aspx?id=%d&type=deputado' % self.official_id
 
     class Meta:
         ordering = ['name']

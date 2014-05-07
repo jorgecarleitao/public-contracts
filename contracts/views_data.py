@@ -1,6 +1,8 @@
 import json
+
 from django.http import HttpResponse
-from analysis import AnalysisManager
+
+from .analysis import AnalysisManager
 
 
 def entities_category_ranking_json(request):

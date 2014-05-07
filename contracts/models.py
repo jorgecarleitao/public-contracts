@@ -140,7 +140,7 @@ class Entity(models.Model):
         """
         Computes the data of this entity from the existing relations.
         """
-        print 'computing data of entity %d' % self.base_id
+        print('computing data of entity %d' % self.base_id)
 
         # if data does not exist, we create it.
         try:

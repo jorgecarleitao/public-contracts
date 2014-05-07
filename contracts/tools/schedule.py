@@ -4,7 +4,7 @@ and cache.
 """
 ## setup the Django with its private settings for server.
 if __name__ == "__main__":
-    import set_up
+    from . import set_up
     set_up.set_up_django_environment('tools.settings_private')
 
 from contracts.crawler import crawler
@@ -25,7 +25,7 @@ def update():
         category.compute_data()
 
     # update analysis
-    for analysis in AnalysisManager.values():
+    for analysis in list(AnalysisManager.values()):
         analysis.update()
 
 if __name__ == "__main__":

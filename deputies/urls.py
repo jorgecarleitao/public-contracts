@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-import views
-import views_data
+from . import views
+from . import views_data
 
 
 urlpatterns = patterns('',
@@ -13,4 +13,4 @@ urlpatterns = patterns('',
 
                        url(r'^%s/data$' % _('deputies-time-distribution'), views_data.deputies_time_distribution_json,
                            name='deputies_survival_distribution_json'),
-)
+                       )

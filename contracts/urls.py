@@ -1,13 +1,13 @@
 from django.conf.urls import patterns, url, include
 from django.utils.translation import ugettext as _
 
-import feed
-import views
+from . import feed
+from . import views
 
-import entity_urls
-import contract_urls
-import category_urls
-import analysis_urls
+from . import entity_urls
+from . import contract_urls
+from . import category_urls
+from . import analysis_urls
 
 
 urlpatterns = patterns('',

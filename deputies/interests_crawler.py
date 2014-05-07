@@ -1,9 +1,10 @@
 import pickle
-from BeautifulSoup import BeautifulSoup
 from datetime import datetime
-from crawler import safe_pickle_load, AbstractCrawler
 
-import models
+from bs4 import BeautifulSoup
+
+from .crawler import safe_pickle_load, AbstractCrawler
+from . import models
 
 
 def parse_paid(value):

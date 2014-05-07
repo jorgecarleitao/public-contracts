@@ -3,11 +3,10 @@ from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
-import models
+from . import models
 
 
 def build_laws_list_context(context, GET):
-
     key = _('search')
     if key in GET and GET[key]:
         context[key] = GET[key]
@@ -33,7 +32,10 @@ def home(request):
 
 
 def law_list(request):
-    context = {'laws': models.Document.objects.exclude(type_id__in=[95, 97, 145, 150]).order_by("-dre_doc_id").prefetch_related("type")}
+    context = {'laws': models.Document.objects
+        .exclude(type_id__in=[95, 97, 145, 150])
+        .order_by("-dre_doc_id")
+        .prefetch_related("type")}
 
     context = build_laws_list_context(context, request.GET)
 

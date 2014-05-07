@@ -1,9 +1,9 @@
 from django.db.models import Sum, Count
 from django.shortcuts import render, get_object_or_404
 
-import models
-from views import build_contract_list_context, build_tender_list_context
-from entity_views import build_costumer_list_context
+from . import models
+from .views import build_contract_list_context, build_tender_list_context
+from .entity_views import build_costumer_list_context
 
 
 def main_view(request, category_id):
@@ -64,7 +64,7 @@ def contracted(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    entities = models.Entity.objects.filter(contract__category_id__in=category_id).distinct()\
+    entities = models.Entity.objects.filter(contract__category_id__in=categories_ids).distinct()\
                .annotate(total_expended=Sum("contract__price"), total_contracts=Count("contract__price"))
 
     context = {'navigation_tab': 'categories',

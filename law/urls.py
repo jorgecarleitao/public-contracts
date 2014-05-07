@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
-import views
+from . import views
 
 urlpatterns = patterns('',
                        url(r'^%s/%s$' % (_('law'), _('home')), views.home, name='law_home'),
@@ -11,4 +11,4 @@ urlpatterns = patterns('',
 
                        url(r'^%s/(\d+)$' % _('document'), views.law_view, name='law_view'),
                        url(r'^%s/(\d+)/(.*)' % _('document'), views.law_view, name='law_view'),
-)
+                       )

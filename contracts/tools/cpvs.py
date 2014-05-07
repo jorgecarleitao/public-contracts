@@ -1,6 +1,7 @@
-import set_up
-set_up.set_up_django_environment()
 import xml.etree.ElementTree
+
+from . import set_up
+set_up.set_up_django_environment()
 
 from contracts.models import Category
 
@@ -38,7 +39,7 @@ def build_categories(file_path='../'):
                 assert depth == category.depth, 'category %s with different depth' % data['code']
             except Category.DoesNotExist:
                 Category.add_root(**data)
-                print 'category %s added' % data['code']
+                print('category %s added' % data['code'])
         else:
             # we need to build the parent code:
             # we will use __startwith, dropping the "-#".
@@ -55,9 +56,9 @@ def build_categories(file_path='../'):
                 try:
                     parent_category = Category.objects.get(code__startswith=parent_pure_code)
                     parent_category.add_child(**data)
-                    print 'category %s added' % data['code']
+                    print('category %s added' % data['code'])
                 except Category.DoesNotExist:
-                    print 'category %s not added because lacks parent' % data['code']
+                    print('category %s not added because lacks parent' % data['code'])
                     continue
 
         count += 1

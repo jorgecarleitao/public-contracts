@@ -1,9 +1,9 @@
 if __name__ == "__main__":
-    import set_up
+    from . import set_up
     set_up.set_up_django_environment('settings_private')
 
 from deputies import crawler as c
-import populator as p
+from . import populator as p
 
 
 def update():

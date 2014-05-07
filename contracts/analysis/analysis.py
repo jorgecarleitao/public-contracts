@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import unicode_literals
+
 from datetime import date, timedelta
 import datetime
 import calendar
@@ -112,7 +114,7 @@ def get_entities_delta_time(startswith_string):
         count = 0
         avg = timedelta(0)
         for contract in entity.contracts_made.exclude(signing_date=None).exclude(added_date=None) \
-            .values('signing_date', 'added_date'):
+                .values('signing_date', 'added_date'):
             avg += contract['added_date'] - contract['signing_date']
             count += 1
 
@@ -131,7 +133,7 @@ def get_entities_contracts_time_series(startswith_string):
     """
     startswith_string += '%%'
 
-    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
                        MONTH(`contracts_contract`.`signing_date`),
                        COUNT(`contracts_contract`.`id`)
                 FROM `contracts_contract`
@@ -254,7 +256,7 @@ def get_legislation_application_time_series():
 
     max_days = 10  # Código dos contratos públicos - parte II - Contratação pública - CAPÍTULO XII - Artigo 108.
 
-    query = u'''SELECT YEAR(`contracts_contract`.`signing_date`),
+    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
                        MONTH(`contracts_contract`.`signing_date`),
                        COUNT(`contracts_contract`.`id`),
                        SUM(DATEDIFF(`contracts_contract`.`signing_date`,`contracts_contract`.`added_date`) > 10)

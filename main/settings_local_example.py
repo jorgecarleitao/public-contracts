@@ -1,4 +1,4 @@
-from domain import SITE_DOMAIN, SITE_NAME
+from .domain import SITE_DOMAIN, SITE_NAME
 
 HOST_NAME = 'web306.webfaction.com'
 
