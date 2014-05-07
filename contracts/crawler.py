@@ -608,7 +608,7 @@ class TendersCrawler(DynamicCrawler):
         data = {'base_id': item['id'],
                 'act_type': clean_act_type(item['type']),
                 'model_type': clean_model_type(item['modelType']),
-                'contract_type': clean_contract_type(item[u'contractTypes']),
+                'contract_type': clean_contract_type(item['contractType']),
                 'description': item['contractDesignation'],
                 'announcement_number': item['announcementNumber'],
                 'dre_number': int(item['dreNumber']),
