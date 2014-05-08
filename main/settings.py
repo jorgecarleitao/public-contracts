@@ -10,6 +10,16 @@ if hasattr(settings_local, 'ADMINS'):
     ADMINS = settings_local.ADMINS
     MANAGERS = ADMINS
 
+
+if hasattr(settings_local, 'EMAIL_HOST'):
+    EMAIL_HOST = settings_local.EMAIL_HOST
+    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
+    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
+    SERVER_EMAIL = settings_local.SERVER_EMAIL
+    EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_DOMAIN
+
+
 import socket
 
 if socket.gethostname() == settings_local.HOST_NAME:
@@ -25,7 +35,6 @@ main_directory = os.path.abspath(os.path.dirname(__file__))
 site_directory = os.path.abspath(os.path.dirname(main_directory))
 
 TIME_ZONE = 'Europe/Lisbon'
-LANGUAGE_CODE = 'pt'
 
 DATABASES = {
     'default': {
@@ -74,9 +83,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
 )
 
-if DEBUG:
-    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -113,3 +119,4 @@ INSTALLED_APPS = (
 
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
+    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
