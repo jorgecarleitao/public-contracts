@@ -6,6 +6,11 @@ def site(request):
     """
     Returns context variables of the website
     """
+    try:
+        tab = resolve(request.path).app_name
+    except:
+        tab = 'main'
+
     return {'SITE_NAME': SITE_NAME,
             'SITE_DOMAIN': SITE_DOMAIN,
-            'main_navigation_tab': resolve(request.path).app_name}
+            'main_navigation_tab': tab}
