@@ -1,10 +1,17 @@
 {% load i18n %}
 {% if laws or search %}
-    <ul class="nav nav-pills pull-right">
-        <li {% if search %}class="active"{% endif %}>
-            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search laws" %}" value="{{search}}">
-        </li>
-    </ul>
+    <div class="pagination btn-toolbar pull-right">
+        <div class="btn-group">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control{% if search %} active{% endif %}"
+                       autofocus="1"
+                       id="search_content"
+                       placeholder="{% trans "search laws" %}"
+                       value="{{search}}">
+            </div>
+        </div>
+    </div>
 {% endif %}
 <script>
     $(document).ready(function() {
