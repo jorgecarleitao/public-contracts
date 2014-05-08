@@ -1,20 +1,29 @@
 {% load i18n %}
 {% if deputies or search %}
-    <ul class="nav nav-pills pull-right">
-        <li {% if search %}class="active"{% endif %}>
-            <input type="text" autofocus="1" id="search_content" placeholder="{% trans "search deputies" %}" value="{{search}}">
-        </li>
-        <li {% if ordering == 'name' %}class="active"{% endif %}>
-            <a class="ordering order-name" title="{% trans "order by name" %}" href="#">
+    <div class="pagination btn-toolbar pull-right">
+        <div class="btn-group">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control{% if search %} active{% endif %}"
+                       autofocus="1"
+                       id="search_content"
+                       placeholder="{% trans "search deputies" %}"
+                       value="{{search}}">
+            </div>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default ordering order-name{% if ordering == 'name' or not ordering %} active{% endif %}"
+               title="{% trans "order by name" %}"
+               href="#">
                 {% trans "name" %}
             </a>
-        </li>
-        <li {% if ordering == 'mandates' %}class="active"{% endif %}>
-            <a class="ordering order-mandates" title="{% trans "order by mandates" %}" href="#">
+            <a class="btn btn-default ordering order-mandates{% if ordering == 'mandates' %} active{% endif %}"
+               title="{% trans "order by mandates" %}"
+               href="#">
                 {% trans "mandates" %}
             </a>
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endif %}
 <script>
     $(document).ready(function() {

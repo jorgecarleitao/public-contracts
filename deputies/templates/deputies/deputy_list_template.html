@@ -1,8 +1,10 @@
 {% load i18n %}
-{% include "deputies/search_bar.html" %}
-{% if deputies %}
-    {% include "pagination.html" with items=deputies%}
-{% endif %}
+<div class="container">
+    {% include "deputies/search_bar.html" %}
+    {% if deputies %}
+        {% include "pagination.html" with items=deputies%}
+    {% endif %}
+</div>
 {% include "deputies/deputies_loop.html" %}
 {% if deputies %}
     {% include "pagination.html" with items=deputies %}
