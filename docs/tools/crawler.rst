@@ -4,7 +4,7 @@ Crawler for Contracts and Tenders
 .. currentmodule:: contracts.crawler
 
 .. _Base: http://www.base.gov.pt/base2
-.. _mechanize: http://wwwsearch.sourceforge.net/mechanize/
+.. _requests: http://docs.python-requests.org/en/latest/
 
 This document explains how Base_ provides its data and what our crawler works.
 
@@ -58,12 +58,12 @@ API
 
 .. class::AbstractCrawler
 
-    An object able to retrieve content from an url. When initialized, it initializes a mechanize_ browser.
+    An object able to retrieve content from an url.
     It has one method:
 
     .. method:: goToPage(url)
 
-        Returns the html of the url.
+        Returns the html of the url, using requests_.
 
 .. class::JSONCrawler
 

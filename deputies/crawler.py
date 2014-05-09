@@ -7,6 +7,7 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+import requests.exceptions
 from bs4 import BeautifulSoup
 
 from contracts.crawler import AbstractCrawler
@@ -252,14 +253,13 @@ class DeputiesCrawler(AbstractCrawler):
         while True:
             try:
                 entry = self.get_deputy(bid, True)
-            except SocketError:
-                if self.browser.addheaders:
+            except requests.exceptions.ConnectionError:
+                if 'User-agent' in self.request_headers:
                     logger.warning("removed header")
-                    self.browser.addheaders = []
+                    self.request_headers['User-agent'].pop()
                 else:
                     logger.warning("added header")
-                    self.browser.addheaders = ['User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
-                                               'AppleWebKit/537.36 (KHTML, like Gecko)']
+                    self.request_headers['User-agent'] = self.user_agent
                 entry = self.get_deputy(bid, True)
             if entry != {}:
                 yield entry

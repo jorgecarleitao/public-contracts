@@ -9,7 +9,7 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-import mechanize as mc
+import requests
 
 from . import models
 
@@ -143,25 +143,22 @@ def clean_dre_document(url):
 
 
 class AbstractCrawler(object):
+    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko)'
 
-    class NoMoreEntriesError:
+    class NoMoreEntriesError(Exception):
         pass
 
     def __init__(self):
-        # Browser
-        br = mc.Browser()
-
-        br.set_handle_robots(False)
-
         # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
-        br.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
-                                        'AppleWebKit/537.36 (KHTML, like Gecko)'),
-                         ('Range', "items=0-24")]
-        self.browser = br
+        self.request_headers = {'User-agent': self.user_agent,
+                                'Range': "items=0-24"}
 
     def goToPage(self, url):
-        response = self.browser.open(url)
-        return response.read()
+        response = requests.get(url, headers=self.request_headers)
+        return response.text
+
+    def set_headers_range(self, range):
+        self.request_headers['Range'] = "items=%d-%d" % range
 
 
 class JSONCrawler(AbstractCrawler):
@@ -332,7 +329,7 @@ class EntitiesCrawler(DynamicCrawler):
 
         def _retrieve_entities():
             logger.info('_retrieve_entities(%d)', block)
-            self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
+            self.set_headers_range(self.block_to_range(block))
             data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades")
             if len(data) == 0:
                 raise self.NoMoreEntriesError
@@ -443,7 +440,7 @@ class ContractsCrawler(DynamicCrawler):
         the last existing contract in Base's database.
         """
         def _retrieve_contracts():
-            self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
+            self.set_headers_range(self.block_to_range(block))
             data = self.goToPage("http://www.base.gov.pt/base2/rest/contratos")
             if len(data) == 0:  # if there are no entries, we just stop the procedure.
                 raise self.NoMoreEntriesError
