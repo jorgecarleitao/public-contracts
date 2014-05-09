@@ -120,3 +120,56 @@ INSTALLED_APPS = (
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
     MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        # If in debug, DEBUG to console
+        'debug_console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        # If no debug, INFO to console.
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        # If no debug, errors to admins
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        # This is the "catch all" logger
+        '': {
+            'handlers': ['debug_console', 'console', 'mail_admins'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
