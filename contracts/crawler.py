@@ -643,7 +643,7 @@ class TendersCrawler(DynamicCrawler):
             try:
                 data = self._retrieve_and_cache_tender_data(base_id)
                 error_counter = 0
-            except HTTPError:
+            except (HTTPError, ValueError):
                 error_counter += 1
                 if error_counter == 100:
                     return base_id
