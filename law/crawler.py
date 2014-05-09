@@ -16,14 +16,15 @@ from .models import Type, Creator, Document
 from . import models
 
 
+class DocumentNotFound(Exception):
+    pass
+
+
 class FirstSeriesCrawler(AbstractCrawler):
 
     data_directory = '../../law_data'
 
     # document_id is represented by 8 numbers: year#### (e.g. 19971111)
-
-    class DocumentNotFound(Exception):
-        pass
 
     def __init__(self):
         super(FirstSeriesCrawler, self).__init__()
@@ -48,7 +49,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             html = soup.find("div", dict(id='centro_total'))
 
             if not html.find('div', {'id': 'doc_data'}):
-                raise self.DocumentNotFound
+                raise DocumentNotFound
 
             logger.info("saving document_id %d", document_id)
             f = open(file_name, "wb")
@@ -75,7 +76,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             try:
                 self.retrieve_document(int("%04d%04d" % (year, document_number)))
                 fails = 0
-            except self.DocumentNotFound:
+            except DocumentNotFound:
                 fails += 1
                 logger.info("DocumentNotFound: %d", fails)
 
@@ -228,9 +229,6 @@ class Populator:
         import locale
         locale.setlocale(locale.LC_TIME, "pt_PT.UTF-8")
 
-    class DocumentNotFound(Exception):
-        pass
-
     def get_document(self, document_id):
         file_name = '%s/%d.dat' % (self.data_directory, document_id)
 
@@ -241,7 +239,7 @@ class Populator:
             finally:
                 f.close()
         except IOError:
-            raise self.DocumentNotFound
+            raise DocumentNotFound
 
     @staticmethod
     def populate_from_document(document_id, data):
