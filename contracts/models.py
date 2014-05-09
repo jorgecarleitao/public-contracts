@@ -1,8 +1,14 @@
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum, Count
 from django.utils.text import slugify
+
 from treebeard.ns_tree import NS_Node
 
 
@@ -140,7 +146,7 @@ class Entity(models.Model):
         """
         Computes the data of this entity from the existing relations.
         """
-        print('computing data of entity %d' % self.base_id)
+        logger.info('computing data of entity %d', self.base_id)
 
         # if data does not exist, we create it.
         try:

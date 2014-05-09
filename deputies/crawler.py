@@ -2,6 +2,10 @@ import pickle
 import os
 import re
 from datetime import datetime
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 from bs4 import BeautifulSoup
 
@@ -197,7 +201,7 @@ class DeputiesCrawler(AbstractCrawler):
         return entry
 
     def get_deputy(self, bid, flush_cache=False):
-        print('retrieving bid %d' % bid)
+        logger.info('retrieving bid %d', bid)
         file_name = self.data_directory + 'deputy_%d.dat' % bid
         data = safe_pickle_load(file_name)
 
@@ -205,7 +209,7 @@ class DeputiesCrawler(AbstractCrawler):
             try:
                 data = self.crawl_deputy(bid)
             except:
-                print('Not able to retrieve bid %d' % bid)
+                logger.exception('Not able to retrieve bid %d', bid)
                 raise
 
             f = open(file_name, "w")
@@ -250,10 +254,10 @@ class DeputiesCrawler(AbstractCrawler):
                 entry = self.get_deputy(bid, True)
             except SocketError:
                 if self.browser.addheaders:
-                    print("removed header")
+                    logger.warning("removed header")
                     self.browser.addheaders = []
                 else:
-                    print("added header")
+                    logger.warning("added header")
                     self.browser.addheaders = ['User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) '
                                                'AppleWebKit/537.36 (KHTML, like Gecko)']
                 entry = self.get_deputy(bid, True)

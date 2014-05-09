@@ -1,5 +1,9 @@
 # coding=utf-8
 from __future__ import unicode_literals
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 from django.core.cache import cache
 
@@ -21,7 +25,7 @@ class Analysis:
         return result
 
     def update(self):
-        print('Updating analysis "%s"' % self.name)
+        logger.info('Updating analysis "%s"', self.name)
         result = self.function(*self.args, **self.kwargs)
         cache.set(self.name, result, 60*60*24)
         return result

@@ -4,6 +4,10 @@ import pickle
 import re
 import json
 from urllib.error import HTTPError
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 import mechanize as mc
 
@@ -327,7 +331,7 @@ class EntitiesCrawler(DynamicCrawler):
         """
 
         def _retrieve_entities():
-            print('_retrieve_entities(%d)' % block)
+            logger.info('_retrieve_entities(%d)', block)
             self.browser.addheaders[1] = ('Range', "items=%d-%d" % self.block_to_range(block))
             data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades")
             if len(data) == 0:
@@ -339,7 +343,7 @@ class EntitiesCrawler(DynamicCrawler):
             f = open(file_name, "rb")
             data = pickle.load(f)
             if len(data) != 25:  # if block is not complete, we retrieve it again to try to complete it.
-                print('_get_entities_block(%d) returns len(data) = %d != 25' % (block, len(data)))
+                logger.info('_get_entities_block(%d) returns len(data) = %d != 25', block, len(data))
                 raise IOError
             f.close()
         except IOError:
@@ -368,7 +372,7 @@ class EntitiesCrawler(DynamicCrawler):
         Saves a set of 25 entities, identified by a block, into the database.
         If an entity already exists, it updates its data.
         """
-        print('_save_entities(%d)' % block)
+        logger.info('_save_entities(%d)', block)
 
         created_entities = []
         for data in self._get_entities_block(block):
@@ -450,8 +454,7 @@ class ContractsCrawler(DynamicCrawler):
             f = open(file_name, "rb")
             data = pickle.load(f)
             if len(data) != 25:  # if block is not complete, we retrieve it again to complete it.
-                # todo, write another error for this case
-                print('_get_contracts_block(%d) returns len(data) = %d != 25' % (block, len(data)))
+                logger.info('_get_contracts_block(%d) returns len(data) = %d != 25', block, len(data))
                 raise IOError
             f.close()
         except IOError:
@@ -473,7 +476,7 @@ class ContractsCrawler(DynamicCrawler):
             """
             Retrieves data from a specific contract.
             """
-            print('_retrieve_contract(%d)' % base_id)
+            logger.info('_retrieve_contract(%d)', base_id)
             url = 'http://www.base.gov.pt/base2/rest/contratos/%d' % base_id
             return self.goToPage(url)
 
@@ -512,11 +515,11 @@ class ContractsCrawler(DynamicCrawler):
         # we try to see if it already exists
         try:
             contract = models.Contract.objects.get(base_id=data['base_id'])
-            print('_save_contract(%s): contract %d already exists' % (item['id'], data['base_id']))
+            logger.info('_save_contract(%s): contract %d already exists', item['id'], data['base_id'])
         except models.Contract.DoesNotExist:
             # if it doesn't exist, we create it
             contract = models.Contract.objects.create(**data)
-            print('_save_contract(%s): contract %d saved' % (item['id'], data['base_id']))
+            logger.info('_save_contract(%s): contract %d saved', item['id'], data['base_id'])
 
         contractors = clean_entities(item['contracting'])
         contracted = clean_entities(item['contracted'])
@@ -526,7 +529,7 @@ class ContractsCrawler(DynamicCrawler):
         return list(contracted) + list(contractors)
 
     def _save_contracts(self, block):
-        print('save_contracts(%d)' % block)
+        logger.info('save_contracts(%d)', block)
         raw_contracts = self._get_contracts_block(block)
 
         affected_entities = []
@@ -534,9 +537,9 @@ class ContractsCrawler(DynamicCrawler):
             try:
                 data = self._retrieve_and_save_contract_data(raw_contract['id'])
                 affected_entities += self._save_contract(data)
-            # this has given errors before, we print the contract number to gain some information.
+            # this has given errors before, we log the contract number to gain some information.
             except:
-                print('error on saving contract %d' % raw_contract['id'])
+                logger.exception('error on saving contract %d', raw_contract['id'])
                 raise
 
         return affected_entities
@@ -584,7 +587,7 @@ class TendersCrawler(DynamicCrawler):
             """
             Retrieves data from a specific tender.
             """
-            print('_retrieve_tender_data(%d)' % base_id)
+            logger.info('_retrieve_tender_data(%d)', base_id)
             url = 'http://www.base.gov.pt/base2/rest/anuncios/%d' % base_id
             return self.goToPage(url)
 
@@ -621,16 +624,17 @@ class TendersCrawler(DynamicCrawler):
         try:
             data['category'] = models.Category.objects.get(code=data['cpvs'])
         except models.Category.DoesNotExist:
+            logger.warning('Category "%s" not found', data['cpvs'])
             data['category'] = None
 
         # we try to see if it already exists
         try:
             tender = models.Tender.objects.get(base_id=data['base_id'])
-            print('_save_tender(%s): tender %d already exists' % (item['id'], data['base_id']))
+            logger.info('_save_tender(%s): tender %d already exists', item['id'], data['base_id'])
         except models.Tender.DoesNotExist:
             # if it doesn't exist, we create it
             tender = models.Tender.objects.create(**data)
-            print('_save_tender(%s): tender %d saved' % (item['id'], data['base_id']))
+            logger.info('_save_tender(%s): tender %d saved', item['id'], data['base_id'])
 
         contractors = clean_entities(item['contractingEntities'])
         tender.contractors.add(*list(contractors))
@@ -651,11 +655,10 @@ class TendersCrawler(DynamicCrawler):
 
             try:
                 self._save_tender(data)
-            # this has given errors before, we print the contract number to gain some information.
+            # this has given errors before, we log the contract number to gain some information.
             except:
-                print('error on saving tender %d' % base_id)
-                #if base_id != 41407 and base_id != 41445:
-                #    raise
+                logger.exception('error on saving tender %d', base_id)
+                raise
 
             base_id += 1
 

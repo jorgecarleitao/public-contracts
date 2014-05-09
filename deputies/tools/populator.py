@@ -1,7 +1,11 @@
 # coding=utf-8
 from __future__ import unicode_literals
-
 import datetime
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 from deputies import models
 import contracts.models
 
@@ -86,13 +90,12 @@ class DeputiesDBPopulator(object):
         return mandate
 
     def populate_deputy(self, data):
-        print('clean_deputy %d' % data['id']),
         try:
             deputy = models.Deputy.objects.get(official_id=data['id'])
-            print('already exists')
+            logger.info('clean_deputy %d already exists', data['id'])
         except models.Deputy.DoesNotExist:
             deputy = models.Deputy()
-            print('creating entry')
+            logger.info('clean_deputy %d creating entry', data['id'])
 
         # validate data
         deputy.official_id = data['id']

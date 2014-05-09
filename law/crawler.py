@@ -4,6 +4,10 @@ from __future__ import unicode_literals
 import datetime
 import re
 import os
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 from bs4 import BeautifulSoup
 from contracts.crawler import AbstractCrawler
@@ -46,7 +50,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             if not html.find('div', {'id': 'doc_data'}):
                 raise self.DocumentNotFound
 
-            print("saving document_id %d" % document_id)
+            logger.info("saving document_id %d", document_id)
             f = open(file_name, "wb")
             try:
                 f.write(html)
@@ -64,7 +68,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             return 1
 
     def get_documents(self, year):
-        print("get_documents(year=%d)" % year)
+        logger.info("get_documents(year=%d)", year)
         document_number = self.last_document_id(year)
         fails = 0
         while True:
@@ -73,7 +77,7 @@ class FirstSeriesCrawler(AbstractCrawler):
                 fails = 0
             except self.DocumentNotFound:
                 fails += 1
-                print("DocumentNotFound: %d" % fails)
+                logger.info("DocumentNotFound: %d", fails)
 
             if fails == 50:
                 break
@@ -116,7 +120,7 @@ def clean_data(data_string):
         elif element.text == '':
             pass
         else:
-            print([element.text])
+            logger.exception('Unknown element in data')
             raise IndexError(element.text)
 
     doc_text = soup.find('div', {'id': 'doc_texto'})
@@ -241,7 +245,7 @@ class Populator:
 
     @staticmethod
     def populate_from_document(document_id, data):
-        print("populate_from_document(%d)" % document_id)
+        logger.info("populate_from_document(%d)", document_id)
         data = clean_data(data)
         data['dre_doc_id'] = document_id
 

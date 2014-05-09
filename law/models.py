@@ -1,3 +1,8 @@
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -98,12 +103,10 @@ class Document(models.Model):
         if self.text is None:
             return None
 
-        import traceback
         try:
             return compose_text(self)
         except Exception as e:
-            print(str(e))
-            print(traceback.format_exc())
+            logger.error("Compose text failed in document %d", self.id)
             return normalize(self.text)
 
     def name(self):

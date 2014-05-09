@@ -1,4 +1,10 @@
-import set_up
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+from main.tools import set_up
+
 set_up.set_up_django_environment('settings_private')
 
 from deputies.tools import schedule as deputies_schedule
@@ -8,14 +14,12 @@ from law.tools import schedule as law_schedule
 try:
     contracts_schedule.update()
 except:
-    print("contracts_schedule failed")
-    raise
+    logger.exception("contracts_schedule failed")
 
 try:
     law_schedule.update()
 except:
-    print("law_schedule failed")
-    raise
+    logger.exception("law_schedule failed")
 
 #try:
 #    deputies_schedule.update()
