@@ -54,7 +54,7 @@ class FirstSeriesCrawler(AbstractCrawler):
             logger.info("saving document_id %d", document_id)
             f = open(file_name, "wb")
             try:
-                f.write(html)
+                f.write(str(html).encode('utf-8'))
             finally:
                 f.close()
         return html
