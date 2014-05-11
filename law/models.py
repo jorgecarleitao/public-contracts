@@ -106,7 +106,7 @@ class Document(models.Model):
         try:
             return compose_text(self)
         except Exception as e:
-            logger.error("Compose text failed in document %d", self.id)
+            logger.exception("Compose text failed in document %d", self.id)
             return normalize(self.text)
 
     def name(self):
