@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import re
-from bs4 import BeautifulSoup, Tag, NavigableString
+from bs4 import BeautifulSoup, NavigableString
 
 from django.utils.text import slugify
 
@@ -182,8 +182,7 @@ def compose_text(document):
 
 
 def organize_soup(soup):
-
-    last_element = Tag(soup, 'p', {'text': 'Anexo'})
+    last_element = soup.new_tag('p', **{'text': 'Anexo'})
     soup.append(last_element)
 
     current_element = dict([(format, None) for format in hierarchy_classes])
@@ -196,7 +195,7 @@ def organize_soup(soup):
             # and format_to_receive does not have a list, we create it:
             if current_element[format_to_receive].contents[-1].name != 'ol':
                 # we create the list
-                current_element[format_to_receive].append(Tag(soup, 'ol'))
+                current_element[format_to_receive].append(soup.new_tag('ol'))
             # we add the current_element to the list
             current_element[format_to_receive].contents[-1].append(current_element[format_to_move])
         else:
@@ -231,15 +230,15 @@ def organize_soup(soup):
                         break
 
             if format in hierarchy_html_lists:
-                current_element[format] = Tag(soup, hierarchy_html_lists[format],
-                                              {'class': hierarchy_classes[format]})
+                current_element[format] = soup.new_tag(hierarchy_html_lists[format],
+                                                       **{'class': hierarchy_classes[format]})
             else:
-                current_element[format] = Tag(soup, 'div',
-                                              {'class': hierarchy_classes[format]})
+                current_element[format] = soup.new_tag('div',
+                                                       **{'class': hierarchy_classes[format]})
 
             element.replaceWith(current_element[format])
             if format in hierarchy_html_titles:
-                current_element_title = Tag(soup, hierarchy_html_titles[format], {'class': 'title'})
+                current_element_title = soup.new_tag(hierarchy_html_titles[format], **{'class': 'title'})
                 current_element[format].append(current_element_title)
                 current_element_title.append(element)
             else:
@@ -259,7 +258,7 @@ def organize_soup(soup):
                     sufix = '-' + slugify(search.group(1).strip())
                 current_element[format]['id'] = prefix + hierarchy_classes[format] + sufix
 
-                anchor_tag = Tag(soup, 'a', {'class': 'headerlink', 'href': '#%s' % current_element[format]['id']})
+                anchor_tag = soup.new_tag('a', **{'class': 'headerlink', 'href': '#%s' % current_element[format]['id']})
                 anchor_tag.insert(0, NavigableString(' ¶'))
 
                 if format in hierarchy_html_titles:
@@ -284,10 +283,10 @@ def organize_soup(soup):
 
             if previous_element and previous_element.parent:
                 try:
-                    klass = previous_element.parent["class"]
+                    classes = previous_element.parent["class"]
                 except KeyError:
-                    klass = None
-                if klass == 'title' \
+                    classes = []
+                if 'title' in classes \
                         and previous_element.parent.contents \
                         and previous_element.parent.contents[0] == previous_element:
                     previous_element.parent.append(element)
