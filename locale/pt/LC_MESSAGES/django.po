@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-07 17:29+0100\n"
+"POT-Creation-Date: 2014-05-11 06:08+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -102,25 +102,25 @@ msgstr "valor"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:18
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
 #: deputies/views.py:11 deputies/views.py:38
-#: deputies/templates/deputies/search_bar.html:9
-#: deputies/templates/deputies/search_bar.html:26
+#: deputies/templates/deputies/search_bar.html:18
+#: deputies/templates/deputies/search_bar.html:35
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:60 contracts/views.py:29 contracts/views.py:101
-#: contracts/views.py:163
+#: contracts/entity_views.py:60 contracts/views.py:28 contracts/views.py:100
+#: contracts/views.py:162
 #: contracts/templates/contracts/contract_list/search_contracts.html:50
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
-#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:40
-#: law/views.py:11 law/templates/law/law_list/search_law.html:15
+#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:49
+#: law/views.py:10 law/templates/law/law_list/search_law.html:22
 msgid "search"
 msgstr "procura"
 
 #: contracts/entity_views.py:74 contracts/entity_views.py:75
-#: contracts/views.py:36 contracts/views.py:37 contracts/views.py:115
-#: contracts/views.py:116 contracts/views.py:169 contracts/views.py:170
+#: contracts/views.py:35 contracts/views.py:36 contracts/views.py:114
+#: contracts/views.py:115 contracts/views.py:168 contracts/views.py:169
 #: contracts/templates/contracts/contract_list/search_contracts.html:36
 #: contracts/templates/contracts/contract_list/search_contracts.html:38
 #: contracts/templates/contracts/entity_list/search_entities.html:35
@@ -131,43 +131,43 @@ msgstr "procura"
 #: contracts/templates/contracts/tender_list/search.html:34
 #: contracts/templates/contracts/tender_list/search.html:36
 #: deputies/views.py:32 deputies/views.py:33
-#: deputies/templates/deputies/search_bar.html:26
-#: deputies/templates/deputies/search_bar.html:28
+#: deputies/templates/deputies/search_bar.html:35
+#: deputies/templates/deputies/search_bar.html:37
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:84 contracts/views.py:47 contracts/views.py:126
-#: contracts/views.py:180 deputies/views.py:43 law/views.py:18
+#: contracts/entity_views.py:84 contracts/views.py:46 contracts/views.py:125
+#: contracts/views.py:179 deputies/views.py:43 law/views.py:17
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
-#: contracts/feed.py:23
+#: contracts/feed.py:25
 #, python-format
 msgid "Contracts in \"%s\""
 msgstr "Contracts em \"%s\""
 
-#: contracts/feed.py:43
+#: contracts/feed.py:45
 #, python-format
 msgid "Tenders in \"%s\""
 msgstr "Concursos em \"%s\""
 
-#: contracts/feed.py:73
+#: contracts/feed.py:75
 #, python-format
 msgid "Latest contracts in %s"
 msgstr "Últimos contratos em %s"
 
-#: contracts/feed.py:102
+#: contracts/feed.py:104
 #, python-format
 msgid "Contracts with \"%s\""
 msgstr "Contratos com \"%s\""
 
-#: contracts/feed.py:122
+#: contracts/feed.py:124
 #, python-format
 msgid "Tenders created by \"%s\""
 msgstr "Concursos criados por \"%s\""
 
-#: contracts/feed.py:152
+#: contracts/feed.py:154
 #, python-format
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
@@ -200,8 +200,8 @@ msgstr "entidade"
 msgid "category"
 msgstr "categoria"
 
-#: contracts/views.py:22 contracts/views.py:42 contracts/views.py:156
-#: contracts/views.py:175
+#: contracts/views.py:21 contracts/views.py:41 contracts/views.py:155
+#: contracts/views.py:174
 #: contracts/templates/contracts/contract_list/search_contracts.html:18
 #: contracts/templates/contracts/contract_list/search_contracts.html:36
 #: contracts/templates/contracts/tender_list/search.html:16
@@ -209,8 +209,8 @@ msgstr "categoria"
 msgid "price"
 msgstr "preço"
 
-#: contracts/views.py:22 contracts/views.py:42 contracts/views.py:156
-#: contracts/views.py:175
+#: contracts/views.py:21 contracts/views.py:41 contracts/views.py:155
+#: contracts/views.py:174
 #: contracts/templates/contracts/contract_list/search_contracts.html:23
 #: contracts/templates/contracts/contract_list/search_contracts.html:38
 #: contracts/templates/contracts/tender_list/search.html:21
@@ -218,13 +218,13 @@ msgstr "preço"
 msgid "date"
 msgstr "data"
 
-#: contracts/views.py:90 contracts/views.py:96 contracts/views.py:121
+#: contracts/views.py:89 contracts/views.py:95 contracts/views.py:120
 #: contracts/templates/contracts/entity_list/search_entities.html:18
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:90 contracts/views.py:98 contracts/views.py:121
+#: contracts/views.py:89 contracts/views.py:97 contracts/views.py:120
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "expenses"
@@ -576,9 +576,8 @@ msgid "Categorized as:"
 msgstr "Categorizado como:"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:10
-#: contracts/templates/contracts/tender_list/search.html:10
-msgid "search tenders"
-msgstr "procurar concursos"
+msgid "search contracts"
+msgstr "procurar contratos"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:16
 #: contracts/templates/contracts/tender_list/search.html:15
@@ -864,7 +863,7 @@ msgid "Costumers"
 msgstr "Clientes"
 
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:16
-#: deputies/templates/deputies/search_bar.html:8
+#: deputies/templates/deputies/search_bar.html:16
 msgid "order by name"
 msgstr "ordenar por nome"
 
@@ -1278,6 +1277,10 @@ msgstr ""
 "Nos últimos 5 anos, tem havido uma pequena têndencia para usar mais o "
 "concurso público."
 
+#: contracts/templates/contracts/tender_list/search.html:10
+msgid "search tenders"
+msgstr "procurar concursos"
+
 #: contracts/templatetags/contracts/humanize.py:11
 #, python-format
 msgid "%(value).1f thousand"
@@ -1365,8 +1368,8 @@ msgid "deputies-time-distribution"
 msgstr "distribuicao-de-tempos-de-deputados"
 
 #: deputies/views.py:11 deputies/views.py:38
-#: deputies/templates/deputies/search_bar.html:14
-#: deputies/templates/deputies/search_bar.html:28
+#: deputies/templates/deputies/search_bar.html:23
+#: deputies/templates/deputies/search_bar.html:37
 msgid "mandates"
 msgstr "mandatos"
 
@@ -1583,11 +1586,11 @@ msgstr ""
 "cratica</a> ser um projeto de código aberto. Agradecemos aos seus "
 "contribuidores por isso e pelas ideias que usámos do seu código."
 
-#: deputies/templates/deputies/search_bar.html:5
+#: deputies/templates/deputies/search_bar.html:10
 msgid "search deputies"
 msgstr "procurar deputados"
 
-#: deputies/templates/deputies/search_bar.html:13
+#: deputies/templates/deputies/search_bar.html:21
 msgid "order by mandates"
 msgstr "ordenar por número de mandatos"
 
@@ -1701,8 +1704,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Neste projecto usamos a <a href=\"%(dre_url)s\">base de dados da "
-"lei portuguesa</a> para explorar algumas das suas propriedades."
+"Neste projecto usamos a <a href=\"%(dre_url)s\">base de dados da lei "
+"portuguesa</a> para explorar algumas das suas propriedades."
 
 #: law/templates/law/home.html:20
 msgid "First question: how many laws are enacted yearly?"
@@ -1790,7 +1793,7 @@ msgstr "Tipos"
 msgid "Laws"
 msgstr "Leis"
 
-#: law/templates/law/law_list/search_law.html:5
+#: law/templates/law/law_list/search_law.html:10
 msgid "search laws"
 msgstr "procurar leis"
 
