@@ -44,11 +44,11 @@ class FirstSeriesCrawler(AbstractCrawler):
             # online retrieval
             html = self.goToPage(models.dre_url_formater.format(document_id=document_id))
 
-            soup = BeautifulSoup(html)
+            soup = BeautifulSoup(html, "html5lib")
 
-            html = soup.find("div", dict(id='centro_total'))
+            html = soup.find("div", id='centro_total')
 
-            if not html.find('div', {'id': 'doc_data'}):
+            if not html.find('div', id='doc_data'):
                 raise DocumentNotFound
 
             logger.info("saving document_id %d", document_id)
@@ -94,9 +94,9 @@ class FirstSeriesCrawler(AbstractCrawler):
 
 
 def clean_data(data_string):
-    soup = BeautifulSoup(data_string)
+    soup = BeautifulSoup(data_string, "html5lib")
 
-    doc_data = soup.find('div', {'id': 'doc_data'})
+    doc_data = soup.find('div', id='doc_data')
 
     data = {}
     for element in doc_data.findAll('p'):
@@ -124,12 +124,12 @@ def clean_data(data_string):
             logger.exception('Unknown element in data')
             raise IndexError(element.text)
 
-    doc_text = soup.find('div', {'id': 'doc_texto'})
+    doc_text = soup.find('div', id='doc_texto')
     data['text'] = clean_text(doc_text)
 
-    doc_boxes = soup.find('div', {'id': 'doc_caixas'})
+    doc_boxes = soup.find('div', id='doc_caixas')
     if doc_boxes is not None:
-        doc_pdf = doc_boxes.find('div', {'class': 'cx_pdf'})
+        doc_pdf = doc_boxes.find('div', **{'class': 'cx_pdf'})
         pdf_anchor = doc_pdf.find('a')
         data['pdf_url'] = pdf_anchor['href']
 
