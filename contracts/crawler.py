@@ -14,6 +14,11 @@ import requests
 from . import models
 
 
+class EntityNotFoundError(Exception):
+    def __init__(self, entities_base_ids):
+        self.entities_base_ids = entities_base_ids
+
+
 def clean_price(item):
     """
     Transforms a string like '1.002,54 \eurochar'
@@ -29,12 +34,16 @@ def clean_entities(items):
     items is a list of dictionaries with key 'id'.
     We pick them all, or raise an IndexError if any of them doesn't exist (critical error).
     """
-    entities = models.Entity.objects.filter(base_id__in=[item['id'] for item in items])
+    ids = [item['id'] for item in items]
+    entities = models.Entity.objects.filter(base_id__in=ids)
 
-    # we check that all entities are there
-    if entities.count() != len(items):
-        raise IndexError
+    entities_ids = [entity.base_id for entity in entities]
 
+    # we check that all entities exist, or we raise an error.
+    not_found_ids = []
+    for base_id in ids:
+        if base_id not in entities_ids:
+            raise EntityNotFoundError(ids)
     return entities
 
 
@@ -126,7 +135,7 @@ def clean_place(item, data):
 
 def clean_country(item):
     try:
-        country = models.Country.objects.get(name=item['country'])
+        country = models.Country.objects.get(name=item)
     except IndexError:
         country = None
     except models.Country.DoesNotExist:
@@ -317,6 +326,8 @@ class EntitiesCrawler(DynamicCrawler):
     """
     A crawler to be used daily to retrieve new entities.
     """
+    entities_directory = '../../data_entities'
+
     def _get_entities_block(self, block):
         """
         Returns a block of 25 entities from a file.
@@ -364,6 +375,31 @@ class EntitiesCrawler(DynamicCrawler):
         else:
             return 0
 
+    @staticmethod
+    def _save_entity(data):
+        country_name = ''
+        if 'location' in data:
+            country_name = data['location']
+        elif 'country' in data:
+            country_name = data['country']
+        country = clean_country(country_name)
+
+        # if entity exists, we update its data
+        try:
+            entity = models.Entity.objects.get(base_id=int(data['id']))
+            entity.name = data['description']
+            entity.country = country
+            entity.nif = data['nif']
+            entity.save()
+        # else, we create it with the data
+        except models.Entity.DoesNotExist:
+            entity = models.Entity.objects.create(name=data['description'],
+                                                  base_id=int(data['id']),
+                                                  country=country,
+                                                  nif=data['nif'])
+
+        return entity
+
     def _save_entities(self, block):
         """
         Saves a set of 25 entities, identified by a block, into the database.
@@ -373,24 +409,41 @@ class EntitiesCrawler(DynamicCrawler):
 
         created_entities = []
         for data in self._get_entities_block(block):
-            country = clean_country(data)
-
-            # if entity exists, we update its data
-            try:
-                entity = models.Entity.objects.get(base_id=int(data['id']))
-                entity.name = data['description']
-                entity.country = country
-                entity.nif = data['nif']
-                entity.save()
-            # else, we create it with the data
-            except models.Entity.DoesNotExist:
-                entity = models.Entity.objects.create(name=data['description'],
-                                                      base_id=int(data['id']),
-                                                      country=country,
-                                                      nif=data['nif'])
-                created_entities.append(entity)
+            entity = self._save_entity(data)
+            created_entities.append(entity)
 
         return created_entities
+
+    def _retrieve_and_save_entity_data(self, base_id):
+        """
+        Returns the data of a contract. It first tries the file. If the file doesn't exist,
+        it retrieves the data from BASE and saves it in the file.
+        """
+
+        def _retrieve_entity_data():
+            """
+            Retrieves data from a specific contract.
+            """
+            logger.info('_retrieve_entity_data(%d)', base_id)
+            url = "http://www.base.gov.pt/base2/rest/entidades/%d" % base_id
+            return self.goToPage(url)
+
+        file_name = '%s/%d.dat' % (self.entities_directory, base_id)
+        try:
+            f = open(file_name, "rb")
+            data = pickle.load(f)
+            f.close()
+        except IOError:
+            # online retrieval
+            data = _retrieve_entity_data()
+            f = open(file_name, "wb")
+            pickle.dump(data, f)
+            f.close()
+        return data
+
+    def save_entity(self, base_id):
+        data = self._retrieve_and_save_entity_data(base_id)
+        return self._save_entity(data)
 
     def update(self):
         """
@@ -490,8 +543,7 @@ class ContractsCrawler(DynamicCrawler):
             f.close()
         return data
 
-    @staticmethod
-    def _save_contract(item):
+    def _save_contract(self, item):
         data = {'base_id': item['id'],
                 'procedure_type': clean_procedure_type(item['contractingProcedureType']),
                 'contract_type': clean_contract_type(item[u'contractTypes']),
@@ -518,8 +570,8 @@ class ContractsCrawler(DynamicCrawler):
             contract = models.Contract.objects.create(**data)
             logger.info('_save_contract(%s): contract %d saved', item['id'], data['base_id'])
 
-        contractors = clean_entities(item['contracting'])
-        contracted = clean_entities(item['contracted'])
+        contractors = self._safe_clean_entities(item['contracting'])
+        contracted = self._safe_clean_entities(item['contracted'])
         contract.contracted.add(*list(contracted))
         contract.contractors.add(*list(contractors))
 
@@ -553,6 +605,20 @@ class ContractsCrawler(DynamicCrawler):
                 break
 
         return modified_entities
+
+    @staticmethod
+    def _safe_clean_entities(items):
+        try:
+            return clean_entities(items)
+        except EntityNotFoundError as error:
+            # in case we don't have the entity, we try to retrieve it from BASE.
+            entity_crawler = EntitiesCrawler()
+
+            entities = []
+            for missing_id in error.entities_base_ids:
+                entity = entity_crawler.save_entity(missing_id)
+                entities.append(entity)
+            return entities
 
 
 class TendersCrawler(DynamicCrawler):
