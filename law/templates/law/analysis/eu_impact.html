@@ -1,0 +1,64 @@
+{% extends "law/analysis/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Impact of EU Law in the Portuguese Law" %}{% endblock %}
+{% block analysis_title %}{% trans "Impact of EU Law in the Portuguese Law" %}{% endblock %}
+{% block analysis_content %}
+    <h4>Introduction</h4>
+    <p itemprop="description">
+        Laws of a country are probably the written documents with most impact on the people's life, as they
+        constitute the rules on which they live in a country. Elections are in democracy
+        an important bridge between people's will (what rules they want)
+        and the implementation of their will (what rules they have).
+    </p>
+    <p>
+        In a joint effort by european states that believe in a set of common rules,
+        the european union was formed and it is argued that today it is an important legislative body
+        with a concrete impact to the life of european citizens.
+    </p>
+    <p>
+        Because the European law supersede the national law but is not, by itself, a national law,
+        states must implement european decisions in their law.
+        What most of us don't know is <strong>how much</strong> this happens. Thus, here we pose the question:
+        what is the impact of the european law in the portuguese law?
+    </p>
+    <h4>Main result</h4>
+    <p>
+        To answer this, we picked all documents published in the Series I of "Diário da República",
+        counted how many cited at least one european law,
+        and divided that number by the total number of created laws, for each year. The result is shown below:
+    </p>
+    <img itemprop="primaryImageOfPage" src="{% static "images/eu_impact.png" %}">
+    <h5>Details</h5>
+    <ul>
+        {% include "law/analysis/notation_items.html" %}
+        <li>If the document does not have full text available, we ignore it. This number is very small in any case.</li>
+    </ul>
+    <h4>Discussion</h4>
+    <p>
+        As expected, we observe a steady increase from 1986 (year Portugal joined EU) until today.
+    </p>
+    <p>
+        Arguably unexpected is a change in the sloop since ~2006, which gave
+        rise to an increase of 10% in 7 years (4% to 14% from 2006 to 2013).
+        This seems to indicate that not only European legislation is having more influence on portuguese law,
+        but also that this increase is faster since 2006.
+    </p>
+    <h4>Conclusion</h4>
+    <p>
+        Here we quantitatively measured the impact of the european law in the portuguese law and we have shown
+        that Europe legislation has a strong impact in portuguese law.
+    </p>
+    <p>
+        Furthermore, we have shown that the change of impact increased since 2006, and today about 14%
+        of all portuguese laws cite at least once an european law.
+    </p>
+    <p>
+        This seems to suggest that European elections are not only important, but are also becoming more important
+        as they impact more the rules that govern people's life.
+    </p>
+    <p>
+        It remains to be studied if this effect is similar to other european states.
+    </p>
+{% endblock %}

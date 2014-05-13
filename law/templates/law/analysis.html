@@ -1,0 +1,20 @@
+{% extends "law/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Analysis" %}{% endblock %}
+{% block content %}
+    <div itemscope itemtype="http://schema.org/WebPage">
+        <h1 itemprop="name">
+            {% trans "Analysis to the law" %}
+        </h1>
+        <ul>
+            <li><a href="{% url "law_analysis_time_series" %}">
+                {% trans "How many laws are enacted yearly?" %}</a>
+            </li>
+            <li><a href="{% url "law_analysis_eu_impact" %}">
+                {% trans "Impact of EU law in the Portuguese Law" %}</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

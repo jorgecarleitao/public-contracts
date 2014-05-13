@@ -1,0 +1,22 @@
+{% extends "law/analysis/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Number of portuguese laws enacted yearly" %}{% endblock %}
+{% block analysis_title %}{% trans "How many laws are enacted yearly?" %}{% endblock %}
+{% block analysis_content %}
+    <p >{% blocktrans %}
+        We picked all documents published in the Series I of "Diário da república online", counted how many
+        were published in each year. Here is the result:
+    {% endblocktrans %}
+    </p>
+    {% if LANGUAGE_CODE == 'pt' %}
+        <img itemprop="primaryImageOfPage" src="{% static "images/numero_de_leis.png" %}">
+    {% else %}
+        <img itemprop="primaryImageOfPage" src="{% static "images/number_of_laws.png" %}">
+    {% endif %}
+    <p>{% trans "Details:"%}</p>
+    <ul>
+        {% include "law/analysis/notation_items.html" %}
+    </ul>
+{% endblock %}

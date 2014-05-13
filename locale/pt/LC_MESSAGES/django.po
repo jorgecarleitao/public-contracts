@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-11 06:08+0100\n"
+"POT-Creation-Date: 2014-05-13 08:45+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -172,11 +172,12 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/urls.py:14 deputies/urls.py:9 law/urls.py:7
+#: contracts/urls.py:14 deputies/urls.py:9 law/urls.py:8
 msgid "home"
 msgstr "início"
 
-#: contracts/urls.py:15 contracts/urls.py:25
+#: contracts/urls.py:15 contracts/urls.py:25 law/urls.py:9 law/urls.py:11
+#: law/urls.py:15
 msgid "analysis"
 msgstr "analises"
 
@@ -232,6 +233,7 @@ msgstr "despesa"
 
 #: contracts/templates/contracts/analysis.html:5
 #: contracts/templates/contracts/base/header.html:17
+#: law/templates/law/analysis.html:5 law/templates/law/base/header.html:7
 msgid "Analysis"
 msgstr "Análises"
 
@@ -1670,21 +1672,43 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
-#: law/urls.py:7 law/urls.py:8
+#: law/urls.py:8 law/urls.py:9 law/urls.py:11 law/urls.py:15 law/urls.py:19
 msgid "law"
 msgstr "lei"
 
-#: law/urls.py:9
+#: law/urls.py:12 law/templates/law/analysis/eu_impact.html:5
+#: law/templates/law/analysis/eu_impact.html:6
+msgid "Impact of EU Law in the Portuguese Law"
+msgstr "Impacto da lei Europeia na lei Portuguesa"
+
+#: law/urls.py:16 law/templates/law/analysis/laws_time_series.html:5
+msgid "Number of portuguese laws enacted yearly"
+msgstr "Número de leis criadas anualmente"
+
+#: law/urls.py:20
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:10
+#: law/urls.py:21
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:12 law/urls.py:13
+#: law/urls.py:23 law/urls.py:24
 msgid "document"
 msgstr "documento"
+
+#: law/templates/law/analysis.html:9
+msgid "Analysis to the law"
+msgstr "Análises à lei"
+
+#: law/templates/law/analysis.html:13
+#: law/templates/law/analysis/laws_time_series.html:6
+msgid "How many laws are enacted yearly?"
+msgstr "Quantas leis são criadas anualmente?"
+
+#: law/templates/law/analysis.html:16
+msgid "Impact of EU law in the Portuguese Law"
+msgstr "Impacto da lei Europeia na lei Portuguesa"
 
 #: law/templates/law/home.html:5
 msgid "Public Law"
@@ -1724,6 +1748,7 @@ msgstr ""
 "documentos foram publicados em cada ano. Eis o resultado:"
 
 #: law/templates/law/home.html:31
+#: law/templates/law/analysis/laws_time_series.html:18
 msgid "Details:"
 msgstr "Detalhes:"
 
@@ -1780,6 +1805,46 @@ msgstr ""
 "Agradecemos aos contribuidores do <a href=\"%(tretas_url)s\">dre.tretas</a>, "
 "e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
 "melhorado este projeto."
+
+#: law/templates/law/analysis/laws_time_series.html:8
+msgid ""
+"\n"
+"        We picked all documents published in the Series I of \"Diário da "
+"república online\", counted how many\n"
+"        were published in each year. Here is the result:\n"
+"    "
+msgstr ""
+"\n"
+"Pegámos em toda a Série I do Diário da República online e contámos quantos "
+"documentos foram publicados em cada ano. Eis o resultado:"
+
+#: law/templates/law/analysis/notation_items.html:3
+msgid ""
+"\n"
+"        This graph was obtained using all the documents available on the "
+"official website\n"
+"        of the portuguese law, under Series I. Currently they are about "
+"~200.000.\n"
+"    "
+msgstr ""
+"\n"
+"Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
+"da República Online, Série I. São hoje ~200.000 documentos."
+
+#: law/templates/law/analysis/notation_items.html:9
+msgid ""
+"\n"
+"        We call \"Law\" to be anything that is published in\n"
+"        the Series I of Diário da República for simplicity; specifically, "
+"law here is\n"
+"        an \"official document published in the Series I of Diário da "
+"República\".\n"
+"    "
+msgstr ""
+"\n"
+"Chamamos \"Lei\" a qualquer documento que é publicado na Série I do DR para "
+"simplificar; especificamente, uma lei é \"um documento oficial publicado na "
+"Série I do Diário da Républica\".\n"
 
 #: law/templates/law/base/header.html:5
 msgid "Documents"

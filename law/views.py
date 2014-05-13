@@ -67,3 +67,15 @@ def law_view(request, law_id, slug=None):
     context = {'law': law}
 
     return render(request, "law/document_view/main.html", context)
+
+
+def analysis(request):
+    return render(request, "law/analysis.html")
+
+
+def law_analysis_eu_impact(request):
+    return render(request, "law/analysis/eu_impact.html")
+
+
+def law_analysis_time_series(request):
+    return render(request, "law/analysis/laws_time_series.html")
