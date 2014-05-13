@@ -1844,7 +1844,7 @@ msgstr ""
 "\n"
 "Chamamos \"Lei\" a qualquer documento que é publicado na Série I do DR para "
 "simplificar; especificamente, uma lei é \"um documento oficial publicado na "
-"Série I do Diário da Républica\".\n"
+"Série I do Diário da Républica\"."
 
 #: law/templates/law/base/header.html:5
 msgid "Documents"
