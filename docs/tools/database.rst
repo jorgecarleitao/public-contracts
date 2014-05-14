@@ -12,7 +12,7 @@ Database
 Our database contains all the information the official databases contains. Additionally, our database is bound
 to a database ORM and web framework - Django - that facilitates its :doc:`usage`.
 
-Either by using Django or not, we provide direct remote access to ours, so you don't need to re-run everything.
+Either by using Django or not, you have full remote access (read only) to it.
 
 Remote connection
 -----------------
@@ -24,8 +24,6 @@ You can access our database using:
 - password: read-only
 - host: 5.153.9.51
 - port: 3306
-
-As the password suggests, the access is read only.
 
 .. _`phpmyadmin panel`: https://web306.webfaction.com/static/phpMyAdmin
 
