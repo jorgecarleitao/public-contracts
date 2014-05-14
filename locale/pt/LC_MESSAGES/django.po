@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-13 08:45+0100\n"
+"POT-Creation-Date: 2014-05-14 14:38+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -114,7 +114,7 @@ msgstr "nome"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
 #: deputies/views.py:25 deputies/templates/deputies/search_bar.html:49
-#: law/views.py:10 law/templates/law/law_list/search_law.html:22
+#: law/views.py:15 law/templates/law/law_list/search_law.html:22
 msgid "search"
 msgstr "procura"
 
@@ -137,7 +137,7 @@ msgid "sorting"
 msgstr "ordem"
 
 #: contracts/entity_views.py:84 contracts/views.py:46 contracts/views.py:125
-#: contracts/views.py:179 deputies/views.py:43 law/views.py:17
+#: contracts/views.py:179 deputies/views.py:43 law/views.py:22
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -177,7 +177,7 @@ msgid "home"
 msgstr "início"
 
 #: contracts/urls.py:15 contracts/urls.py:25 law/urls.py:9 law/urls.py:11
-#: law/urls.py:15
+#: law/urls.py:13
 msgid "analysis"
 msgstr "analises"
 
@@ -1672,43 +1672,33 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
-#: law/urls.py:8 law/urls.py:9 law/urls.py:11 law/urls.py:15 law/urls.py:19
+#: law/urls.py:8 law/urls.py:9 law/urls.py:11 law/urls.py:13 law/urls.py:18
 msgid "law"
 msgstr "lei"
 
-#: law/urls.py:12 law/templates/law/analysis/eu_impact.html:5
-#: law/templates/law/analysis/eu_impact.html:6
-msgid "Impact of EU Law in the Portuguese Law"
-msgstr "Impacto da lei Europeia na lei Portuguesa"
-
-#: law/urls.py:16 law/templates/law/analysis/laws_time_series.html:5
-msgid "Number of portuguese laws enacted yearly"
-msgstr "Número de leis criadas anualmente"
-
-#: law/urls.py:20
+#: law/urls.py:19
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:21
+#: law/urls.py:20
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:23 law/urls.py:24
+#: law/urls.py:22 law/urls.py:23
 msgid "document"
 msgstr "documento"
+
+#: law/views.py:82 law/templates/law/analysis/laws_time_series.html:6
+msgid "How many laws are enacted yearly?"
+msgstr "Quantas leis são criadas anualmente?"
+
+#: law/views.py:83
+msgid "Impact of EU law in the Portuguese Law"
+msgstr "Impacto da lei Europeia na lei Portuguesa"
 
 #: law/templates/law/analysis.html:9
 msgid "Analysis to the law"
 msgstr "Análises à lei"
-
-#: law/templates/law/analysis.html:13
-#: law/templates/law/analysis/laws_time_series.html:6
-msgid "How many laws are enacted yearly?"
-msgstr "Quantas leis são criadas anualmente?"
-
-#: law/templates/law/analysis.html:16
-msgid "Impact of EU law in the Portuguese Law"
-msgstr "Impacto da lei Europeia na lei Portuguesa"
 
 #: law/templates/law/home.html:5
 msgid "Public Law"
@@ -1739,12 +1729,12 @@ msgstr "Primeira pergunta: quantas leis são criadas anualmente?"
 msgid ""
 "\n"
 "            We picked all documents published in the Series I of \"Diário da "
-"república online\" and counted how many\n"
+"república online\", counted how many\n"
 "            were published in each year. Here is the result:\n"
 "        "
 msgstr ""
 "\n"
-"Pegámos em toda a Série I do diário da república online e contámos quantos "
+"Pegámos em toda a Série I do Diário da República (online) e contámos quantos "
 "documentos foram publicados em cada ano. Eis o resultado:"
 
 #: law/templates/law/home.html:31
@@ -1752,46 +1742,18 @@ msgstr ""
 msgid "Details:"
 msgstr "Detalhes:"
 
-#: law/templates/law/home.html:34
-msgid ""
-"\n"
-"                    This graph was obtained using all the documents "
-"available on the official website\n"
-"                    of the portuguese law, under Series I. Currently they "
-"are about ~200.000.\n"
-"                "
-msgstr ""
-"\n"
-"Este gráfico foi obtido a partir de todos os documentos acessíveis no Diário "
-"da República Online, série I. São hoje ~200.000 documentos."
-
-#: law/templates/law/home.html:40
-msgid ""
-"\n"
-"                    We call \"Law\" to be anything that is published in\n"
-"                    the Series I of Diário da República for simplicity, but "
-"you can call them\n"
-"                    \"documents published in Series I of Diário da República"
-"\" if you prefer.\n"
-"                "
-msgstr ""
-"\n"
-"Chamamos \"Lei\" a qualquer coisa que é publicada na Série I do DR para "
-"simplificar, mas poderá chamar-lhes \"documentos publicados na Série I do "
-"Diário da Républica\" se preferir."
-
-#: law/templates/law/home.html:47
+#: law/templates/law/home.html:35
 msgid "Other information:"
 msgstr "Outras informações:"
 
-#: law/templates/law/home.html:49
+#: law/templates/law/home.html:37
 msgid ""
 "This project is in continuous deployment; we use Twitter to announce updates."
 msgstr ""
 "Este projecto está em desenvolvimento contínuo; usamos o Twitter para "
 "anunciar novidades."
 
-#: law/templates/law/home.html:52
+#: law/templates/law/home.html:40
 #, python-format
 msgid ""
 "\n"
@@ -1805,6 +1767,195 @@ msgstr ""
 "Agradecemos aos contribuidores do <a href=\"%(tretas_url)s\">dre.tretas</a>, "
 "e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
 "melhorado este projeto."
+
+#: law/templates/law/analysis/eu_impact.html:5
+#: law/templates/law/analysis/eu_impact.html:6
+msgid "Impact of EU Law in the Portuguese Law"
+msgstr "Impacto da lei Europeia na lei Portuguesa"
+
+#: law/templates/law/analysis/eu_impact.html:10
+msgid ""
+"\n"
+"            The Laws of a country are probably the written documents with "
+"most impact on the people's life, as they\n"
+"            constitute the rules on which they live in a country.\n"
+"        "
+msgstr ""
+"\n"
+"As leis portuguesas são provavelmente os documentos mais com mais "
+"importância na vida dos portugueses, pois definem as regras que estamos "
+"sujeitos."
+
+#: law/templates/law/analysis/eu_impact.html:16
+msgid ""
+"\n"
+"            The European Union (EU) is today an important legislative body "
+"in\n"
+"            creating laws that affect all EU state members and it has been "
+"claimed that the\n"
+"            European elections are the most important elections so far.\n"
+"        "
+msgstr ""
+"\n"
+"A União Europeia (UE) é hoje um importante corpo legislativo a criar leis "
+"que afectam Portugal nas diferentes àreas de governação e tem sido afirmado "
+"que estas eleições europeias são as mais importantes até hoje."
+
+#: law/templates/law/analysis/eu_impact.html:23
+msgid ""
+"\n"
+"            Here we quantify this claim. Our assumption is that european "
+"elections are important\n"
+"            when the EU law has an impact on people's life, which is "
+"quantifiable by its impact on national laws.\n"
+"        "
+msgstr ""
+"\n"
+"Neste trabalho vamos quantificar esta afirmação. A nossa assunção é que "
+"eleições europeias são importantes quando a lei europeia tem impacto na vida "
+"dos portugueses, e isto é quantificável pelo seu impacto na lei nacional."
+
+#: law/templates/law/analysis/eu_impact.html:29
+msgid ""
+"\n"
+"            With this in mind, we posed the question:\n"
+"            what is the impact of the european law in the portuguese law?\n"
+"        "
+msgstr ""
+"\n"
+"Com isto em mente, colocámos a pergunta: qual o impacto da lei europeia na "
+"lei portuguesa?"
+
+#: law/templates/law/analysis/eu_impact.html:34
+msgid "Main result"
+msgstr "Resultado principal"
+
+#: law/templates/law/analysis/eu_impact.html:36
+msgid ""
+"\n"
+"            To answer this, we picked all documents published in the Series "
+"I of \"Diário da República\",\n"
+"            counted how many cited <em>at least</em> one european law,\n"
+"            and divided that number by the total number of created laws, for "
+"each year, which gives\n"
+"            us the percentage of portuguese laws that, at some level, are "
+"depending on a EU law.\n"
+"            The result is shown below:\n"
+"        "
+msgstr ""
+"\n"
+"Para responder a isso, pegámos em todos os documentos publicados na Série I "
+"do Diário da República (online), contámos quantos citam <em>pelo menos</em> "
+"uma vez uma lei europeia, e dividimos esse número pelo total de leis "
+"criadas, para cada ano. Isto dá-nos a percetagem de leis que, a algum nível, "
+"dependem directamente de uma lei europeia. O resultado é o seguinte:"
+
+#: law/templates/law/analysis/eu_impact.html:49
+msgid "Details"
+msgstr "Detalhes:"
+
+#: law/templates/law/analysis/eu_impact.html:52
+#, python-format
+msgid ""
+"If the document does not have its text available, we ignore it; this "
+"accounts for 17%% of all documents."
+msgstr ""
+"Se um documento não tiver texto integral acessível, ignorámo-lo; isto "
+"representa cerca de 17%% de todos os documentos."
+
+#: law/templates/law/analysis/eu_impact.html:54
+msgid "Discussion"
+msgstr "Discussão"
+
+#: law/templates/law/analysis/eu_impact.html:56
+#, fuzzy, python-format
+msgid ""
+"\n"
+"            As expected, we observe a steady increase from 1986 (year "
+"Portugal joined EU), and today\n"
+"            14%% of all portuguese laws cite at least one european law.\n"
+"        "
+msgstr ""
+"\n"
+"Como esperávamos, observamos um crescimento desde 1986 (ano que entrámos na "
+"EU)."
+
+#: law/templates/law/analysis/eu_impact.html:62
+#, python-format
+msgid ""
+"\n"
+"            Arguably unexpected is the change in sloop since ~2006, which "
+"gave\n"
+"            rise to an increase of 10%% in 7 years (4%% to 14%% from 2006 to "
+"2013).\n"
+"            This seems to indicate that not only European legislation is "
+"having more influence on the portuguese law,\n"
+"            but also that this increase has been faster since 2006.\n"
+"        "
+msgstr ""
+"\n"
+"Provavelmente menos esperado é uma alteração do declive desde ~2006, que "
+"provocou um aumento de ~10%% em 7 anos (~4%% para 14%% de 2006 a 2013). "
+"Comparativamente ao aumento de 4%% de 1986 a 2006, esta alteração é notável."
+
+#: law/templates/law/analysis/eu_impact.html:69
+msgid "Conclusion"
+msgstr "Conclusões"
+
+#: law/templates/law/analysis/eu_impact.html:71
+msgid ""
+"\n"
+"            Here, we measured quantitatively the impact of the european law "
+"in the portuguese law and we have shown\n"
+"            that Europe legislation has a strong impact in portuguese law.\n"
+"        "
+msgstr ""
+"\n"
+"Neste trabalho medimos quantitativamente o impacto da lei europeia na lei "
+"portuguesa, mostrando que esta é hoje citada por ~14%% de toda a lei "
+"portuguesa."
+
+#: law/templates/law/analysis/eu_impact.html:77
+#, python-format
+msgid ""
+"\n"
+"            Furthermore, we have shown that the change of impact increased "
+"since 2006, and today about 14%%\n"
+"            of all portuguese laws cite an european law at least once.\n"
+"        "
+msgstr ""
+"\n"
+"Mostrámos também que a velocidade com que esse impacto se dá tem aumentado "
+"desde 2006, e hoje 14%% de todas as leis citam uma lei europeia pelo menos "
+"uma vez."
+
+#: law/templates/law/analysis/eu_impact.html:83
+msgid ""
+"\n"
+"            This seems to suggest that European elections are not only "
+"important,\n"
+"            but are also becoming more important as they have more impact on "
+"the rules that govern people's life.\n"
+"        "
+msgstr ""
+"\n"
+"Isto parece sugerir que as eleições europeias não são só importantes, como "
+"se estão a tornar cada vez mais importantes pois têm cada vez mais impacto "
+"na legislação nacional e portanto na nossa vida."
+
+#: law/templates/law/analysis/eu_impact.html:89
+msgid ""
+"\n"
+"            It remains to be studied if this effect is similar in other "
+"european states.\n"
+"        "
+msgstr ""
+"\n"
+"Fica por estudar se este efeito é equivalente noutros estados membros."
+
+#: law/templates/law/analysis/laws_time_series.html:5
+msgid "Number of portuguese laws enacted yearly"
+msgstr "Número de leis criadas anualmente"
 
 #: law/templates/law/analysis/laws_time_series.html:8
 msgid ""
@@ -1834,17 +1985,14 @@ msgstr ""
 #: law/templates/law/analysis/notation_items.html:9
 msgid ""
 "\n"
-"        We call \"Law\" to be anything that is published in\n"
-"        the Series I of Diário da República for simplicity; specifically, "
-"law here is\n"
-"        an \"official document published in the Series I of Diário da "
-"República\".\n"
+"        For simplicity, we define \"Law\" to be anything that is "
+"\"officially published in the Series I\n"
+"        of Diário da República\".\n"
 "    "
 msgstr ""
 "\n"
-"Chamamos \"Lei\" a qualquer documento que é publicado na Série I do DR para "
-"simplificar; especificamente, uma lei é \"um documento oficial publicado na "
-"Série I do Diário da Républica\"."
+"Por simplicidade, definimos \"Lei\" como sendo qualquer documento que é "
+"oficialmente publicado na Série I do Diário da República."
 
 #: law/templates/law/base/header.html:5
 msgid "Documents"

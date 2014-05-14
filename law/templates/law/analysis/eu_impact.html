@@ -7,58 +7,87 @@
 {% block analysis_content %}
     <h4>Introduction</h4>
     <p itemprop="description">
-        Laws of a country are probably the written documents with most impact on the people's life, as they
-        constitute the rules on which they live in a country. Elections are in democracy
-        an important bridge between people's will (what rules they want)
-        and the implementation of their will (what rules they have).
+        {% blocktrans %}
+            The Laws of a country are probably the written documents with most impact on the people's life, as they
+            constitute the rules on which they live in a country.
+        {% endblocktrans %}
     </p>
     <p>
-        In a joint effort by european states that believe in a set of common rules,
-        the european union was formed and it is argued that today it is an important legislative body
-        with a concrete impact to the life of european citizens.
+        {% blocktrans %}
+            The European Union (EU) is today an important legislative body in
+            creating laws that affect all EU state members and it has been claimed that the
+            European elections are the most important elections so far.
+        {% endblocktrans %}
     </p>
     <p>
-        Because the European law supersede the national law but is not, by itself, a national law,
-        states must implement european decisions in their law.
-        What most of us don't know is <strong>how much</strong> this happens. Thus, here we pose the question:
-        what is the impact of the european law in the portuguese law?
+        {% blocktrans %}
+            Here we quantify this claim. Our assumption is that european elections are important
+            when the EU law has an impact on people's life, which is quantifiable by its impact on national laws.
+        {% endblocktrans %}
     </p>
-    <h4>Main result</h4>
     <p>
-        To answer this, we picked all documents published in the Series I of "Diário da República",
-        counted how many cited at least one european law,
-        and divided that number by the total number of created laws, for each year. The result is shown below:
+        {% blocktrans %}
+            With this in mind, we posed the question:
+            what is the impact of the european law in the portuguese law?
+        {% endblocktrans %}
     </p>
-    <img itemprop="primaryImageOfPage" src="{% static "images/eu_impact.png" %}">
-    <h5>Details</h5>
+    <h4>{% trans "Main result" %}</h4>
+    <p>
+        {% blocktrans %}
+            To answer this, we picked all documents published in the Series I of "Diário da República",
+            counted how many cited <em>at least</em> one european law,
+            and divided that number by the total number of created laws, for each year, which gives
+            us the percentage of portuguese laws that, at some level, are depending on a EU law.
+            The result is shown below:
+        {% endblocktrans %}
+    </p>
+    {% if LANGUAGE_CODE == 'pt' %}
+        <img itemprop="primaryImageOfPage" src="{% static "images/impacto_eu.png" %}">
+    {% else %}
+        <img itemprop="primaryImageOfPage" src="{% static "images/eu_impact.png" %}">
+    {% endif %}
+    <h5>{% trans "Details" %}</h5>
     <ul>
         {% include "law/analysis/notation_items.html" %}
-        <li>If the document does not have full text available, we ignore it. This number is very small in any case.</li>
+        <li>{% trans "If the document does not have its text available, we ignore it; this accounts for 17% of all documents." %}</li>
     </ul>
-    <h4>Discussion</h4>
+    <h4>{% trans "Discussion" %}</h4>
     <p>
-        As expected, we observe a steady increase from 1986 (year Portugal joined EU) until today.
+        {% blocktrans %}
+            As expected, we observe a steady increase from 1986 (year Portugal joined EU), and today
+            14% of all portuguese laws cite at least one european law.
+        {% endblocktrans %}
     </p>
     <p>
-        Arguably unexpected is a change in the sloop since ~2006, which gave
-        rise to an increase of 10% in 7 years (4% to 14% from 2006 to 2013).
-        This seems to indicate that not only European legislation is having more influence on portuguese law,
-        but also that this increase is faster since 2006.
+        {% blocktrans %}
+            Arguably unexpected is the change in sloop since ~2006, which gave
+            rise to an increase of 10% in 7 years (4% to 14% from 2006 to 2013).
+            This seems to indicate that not only European legislation is having more influence on the portuguese law,
+            but also that this increase has been faster since 2006.
+        {% endblocktrans %}
     </p>
-    <h4>Conclusion</h4>
+    <h4>{% trans "Conclusion" %}</h4>
     <p>
-        Here we quantitatively measured the impact of the european law in the portuguese law and we have shown
-        that Europe legislation has a strong impact in portuguese law.
-    </p>
-    <p>
-        Furthermore, we have shown that the change of impact increased since 2006, and today about 14%
-        of all portuguese laws cite at least once an european law.
-    </p>
-    <p>
-        This seems to suggest that European elections are not only important, but are also becoming more important
-        as they impact more the rules that govern people's life.
+        {% blocktrans %}
+            Here, we measured quantitatively the impact of the european law in the portuguese law and we have shown
+            that Europe legislation has a strong impact in portuguese law.
+        {% endblocktrans %}
     </p>
     <p>
-        It remains to be studied if this effect is similar to other european states.
+        {% blocktrans %}
+            Furthermore, we have shown that the change of impact increased since 2006, and today about 14%
+            of all portuguese laws cite an european law at least once.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans %}
+            This seems to suggest that European elections are not only important,
+            but are also becoming more important as they have more impact on the rules that govern people's life.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans %}
+            It remains to be studied if this effect is similar in other european states.
+        {% endblocktrans %}
     </p>
 {% endblock %}
