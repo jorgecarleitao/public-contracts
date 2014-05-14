@@ -6,15 +6,14 @@ from . import views
 
 urlpatterns = patterns('',
                        url(r'^%s/%s$' % (_('law'), _('home')), views.home, name='law_home'),
-                       url(r'^%s/%s$' % (_('law'), _('analysis')), views.analysis, name='law_analysis'),
+                       url(r'^%s/%s$' % (_('law'), _('analysis')), views.analysis_list, name='law_analysis'),
 
-                       url(r'^%s/%s/%s$' % (_('law'), _('analysis'),
-                                            slugify(_('Impact of EU Law in the Portuguese Law'))),
-                           views.law_analysis_eu_impact, name='law_analysis_eu_impact'),
+                       url(r'^%s/%s/(\d+)/(\w+)' % (_('law'), _('analysis')),
+                           views.law_analysis, name='law_analysis_selector'),
+                       url(r'^%s/%s/(\d+)' % (_('law'), _('analysis')),
+                           views.law_analysis,
+                        ),
 
-                       url(r'^%s/%s/%s$' % (_('law'), _('analysis'),
-                                            slugify(_('Number of portuguese laws enacted yearly'))),
-                           views.law_analysis_time_series, name='law_analysis_time_series'),
 
                        url(r'^%s$' % _('law'), views.law_list, name='law_law_list'),
                        url(r'^%s$' % _('types'), views.types_list, name='law_types_list'),

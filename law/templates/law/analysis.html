@@ -9,12 +9,11 @@
             {% trans "Analysis to the law" %}
         </h1>
         <ul>
-            <li><a href="{% url "law_analysis_time_series" %}">
-                {% trans "How many laws are enacted yearly?" %}</a>
+            {% for analys in analysis %}
+                <li><a href="{{ analys.url }}">
+                    {{ analys.title }}</a>
             </li>
-            <li><a href="{% url "law_analysis_eu_impact" %}">
-                {% trans "Impact of EU law in the Portuguese Law" %}</a>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock %}

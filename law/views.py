@@ -1,9 +1,14 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.urlresolvers import reverse
 from django.db.models import Count
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 from . import models
+
+import law.analysis
 
 
 def build_laws_list_context(context, GET):
@@ -69,13 +74,41 @@ def law_view(request, law_id, slug=None):
     return render(request, "law/document_view/main.html", context)
 
 
-def analysis(request):
-    return render(request, "law/analysis.html")
+def analysis_list(request):
+
+    analysis_list = []
+    analysis_dict = law.analysis.ANALYSIS
+
+    titles = {'law_count_time_series': _('How many laws are enacted yearly?'),
+              'law_eu_impact_time_series': _('Impact of EU law in the Portuguese Law')}
+
+    for analysis in analysis_dict:
+        analysis_list.append({
+            'id': analysis_dict[analysis],
+            'url': reverse('law_analysis_selector',
+                           args=(analysis_dict[analysis],
+                                 slugify(titles[analysis]))),
+            'title': titles[analysis]
+        })
+        print(analysis_list[-1]['url'])
+
+    return render(request, "law/analysis.html", {'analysis': analysis_list})
 
 
-def law_analysis_eu_impact(request):
-    return render(request, "law/analysis/eu_impact.html")
+def law_analysis(request, analysis_id, slug=None):
+    try:
+        analysis_id = int(analysis_id)
+    except:
+        raise Http404
+    if int(analysis_id) not in law.analysis.PRIMARY_KEY:
+        raise Http404
 
+    name = law.analysis.PRIMARY_KEY[analysis_id]
 
-def law_analysis_time_series(request):
-    return render(request, "law/analysis/laws_time_series.html")
+    templates = {'law_count_time_series': 'law/analysis/laws_time_series.html',
+                 'law_eu_impact_time_series': 'law/analysis/eu_impact.html'}
+
+    if name not in templates:
+        raise IndexError('Template for analysis "%s" not found' % name)
+
+    return render(request, templates[name])
