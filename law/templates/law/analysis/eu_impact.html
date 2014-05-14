@@ -5,7 +5,7 @@
 {% block title %}{% trans "Impact of EU Law in the Portuguese Law" %}{% endblock %}
 {% block analysis_title %}{% trans "Impact of EU Law in the Portuguese Law" %}{% endblock %}
 {% block analysis_content %}
-    <h4>Introduction</h4>
+    <h4>{% trans "Introduction" %}</h4>
     <p itemprop="description">
         {% blocktrans %}
             The Laws of a country are probably the written documents with most impact on the people's life, as they
@@ -21,7 +21,7 @@
     </p>
     <p>
         {% blocktrans %}
-            Here we quantify this claim. Our assumption is that european elections are important
+            Here we try to quantify this. Our assumption is that european elections are important
             when the EU law has an impact on people's life, which is quantifiable by its impact on national laws.
         {% endblocktrans %}
     </p>
@@ -49,45 +49,94 @@
     <h5>{% trans "Details" %}</h5>
     <ul>
         {% include "law/analysis/notation_items.html" %}
-        <li>{% trans "If the document does not have its text available, we ignore it; this accounts for 17% of all documents." %}</li>
+        <li>
+            {% blocktrans %}
+                If the document does not have its text available, we ignore it;
+                this accounts for 17% of all documents.
+            {% endblocktrans %}
+        </li>
     </ul>
     <h4>{% trans "Discussion" %}</h4>
     <p>
         {% blocktrans %}
-            As expected, we observe a steady increase from 1986 (year Portugal joined EU), and today
-            14% of all portuguese laws cite at least one european law.
+            As expected, we observe a steady increase from 1986 (year Portugal joined EU), and
+            14% of all portuguese laws created in 2013 cited at least one european law.
         {% endblocktrans %}
     </p>
     <p>
         {% blocktrans %}
-            Arguably unexpected is the change in sloop since ~2006, which gave
-            rise to an increase of 10% in 7 years (4% to 14% from 2006 to 2013).
-            This seems to indicate that not only European legislation is having more influence on the portuguese law,
-            but also that this increase has been faster since 2006.
+            From 1985 to 2005 (20 years), there was a consistent increase to ~7%. We observe that
+            there was a change in sloop since ~2005, which gave rise to an increase of ~7% in ~10 years,
+            or double the sloop.
         {% endblocktrans %}
     </p>
     <h4>{% trans "Conclusion" %}</h4>
     <p>
         {% blocktrans %}
-            Here, we measured quantitatively the impact of the european law in the portuguese law and we have shown
-            that Europe legislation has a strong impact in portuguese law.
+            Here, we measured quantitatively the impact of the european law in the portuguese law and
+            we have shown that Europe legislation has a strong impact in portuguese law: in 2013 about 14%
+            of all portuguese laws cited an european law at least once.
         {% endblocktrans %}
     </p>
     <p>
         {% blocktrans %}
-            Furthermore, we have shown that the change of impact increased since 2006, and today about 14%
-            of all portuguese laws cite an european law at least once.
+            Furthermore, we have shown that the velocity of this impact doubled since 2004:
+            in 10 years (2003-2013) the percentage of laws citing european law raised as
+            much as in the 20 years before (1985-2005).
         {% endblocktrans %}
     </p>
     <p>
         {% blocktrans %}
-            This seems to suggest that European elections are not only important,
-            but are also becoming more important as they have more impact on the rules that govern people's life.
+            This seems to support the idea that the European elections are not only important,
+            but they are also becoming more important as they have more impact on the
+            rules that govern people's life.
         {% endblocktrans %}
     </p>
     <p>
         {% blocktrans %}
             It remains to be studied if this effect is similar in other european states.
         {% endblocktrans %}
+    </p>
+    <h4>{% trans "Licence" %}</h4>
+    <p>
+        {% if LANGUAGE_CODE == 'pt' %}
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+                <img alt="Licença Creative Commons" style="border-width:0"
+                     src="http://i.creativecommons.org/l/by/4.0/88x31.png" />
+            </a><br />O trabalho "<span xmlns:dct="http://purl.org/dc/terms/"
+                                        href="http://purl.org/dc/dcmitype/Text"
+                                        property="dct:title"
+                                        rel="dct:type">Impacto da Lei Europeia na Lei Portuguesa</span>" de
+            <a xmlns:cc="http://creativecommons.org/ns#"
+               href="https://sites.google.com/site/jorgecarleitao/"
+               property="cc:attributionName"
+               rel="cc:attributionURL">Jorge C. Leitão</a>
+            está licenciado com uma Licença <a rel="license"
+                                               href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons - Atribuição 4.0 Internacional</a>.
+            <br />Baseado no trabalho disponível em
+            <a xmlns:dct="http://purl.org/dc/terms/"
+               href="http://publicos.pt/lei/analises/2/impacto-da-lei-europeia-na-lei-portuguesa"
+               rel="dct:source">http://publicos.pt/lei/analises/2/impacto-da-lei-europeia-na-lei-portuguesa</a>.
+        {% else %}
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+                <img alt="Licença Creative Commons" style="border-width:0"
+                     src="http://i.creativecommons.org/l/by/4.0/88x31.png" />
+            </a><br />The work "<span xmlns:dct="http://purl.org/dc/terms/"
+                                      href="http://purl.org/dc/dcmitype/Text"
+                                      property="dct:title"
+                                      rel="dct:type">Impact of European Law in Portuguese Law</span>" of
+            <a xmlns:cc="http://creativecommons.org/ns#"
+               href="https://sites.google.com/site/jorgecarleitao/"
+               property="cc:attributionName"
+               rel="cc:attributionURL">Jorge C. Leitão</a>
+            is licenced under a Licence <a rel="license"
+                                           href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons - Atribuição 4.0 Internacional</a>.
+            <br />Original work can be found at
+            <a xmlns:dct="http://purl.org/dc/terms/"
+               href="http://publicos.pt/lei/analises/2/impacto-da-lei-europeia-na-lei-portuguesa"
+               rel="dct:source">http://publicos.pt/law/analysis/2/impact-of-european-law-in-portuguese-law</a>.
+        {% endif %}
     </p>
 {% endblock %}

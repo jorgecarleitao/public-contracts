@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 14:38+0100\n"
+"POT-Creation-Date: 2014-05-14 15:44+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1773,6 +1773,10 @@ msgstr ""
 msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
 
+#: law/templates/law/analysis/eu_impact.html:8
+msgid "Introduction"
+msgstr "Introdução"
+
 #: law/templates/law/analysis/eu_impact.html:10
 msgid ""
 "\n"
@@ -1797,21 +1801,21 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"A União Europeia (UE) é hoje um importante corpo legislativo a criar leis "
+"A União Europeia (UE) é hoje um importante corpo legislativo que cria leis "
 "que afectam Portugal nas diferentes àreas de governação e tem sido afirmado "
 "que estas eleições europeias são as mais importantes até hoje."
 
 #: law/templates/law/analysis/eu_impact.html:23
 msgid ""
 "\n"
-"            Here we quantify this claim. Our assumption is that european "
+"            Here we try to quantify this. Our assumption is that european "
 "elections are important\n"
 "            when the EU law has an impact on people's life, which is "
 "quantifiable by its impact on national laws.\n"
 "        "
 msgstr ""
 "\n"
-"Neste trabalho vamos quantificar esta afirmação. A nossa assunção é que "
+"Neste trabalho tentámos quantificar esta afirmação. A nossa assunção é que "
 "eleições europeias são importantes quando a lei europeia tem impacto na vida "
 "dos portugueses, e isto é quantificável pelo seu impacto na lei nacional."
 
@@ -1847,103 +1851,114 @@ msgstr ""
 "Para responder a isso, pegámos em todos os documentos publicados na Série I "
 "do Diário da República (online), contámos quantos citam <em>pelo menos</em> "
 "uma vez uma lei europeia, e dividimos esse número pelo total de leis "
-"criadas, para cada ano. Isto dá-nos a percetagem de leis que, a algum nível, "
-"dependem directamente de uma lei europeia. O resultado é o seguinte:"
+"criadas, em cada ano. Isto dá-nos a percetagem anual de leis que, a algum "
+"nível, dependem directamente de uma lei europeia, que argumentamos ser uma "
+"medida realista do seu impacto. O resultado é o seguinte:"
 
 #: law/templates/law/analysis/eu_impact.html:49
 msgid "Details"
 msgstr "Detalhes:"
 
-#: law/templates/law/analysis/eu_impact.html:52
+#: law/templates/law/analysis/eu_impact.html:53
 #, python-format
 msgid ""
-"If the document does not have its text available, we ignore it; this "
-"accounts for 17%% of all documents."
+"\n"
+"                If the document does not have its text available, we ignore "
+"it;\n"
+"                this accounts for 17%% of all documents.\n"
+"            "
 msgstr ""
+"\n"
 "Se um documento não tiver texto integral acessível, ignorámo-lo; isto "
-"representa cerca de 17%% de todos os documentos."
+"representa 17%% de todos os documentos."
 
-#: law/templates/law/analysis/eu_impact.html:54
+#: law/templates/law/analysis/eu_impact.html:59
 msgid "Discussion"
 msgstr "Discussão"
 
-#: law/templates/law/analysis/eu_impact.html:56
-#, fuzzy, python-format
+#: law/templates/law/analysis/eu_impact.html:61
+#, python-format
 msgid ""
 "\n"
 "            As expected, we observe a steady increase from 1986 (year "
-"Portugal joined EU), and today\n"
-"            14%% of all portuguese laws cite at least one european law.\n"
+"Portugal joined EU), and\n"
+"            14%% of all portuguese laws created in 2013 cited at least one "
+"european law.\n"
 "        "
 msgstr ""
 "\n"
 "Como esperávamos, observamos um crescimento desde 1986 (ano que entrámos na "
-"EU)."
+"UE) quantificado em 14%% de todas as leis criadas em 2013 terem citado pelo "
+"menos uma vez uma lei europeia."
 
-#: law/templates/law/analysis/eu_impact.html:62
+#: law/templates/law/analysis/eu_impact.html:67
 #, python-format
 msgid ""
 "\n"
-"            Arguably unexpected is the change in sloop since ~2006, which "
-"gave\n"
-"            rise to an increase of 10%% in 7 years (4%% to 14%% from 2006 to "
-"2013).\n"
-"            This seems to indicate that not only European legislation is "
-"having more influence on the portuguese law,\n"
-"            but also that this increase has been faster since 2006.\n"
+"            From 1985 to 2005 (20 years), there was a consistent increase to "
+"~7%%. We observe that\n"
+"            there was a change in sloop since ~2005, which gave rise to an "
+"increase of ~7%% in ~10 years,\n"
+"            or double the sloop.\n"
 "        "
 msgstr ""
 "\n"
-"Provavelmente menos esperado é uma alteração do declive desde ~2006, que "
-"provocou um aumento de ~10%% em 7 anos (~4%% para 14%% de 2006 a 2013). "
-"Comparativamente ao aumento de 4%% de 1986 a 2006, esta alteração é notável."
+"De 1985 a 2005 (20 anos), houve um crescimento consistente de ~7%% e "
+"observamos que o crescimento nos últimos 10 anos foi também de 7%%, que "
+"representa o dobro."
 
-#: law/templates/law/analysis/eu_impact.html:69
+#: law/templates/law/analysis/eu_impact.html:73
 msgid "Conclusion"
 msgstr "Conclusões"
 
-#: law/templates/law/analysis/eu_impact.html:71
-msgid ""
-"\n"
-"            Here, we measured quantitatively the impact of the european law "
-"in the portuguese law and we have shown\n"
-"            that Europe legislation has a strong impact in portuguese law.\n"
-"        "
-msgstr ""
-"\n"
-"Neste trabalho medimos quantitativamente o impacto da lei europeia na lei "
-"portuguesa, mostrando que esta é hoje citada por ~14%% de toda a lei "
-"portuguesa."
-
-#: law/templates/law/analysis/eu_impact.html:77
+#: law/templates/law/analysis/eu_impact.html:75
 #, python-format
 msgid ""
 "\n"
-"            Furthermore, we have shown that the change of impact increased "
-"since 2006, and today about 14%%\n"
-"            of all portuguese laws cite an european law at least once.\n"
+"            Here, we measured quantitatively the impact of the european law "
+"in the portuguese law and\n"
+"            we have shown that Europe legislation has a strong impact in "
+"portuguese law: in 2013 about 14%%\n"
+"            of all portuguese laws cited an european law at least once.\n"
 "        "
 msgstr ""
 "\n"
-"Mostrámos também que a velocidade com que esse impacto se dá tem aumentado "
-"desde 2006, e hoje 14%% de todas as leis citam uma lei europeia pelo menos "
-"uma vez."
+"\n"
+"Neste trabalho medimos quantitativamente o impacto da lei europeia na lei e "
+"mostrámos que a legislação europeia tem um forte impacto: em 2013 cerca de "
+"14%% de toda a lei citou pelo menos uma vez uma lei europeia."
 
-#: law/templates/law/analysis/eu_impact.html:83
+#: law/templates/law/analysis/eu_impact.html:82
 msgid ""
 "\n"
-"            This seems to suggest that European elections are not only "
-"important,\n"
-"            but are also becoming more important as they have more impact on "
-"the rules that govern people's life.\n"
+"            Furthermore, we have shown that the velocity of this impact "
+"doubled since 2004:\n"
+"            in 10 years (2003-2013) the percentage of laws citing european "
+"law raised as\n"
+"            much as in the 20 years before (1985-2005).\n"
 "        "
 msgstr ""
 "\n"
-"Isto parece sugerir que as eleições europeias não são só importantes, como "
-"se estão a tornar cada vez mais importantes pois têm cada vez mais impacto "
-"na legislação nacional e portanto na nossa vida."
+"Mostrámos também que a velocidade com que esse impacto se tem dado duplicou "
+"desde ~2005: em 10 anos (2003-2013) a percentagem de leis que citam leis "
+"europeias cresceu tanto como nos 20 anos anteriores (1985-2005)."
 
 #: law/templates/law/analysis/eu_impact.html:89
+msgid ""
+"\n"
+"            This seems to support the idea that the European elections are "
+"not only important,\n"
+"            but they are also becoming more important as they have more "
+"impact on the\n"
+"            rules that govern people's life.\n"
+"        "
+msgstr ""
+"\n"
+"Assim, concluimos que as eleições europeias não são só importantes, como se "
+"estão a tornar mais importantes pois têm cada vez mais impacto na legislação "
+"nacional e consequentemente nos cidadãos portugueses."
+
+#: law/templates/law/analysis/eu_impact.html:96
 msgid ""
 "\n"
 "            It remains to be studied if this effect is similar in other "
@@ -1951,7 +1966,11 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"Fica por estudar se este efeito é equivalente noutros estados membros."
+"Fica por estudar se este efeito é similar noutros estados membros."
+
+#: law/templates/law/analysis/eu_impact.html:100
+msgid "Licence"
+msgstr "Licença"
 
 #: law/templates/law/analysis/laws_time_series.html:5
 msgid "Number of portuguese laws enacted yearly"
