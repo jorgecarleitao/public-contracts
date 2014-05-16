@@ -20,5 +20,5 @@ urlpatterns = patterns('',
                        url(r'(\d+)/%s$' % _('tenders'), entity_views.tenders, name='entity_tenders'),
                        url(r'(\d+)/%s/rss$' % _('tenders'), feed.EntityTendersFeed()),
 
-                       url(r'(\d+)/(\w+)', entity_views.main_view, name='entity'),
+                       url(r'(\d+)/([-\w]+)', entity_views.main_view, name='entity'),
                        )
