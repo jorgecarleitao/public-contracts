@@ -90,7 +90,6 @@ def analysis_list(request):
                                  slugify(titles[analysis]))),
             'title': titles[analysis]
         })
-        print(analysis_list[-1]['url'])
 
     return render(request, "law/analysis.html", {'analysis': analysis_list})
 

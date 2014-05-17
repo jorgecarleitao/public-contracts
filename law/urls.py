@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, url
-from django.utils.text import slugify
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from . import views
 
@@ -13,7 +12,6 @@ urlpatterns = patterns('',
                        url(r'^%s/%s/(\d+)' % (_('law'), _('analysis')),
                            views.law_analysis,
                         ),
-
 
                        url(r'^%s$' % _('law'), views.law_list, name='law_law_list'),
                        url(r'^%s$' % _('types'), views.types_list, name='law_types_list'),

@@ -1,15 +1,17 @@
 from django.conf.urls import patterns, include, url
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.sitemaps.views import sitemap
+
+import robust_urls.urls
 
 import contracts.urls
 import deputies.urls
 import law.urls
 from . import views
-from .sitemaps import ContractsSitemap
+from .sitemaps import Sitemap
 
 sitemaps = {
-    'contracts': ContractsSitemap,
+    'sitemaps': Sitemap,
 }
 
 urlpatterns = patterns('',
@@ -21,6 +23,8 @@ urlpatterns = patterns('',
                        (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
                        (r'^robots\.txt$', views.robots),
                        )
+
+urlpatterns += patterns(url(r'/i18n/', include(robust_urls.urls)))
 
 from django.conf import settings
 if settings.DEBUG:

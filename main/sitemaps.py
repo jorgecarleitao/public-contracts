@@ -7,7 +7,7 @@ priorities = {'contracts_home': 1.0,
               'about': 0.5}
 
 
-class ContractsSitemap(sitemaps.Sitemap):
+class Sitemap(sitemaps.Sitemap):
 
     def items(self):
         return [view for view in priorities]

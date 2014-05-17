@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from . import category_views
 from . import feed
