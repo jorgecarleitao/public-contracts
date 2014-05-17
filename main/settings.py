@@ -35,7 +35,10 @@ main_directory = os.path.abspath(os.path.dirname(__file__))
 site_directory = os.path.abspath(os.path.dirname(main_directory))
 
 TIME_ZONE = 'Europe/Lisbon'
-LANGUAGE_CODE = 'pt'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = (('en', 'English'),
+             ('pt', 'Portuguese'))
 
 DATABASES = {
     'default': {

@@ -2,8 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sitemaps.views import sitemap
 
-import robust_urls.urls
-
 import contracts.urls
 import deputies.urls
 import law.urls
@@ -23,8 +21,6 @@ urlpatterns = patterns('',
                        (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
                        (r'^robots\.txt$', views.robots),
                        )
-
-urlpatterns += patterns(url(r'/i18n/', include(robust_urls.urls)))
 
 from django.conf import settings
 if settings.DEBUG:
