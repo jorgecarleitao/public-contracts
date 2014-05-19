@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
-from .analysis import AnalysisManager
+from .analysis import analysis_manager
 
 
 @cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
 
-    entities = AnalysisManager.get_analysis('municipalities_categories_ranking')
+    entities = analysis_manager.get_analysis('municipalities_categories_ranking')
     count = 1
     for entity in entities:
         entity.rank = count
@@ -21,7 +21,7 @@ def entities_category_ranking(request):
 
 def contracts_price_histogram(request):
 
-    data = AnalysisManager.get_analysis("contracts_macro_statistics")
+    data = analysis_manager.get_analysis("contracts_macro_statistics")
 
     context = {'navigation_tab': 'analysis',
                'count': data['total_count'],
@@ -38,7 +38,7 @@ def procedure_types_time_series(request):
 @cache_page(60 * 60 * 24)
 def municipalities_delta_time(request):
 
-    entities = AnalysisManager.get_analysis('municipalities_delta_time')
+    entities = analysis_manager.get_analysis('municipalities_delta_time')
     count = 1
     for entity in entities:
         entity.rank = count
@@ -68,6 +68,7 @@ def ministries_contracts_time_series(request):
 def contracts_time_series(request):
     context = {'navigation_tab': 'analysis'}
     return render(request, 'contracts/contracts_time_series/main.html', context)
+
 
 def legislation_application_time_series(request):
     context = {'navigation_tab': 'analysis'}

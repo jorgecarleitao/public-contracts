@@ -1,6 +1,4 @@
-from collections import defaultdict
-
-from contracts.analysis.cache import AnalysisManager, Analysis
+from main.analysis import AnalysisManager, Analysis
 
 from law.analysis.analysis import get_documents_time_series, get_eu_impact_time_series
 
@@ -16,5 +14,6 @@ PRIMARY_KEY = dict()
 for k, v in ANALYSIS.items():
     PRIMARY_KEY[v] = k
 
+analysis_manager = AnalysisManager()
 for x in _allAnalysis:
-    AnalysisManager.register(x, primary_key=ANALYSIS[x.name])
+    analysis_manager.register(x, primary_key=ANALYSIS[x.name])

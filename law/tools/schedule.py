@@ -8,6 +8,7 @@ if __name__ == "__main__":
     set_up.set_up_django_environment('law.tools.settings_private')
 
 from law.crawler import FirstSeriesCrawler, Populator
+from law.analysis import analysis_manager
 
 
 def update():
@@ -20,6 +21,10 @@ def update():
 
     p = Populator()
     p.populate_all(current_year - 1)
+
+    # update analysis
+    for analysis in list(analysis_manager.values()):
+        analysis.update()
 
 if __name__ == "__main__":
     update()
