@@ -1,8 +1,16 @@
-from contracts.analysis.cache import AnalysisManager, Analysis
+from main.analysis import AnalysisManager, Analysis
 
-from . import analysis
+from deputies.analysis.analysis import *
 
-_allAnalysis = [Analysis('deputies_time_distribution', analysis.get_time_in_office_distribution)]
+_allAnalysis = [Analysis('deputies_time_distribution', get_time_in_office_distribution)]
 
+
+ANALYSIS = {'deputies_time_distribution': 1}
+
+PRIMARY_KEY = dict()
+for k, v in ANALYSIS.items():
+    PRIMARY_KEY[v] = k
+
+analysis_manager = AnalysisManager()
 for x in _allAnalysis:
-    AnalysisManager.register(x)
+    analysis_manager.register(x, primary_key=ANALYSIS[x.name])

@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
 from contracts.crawler import crawler
 from contracts import models
-from contracts.analysis import AnalysisManager
+from contracts.analysis import analysis_manager
 
 
 def update():
@@ -25,7 +25,7 @@ def update():
         category.compute_data()
 
     # update analysis
-    for analysis in list(AnalysisManager.values()):
+    for analysis in list(analysis_manager.values()):
         analysis.update()
 
 if __name__ == "__main__":
