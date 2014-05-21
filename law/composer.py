@@ -131,8 +131,19 @@ hierarchy_classes = {'Anexo': 'anexo',
                      'Secção': 'seccao',
                      'Sub-Secção': 'subseccao',
                      'Artigo': 'artigo',
+                     'Número': 'numero list-unstyled',
+                     'Alínea': 'alinea list-unstyled'}
+
+hierarchy_ids = {'Anexo': 'anexo',
+                     'Parte': 'parte',
+                     'Título': 'titulo',
+                     'Capítulo': 'capitulo',
+                     'Secção': 'seccao',
+                     'Sub-Secção': 'subseccao',
+                     'Artigo': 'artigo',
                      'Número': 'numero',
                      'Alínea': 'alinea'}
+
 
 hierarchy_classes_with_titles = ['anexo', 'parte', 'titulo', 'capitulo', 'seccao', 'subseccao', 'artigo']
 
@@ -201,8 +212,8 @@ def organize_soup(soup):
         else:
             current_element[format_to_receive].append(current_element[format_to_move])
 
-    for element in soup.findAll(True, recursive=False):
-
+    body = soup.html.body
+    for element in body.select('p'):
         for format in hierarchy_priority:
             search = re.search(hierarchy_regex[format], element.text)
             if not search:
@@ -256,7 +267,7 @@ def organize_soup(soup):
                 sufix = ''
                 if search.group(1):
                     sufix = '-' + slugify(search.group(1).strip())
-                current_element[format]['id'] = prefix + hierarchy_classes[format] + sufix
+                current_element[format]['id'] = prefix + hierarchy_ids[format] + sufix
 
                 anchor_tag = soup.new_tag('a', **{'class': 'headerlink', 'href': '#%s' % current_element[format]['id']})
                 anchor_tag.insert(0, NavigableString(' ¶'))
