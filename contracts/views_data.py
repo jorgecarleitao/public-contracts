@@ -2,13 +2,13 @@ import json
 
 from django.http import HttpResponse
 
-from .analysis import AnalysisManager
+from .analysis import analysis_manager
 
 
 def entities_category_ranking_json(request):
     data = []
     count = 0
-    for entity in AnalysisManager.get_analysis('municipalities_categories_ranking'):
+    for entity in analysis_manager.get_analysis('municipalities_categories_ranking'):
         count += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -19,7 +19,7 @@ def entities_category_ranking_json(request):
 
 def entities_category_ranking_histogram_json(request):
 
-    entities = AnalysisManager.get_analysis('municipalities_categories_ranking')
+    entities = analysis_manager.get_analysis('municipalities_categories_ranking')
 
     min_value = entities[-1].avg_depth - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[0].avg_depth + 0.00000001   # avoid rounding, this caused a bug before.
@@ -45,7 +45,7 @@ def entities_category_ranking_histogram_json(request):
 
 def contracts_price_histogram_json(request):
 
-    distribution = AnalysisManager.get_analysis('contracts_price_distribution')
+    distribution = analysis_manager.get_analysis('contracts_price_distribution')
 
     data = []
     for entry in distribution:
@@ -58,12 +58,12 @@ def contracts_price_histogram_json(request):
 
 
 def contracts_macro_statistics_json(request):
-    data = AnalysisManager.get_analysis('contracts_macro_statistics')
+    data = analysis_manager.get_analysis('contracts_macro_statistics')
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 def get_procedure_types_time_series_json(request):
-    data = AnalysisManager.get_analysis('procedure_type_time_series')
+    data = analysis_manager.get_analysis('procedure_type_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -75,7 +75,7 @@ def get_procedure_types_time_series_json(request):
 def municipalities_delta_time_json(request):
     data = []
     rank = 0
-    for entity in AnalysisManager.get_analysis('municipalities_delta_time'):
+    for entity in analysis_manager.get_analysis('municipalities_delta_time'):
         rank += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
@@ -86,7 +86,7 @@ def municipalities_delta_time_json(request):
 
 def municipalities_delta_time_histogram_json(request):
 
-    entities = AnalysisManager.get_analysis('municipalities_delta_time')
+    entities = analysis_manager.get_analysis('municipalities_delta_time')
 
     min_value = entities[0].average_delta_time - 0.00000001  # avoid rounding, this caused a bug before.
     max_value = entities[-1].average_delta_time + 0.00000001   # avoid rounding, this caused a bug before.
@@ -111,7 +111,7 @@ def municipalities_delta_time_histogram_json(request):
 
 
 def municipalities_contracts_time_series_json(request):
-    data = AnalysisManager.get_analysis('municipalities_contracts_time_series')
+    data = analysis_manager.get_analysis('municipalities_contracts_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -121,7 +121,7 @@ def municipalities_contracts_time_series_json(request):
 
 
 def municipalities_procedure_types_time_series_json(request):
-    data = AnalysisManager.get_analysis('municipalities_procedure_types_time_series')
+    data = analysis_manager.get_analysis('municipalities_procedure_types_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -131,7 +131,7 @@ def municipalities_procedure_types_time_series_json(request):
 
 
 def ministries_contracts_time_series_json(request):
-    data = AnalysisManager.get_analysis('ministries_contracts_time_series')
+    data = analysis_manager.get_analysis('ministries_contracts_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -141,7 +141,7 @@ def ministries_contracts_time_series_json(request):
 
 
 def excluding_municipalities_contracts_time_series_json(request):
-    data = AnalysisManager.get_analysis('excluding_municipalities_contracts_time_series')
+    data = analysis_manager.get_analysis('excluding_municipalities_contracts_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -151,7 +151,7 @@ def excluding_municipalities_contracts_time_series_json(request):
 
 
 def contracts_time_series_json(request):
-    data = AnalysisManager.get_analysis('contracts_time_series')
+    data = analysis_manager.get_analysis('contracts_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
@@ -161,7 +161,7 @@ def contracts_time_series_json(request):
 
 
 def legislation_application_time_series_json(request):
-    data = AnalysisManager.get_analysis('legislation_application_time_series')
+    data = analysis_manager.get_analysis('legislation_application_time_series')
 
     for x in data:
         x['from'] = x['from'].strftime('%Y-%m-%d')
