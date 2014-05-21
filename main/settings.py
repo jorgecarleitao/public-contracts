@@ -35,7 +35,7 @@ main_directory = os.path.abspath(os.path.dirname(__file__))
 site_directory = os.path.abspath(os.path.dirname(main_directory))
 
 TIME_ZONE = 'Europe/Lisbon'
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'pt'
 
 LANGUAGES = (('en', 'English'),
              ('pt', 'Portuguese'))
