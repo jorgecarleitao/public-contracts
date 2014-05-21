@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 15:44+0100\n"
+"POT-Creation-Date: 2014-05-21 11:20+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -172,12 +172,12 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/urls.py:14 deputies/urls.py:9 law/urls.py:8
+#: contracts/urls.py:14 deputies/urls.py:9 law/urls.py:7
 msgid "home"
 msgstr "início"
 
-#: contracts/urls.py:15 contracts/urls.py:25 law/urls.py:9 law/urls.py:11
-#: law/urls.py:13
+#: contracts/urls.py:15 contracts/urls.py:25 law/urls.py:8 law/urls.py:10
+#: law/urls.py:12
 msgid "analysis"
 msgstr "analises"
 
@@ -1672,19 +1672,19 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
-#: law/urls.py:8 law/urls.py:9 law/urls.py:11 law/urls.py:13 law/urls.py:18
+#: law/urls.py:7 law/urls.py:8 law/urls.py:10 law/urls.py:12 law/urls.py:16
 msgid "law"
 msgstr "lei"
 
-#: law/urls.py:19
+#: law/urls.py:17
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:20
+#: law/urls.py:18
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:22 law/urls.py:23
+#: law/urls.py:20 law/urls.py:21
 msgid "document"
 msgstr "documento"
 
