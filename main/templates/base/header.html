@@ -1,6 +1,16 @@
 {% load static %}
 {% load i18n %}
-{% block message %}{% endblock %}
+{% block message %}
+{% endblock %}
+{% if LANGUAGE_CODE == 'pt' %}
+    <div class="alert alert-success">
+        <p>
+            Conheça a importância destas eleições europeias na nossa análise:
+            <strong><a href="{% url "law_analysis_internal_selector" 2 %}">
+                Impacto da Lei Europeia na Lei Portuguesa</a></strong>.
+        </p>
+    </div>
+{% endif %}
 <ul class="nav nav-tabs">
     {% block scope_nav %}{% endblock %}
 </ul>
