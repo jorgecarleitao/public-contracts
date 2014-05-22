@@ -10,7 +10,7 @@ urlpatterns = patterns('',
                        url(r'^%s/%s/(\d+)/(\w+)' % (_('law'), _('analysis')),
                            views.law_analysis, name='law_analysis_selector'),
                        url(r'^%s/%s/(\d+)' % (_('law'), _('analysis')),
-                           views.law_analysis,
+                           views.law_analysis, name='law_analysis_internal_selector',
                         ),
 
                        url(r'^%s$' % _('law'), views.law_list, name='law_law_list'),
