@@ -35,11 +35,11 @@ Look at `this contract`_ in the official database. It has the number "791452". L
 
 Now, lets start with its price::
 
-    >>> print contract.price
+    >>> print(contract.price)
 
 and its description::
 
-    >>> print contract.description
+    >>> print(contract.description)
 
 .. _ManyToMany: https://docs.djangoproject.com/en/dev/topics/db/examples/many_to_many/
 
@@ -53,7 +53,7 @@ Lets say we want the entity that paid contract 791452. In that case, we pick the
 and select the first one::
 
     >>> entity = contract.contractors.all()[0]
-    >>> print entity
+    >>> print(entity)
 
 Let's pick the contracts this entity made. To that, we use the "contracts_made" of the entity::
 
@@ -63,7 +63,7 @@ Let's pick the contracts this entity made. To that, we use the "contracts_made" 
 
 Lets count_ the number of these contracts::
 
-    >>> print entity_contracts.count()
+    >>> print(entity_contracts.count())
 
 .. _can check: http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#23537
 
@@ -80,7 +80,7 @@ is the following::
 
     >>> from django.db.models import Sum
     >>> total_price = entity_contracts.aggregate(our_sum=Sum('price'))['our_sum']
-    >>> print total_price
+    >>> print(total_price)
 
 Again, you `can check`_ on the official website.
 
@@ -88,7 +88,7 @@ As a final example, we are going to use a filter. Lets say you want all the abov
 contracts, but restricted to prices higher than 10.000€. For this, we need to "filter" the contracts::
 
     >>> expensive_contracts = entity_contracts.filter(price__gt=10000*100)
-    >>> print expensive_contracts.count()
+    >>> print(expensive_contracts.count())
 
 The "price__gt" means price `(g)reater (t)han <Django queries API>`_, and we multiply by 100 because
 :attr:`prices are in euro cents price <models.Contract.price>`.

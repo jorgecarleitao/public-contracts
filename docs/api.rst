@@ -7,8 +7,9 @@ It documents what objects the database contains, and how you can interact with t
 Publics uses Django ORM to build, maintain and query a MySQL database.
 This has two immediate consequences:
 
-    1. If you don't know python/Django but you know MySQL, you can still access it (see :doc:`tools/database` for connecting to it).
-    2. If you don't know MySQL, but you know Python and/or Django, you can make take advantage of the API.
+    1. If you don't know python/Django but you know MySQL, you can access it remotely (see :doc:`tools/database`).
+    2. If you don't know MySQL, but you know Python and/or Django,
+       you can take advantage of this API (see :doc:`/usage`)
 
 .. toctree::
    :maxdepth: 1

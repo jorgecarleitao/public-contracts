@@ -50,8 +50,8 @@ Install using::
 
     pip install django-treebeard
 
-Running the database API
-------------------------
+Running the example
+-------------------
 
 .. _official number: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml
 
@@ -67,5 +67,5 @@ If everything went well, it outputs two numbers:
 
 If some problem occur, please drop by our mailing-list_ so we can help you.
 
-From here, you can see section :doc:`usage` for a tutorial, and section :doc:`API` for a complete
+From here, you can see section :doc:`usage` for a tutorial, and section :doc:`api` for the complete
 documentation.
