@@ -5,6 +5,7 @@ import json
 import logging
 
 import requests
+import requests.exceptions
 
 from . import models
 
@@ -209,7 +210,7 @@ class JSONCrawler(AbstractCrawler):
     def goToPage(self, url):
         try:
             return json.loads(super(JSONCrawler, self).goToPage(url))
-        except ValueError:
+        except (ValueError, requests.exceptions.Timeout):
             raise JSONLoadError(url)
 
 
