@@ -31,8 +31,8 @@ def update():
         category.compute_data()
 
     # update analysis
-    for analysis in list(analysis_manager.values()):
-        analysis.update()
+    #for analysis in list(analysis_manager.values()):
+    #    analysis.update()
 
 if __name__ == "__main__":
     update()
