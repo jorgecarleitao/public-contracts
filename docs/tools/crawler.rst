@@ -6,55 +6,56 @@ Crawler for Contracts and Tenders
 .. _Base: http://www.base.gov.pt/base2
 .. _requests: http://docs.python-requests.org/en/latest/
 
-This document explains how Base_ provides its data and what our crawler works.
+This document explains how Base_ provides its data and what the crawler works.
 
 .. important::
-    Please, take precautions on using the crawler on your own as it can generate Denial of
-    Service (DoS) to Base_ database. We provide remote access to ours exactly to avoid that.
+    Please, take precautions on using the crawler as it can generate Denial of
+    Service (DoS) to Base_ database. We provide remote access to the database to avoid that.
 
 .. important::
-    Crawling the Base_ from scratch can take more than 2 days as of Jan. 2014.
+    Crawling Base_ from scratch takes more than 2 days as of Jan. 2014.
 
 Base database
 -------------
 
 Base_ uses the following urls to expose its data
 
-- :class:`~models.Entity`: http://www.base.gov.pt/base2/rest/entidades/[base_id]
-- :class:`~models.Contract`: http://www.base.gov.pt/base2/rest/contratos/[base_id]
-- List of countries: http://www.base.gov.pt/base2/rest/lista/paises
-- List of districts: http://www.base.gov.pt/base2/rest/lista/distritos?pais=[country_base_id]; (portugal_base_id=187)
-- List of councils: http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=[district_base_id];
-- List of types of contracts: http://www.base.gov.pt/base2/rest/lista/tipocontratos
-- List of types of procedures: http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos
-- List of 25 entities: http://www.base.gov.pt/base2/rest/entidades [1]
-- List of 25 contracts: http://www.base.gov.pt/base2/rest/contratos [1]
+1. :class:`~contracts.models.Entity`: http://www.base.gov.pt/base2/rest/entidades/[base_id]
+2. :class:`~contracts.models.Contract`: http://www.base.gov.pt/base2/rest/contratos/[base_id]
+3. :class:`~contracts.models.Tender`: http://www.base.gov.pt/base2/rest/anuncios/[base_id]
+4. List of :class:`~contracts.models.Country`: http://www.base.gov.pt/base2/rest/lista/paises
+5. List of :class:`~contracts.models.District`: http://www.base.gov.pt/base2/rest/lista/distritos?pais=[country_base_id]; (portugal_base_id=187)
+6. List of :class:`~contracts.models.Council`: http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=[district_base_id];
+7. List of :class:`~contracts.models.ContractType`: http://www.base.gov.pt/base2/rest/lista/tipocontratos
+8. List of :class:`~contracts.models.ProcedureType`: http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos
+9. List of :class:`~contracts.models.ProcedureType`: http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos
 
-[1] Both lists returns 25 elements. Which specific elements to be retrieved have to be defined
-in the header of the request.
+Each url returns ``json`` with information about the particular object.
+For this reason, we have an abstract crawler for retrieving this information
+and map it to this API.
 
-Each url returns a :mod:`json` object with respective information. For this reason,
-we have an abstract crawler for retrieving json from urls:
-
-The lists of entities and contracts grow over time, the others are constant and only have to be retrieved once.
-
-What our crawler does
+What the crawler does
 ---------------------
 
-The crawler accesses Base_ urls using the following procedure:
+The crawler accesses Base_ urls using the same procedure for entities, contracts and tenders.
 
-1. Crawls the list of entities to retrieve their information, validates it, and stores it in the database.
-2. Crawls the list of contracts to get all their 'base_id's.
-3. Crawls each contract to retrieve its information, validates it, and stores it in the database.
+1. Set ``base_id = 1`` and retrieves json ``data`` from one of the links above
+2. Stores ``data`` in a .json file
+3. Cleans and validates ``data`` into ``cleaned_data``
+4. Uses ``cleaned_data`` to construct or update an instance of a model (e.g. :class:`~contracts.models.Entity`)
+5. Saves the model, does ``base_id += 1``, goes to 1.
+
+BASE returns status ``500`` if the ``base_id`` doesn't exist in their database.
+The procedure stops if status ``500`` occurs for 100 consecutive ``base_id``,
+which we interpret as the end of the list.
 
 Because Base_ database is constantly being updated with new contracts and entities,
 this procedure is repeated once a day.
-To avoid hitting Base_ with extra queries, the crawler remembers the last entity and contract retrieved,
-continuing from that one on posterior calls.
-
 
 API
 -----
+
+This section introduces the different crawlers we use to crawl Base_.
 
 .. class::AbstractCrawler
 
@@ -63,119 +64,158 @@ API
 
     .. method:: goToPage(url)
 
-        Returns the html of the url, using requests_.
+        Returns the content of the url, using requests_.
 
 .. class::JSONCrawler
 
-    A subclass of AbstractCrawler able to retrieve JSON content from an url.
-    It has one method:
+    A subclass of :class:`AbstractCrawler` to retrieve JSON content from an url.
+    It overwrites :meth:`~AbstractCrawler.goToPage`:
 
     .. method:: goToPage(url)
 
         Returns a dictionary corresponding to the json content of the url.
 
-For retrieving data, the procedure is separated in three steps:
-
-1. Go to the url and retrieve the data
-2. Validate the data
-3. Populate the database with the validated data.
-
-For static data, this is relatively easy. We provide a specific crawler for this:
-
 .. class:: ContractsStaticDataCrawler
 
-    A subclass JSONCrawler for static data of contracts. This crawler only needs to be run once and
+    A subclass :class:`JSONCrawler` for static data of contracts. This crawler only needs to be run once and
     is used to populate the database the first time.
 
-    .. method:: retrieve_and_save_contracts_types()
-    .. method:: retrieve_and_save_procedures_types()
-    .. method:: retrieve_and_save_countries()
-    .. method:: retrieve_and_save_districts(country)
-    .. method:: retrieve_and_save_councils(district)
-
-        Methods to retrieve specific static data.
-
-    .. method:: retrieve_and_save_all
+    .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of contracts.
 
 
 .. class:: TendersStaticDataCrawler
 
-    A subclass JSONCrawler for static data of tenders. This crawler only needs to be run once and
+    A subclass :class:`JSONCrawler` for static data of tenders. This crawler only needs to be run once and
     is used to populate the database the first time.
-
-    .. method:: retrieve_and_save_act_types()
-    .. method:: retrieve_and_save_model_types()
-
-        Methods to retrieve specific static data.
 
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of tenders.
 
+
 .. class:: StaticDataCrawler
 
-    A crawler that uses composite design pattern to just extract all static date (tenders and contracts).
+    A crawler that uses :class:`ContractsStaticDataCrawler` and :class:`TendersStaticDataCrawler`
+    to extract all static data.
 
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data.
 
-For dynamic data, and given the size of the database, the approach is more complex.
+Given the size of Base_ database, and since it is constantly being updated,
+contracts, entities and tenders, use the following approach:
 
 .. class:: DynamicCrawler
 
-    A subclass JSONCrawler (abstract) that conceptually uses a directory to store files with lists of 25 summaries.
+    An abstract subclass of :class:`JSONCrawler` that implements
+    the crawling procedure described in the previous section.
 
-    .. attribute:: data_directory = '../../data'
+    .. attribute:: object_directory = None
+
+        A string with the directory where the ``.json`` files are stored; to be overwritten.
+
+    .. attribute:: object_name = None
+
+        A string with the name of the object used to name the ``.json`` files; to be overwritten.
+
+    .. attribute:: object_url = None
+
+        The url used to retrieve data from BASE; to be overwritten.
+
+    .. attribute:: object_model = None
+
+        The model to be constructed from the retrieved data; to be overwritten.
+
+    .. method:: get_data(base_id, flush=False)
+
+        Returns data from :attr:`object_url` using ``base_id`` and
+        stores it in a ``file`` in :attr:`object_directory` under the name ``<object_name>_<base_id>.json``.
+
+        If ``file`` already exists and ``flush=False``, directly returns its content;
+        otherwise, retrieves the content in the url creates/updates the ``file``.
+
+    .. staticmethod:: clean_data(data)
+
+        Cleans ``data``, returning a ``cleaned_data`` dictionary with keys being fields
+        of the :attr:`object_model` and values being extracted from ``data``.
+
+        This method is not implemented and has to be overwritten for each object.
+
+    .. method:: save_instance(cleaned_data)
+
+        Saves or updates an instance of type :attr:`object_model`
+        using the dictionary ``cleaned_data``.
+
+        This method can be overwritten for
+        changing how the instance is saved.
+
+        Returns a tuple ``(instance, created)`` where ``created`` is ``True`` if the instance
+        was created (and not just updated).
+
+    .. method:: update_instance(base_id, flush=False)
+
+        Uses :meth:`get_data`, :meth:`clean_data` and :meth:`save_instance` to
+        create or update an instance identified by ``base_id``. ``flush`` is passed to :meth:`get_data`.
+
+        Returns the output of :meth:`save_instance`.
+
+    .. method:: last_base_id()
+
+        Returns the highest ``base_id`` retrieved so far by :meth:`get_data`
+        by searching in :attr:`object_directory` for files in :attr:`object_directory`.
+
+    .. method:: update(flush=False)
+
+        Runs a loop over :meth:`update_instance` from ``base_id`` equal to :meth:`last_base_id`
+        with increase by 1 on each iteration until
+        no more results are returned for 100 consecutive calls of :meth:`update_instance`.
+
+        Returns all instances created during the loop.
 
 
 .. class:: EntitiesCrawler
 
-    A subclass of DynamicCrawler to crawl entities.
+    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Entity` table.
 
-    It goes to all lists of entities in Base_, each with 25 elements, and store them in files in :attr:`data_directory`.
-    Uses the stored pages to create/update :class:`Entities <models.Entity>` in the database.
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Entity`.
 
-    .. method:: update()
+    Uses:
 
-        The entry point of this crawler; given the existence of :attr:`data_directory`,
-        updates :class:`Entities <models.Entity>` until database is fully synchronized with Base_.
+    * :attr:`~DynamicCrawler.object_directory`: ``'../../data/entities'``
+    * :attr:`~DynamicCrawler.object_name`: ``'entity'``;
+    * :attr:`~DynamicCrawler.object_url`: ``'http://www.base.gov.pt/base2/rest/entidades/%d'``
+    * :attr:`~DynamicCrawler.object_model`: :class:`~contracts.models.Entity`.
 
 
 .. class:: ContractsCrawler
 
-    A subclass of DynamicCrawler to crawl contracts.
+    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Contract` table.
 
-    It goes to all lists of entities in Base_, each with 25 elements, and store the ids in files in :attr:`data_directory`.
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Contract`
+    and :meth:`~DynamicCrawler.save_instance` to also save ``ManytoMany`` relationships
+    of the :class:`~contracts.models.Contract`.
 
-    Goes to the page of each :class:`models.Contract`, obtained from the stored ids, and stores the information in
+    Uses:
 
-    .. attribute:: contracts_directory = '../../contracts'
-
-        directory of cached information of contracts.
-
-    .. warning:: This directory will be filled with lots of files,
-        with total size of ~1.7 GB as of Jan. of 2014.
-
-    .. method:: update()
-
-        Entry point of this crawler, given the existence of :attr:`contracts_directory` and :attr:`data_directory`,
-        downloads, caches and saves contracts until the database is fully synchronized with Base_.
+    * :attr:`object_directory`: ``'../../data/contracts'``
+    * :attr:`object_name`: ``'contract'``;
+    * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/contratos/%d'``
+    * :attr:`object_model`: :class:`~contracts.models.Contract`.
 
 
 .. class:: TenderCrawler
 
-    A subclass of DynamicCrawler to crawl tenders.
+    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Tender` table.
 
-    It sequentially searches for tenders with a given id, retrieves it, and caches the results in
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Tender`
+    and :meth:`~DynamicCrawler.save_instance` to also save ``ManytoMany`` relationships
+    of the :class:`~contracts.models.Tender`.
 
-    .. attribute:: tenders_directory = '../../tenders'
+    Uses:
 
-    Used to synchronized tenders with Base_.
-
-    .. method:: update()
-
-        Entry point of this crawler, given the existence of :attr:`tenders_directory` and :attr:`data_directory`,
-        downloads, caches and saves :class:`tenders <models.Tender>` until the database is fully synchronized with Base_.
+    * :attr:`object_directory`: ``'../../data/tenders'``
+    * :attr:`object_name`: ``'tender'``;
+    * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/anuncios/%d'``
+    * :attr:`object_model`: :class:`~contracts.models.Tender`.
