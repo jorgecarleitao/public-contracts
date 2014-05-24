@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from .analysis import analysis_manager
 
@@ -62,7 +62,7 @@ def contracts_macro_statistics_json(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-def get_procedure_types_time_series_json(request):
+def procedure_types_time_series_json(request):
     data = analysis_manager.get_analysis('procedure_type_time_series')
 
     for x in data:
@@ -168,3 +168,31 @@ def legislation_application_time_series_json(request):
         x['to'] = x['to'].strftime('%Y-%m-%d')
 
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+AVAILABLE_VIEWS = {
+    'category-ranking-index-json': entities_category_ranking_json,
+    'entities-category-ranking-histogram-json': entities_category_ranking_histogram_json,
+    'contracts-price-histogram-json': contracts_price_histogram_json,
+    'contracts-macro-statistics-json': contracts_macro_statistics_json,
+
+    'procedure-types-time-series-json': procedure_types_time_series_json,
+
+    'municipalities-delta-time-json': municipalities_delta_time_json,
+    'municipalities-delta-time-histogram-json': municipalities_delta_time_histogram_json,
+    'contracts-time-series-json': contracts_time_series_json,
+    'excluding-municipalities-contracts-time-series-json': excluding_municipalities_contracts_time_series_json,
+
+    'municipalities-contracts-time-series-json': municipalities_contracts_time_series_json,
+    'municipalities-procedure-types-time-series-json': municipalities_procedure_types_time_series_json,
+
+    'ministries-contracts-time-series-json': ministries_contracts_time_series_json,
+    'legislation-application-time-series-json': legislation_application_time_series_json,
+}
+
+
+def analysis_selector(request, analysis_name):
+    if analysis_name not in AVAILABLE_VIEWS:
+        raise Http404
+
+    return AVAILABLE_VIEWS[analysis_name](request)

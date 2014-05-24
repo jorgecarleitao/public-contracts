@@ -35,7 +35,7 @@
         svg1.call(tip1);
 
         var data;
-        d3.json("{% url 'entities_category_ranking_histogram_json' %}", function(data) {
+        d3.json("{% url 'contracts_data_selector' 'entities-category-ranking-histogram-json' %}", function(data) {
             min_x_value = d3.min(data, function(d) { return d.min_position; });
             max_x_value = d3.max(data, function(d) { return d.max_position; });
 

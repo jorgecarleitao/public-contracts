@@ -85,7 +85,7 @@
                 .ticks(8)
     }
 
-    d3.json('{% url "municipalities_procedure_types_time_series_json" %}', function(error, data) {
+    d3.json('{% url 'contracts_data_selector' 'municipalities-procedure-types-time-series-json' %}', function(error, data) {
 
         data.forEach(function(d) {
             d.from = parseDate(d.from);

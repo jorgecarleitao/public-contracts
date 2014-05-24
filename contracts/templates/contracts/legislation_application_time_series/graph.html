@@ -67,7 +67,7 @@
                 .orient("left")
     }
 
-    d3.json('{% url "legislation_application_time_series_json" %}', function(error, data) {
+    d3.json('{% url 'contracts_data_selector' 'legislation-application-time-series-json' %}', function(error, data) {
 
         data.forEach(function(d) {
             d.from = parseDate(d.from);

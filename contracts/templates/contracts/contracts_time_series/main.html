@@ -21,7 +21,7 @@
     </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-    {% url 'contracts_time_series_json' as the_url %}
+    {% url 'contracts_data_selector' 'contracts-time-series-json' as the_url %}
     {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
     <div class="text-element">
         <h4>{% trans "Observations and context" %}</h4>
@@ -58,11 +58,11 @@
             {% endblocktrans %}
         </p>
         <h4>{% trans "Municipalities only:" %}</h4>
-        {% url 'municipalities_contracts_time_series_json' as the_url %}
+        {% url 'contracts_data_selector' 'municipalities-contracts-time-series-json' as the_url %}
         {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
         <ul>
             <li>
-                {% url "municipalities_contracts_time_series" as the_url %}
+                {% url "contracts_analysis_internal_selector" 2 as the_url %}
                 {% blocktrans with url=the_url %}
                     In <a href="{{ the_url }}">this analysis</a> we justify that this graph is consistent
                     with the existence of two municipal elections, one in 10-2009 and other in 10-2013.
@@ -70,7 +70,7 @@
             </li>
         </ul>
         <h4>{% trans "Non-Municipalities only:" %}</h4>
-        {% url 'excluding_municipalities_contracts_time_series_json' as the_url %}
+        {% url 'contracts_data_selector' 'excluding-municipalities-contracts-time-series-json' as the_url %}
         {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
         <p>
             {% blocktrans %}

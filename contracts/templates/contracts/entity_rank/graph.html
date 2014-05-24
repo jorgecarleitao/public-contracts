@@ -70,7 +70,7 @@
     svg.call(tip);
 
     var data;
-    d3.json("{% url 'category_ranking_index_json' %}", function(data) {
+    d3.json("{% url 'contracts_data_selector' 'category-ranking-index-json' %}", function(data) {
         var min_x = d3.min(data, function(d) { return d.rank; });
         var max_x = d3.max(data, function(d) { return d.rank; });
 

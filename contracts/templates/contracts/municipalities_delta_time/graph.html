@@ -79,7 +79,7 @@
     svg.call(tip);
 
     var data;
-    d3.json("{% url 'municipalities_delta_time_json' %}", function(data) {
+    d3.json("{% url 'contracts_data_selector' 'municipalities-delta-time-json' %}", function(data) {
         max_rank = d3.max(data, function(d) { return d.rank; });
 
         x.domain([1, max_rank]);
