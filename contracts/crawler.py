@@ -210,7 +210,10 @@ class JSONCrawler(AbstractCrawler):
     def goToPage(self, url):
         try:
             return json.loads(super(JSONCrawler, self).goToPage(url))
-        except (ValueError, requests.exceptions.Timeout):
+        except ValueError:
+            raise JSONLoadError(url)
+        except requests.exceptions.Timeout:
+            logging.warning("timeout in url %s", url)
             raise JSONLoadError(url)
 
 
