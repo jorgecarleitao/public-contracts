@@ -195,7 +195,7 @@ class AbstractCrawler(object):
                                 'Range': "items=0-24"}
 
     def goToPage(self, url):
-        response = requests.get(url, headers=self.request_headers)
+        response = requests.get(url, headers=self.request_headers, timeout=5)
         return response.text
 
     def set_headers_range(self, range):
