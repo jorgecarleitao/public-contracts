@@ -7,16 +7,22 @@ if __name__ == "__main__":
     from . import set_up
     set_up.set_up_django_environment('tools.settings_private')
 
-from contracts.crawler import crawler
+from contracts.crawler import DynamicDataCrawler, StaticDataCrawler
 from contracts import models
 from contracts.analysis import analysis_manager
 
 
 def update():
-    # retrieve latest data.
+    # check if we need to update static data
+    if not models.ProcedureType.objects.exists():
+        c = StaticDataCrawler()
+        c.retrieve_and_save_all()
+
+    # retrieve latest dynamic data.
+    crawler = DynamicDataCrawler()
     affected_entities = crawler.update_all()
 
-    # update entities cached data
+    # update entities' cached data
     for entity in affected_entities:
         entity.compute_data()
 

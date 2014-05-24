@@ -1,17 +1,14 @@
 from datetime import datetime, timedelta
 import os
-import pickle
 import re
 import json
-from urllib.error import HTTPError
 import logging
-
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
 import requests
 
 from . import models
+
+logger = logging.getLogger(__name__)
 
 
 class EntityNotFoundError(Exception):
@@ -56,6 +53,26 @@ def clean_entities(items):
     return entities
 
 
+def safe_clean_entities(items):
+    """
+    Cleans a list of identities base_ids
+    by retrieving them from BASE if
+    they are not found.
+    """
+    try:
+        return clean_entities(items)
+    except EntityNotFoundError as error:
+        # in case we don't have the entity, we try to retrieve it from BASE.
+        entity_crawler = EntitiesCrawler()
+
+        entities = []
+        for missing_id in error.entities_base_ids:
+            # if we can't find, this raises an Error, ending the process
+            entity, created = entity_crawler.update_instance(missing_id)
+            entities.append(entity)
+        return entities
+
+
 def clean_date(string_date):
     if string_date:
         return datetime.strptime(string_date, "%d-%m-%Y").date()
@@ -84,6 +101,13 @@ def clean_cpvs(item):
     we want u'79822500-7'
     """
     return item.split(',')[0]
+
+
+def clean_category(item):
+    try:
+        return models.Category.objects.get(code=clean_cpvs(item))
+    except models.Category.DoesNotExist:
+        return None
 
 
 def clean_contract_type(item):
@@ -119,27 +143,26 @@ def clean_place(item, data):
     It is like {u'executionPlace': u'Portugal, Faro, Castro Marim'}
     but it can come without council or even district.
     """
-    data['country'] = None
-    data['district'] = None
-    data['council'] = None
+    cleaned_data = {'country': None, 'district': None, 'council': None}
+
     if 'executionPlace' in item and item['executionPlace']:
         names = re.split(', |<BR/>', item['executionPlace'])  # we only take the first place (they can be more than one)
         if len(names) >= 1:
             country_name = names[0]
-            data['country'] = models.Country.objects.get(name=country_name)
+            cleaned_data['country'] = models.Country.objects.get(name=country_name)
             if len(names) >= 2:
                 district_name = names[1]
                 try:
-                    data['district'] = models.District.objects.get(name=district_name, country__name=country_name)
+                    cleaned_data['district'] = models.District.objects.get(name=district_name, country__name=country_name)
                 except models.District.DoesNotExist:
                     return data
                 if len(names) >= 3:
                     council_name = names[2]
                     try:
-                        data['council'] = models.Council.objects.get(name=council_name, district__name=district_name)
+                        cleaned_data['council'] = models.Council.objects.get(name=council_name, district__name=district_name)
                     except models.Council.DoesNotExist:
-                        return data
-    return data
+                        pass
+    return cleaned_data
 
 
 def clean_country(item):
@@ -327,24 +350,26 @@ class StaticDataCrawler():
 
 
 class DynamicCrawler(JSONCrawler):
-    data_directory = '../../data'
+    object_directory = '../../data'
+    object_url = None
+    object_name = None
+    object_model = None
+
+    MAX_ALLOWED_FAILS = 100
 
     @staticmethod
     def block_to_range(i):
         return i*25, (i+1)*25 - 1
 
-
-class EntitiesCrawler(DynamicCrawler):
-    """
-    A crawler to be used daily to retrieve new entities.
-    """
-    entities_directory = '../../data/entities'
-
-    def get_entity_data(self, base_id, flush=False):
+    def get_data(self, base_id, flush=False):
         """
-        Returns the raw data of an entity from BASE.
+        Returns data retrievedd from BASE or from saved file in directory
+
+        If retrieved from BASE, saves it in a file in directory.
         """
-        file_name = '%s/entity_%d.json' % (self.entities_directory, base_id)
+        file_name = '%s/%s_%d.json' % (self.object_directory,
+                                       self.object_name,
+                                       base_id)
         try:
             if flush:
                 raise IOError  # force flushing the file
@@ -353,15 +378,98 @@ class EntitiesCrawler(DynamicCrawler):
             f.close()
             action = 'used'
         except IOError:
-            data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades/%d" % base_id)
+            data = self.goToPage(self.object_url % base_id)
             with open(file_name, 'w') as outfile:
                 json.dump(data, outfile)
             action = 'created'
-        logger.debug('file of entity "%d" %s', base_id, action)
+        logger.debug('file of %s "%d" %s', self.object_name, base_id, action)
         return data
 
     @staticmethod
-    def clean_entity_data(data):
+    def clean_data(data):
+        raise NotImplementedError
+
+    def _save_instance(self, cleaned_data):
+        """
+        Saves or updates the instance using cleaned_data
+        """
+        try:
+            instance = self.object_model.objects.get(base_id=cleaned_data['base_id'])
+            for (key, value) in cleaned_data.items():
+                setattr(instance, key, value)
+            action = 'updated'
+        except self.object_model.DoesNotExist:
+            instance = self.object_model(**cleaned_data)
+            action = 'created'
+        instance.save()
+        logger.info('%s "%d" %s' % (self.object_name, cleaned_data['base_id'], action))
+
+        return instance, (action == 'created')
+
+    def update_instance(self, base_id, flush=False):
+        """
+        Retrieves data of object base_id from BASE,
+        cleans, and saves it as an instance of a Django model.
+
+        Returns the instance
+        """
+        data = self.get_data(base_id, flush)
+        cleaned_data = self.clean_data(data)
+        entity, created = self._save_instance(cleaned_data)
+        return entity, created
+
+    def last_base_id(self):
+        """
+        Returns the last known base_id
+        """
+        regex = re.compile(r"%s_(\d+).json" % self.object_name)
+        files = [int(re.findall(regex, f)[0])
+                 for f in os.listdir('%s/' % self.object_directory)
+                 if re.match(regex, f)]
+        files = sorted(files, key=lambda x: int(x), reverse=True)
+        if files:
+            return files[0]
+        else:
+            return 0
+
+    def update(self, flush=False):
+        """
+        Loops on all object ids to update object table.
+        """
+        created_instances = []
+
+        base_id = max(self.last_base_id(), 0)
+        last_base_id = base_id
+        fails = 0
+        while True:
+            base_id += 1
+            try:
+                instance, created = self.update_instance(base_id, flush)
+                if created:
+                    created_instances.append(instance)
+                fails = 0
+            except JSONLoadError:
+                fails += 1
+                if fails == self.MAX_ALLOWED_FAILS:
+                    break
+
+        logging.info("Update completed - last base_id %d", last_base_id)
+        logging.info("Update completed - %d new instances", len(created_instances))
+
+        return created_instances
+
+
+class EntitiesCrawler(DynamicCrawler):
+    """
+    Crawler used to retrieve entities.
+    """
+    object_directory = '../../data/entities'
+    object_url = 'http://www.base.gov.pt/base2/rest/entidades/%d'
+    object_name = 'entity'
+    object_model = models.Entity
+
+    @staticmethod
+    def clean_data(data):
         cleaned_data = {}
 
         country_name = ''
@@ -377,343 +485,81 @@ class EntitiesCrawler(DynamicCrawler):
 
         return cleaned_data
 
-    @staticmethod
-    def save_entity(cleaned_data):
-        """
-        Saves or updates an entity using the cleaned_data
-        """
-        try:
-            entity = models.Entity.objects.get(base_id=cleaned_data['base_id'])
-            for (key, value) in cleaned_data.items():
-                setattr(entity, key, value)
-            action = 'updated'
-        except models.Entity.DoesNotExist:
-            entity = models.Entity(**cleaned_data)
-            action = 'created'
-        entity.save()
-        logger.info('entity "%d" %s' % (cleaned_data['base_id'], action))
-
-        return entity, action == 'created'
-
-    def update_entity(self, base_id, flush=False):
-        """
-        Retrieves data of entity base_id from BASE,
-        cleans, and saves it as an entity.
-
-        Returns the entity
-        """
-        data = self.get_entity_data(base_id, flush)
-        cleaned_data = self.clean_entity_data(data)
-        entity = self.save_entity(cleaned_data)
-        return entity
-
-    def update(self, flush=False):
-        """
-        Loops on all entities ids to create or
-        update entities table.
-        """
-        created_entities = []
-
-        MAX_ALLOWED_FAILS = 100
-
-        base_id = self.last_base_id() - MAX_ALLOWED_FAILS
-        last_base_id = base_id
-        fails = 0
-        while True:
-            base_id += 1
-            try:
-                entity, created = self.update_entity(base_id, flush)
-                if created:
-                    created_entities.append(entity)
-                fails = 0
-            except JSONLoadError:
-                fails += 1
-                if fails == MAX_ALLOWED_FAILS:
-                    break
-
-        logging.info("Update completed - last base_id %d", last_base_id)
-        logging.info("Update completed - %d new entities", len(created_entities))
-
-        return created_entities
-
-    def last_base_id(self):
-        regex = re.compile(r"entity_(\d+).json")
-        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.entities_directory) if re.match(regex, f)]
-        files = sorted(files, key=lambda x: int(x), reverse=True)
-        if files:
-            return files[0]
-        else:
-            return 0
-
 
 class ContractsCrawler(DynamicCrawler):
     """
-    A crawler to be used daily to retrieve new contracts.
+    Crawler used to retrieve contracts.
     """
-    contracts_directory = '../../contracts'
-
-    def _last_contract_block(self):
-        """
-        Returns the last block existent in the database
-        This is computed using the files we saved. The regex expression must be compatible to the
-        name given in `_get_contracts_block`.
-        """
-        regex = re.compile(r"(\d+).dat")
-        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
-        files = sorted(files, key=lambda x: int(x), reverse=True)
-        if len(files):
-            return files[0]
-        else:
-            return 0
-
-    def _get_contracts_block(self, block):
-        """
-        Returns a block of 25 contracts from a file.
-        If the file doesn't exist or returns less than 25 contracts,
-        it hits Base's database and updates the file.
-
-        It raises a `NoMoreEntriesError` if the retrieval returned 0 contracts i.e. if we have reached
-        the last existing contract in Base's database.
-        """
-        def _retrieve_contracts():
-            self.set_headers_range(self.block_to_range(block))
-            data = self.goToPage("http://www.base.gov.pt/base2/rest/contratos")
-            if len(data) == 0:  # if there are no entries, we just stop the procedure.
-                raise self.NoMoreEntriesError
-            return data
-
-        file_name = '%s/%d.dat' % (self.data_directory, block)
-        try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            if len(data) != 25:  # if block is not complete, we retrieve it again to complete it.
-                logger.info('_get_contracts_block(%d) returns len(data) = %d != 25', block, len(data))
-                raise IOError
-            f.close()
-        except IOError:
-            # online retrieval
-            data = _retrieve_contracts()
-
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
-        return data
-
-    def _retrieve_and_save_contract_data(self, base_id):
-        """
-        Returns the data of a contract. It first tries the file. If the file doesn't exist,
-        it retrieves the data from BASE and saves it in the file.
-        """
-
-        def _retrieve_contract_data():
-            """
-            Retrieves data from a specific contract.
-            """
-            logger.info('_retrieve_contract(%d)', base_id)
-            url = 'http://www.base.gov.pt/base2/rest/contratos/%d' % base_id
-            return self.goToPage(url)
-
-        file_name = '%s/%d.dat' % (self.contracts_directory, base_id)
-        try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            f.close()
-        except IOError:
-            # online retrieval
-            data = _retrieve_contract_data()
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
-        return data
-
-    def _save_contract(self, item):
-        data = {'base_id': item['id'],
-                'procedure_type': clean_procedure_type(item['contractingProcedureType']),
-                'contract_type': clean_contract_type(item[u'contractTypes']),
-                'contract_description': item['objectBriefDescription'],
-                'description': item['description'],
-                'signing_date': clean_date(item['signingDate']),
-                'added_date': clean_date(item['publicationDate']),
-                'cpvs': clean_cpvs(item['cpvs']),
-                'price': clean_price(item['initialContractualPrice'])}
-        data = clean_place(item, data)
-
-        # we try to associate the cpvs to a category
-        try:
-            data['category'] = models.Category.objects.get(code=data['cpvs'])
-        except models.Category.DoesNotExist:
-            data['category'] = None
-
-        # we try to see if it already exists
-        try:
-            contract = models.Contract.objects.get(base_id=data['base_id'])
-            logger.info('_save_contract(%s): contract %d already exists', item['id'], data['base_id'])
-        except models.Contract.DoesNotExist:
-            # if it doesn't exist, we create it
-            contract = models.Contract.objects.create(**data)
-            logger.info('_save_contract(%s): contract %d saved', item['id'], data['base_id'])
-
-        contractors = self._safe_clean_entities(item['contracting'])
-        contracted = self._safe_clean_entities(item['contracted'])
-        contract.contracted.add(*list(contracted))
-        contract.contractors.add(*list(contractors))
-
-        return list(contracted) + list(contractors)
-
-    def _save_contracts(self, block):
-        logger.info('save_contracts(%d)', block)
-        raw_contracts = self._get_contracts_block(block)
-
-        affected_entities = []
-        for raw_contract in raw_contracts:
-            try:
-                data = self._retrieve_and_save_contract_data(raw_contract['id'])
-                affected_entities += self._save_contract(data)
-            # this has given errors before, we log the contract number to gain some information.
-            except:
-                logger.exception('error on saving contract %d', raw_contract['id'])
-                raise
-
-        return affected_entities
-
-    def update(self):
-        modified_entities = []
-
-        block = self._last_contract_block()
-        while True:
-            try:
-                modified_entities += self._save_contracts(block)
-                block += 1
-            except self.NoMoreEntriesError:
-                break
-
-        return modified_entities
+    object_directory = '../../data/contracts'
+    object_url = 'http://www.base.gov.pt/base2/rest/contratos/%d'
+    object_name = 'contract'
+    object_model = models.Contract
 
     @staticmethod
-    def _safe_clean_entities(items):
-        try:
-            return clean_entities(items)
-        except EntityNotFoundError as error:
-            # in case we don't have the entity, we try to retrieve it from BASE.
-            entity_crawler = EntitiesCrawler()
+    def clean_data(data):
 
-            entities = []
-            for missing_id in error.entities_base_ids:
-                entity = entity_crawler.update_entity(missing_id)
-                entities.append(entity)
-            return entities
+        cleaned_data = {'base_id': data['id'],
+                        'procedure_type': clean_procedure_type(data['contractingProcedureType']),
+                        'contract_type': clean_contract_type(data[u'contractTypes']),
+                        'contract_description': data['objectBriefDescription'],
+                        'description': data['description'],
+                        'signing_date': clean_date(data['signingDate']),
+                        'added_date': clean_date(data['publicationDate']),
+                        'cpvs': clean_cpvs(data['cpvs']),
+                        'category': clean_category(data['cpvs']),
+                        'price': clean_price(data['initialContractualPrice'])}
+        cleaned_data.update(clean_place(data, data))
+
+        cleaned_data['contractors'] = safe_clean_entities(data['contracting'])
+        cleaned_data['contracted'] = safe_clean_entities(data['contracted'])
+
+        return cleaned_data
+
+    def _save_instance(self, cleaned_data):
+        contractors = cleaned_data.pop('contractors')
+        contracted = cleaned_data.pop('contracted')
+        contract, created = super(ContractsCrawler, self)._save_instance(cleaned_data)
+
+        contract.contracted.clear()
+        contract.contracted.add(*list(contracted))
+        contract.contractors.clear()
+        contract.contractors.add(*list(contractors))
+
+        return contract, created
 
 
 class TendersCrawler(DynamicCrawler):
     """
-    A crawler to be used daily to retrieve new tenders.
+    Crawler used to retrieve tenders.
     """
-    tenders_directory = '../../tenders'
+    object_directory = '../../data/tenders'
+    object_url = 'http://www.base.gov.pt/base2/rest/anuncios/%d'
+    object_name = 'tender'
+    object_model = models.Tender
 
-    def _last_base_id(self):
-        """
-        Returns the last existent item in the database
-        This is computed using the files we saved. The regex expression must be compatible to the
-        name given in `_retrieve_and_save_tender_data`.
-        """
-        regex = re.compile(r"(\d+).dat")
-        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.tenders_directory) if re.match(regex, f)]
-        files = sorted(files, key=lambda x: int(x), reverse=True)
-        if len(files):
-            return files[0]
-        else:
-            return 1
-
-    def _retrieve_and_cache_tender_data(self, base_id):
-        """
-        Returns the data of a tender. It first tries the file. If the file doesn't exist,
-        it retrieves the data from Base and saves it in the file.
-        """
-        def _retrieve_tender_data():
-            """
-            Retrieves data from a specific tender.
-            """
-            logger.info('_retrieve_tender_data(%d)', base_id)
-            url = 'http://www.base.gov.pt/base2/rest/anuncios/%d' % base_id
-            return self.goToPage(url)
-
-        file_name = '%s/%d.dat' % (self.tenders_directory, base_id)
-        try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            f.close()
-        except IOError:
-            # online retrieval
-            data = _retrieve_tender_data()
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
-        return data
+    MAX_ALLOWED_FAILS = 1000
 
     @staticmethod
-    def _save_tender(item):
-        data = {'base_id': item['id'],
-                'act_type': clean_act_type(item['type']),
-                'model_type': clean_model_type(item['modelType']),
-                'contract_type': clean_contract_type(item['contractType']),
-                'description': item['contractDesignation'],
-                'announcement_number': item['announcementNumber'],
-                'dre_number': int(item['dreNumber']),
-                'dre_series': int(item['dreSeries']),
-                'dre_document': clean_dre_document(item['reference']),
-                'publication_date': clean_date(item['drPublicationDate']),
-                'deadline_date': clean_deadline(item['drPublicationDate'], item['proposalDeadline']),
-                'cpvs': clean_cpvs(item['cpvs']),
-                'price': clean_price(item['basePrice'])}
+    def clean_data(data):
 
-        # we try to associate the cpvs to a category
-        try:
-            data['category'] = models.Category.objects.get(code=data['cpvs'])
-        except models.Category.DoesNotExist:
-            logger.warning('Category "%s" not found', data['cpvs'])
-            data['category'] = None
+        cleaned_data = {'base_id': data['id'],
+                        'act_type': clean_act_type(data['type']),
+                        'model_type': clean_model_type(data['modelType']),
+                        'contract_type': clean_contract_type(data['contractType']),
+                        'description': data['contractDesignation'],
+                        'announcement_number': data['announcementNumber'],
+                        'dre_number': int(data['dreNumber']),
+                        'dre_series': int(data['dreSeries']),
+                        'dre_document': clean_dre_document(data['reference']),
+                        'publication_date': clean_date(data['drPublicationDate']),
+                        'deadline_date': clean_deadline(data['drPublicationDate'], data['proposalDeadline']),
+                        'cpvs': clean_cpvs(data['cpvs']),
+                        'category': clean_category(data['cpvs']),
+                        'price': clean_price(data['basePrice'])}
+        cleaned_data.update(clean_place(data, data))
 
-        # we try to see if it already exists
-        try:
-            tender = models.Tender.objects.get(base_id=data['base_id'])
-            logger.info('_save_tender(%s): tender %d already exists', item['id'], data['base_id'])
-        except models.Tender.DoesNotExist:
-            # if it doesn't exist, we create it
-            tender = models.Tender.objects.create(**data)
-            logger.info('_save_tender(%s): tender %d saved', item['id'], data['base_id'])
-
-        contractors = clean_entities(item['contractingEntities'])
-        tender.contractors.add(*list(contractors))
-
-    def _save_tenders(self):
-        base_id = self._last_base_id() - 1000
-        error_counter = 0
-        while True:
-            try:
-                data = self._retrieve_and_cache_tender_data(base_id)
-                error_counter = 0
-            except (HTTPError, ValueError):
-                error_counter += 1
-                if error_counter == 100:
-                    return base_id
-                base_id += 1
-                continue
-
-            try:
-                self._save_tender(data)
-            # this has given errors before, we log the contract number to gain some information.
-            except:
-                logger.exception('error on saving tender %d', base_id)
-                raise
-
-            base_id += 1
-
-    def update(self):
-        """
-        Goes to all blocks and saves all entities in each block.
-        Once a block is completely empty, we stop.
-        """
-        self._save_tenders()
+        cleaned_data['contractors'] = safe_clean_entities(data['contractingEntities'])
+        return cleaned_data
 
 
 class DynamicDataCrawler():
@@ -723,19 +569,23 @@ class DynamicDataCrawler():
         self.tenders_crawler = TendersCrawler()
 
     def update_all(self):
-        modified_entities = []
+        modified_entities = self.entities_crawler.update()
 
-        modified_entities += self.entities_crawler.update()
-        modified_entities += self.contracts_crawler.update()
-        self.tenders_crawler.update()
+        contracts = self.contracts_crawler.update()
+        for contract in contracts:
+            modified_entities += list(contract.contractors.all())
+            modified_entities += list(contract.contracted.all())
 
-        # see http://stackoverflow.com/a/7961390/931303
+        tenders = self.tenders_crawler.update()
+        for tender in tenders:
+            modified_entities += list(tender.contractors.all())
+
         def distinct(items):
             """
             Returns distinct a list of distinct elements
+
+            see http://stackoverflow.com/a/7961390/931303
             """
             return list(set(items))
 
         return distinct(modified_entities)
-
-crawler = DynamicDataCrawler()
