@@ -19,10 +19,19 @@ class EntityNotFoundError(Exception):
         self.entities_base_ids = entities_base_ids
 
 
+class JSONLoadError(Exception):
+    """
+    Error when JSON fails to parse
+    an url content.
+    """
+    def __init__(self, url):
+        self.url = url
+
+
 def clean_price(item):
     """
     Transforms a string like '1.002,54 \eurochar'
-    into 100254 (cents).
+    into '100254' (i.e. euro cents).
     """
     price = item.split(' ')[0]
     price = price.replace(".", "").replace(",", "")
@@ -175,7 +184,10 @@ class JSONCrawler(AbstractCrawler):
     A crawler specific for retrieving JSON content.
     """
     def goToPage(self, url):
-        return json.loads(super(JSONCrawler, self).goToPage(url))
+        try:
+            return json.loads(super(JSONCrawler, self).goToPage(url))
+        except ValueError:
+            raise JSONLoadError(url)
 
 
 class ContractsStaticDataCrawler(JSONCrawler):
@@ -326,141 +338,112 @@ class EntitiesCrawler(DynamicCrawler):
     """
     A crawler to be used daily to retrieve new entities.
     """
-    entities_directory = '../../data_entities'
+    entities_directory = '../../data/entities'
 
-    def _get_entities_block(self, block):
+    def get_entity_data(self, base_id, flush=False):
         """
-        Returns a block of 25 entities from a file.
-        If the file doesn't exist or returns less than 25 entries,
-        it hits BASE's database and updates the file.
-
-        It raises a `NoMoreEntriesError` if the retrieval returned 0 entries i.e. if have we reached
-        the last existing entity in Base's database.
+        Returns the raw data of an entity from BASE.
         """
-
-        def _retrieve_entities():
-            logger.info('_retrieve_entities(%d)', block)
-            self.set_headers_range(self.block_to_range(block))
-            data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades")
-            if len(data) == 0:
-                raise self.NoMoreEntriesError
-            return data
-
-        file_name = '%s/%d_entities.dat' % (self.data_directory, block)
+        file_name = '%s/entity_%d.json' % (self.entities_directory, base_id)
         try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            if len(data) != 25:  # if block is not complete, we retrieve it again to try to complete it.
-                logger.info('_get_entities_block(%d) returns len(data) = %d != 25', block, len(data))
-                raise IOError
+            if flush:
+                raise IOError  # force flushing the file
+            f = open(file_name, "r")
+            data = json.load(f)
             f.close()
+            action = 'used'
         except IOError:
-            data = _retrieve_entities()
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
+            data = self.goToPage("http://www.base.gov.pt/base2/rest/entidades/%d" % base_id)
+            with open(file_name, 'w') as outfile:
+                json.dump(data, outfile)
+            action = 'created'
+        logger.debug('file of entity "%d" %s', base_id, action)
         return data
 
-    def _last_entity_block(self):
-        """
-        Returns the last block we were able to retrieve from the database.
-        This is computed using the files we saved. The regex expression must be compatible to the
-        name given in `_get_entities_block`.
-        """
-        regex = re.compile(r"(\d+)_entities.dat")
-        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.data_directory) if re.match(regex, f)]
-        files = sorted(files, key=lambda x: int(x), reverse=True)
-        if len(files):
-            return files[0]
-        else:
-            return 0
-
     @staticmethod
-    def _save_entity(data):
+    def clean_entity_data(data):
+        cleaned_data = {}
+
         country_name = ''
         if 'location' in data:
             country_name = data['location']
         elif 'country' in data:
             country_name = data['country']
-        country = clean_country(country_name)
 
-        # if entity exists, we update its data
+        cleaned_data['country'] = clean_country(country_name)
+        cleaned_data['base_id'] = int(data['id'])
+        cleaned_data['name'] = data['description']
+        cleaned_data['nif'] = data['nif']
+
+        return cleaned_data
+
+    @staticmethod
+    def save_entity(cleaned_data):
+        """
+        Saves or updates an entity using the cleaned_data
+        """
         try:
-            entity = models.Entity.objects.get(base_id=int(data['id']))
-            entity.name = data['description']
-            entity.country = country
-            entity.nif = data['nif']
-            entity.save()
-        # else, we create it with the data
+            entity = models.Entity.objects.get(base_id=cleaned_data['base_id'])
+            for (key, value) in cleaned_data.items():
+                setattr(entity, key, value)
+            action = 'updated'
         except models.Entity.DoesNotExist:
-            entity = models.Entity.objects.create(name=data['description'],
-                                                  base_id=int(data['id']),
-                                                  country=country,
-                                                  nif=data['nif'])
+            entity = models.Entity(**cleaned_data)
+            action = 'created'
+        entity.save()
+        logger.info('entity "%d" %s' % (cleaned_data['base_id'], action))
 
+        return entity, action == 'created'
+
+    def update_entity(self, base_id, flush=False):
+        """
+        Retrieves data of entity base_id from BASE,
+        cleans, and saves it as an entity.
+
+        Returns the entity
+        """
+        data = self.get_entity_data(base_id, flush)
+        cleaned_data = self.clean_entity_data(data)
+        entity = self.save_entity(cleaned_data)
         return entity
 
-    def _save_entities(self, block):
+    def update(self, flush=False):
         """
-        Saves a set of 25 entities, identified by a block, into the database.
-        If an entity already exists, it updates its data.
-        """
-        logger.info('_save_entities(%d)', block)
-
-        created_entities = []
-        for data in self._get_entities_block(block):
-            entity = self._save_entity(data)
-            created_entities.append(entity)
-
-        return created_entities
-
-    def _retrieve_and_save_entity_data(self, base_id):
-        """
-        Returns the data of a contract. It first tries the file. If the file doesn't exist,
-        it retrieves the data from BASE and saves it in the file.
-        """
-
-        def _retrieve_entity_data():
-            """
-            Retrieves data from a specific contract.
-            """
-            logger.info('_retrieve_entity_data(%d)', base_id)
-            url = "http://www.base.gov.pt/base2/rest/entidades/%d" % base_id
-            return self.goToPage(url)
-
-        file_name = '%s/%d.dat' % (self.entities_directory, base_id)
-        try:
-            f = open(file_name, "rb")
-            data = pickle.load(f)
-            f.close()
-        except IOError:
-            # online retrieval
-            data = _retrieve_entity_data()
-            f = open(file_name, "wb")
-            pickle.dump(data, f)
-            f.close()
-        return data
-
-    def save_entity(self, base_id):
-        data = self._retrieve_and_save_entity_data(base_id)
-        return self._save_entity(data)
-
-    def update(self):
-        """
-        Goes to all blocks and saves all entities in each block.
-        Once a retrieved block is completely empty, we stop.
+        Loops on all entities ids to create or
+        update entities table.
         """
         created_entities = []
 
-        block = self._last_entity_block()
+        MAX_ALLOWED_FAILS = 100
+
+        base_id = self.last_base_id() - MAX_ALLOWED_FAILS
+        last_base_id = base_id
+        fails = 0
         while True:
+            base_id += 1
             try:
-                created_entities += self._save_entities(block)
-                block += 1
-            except self.NoMoreEntriesError:
-                break
+                entity, created = self.update_entity(base_id, flush)
+                if created:
+                    created_entities.append(entity)
+                fails = 0
+            except JSONLoadError:
+                fails += 1
+                if fails == MAX_ALLOWED_FAILS:
+                    break
+
+        logging.info("Update completed - last base_id %d", last_base_id)
+        logging.info("Update completed - %d new entities", len(created_entities))
 
         return created_entities
+
+    def last_base_id(self):
+        regex = re.compile(r"entity_(\d+).json")
+        files = [int(re.findall(regex, f)[0]) for f in os.listdir('%s/' % self.entities_directory) if re.match(regex, f)]
+        files = sorted(files, key=lambda x: int(x), reverse=True)
+        if files:
+            return files[0]
+        else:
+            return 0
 
 
 class ContractsCrawler(DynamicCrawler):
@@ -616,7 +599,7 @@ class ContractsCrawler(DynamicCrawler):
 
             entities = []
             for missing_id in error.entities_base_ids:
-                entity = entity_crawler.save_entity(missing_id)
+                entity = entity_crawler.update_entity(missing_id)
                 entities.append(entity)
             return entities
 
