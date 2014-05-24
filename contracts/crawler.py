@@ -190,17 +190,9 @@ class AbstractCrawler(object):
     class NoMoreEntriesError(Exception):
         pass
 
-    def __init__(self):
-        # User-Agent. For choosing one, use for instance this with your browser: http://whatsmyuseragent.com/
-        self.request_headers = {'User-agent': self.user_agent,
-                                'Range': "items=0-24"}
-
     def goToPage(self, url):
-        response = requests.get(url, headers=self.request_headers, timeout=5)
+        response = requests.get(url, headers={'User-agent': self.user_agent}, timeout=5)
         return response.text
-
-    def set_headers_range(self, range):
-        self.request_headers['Range'] = "items=%d-%d" % range
 
 
 class JSONCrawler(AbstractCrawler):
@@ -361,10 +353,6 @@ class DynamicCrawler(JSONCrawler):
 
     MAX_ALLOWED_FAILS = 100
 
-    @staticmethod
-    def block_to_range(i):
-        return i*25, (i+1)*25 - 1
-
     def get_data(self, base_id, flush=False):
         """
         Returns data retrievedd from BASE or from saved file in directory
@@ -393,7 +381,7 @@ class DynamicCrawler(JSONCrawler):
     def clean_data(data):
         raise NotImplementedError
 
-    def _save_instance(self, cleaned_data):
+    def save_instance(self, cleaned_data):
         """
         Saves or updates the instance using cleaned_data
         """
@@ -419,8 +407,7 @@ class DynamicCrawler(JSONCrawler):
         """
         data = self.get_data(base_id, flush)
         cleaned_data = self.clean_data(data)
-        entity, created = self._save_instance(cleaned_data)
-        return entity, created
+        return self.save_instance(cleaned_data)
 
     def last_base_id(self):
         """
@@ -519,10 +506,10 @@ class ContractsCrawler(DynamicCrawler):
 
         return cleaned_data
 
-    def _save_instance(self, cleaned_data):
+    def save_instance(self, cleaned_data):
         contractors = cleaned_data.pop('contractors')
         contracted = cleaned_data.pop('contracted')
-        contract, created = super(ContractsCrawler, self)._save_instance(cleaned_data)
+        contract, created = super(ContractsCrawler, self).save_instance(cleaned_data)
 
         contract.contracted.clear()
         contract.contracted.add(*list(contracted))
