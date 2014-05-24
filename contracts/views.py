@@ -9,13 +9,6 @@ def home(request):
     return render(request, 'contracts/main_page.html')
 
 
-def analysis(request):
-
-    context = {'navigation_tab': 'analysis'}
-
-    return render(request, 'contracts/analysis.html', context)
-
-
 def build_contract_list_context(context, GET):
     def apply_order(querySet, order):
         ordering = {_('price'): '-price', _('date'): '-signing_date'}

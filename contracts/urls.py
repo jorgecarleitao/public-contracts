@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from . import feed
 from . import views
+from . import views_analysis
 
 from . import entity_urls
 from . import contract_urls
@@ -12,7 +13,14 @@ from . import analysis_urls
 
 urlpatterns = patterns('',
                        url(r'^%s/%s$' % (_('contracts'), _('home')), views.home, name='contracts_home'),
-                       url(r'^%s$' % _('analysis'), views.analysis, name='contracts_analysis'),
+                       url(r'^%s/%s$' % (_('contracts'), _('analysis')),
+                           views_analysis.analysis, name='contracts_analysis'),
+
+                       url(r'^%s/%s/(\d+)/(\w+)' % (_('contracts'), _('analysis')),
+                           views_analysis.analysis_selector, name='contracts_analysis_selector'),
+                       url(r'^%s/%s/(\d+)' % (_('contracts'), _('analysis')),
+                           views_analysis.analysis_selector, name='contracts_internal_analysis_selector',
+                        ),
 
                        url(r'^%s$' % _('contracts'), views.contracts_list, name='contracts_list'),
                        url(r'^%s/rss$' % _('contracts'), feed.ContractsFeed(), name='contracts_list_feed'),
