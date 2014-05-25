@@ -4,10 +4,13 @@ import re
 import json
 import logging
 
+from django.core.exceptions import ValidationError
+
 import requests
 import requests.exceptions
 
 from . import models
+from contracts.crawler_forms import EntityForm
 
 logger = logging.getLogger(__name__)
 
@@ -461,20 +464,16 @@ class EntitiesCrawler(DynamicCrawler):
 
     @staticmethod
     def clean_data(data):
-        cleaned_data = {}
+        prepared_data = {'base_id': data['id'],
+                         'name': data['description'],
+                         'nif': data['nif'],
+                         'country': data['location']}
+        form = EntityForm(prepared_data)
 
-        country_name = ''
-        if 'location' in data:
-            country_name = data['location']
-        elif 'country' in data:
-            country_name = data['country']
+        if not form.is_valid():
+            raise ValidationError(form.errors)
 
-        cleaned_data['country'] = clean_country(country_name)
-        cleaned_data['base_id'] = int(data['id'])
-        cleaned_data['name'] = data['description']
-        cleaned_data['nif'] = data['nif']
-
-        return cleaned_data
+        return form.cleaned_data
 
 
 class ContractsCrawler(DynamicCrawler):
