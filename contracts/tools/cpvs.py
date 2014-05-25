@@ -6,10 +6,29 @@ set_up.set_up_django_environment()
 from contracts.models import Category
 
 
-def build_categories(file_path='../'):
+def get_xml():
+    """
+    Gets the xml directly from the server.
+
+    This does not work as of May 2014 since the zip is compressed using type 9,
+    which is proprietary and Python doesn't support it.
+    See http://stackoverflow.com/a/12809847/931303
+    """
+    from urllib.request import urlopen
+    from io import BytesIO
+    from zipfile import ZipFile
+
+    request = urlopen('http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip')
+    zipfile = ZipFile(BytesIO(request.read()))
+
+    tree = xml.etree.ElementTree.parse(zipfile.open('cpv_2008.xml'))
+    return tree.getroot()
+
+
+def build_categories(file_path=''):
     """
     Builds the Categories with tree from the xml file available in:
-    http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
+    http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip
     """
     file_path += 'cpv_2008.xml'
 

@@ -1,4 +1,4 @@
-def set_up_django_environment(settings='settings'):
+def set_up_django_environment(settings='tools.settings'):
     import os
     import sys
 

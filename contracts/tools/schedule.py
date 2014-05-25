@@ -22,17 +22,5 @@ def update():
     crawler = DynamicDataCrawler()
     affected_entities = crawler.update_all()
 
-    # update entities' cached data
-    for entity in affected_entities:
-        entity.compute_data()
-
-    # update categories cached data
-    for category in models.Category.objects.all():
-        category.compute_data()
-
-    # update analysis
-    #for analysis in list(analysis_manager.values()):
-    #    analysis.update()
-
 if __name__ == "__main__":
     update()

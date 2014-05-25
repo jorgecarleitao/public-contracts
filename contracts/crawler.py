@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 import os
 import re
 import json
@@ -10,7 +9,8 @@ import requests
 import requests.exceptions
 
 from . import models
-from contracts.crawler_forms import EntityForm
+from contracts.crawler_forms import EntityForm, ContractForm, TenderForm, clean_place
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,164 +27,6 @@ class JSONLoadError(Exception):
     """
     def __init__(self, url):
         self.url = url
-
-
-def clean_price(item):
-    """
-    Transforms a string like '1.002,54 \eurochar'
-    into '100254' (i.e. euro cents).
-    """
-    price = item.split(' ')[0]
-    price = price.replace(".", "").replace(",", "")
-    return int(price)
-
-
-def clean_entities(items):
-    """
-    items is a list of dictionaries with key 'id'.
-    We pick them all, or raise an IndexError if any of them doesn't exist (critical error).
-    """
-    ids = [item['id'] for item in items]
-    entities = models.Entity.objects.filter(base_id__in=ids)
-
-    entities_ids = [entity.base_id for entity in entities]
-
-    # we check that all entities exist, or we raise an error.
-    not_found_ids = []
-    for base_id in ids:
-        if base_id not in entities_ids:
-            raise EntityNotFoundError(ids)
-    return entities
-
-
-def safe_clean_entities(items):
-    """
-    Cleans a list of identities base_ids
-    by retrieving them from BASE if
-    they are not found.
-    """
-    try:
-        return clean_entities(items)
-    except EntityNotFoundError as error:
-        # in case we don't have the entity, we try to retrieve it from BASE.
-        entity_crawler = EntitiesCrawler()
-
-        entities = []
-        for missing_id in error.entities_base_ids:
-            # if we can't find, this raises an Error, ending the process
-            entity, created = entity_crawler.update_instance(missing_id)
-            entities.append(entity)
-        return entities
-
-
-def clean_date(string_date):
-    if string_date:
-        return datetime.strptime(string_date, "%d-%m-%Y").date()
-    else:
-        return None
-
-
-def clean_deadline(string_date, string_days):
-    starting_date = datetime.strptime(string_date, "%d-%m-%Y").date()
-
-    strings = string_days.split(' ')
-
-    if len(string_days) == 0:
-        deadline = timedelta(days=0) # some don't have deadline (don't know why)
-    elif strings[1] == 'dias.':
-        deadline = timedelta(days=int(strings[0]))
-    else:
-        raise NotImplementedError
-
-    return starting_date + deadline
-
-
-def clean_cpvs(item):
-    """
-    It is like u'79822500-7, Servi\xe7os de concep\xe7\xe3o gr\xe1fica'
-    we want u'79822500-7'
-    """
-    return item.split(',')[0]
-
-
-def clean_category(item):
-    try:
-        return models.Category.objects.get(code=clean_cpvs(item))
-    except models.Category.DoesNotExist:
-        return None
-
-
-def clean_contract_type(item):
-    try:
-        return models.ContractType.objects.get(name=item)
-    except models.ContractType.DoesNotExist:
-        return None
-
-
-def clean_procedure_type(item):
-    try:
-        return models.ProcedureType.objects.get(name=item)
-    except models.ProcedureType.DoesNotExist:
-        return None
-
-
-def clean_model_type(name):
-    try:
-        return models.ModelType.objects.get(name=name)
-    except models.ModelType.DoesNotExist:
-        return None
-
-
-def clean_act_type(name):
-    try:
-        return models.ActType.objects.get(name=name)
-    except models.ActType.DoesNotExist:
-        return None
-
-
-def clean_place(item, data):
-    """
-    It is like {u'executionPlace': u'Portugal, Faro, Castro Marim'}
-    but it can come without council or even district.
-    """
-    cleaned_data = {'country': None, 'district': None, 'council': None}
-
-    if 'executionPlace' in item and item['executionPlace']:
-        names = re.split(', |<BR/>', item['executionPlace'])  # we only take the first place (they can be more than one)
-        if len(names) >= 1:
-            country_name = names[0]
-            cleaned_data['country'] = models.Country.objects.get(name=country_name)
-            if len(names) >= 2:
-                district_name = names[1]
-                try:
-                    cleaned_data['district'] = models.District.objects.get(name=district_name, country__name=country_name)
-                except models.District.DoesNotExist:
-                    return data
-                if len(names) >= 3:
-                    council_name = names[2]
-                    try:
-                        cleaned_data['council'] = models.Council.objects.get(name=council_name, district__name=district_name)
-                    except models.Council.DoesNotExist:
-                        pass
-    return cleaned_data
-
-
-def clean_country(item):
-    try:
-        country = models.Country.objects.get(name=item)
-    except IndexError:
-        country = None
-    except models.Country.DoesNotExist:
-        country = None
-
-    return country
-
-
-def clean_dre_document(url):
-    """
-    we want the integer value of the last argument of the url
-    """
-    return int(url.split('=')[-1])
 
 
 class AbstractCrawler(object):
@@ -432,7 +274,7 @@ class DynamicCrawler(JSONCrawler):
         """
         created_instances = []
 
-        base_id = max(self.last_base_id(), 0)
+        base_id = max(self.last_base_id() - 1, 0)
         last_base_id = base_id
         fails = 0
         while True:
@@ -488,22 +330,30 @@ class ContractsCrawler(DynamicCrawler):
     @staticmethod
     def clean_data(data):
 
-        cleaned_data = {'base_id': data['id'],
-                        'procedure_type': clean_procedure_type(data['contractingProcedureType']),
-                        'contract_type': clean_contract_type(data[u'contractTypes']),
-                        'contract_description': data['objectBriefDescription'],
-                        'description': data['description'],
-                        'signing_date': clean_date(data['signingDate']),
-                        'added_date': clean_date(data['publicationDate']),
-                        'cpvs': clean_cpvs(data['cpvs']),
-                        'category': clean_category(data['cpvs']),
-                        'price': clean_price(data['initialContractualPrice'])}
-        cleaned_data.update(clean_place(data, data))
+        places = clean_place(data['executionPlace'])
+        prepared_data = {'base_id': data['id'],
+                         'procedure_type': data['contractingProcedureType'],
+                         'contract_type': data[u'contractTypes'],
+                         'contract_description': data['objectBriefDescription'],
+                         'description': data['description'],
+                         'signing_date': data['signingDate'],
+                         'added_date': data['publicationDate'],
+                         'cpvs': data['cpvs'],
+                         'category': data['cpvs'],
+                         'price': data['initialContractualPrice'],
+                         'country': places[0],
+                         'district': places[1],
+                         'council': places[2],
+                         'contractors': data['contracting'],
+                         'contracted': data['contracted']
+                         }
 
-        cleaned_data['contractors'] = safe_clean_entities(data['contracting'])
-        cleaned_data['contracted'] = safe_clean_entities(data['contracted'])
+        form = ContractForm(prepared_data)
 
-        return cleaned_data
+        if not form.is_valid():
+            raise ValidationError(form.errors)
+
+        return form.cleaned_data
 
     def save_instance(self, cleaned_data):
         contractors = cleaned_data.pop('contractors')
@@ -531,25 +381,36 @@ class TendersCrawler(DynamicCrawler):
 
     @staticmethod
     def clean_data(data):
+        prepared_data = {'base_id': data['id'],
+                         'act_type': data['type'],
+                         'model_type': data['modelType'],
+                         'contract_type': data['contractType'],
+                         'description': data['contractDesignation'],
+                         'announcement_number': data['announcementNumber'],
+                         'dre_number': data['dreNumber'],
+                         'dre_series': data['dreSeries'],
+                         'dre_document': data['reference'],
+                         'publication_date': data['drPublicationDate'],
+                         'deadline_date': data['proposalDeadline'],
+                         'cpvs': data['cpvs'],
+                         'category': data['cpvs'],
+                         'price': data['basePrice'],
+                         'contractors': data['contractingEntities']}
 
-        cleaned_data = {'base_id': data['id'],
-                        'act_type': clean_act_type(data['type']),
-                        'model_type': clean_model_type(data['modelType']),
-                        'contract_type': clean_contract_type(data['contractType']),
-                        'description': data['contractDesignation'],
-                        'announcement_number': data['announcementNumber'],
-                        'dre_number': int(data['dreNumber']),
-                        'dre_series': int(data['dreSeries']),
-                        'dre_document': clean_dre_document(data['reference']),
-                        'publication_date': clean_date(data['drPublicationDate']),
-                        'deadline_date': clean_deadline(data['drPublicationDate'], data['proposalDeadline']),
-                        'cpvs': clean_cpvs(data['cpvs']),
-                        'category': clean_category(data['cpvs']),
-                        'price': clean_price(data['basePrice'])}
-        cleaned_data.update(clean_place(data, data))
+        form = TenderForm(prepared_data)
 
-        cleaned_data['contractors'] = safe_clean_entities(data['contractingEntities'])
-        return cleaned_data
+        if not form.is_valid():
+            raise ValidationError(form.errors)
+
+        return form.cleaned_data
+
+    def save_instance(self, cleaned_data):
+        contractors = cleaned_data.pop('contractors')
+        contract, created = super(TendersCrawler, self).save_instance(cleaned_data)
+        contract.contractors.clear()
+        contract.contractors.add(*list(contractors))
+
+        return contract, created
 
 
 class DynamicDataCrawler():
