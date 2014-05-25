@@ -1,6 +1,7 @@
 import json
 
 from django.http import HttpResponse, Http404
+from django.utils.translation import ugettext as _
 
 from .analysis import analysis_manager
 
@@ -65,11 +66,14 @@ def contracts_macro_statistics_json(request):
 def procedure_types_time_series_json(request):
     data = analysis_manager.get_analysis('procedure_type_time_series')
 
-    for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+    tender_time_series = {'values': [], 'key': _('tender')}
+    direct_time_series = {'values': [], 'key': _('direct procurement')}
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    for x in data:
+        tender_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['tender']})
+        direct_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['direct']})
+
+    return HttpResponse(json.dumps([tender_time_series, direct_time_series]), content_type="application/json")
 
 
 def municipalities_delta_time_json(request):
