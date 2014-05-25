@@ -9,8 +9,10 @@ from law.models import Document
 if __name__ == "__main__":
     # prints the relative number of laws that have no text
     import datetime
-    date = datetime.date(1966, 1, 1)
+    date = datetime.date(1986, 1, 1)
 
+    # 95, 97, 145, 150 are types that are not laws:
+    # are summaries and technical sheets of the diary
     documents = Document.objects.filter(date__gt=date)\
         .exclude(type_id__in=[95, 97, 145, 150])
 
