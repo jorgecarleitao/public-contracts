@@ -2,10 +2,6 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block title %}{% trans "Distribution of contract prices"%}{% endblock %}
-{% block forejs %}
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-{% endblock %}
 {% block content %}
     <div class="text-element">
         <h2>{% trans "How many contracts are priced as X Euros?"%}</h2>

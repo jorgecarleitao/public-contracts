@@ -2,6 +2,5 @@
 {% load i18n %}
 {% block summary_content %}
     <h4>{{ entity.average_delta_time|floatformat:1 }}: <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
-    <p>{% trans "Average depth:" %} <strong>{{ entity.avg_depth|floatformat:3}}</strong>
-        ({{ entity.count }} {% trans "contracts" %})</p>
+    <p>{{ entity.contracts_number }} {% trans "contracts" %}</p>
 {% endblock %}

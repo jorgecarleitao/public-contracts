@@ -7,15 +7,15 @@ from .analysis import analysis_manager
 
 
 def entities_category_ranking_json(request):
-    data = []
-    count = 0
+    data = {'values': [], 'key': _('Ranking')}
+    rank = 0
     for entity in analysis_manager.get_analysis('municipalities_categories_ranking'):
-        count += 1
+        rank += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
-        data.append({'name': name, 'rank': count, 'avg_depth': entity.avg_depth})
+        data['values'].append({'name': name, 'rank': rank, 'avg_depth': entity.avg_depth})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def entities_category_ranking_histogram_json(request):
@@ -27,35 +27,37 @@ def entities_category_ranking_histogram_json(request):
     n_bins = 20
 
     # center between max and min: min_value + (max_value - min_value)*(count)/n_bins + (max_value - min_value)/n_bins/2
-
     # create the histogram
-    data = [{'bin': x,
-             'value': 0,
-             'min_position': min_value + (max_value - min_value)*x/n_bins,
-             'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-             } for x in range(n_bins)]
+    data = {'values': [], 'key': _('Histogram')}
+
+    data['values'] = [{'bin': x,
+                       'value': 0,
+                       'min_position': min_value + (max_value - min_value)*x/n_bins,
+                       'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
+                      } for x in range(n_bins)]
 
     for entity in entities:
         for x in range(n_bins):
-            if data[x]['min_position'] < entity.avg_depth <= data[x]['max_position']:
-                data[x]['value'] += 1
+            if data['values'][x]['min_position'] < entity.average_delta_time <= data['values'][x]['max_position']:
+                data['values'][x]['value'] += 1
                 break
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def contracts_price_histogram_json(request):
 
     distribution = analysis_manager.get_analysis('contracts_price_distribution')
 
-    data = []
+    data = {'values': [], 'key': _('histogram of contracts values')}
     for entry in distribution:
-        if entry[1]:
-            data.append({'min_position': entry[0],
-                         'max_position': entry[0]*2,
-                         'value': entry[1]})
+        if entry[1] > 5:
+            data['values'].append(
+                {'min_position': int(entry[0] + 0.5),
+                 'max_position': int(entry[0]*2 + 0.5),
+                 'value': entry[1]})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def contracts_macro_statistics_json(request):
@@ -77,15 +79,15 @@ def procedure_types_time_series_json(request):
 
 
 def municipalities_delta_time_json(request):
-    data = []
+    data = {'values': [], 'key': _('Ranking')}
     rank = 0
     for entity in analysis_manager.get_analysis('municipalities_delta_time'):
         rank += 1
         name = entity.name.split(' ')[2:]
         name = ' '.join(name)
-        data.append({'name': name, 'rank': rank, 'avg_dt': entity.average_delta_time})
+        data['values'].append({'name': name, 'rank': rank, 'avg_dt': entity.average_delta_time})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def municipalities_delta_time_histogram_json(request):
@@ -99,79 +101,84 @@ def municipalities_delta_time_histogram_json(request):
     # center between max and min: min_value + (max_value - min_value)*(count)/n_bins + (max_value - min_value)/n_bins/2
 
     # create the histogram
-    data = [{'bin': x,
-             'value': 0,
-             'min_position': min_value + (max_value - min_value)*x/n_bins,
-             'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-             } for x in range(n_bins)]
+    data = {'values': [], 'key': _('Histogram')}
+
+    data['values'] = [{'bin': x,
+                       'value': 0,
+                       'min_position': min_value + (max_value - min_value)*x/n_bins,
+                       'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
+                      } for x in range(n_bins)]
 
     for entity in entities:
         for x in range(n_bins):
-            if data[x]['min_position'] < entity.average_delta_time <= data[x]['max_position']:
-                data[x]['value'] += 1
+            if data['values'][x]['min_position'] < entity.average_delta_time <= data['values'][x]['max_position']:
+                data['values'][x]['value'] += 1
                 break
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def municipalities_contracts_time_series_json(request):
     data = analysis_manager.get_analysis('municipalities_contracts_time_series')
 
+    count_time_series = {'values': [], 'key': _('contracts')}
     for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
 
 
 def municipalities_procedure_types_time_series_json(request):
     data = analysis_manager.get_analysis('municipalities_procedure_types_time_series')
 
-    for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+    tender_time_series = {'values': [], 'key': _('tender')}
+    direct_time_series = {'values': [], 'key': _('direct procurement')}
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    for x in data:
+        tender_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['tender']})
+        direct_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['direct']})
+
+    return HttpResponse(json.dumps([tender_time_series, direct_time_series]), content_type="application/json")
 
 
 def ministries_contracts_time_series_json(request):
     data = analysis_manager.get_analysis('ministries_contracts_time_series')
 
+    count_time_series = {'values': [], 'key': _('contracts')}
     for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
 
 
 def excluding_municipalities_contracts_time_series_json(request):
     data = analysis_manager.get_analysis('excluding_municipalities_contracts_time_series')
 
+    count_time_series = {'values': [], 'key': _('contracts')}
     for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
 
 
 def contracts_time_series_json(request):
     data = analysis_manager.get_analysis('contracts_time_series')
 
+    count_time_series = {'values': [], 'key': _('contracts')}
     for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
 
 
 def legislation_application_time_series_json(request):
     data = analysis_manager.get_analysis('legislation_application_time_series')
 
+    time_series = {'values': [], 'key': _('contracts published too late')}
     for x in data:
-        x['from'] = x['from'].strftime('%Y-%m-%d')
-        x['to'] = x['to'].strftime('%Y-%m-%d')
+        time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([time_series]), content_type="application/json")
 
 
 AVAILABLE_VIEWS = {
@@ -192,7 +199,7 @@ AVAILABLE_VIEWS = {
 
     'ministries-contracts-time-series-json': ministries_contracts_time_series_json,
     'legislation-application-time-series-json': legislation_application_time_series_json,
-}
+    }
 
 
 def analysis_selector(request, analysis_name):

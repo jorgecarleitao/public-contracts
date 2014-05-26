@@ -2,10 +2,6 @@
 {% load i18n %}
 {% load static %}
 {% block title %}{% trans "Entities index"%}{% endblock %}
-{% block forejs %}
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-{% endblock %}
 {% block content %}
     {% include "contracts/entity_rank/text.html" %}
     {% include "contracts/entity_rank/graph.html" %}

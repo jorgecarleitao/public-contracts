@@ -1,17 +1,16 @@
 {% load i18n %}
 <style>
-    #chart svg {
+    #graph svg {
         width: 720px;
         height: 300px;
     }
 </style>
 
-<div id="chart">
-    <svg></svg>
+<div id="graph">
 </div>
 <script>
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
-    d3.json('{% url 'contracts_data_selector' 'procedure-types-time-series-json' %}', function(error, data) {
+    d3.json('{{ url }}', function(error, data) {
 
         var parseDate = d3.time.format('%Y-%m');
 
@@ -44,13 +43,13 @@
                     .axisLabel("{% trans 'Percentage of contracts' %}")
                     .tickFormat(d3.format(',.02%'));
 
-            var svg = d3.select('#chart svg')    //Select the <svg> element you want to render the chart in.
+            var svg = d3.select('#graph').append('svg')
                     .datum(data)
                     .call(chart);
 
             // link to data
             var a = svg.append("a")
-                .attr("xlink:href", '{% url 'contracts_data_selector' 'procedure-types-time-series-json' %}')
+                .attr("xlink:href", '{{ url }}')
                     .attr("target", "_blank");
             a.append("svg:text")
                 .attr("x", 500).attr("y", 280)

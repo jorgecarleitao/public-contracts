@@ -2,9 +2,6 @@
 {% load i18n %}
 {% load static %}
 {% block title %}Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?{% endblock %}
-{% block forejs %}
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-{% endblock %}
 {% block content %}
     <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?</h2>
@@ -22,7 +19,8 @@
             ajuste directo e que percentagem foi feita por concurso público.
         </p>
     </div>
-    {% include "contracts/procedure_type_time_series/graph.html" %}
+    {% url 'contracts_data_selector' 'procedure-types-time-series-json' as the_url %}
+    {% include "contracts/procedure_type_time_series/graph.html" with url=the_url%}
     <div class="text-element">
         <p>
             De 2010 a 2013, dentro dos contratos existentes na base de dados,
