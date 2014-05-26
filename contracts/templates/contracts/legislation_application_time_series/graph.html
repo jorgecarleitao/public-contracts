@@ -1,111 +1,62 @@
 {% load i18n %}
-<svg id="graph"></svg>
 <style>
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
+    #graph svg {
+        width: 720px;
+        height: 300px;
     }
-
-    .line {
-        fill: none;
-        stroke: #000;
-    }
-
-    .grid .tick {
-        stroke: lightgrey;
-        opacity: 0.7;
-        shape-rendering: crispEdges;
-    }
-    .grid path {
-        stroke-width: 0;
-    }
-
 </style>
+<div id="graph">
+</div>
 <script>
-    var margin = {top: 40, right: 60, bottom: 40, left: 60},
-            width = 720 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
-
-    var parseDate = d3.time.format("%Y-%m-%d").parse;
-
-    var x = d3.time.scale()
-            .range([0, width]);
-
-    var y = d3.scale.linear()
-            .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .ticks(d3.time.years, 1).tickFormat(d3.time.format("%m-%Y"));
-
-    var yAxis = d3.svg.axis()
-            .scale(y).tickFormat(d3.format(".1%"))
-            .orient("left");
-
-    var line = d3.svg.line()
-            .x(function(d) { return x(d.from); })
-            .y(function(d) { return y(d.count); });
-
-    var svg = d3.select("#graph")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    function make_x_axis() {
-        return d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-    }
-
-    function make_y_axis() {
-        return d3.svg.axis()
-                .scale(y)
-                .orient("left")
-    }
-
+    /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
     d3.json('{% url 'contracts_data_selector' 'legislation-application-time-series-json' %}', function(error, data) {
 
-        data.forEach(function(d) {
-            d.from = parseDate(d.from);
-            d.count = (+d.count);
+        var parseDate = d3.time.format('%Y-%m');
+
+        data.forEach(function(series) {
+            series['values'].forEach(function(d) {
+                d.x = parseDate.parse(d.month);
+                d.y = (+d.value);
+            });
         });
 
-        var max_y = d3.max(data, function(d) { return d.count; });
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                            .margin({left: 100, right: 100})  //Adjust chart margins to give the x-axis some breathing room.
+                            .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
+                            .transitionDuration(750)  //how fast do you want the lines to transition?
+                            .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+                            .showYAxis(true)        //Show the y-axis
+                            .showXAxis(true)        //Show the x-axis
+                    ;
 
-        x.domain(d3.extent(data, function(d) { return d.from; }));
-        y.domain([0, max_y*1.1]);
+            chart.xAxis
+                    .axisLabel('{% trans 'month' %}')
+                    .tickFormat(function(d) {
+                        return d3.time.format('%Y-%m')(new Date(d));
+                    });
 
-        // paths
-        svg.append("path").datum(data)
-                .attr("class", "line")
-                .attr("d", line)
-                .attr("stroke-width", 2)
-                .attr("fill", "none");
+            chart.xScale(d3.time.scale());
 
-        // points
-        svg.selectAll("circle")
-                .data(data).enter()
-                .append("svg:circle")
-                .attr("cx", function(d, i) { return x(d.from) })
-                .attr("cy", function(d, i) { return y(d.count) })
-                .attr("r", 3);
+            chart.yAxis     //Chart y-axis settings
+                    .axisLabel("{% trans 'Percentage of contracts' %}")
+                    .tickFormat(d3.format(',.02%'));
 
-        svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .append("text")
-                .text("{% trans "month"%}")
-                .attr("transform", "translate(" + width/2 + ","+ 35 + ")");
+            var svg = d3.select('#graph').append('svg')
+                    .datum(data)
+                    .call(chart);
 
-        svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .text("{% trans "Percentage of contracts"%}");
+            // link to data
+            var a = svg.append("a")
+                .attr("xlink:href", '{% url 'contracts_data_selector' 'legislation-application-time-series-json' %}')
+                    .attr("target", "_blank");
+            a.append("svg:text")
+                .attr("x", 500).attr("y", 280)
+                .text('{% trans "Download data" %}');
+
+            //Update the chart when window resizes.
+            nv.utils.windowResize(function() { chart.update() });
+            return chart;
+        });
     });
 </script>

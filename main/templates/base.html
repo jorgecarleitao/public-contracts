@@ -10,9 +10,12 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/summary.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/document.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/nv.d3.css' %}" rel="stylesheet" type="text/css"/>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
+    <script src="{% static 'js/d3.v3.min.js' %}"></script>
+    <script src="{% static 'js/nv.d3.min.js' %}"></script>
     <script src="{% static 'js/change_get_parameters.js' %}"></script>
     {% block forejs %}{% endblock %}
 </head>

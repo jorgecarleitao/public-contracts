@@ -2,9 +2,6 @@
 {% load i18n %}
 {% load static %}
 {% block title %}{% trans 'Portuguese municipalities - tender or direct procurement?' %}{% endblock %}
-{% block forejs %}
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-{% endblock %}
 {% block content %}
     <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{% trans 'Portuguese municipalities - tender or direct procurement?' %}</h2>
@@ -23,8 +20,6 @@
             {% endblocktrans %}
         </p>
     </div>
-    {% include "contracts/municipalities_procedure_type_time_series/graph.html" %}
-{% endblock %}
-{% block sidebar %}
-    {% include "contracts/municipalities_procedure_type_time_series/sidebar.html" %}
+    {% url 'contracts_data_selector' 'municipalities-procedure-types-time-series-json' as the_url %}
+    {% include "contracts/procedure_type_time_series/graph.html" with url=the_url%}
 {% endblock %}

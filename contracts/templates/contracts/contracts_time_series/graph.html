@@ -1,45 +1,60 @@
-{% extends "contracts/entity_view/tab_data/graph.html" %}
 {% load i18n %}
-{% block margin %}
-    var margin = {top: 40, right: 60, bottom: 40, left: 60},
-            width = 720 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
-{% endblock %}
-{% block x-axis %}
-    var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom").tickValues([
-                new Date(2008, 8),
-                new Date(2009, 8),
-                new Date(2010, 8),
-                new Date(2011, 8),
-                new Date(2012, 8),
-                new Date(2013, 8)
-            ])
-            .tickFormat(d3.time.format("%m-%Y"));
+<style>
+    #graph-{{ url|slugify }} svg {
+        width: 720px;
+        height: 300px;
+    }
+</style>
+<div id="graph-{{ url|slugify }}">
+</div>
+<script>
+    /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
+    d3.json('{{ url }}', function(error, data) {
 
-    var xAxisTop = d3.svg.axis()
-                .scale(x)
-                .orient("top")
-                .ticks(0);
-{% endblock %}
-{% block x-axis-grid %}
-    function make_x_grid() {
-        return d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-                .tickSize(-height, 0, 0)
-    }
-{% endblock %}
-{% block y-axis-grid %}
-    function make_y_grid() {
-        return d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .tickSize(-width, 0, 0)
-                .tickFormat("")
-    }
-{% endblock %}
-{% block y_axis_block_label %}
-    {% trans "Number of signed contracts" %}
-{% endblock %}
+        var parseDate = d3.time.format('%Y-%m');
+
+        data.forEach(function(series) {
+            series['values'].forEach(function(d) {
+                d.x = parseDate.parse(d.month);
+                d.y = (+d.value);
+            });
+        });
+
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                            .margin({left: 100, right: 100})
+                            .useInteractiveGuideline(true)
+                            .transitionDuration(750)
+                            .showYAxis(true)
+                            .showXAxis(true);
+
+            chart.xAxis
+                    .axisLabel('{% trans 'month' %}')
+                    .tickFormat(function(d) {
+                        return d3.time.format('%Y-%m')(new Date(d));
+                    });
+
+            chart.xScale(d3.time.scale());
+
+            chart.yAxis     //Chart y-axis settings
+                    .axisLabel("{% trans "Number of signed contracts" %}")
+                    .tickFormat(d3.format(',.02f'));
+
+            var svg = d3.select('#graph-{{ url|slugify }}').append('svg')
+                    .datum(data)
+                    .call(chart);
+
+            // link to data
+            var a = svg.append("a")
+                .attr("xlink:href", '{{ url }}')
+                    .attr("target", "_blank");
+            a.append("svg:text")
+                .attr("x", 500).attr("y", 280)
+                .text('{% trans "Download data" %}');
+
+            //Update the chart when window resizes.
+            nv.utils.windowResize(function() { chart.update() });
+            return chart;
+        });
+    });
+</script>

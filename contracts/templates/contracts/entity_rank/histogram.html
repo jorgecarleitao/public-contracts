@@ -1,81 +1,50 @@
-<svg id="graph-histogram"></svg>
-<script>
-    function scope() {
-        var margin = {top: 0, right: 20, bottom: 40, left: 40};
-        var width = 720 - margin.left - margin.right;
-        var height = 150 - margin.top - margin.bottom;
-
-        var x = d3.scale.linear()
-                .range([width, 0]);
-
-        var y = d3.scale.linear()
-                .range([height, 0]);
-
-        var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-        var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left").ticks(5);
-
-        var tip1 = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                    return "[" + d.max_position.toFixed(2) + ", " + d.min_position.toFixed(2) + "]: <strong>" + d.value + "</strong>";
-                });
-
-        var svg1 = d3.select("#graph-histogram")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        svg1.call(tip1);
-
-        var data;
-        d3.json("{% url 'contracts_data_selector' 'entities-category-ranking-histogram-json' %}", function(data) {
-            min_x_value = d3.min(data, function(d) { return d.min_position; });
-            max_x_value = d3.max(data, function(d) { return d.max_position; });
-
-            x.domain([min_x_value, max_x_value]);
-            y.domain([d3.min(data, function(d) { return d.value; }), d3.max(data, function(d) { return d.value; })]);
-
-            console.log([min_x_value, max_x_value]);
-
-            var bar_width = width/(max_x_value-1);
-
-            svg1.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis)
-                    .append("text")
-                    .attr("y", 32)
-                    .attr("x", width/2)
-                    .style("text-anchor", "end")
-                    .text("Especificidade média (Em)");
-
-            svg1.append("g")
-                    .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
-                    .attr("x", 52)
-                    .attr("y", 12)
-                    .style("text-anchor", "end")
-                    .text("H(Em)");
-
-            svg1.selectAll(".bar")
-                    .data(data)
-                    .enter().append("rect")
-                    .attr("class", "bar")
-                    .attr("x", function(d) { return x(d.max_position); })
-                    .attr("width", function(d) { return x(d.min_position) - x(d.max_position);})
-                    .attr("y", function(d) { return y(d.value); })
-                    .attr("height", function(d) { return height - y(d.value); })
-                    .on('mouseover', tip1.show)
-                    .on('mouseout', tip1.hide);
-        });
+{% load i18n %}
+<style>
+    #graph-histogram svg {
+        width: 920px;
+        height: 300px;
     }
-    scope();
+</style>
+<div id="graph-histogram"><svg></svg></div>
+<script>
+    d3.json("{% url 'contracts_data_selector' 'municipalities-delta-time-histogram-json' %}", function(data) {
+
+        data.forEach(function(series) {
+            series['values'].forEach(function(d) {
+                d.x = ((+d.min_position) + (+d.max_position))/2;
+                d.y = (+d.value);
+            });
+        });
+
+        nv.addGraph(function() {
+            var chart = nv.models.multiBarChart()
+                            .margin({left: 100, right: 100})
+                            .transitionDuration(350)
+                            .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+                            .rotateLabels(0)      //Angle to rotate x-axis labels.
+                            .groupSpacing(0.1)    //Distance between each group of bars.
+                            .showControls(false)
+                            .tooltip(function(key, x, y, e, graph) {
+                                var d = e.series.values[e.pointIndex];
+                                return '<p><strong>' + d.value + ' {% trans "entities"%}</strong> {% trans "between" %} ' +
+                                        d.min_position.toFixed(1) + ' {% trans "and" %} ' +
+                                        d.max_position.toFixed(1) + ' {% trans "days" %}</p>';
+                });
+            chart.xAxis
+                    .tickFormat(d3.format(',.0f'))
+                    .axisLabel('{% trans "Average time (days)" %}');
+
+            chart.yAxis
+                    .tickFormat(d3.format(',.d'))
+                    .axisLabel('{% trans "Number of entities" %}');
+
+            d3.select('#graph-histogram svg')
+                    .datum(data)
+                    .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
+    });
 </script>

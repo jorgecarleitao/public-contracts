@@ -3,37 +3,33 @@
 {% load contracts.humanize %}
 {% block entity_content %}
     {% with count_contracts=entity.count_contracts count_contracts_received=entity.count_contracts_received %}
-        {% trans "Number of contracts as hiring" as hiring_string %}
-        {% trans "Number of contracts as hired" as hired_string %}
-
-        {% if count_contracts or count_contracts_received %}
-            <script src="http://d3js.org/d3.v3.min.js"></script>
-        {% endif %}
-        <ul>
-            <li>
-                {% trans "Fiscal Number" %}: {{ entity.nif }}
-            </li>
-            <li>
-                {% trans "Total earned" %}: {{ entity.total_earned|intword }} €
-            </li>
-            <li>
-                {% trans "Total expended" %}: {{ entity.total_expended|intword }} €
-            </li>
-            <li>
-                {{ hiring_string }}: {{ count_contracts }}
-            </li>
-            <li>
-                {{ hired_string }}: {{ count_contracts_received }}
-            </li>
-        </ul>
+        <div class="container">
+            <ul>
+                <li>
+                    {% trans "Fiscal Number" %}: {{ entity.nif }}
+                </li>
+                <li>
+                    {% trans "Total earned" %}: {{ entity.total_earned|intword }} €
+                </li>
+                <li>
+                    {% trans "Total expended" %}: {{ entity.total_expended|intword }} €
+                </li>
+                <li>
+                    {% trans "Contracts as hiring" %}: {{ count_contracts }}
+                </li>
+                <li>
+                    {% trans "Contracts as hired" %}: {{ count_contracts_received }}
+                </li>
+            </ul>
+        </div>
         {% if count_contracts %}
             {% url 'entity_contracts_made_time_series' entity.id as the_url %}
-            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url y_axis_label=hiring_string%}
+            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
         {% endif %}
 
         {% if count_contracts_received %}
             {% url 'entity_contracts_received_time_series' entity.id as the_url %}
-            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url y_axis_label=hired_string %}
+            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
         {% endif %}
     {% endwith %}
     <hr>

@@ -27,8 +27,8 @@ def analysis_selector(request, analysis_id, slug=None):
 
 @cache_page(60 * 60 * 24)
 def entities_category_ranking(request):
-
     entities = analysis_manager.get_analysis('municipalities_categories_ranking')
+
     count = 1
     for entity in entities:
         entity.rank = count

@@ -147,7 +147,7 @@ def contracts_made_time_series(request, entity_id):
     cursor = connection.cursor()
     cursor.execute(query, entity_id)
 
-    data = []
+    data = {'values': [], 'key': _('Contracts as hiring')}
     for row in cursor.fetchall():
         year, month, value = row
         if year is None:
@@ -156,12 +156,11 @@ def contracts_made_time_series(request, entity_id):
         min_date = datetime.date(int(year), int(month), 1)
         max_date = add_months(min_date, 1)
 
-        entry = {'from': str(min_date),
-                 'to': str(max_date),
-                 'count': int(value)}
-        data.append(entry)
+        entry = {'month': min_date.strftime('%Y-%m'),
+                 'value': int(value)}
+        data['values'].append(entry)
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def contracts_received_time_series(request, entity_id):
@@ -184,18 +183,16 @@ def contracts_received_time_series(request, entity_id):
     cursor = connection.cursor()
     cursor.execute(query, entity_id)
 
-    data = []
+    data = {'values': [], 'key': _('Contracts as hired')}
     for row in cursor.fetchall():
         year, month, value = row
         if year is None:
             continue
 
         min_date = datetime.date(int(year), int(month), 1)
-        max_date = add_months(min_date, 1)
 
-        entry = {'from': str(min_date),
-                 'to': str(max_date),
-                 'count': int(value)}
-        data.append(entry)
+        entry = {'month': min_date.strftime('%Y-%m'),
+                 'value': int(value)}
+        data['values'].append(entry)
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([data]), content_type="application/json")

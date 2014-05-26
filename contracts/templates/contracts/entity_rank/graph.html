@@ -1,116 +1,50 @@
-<svg id="graph-ranking"></svg>
+{% load i18n %}
 <style>
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-
-    .bar {
-        fill: #1c82c3;
-    }
-
-    .bar:hover {
-        fill: orangered;
-    }
-
-    .d3-tip {
-        line-height: 1;
-        font-weight: bold;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        border-radius: 2px;
-    }
-
-    /* Creates a small triangle extender for the tooltip */
-    .d3-tip:after {
-        box-sizing: border-box;
-        display: inline;
-        font-size: 10px;
-        width: 100%;
-        line-height: 1;
-        color: rgba(0, 0, 0, 0.8);
-        content: "\25BC";
-        position: absolute;
-        text-align: center;
-    }
-    /* Style northward tooltips differently */
-    .d3-tip.n:after {
-        margin: -1px 0 0 0;
-        top: 100%;
-        left: 0;
+    #graph svg {
+        width: 920px;
+        height: 300px;
     }
 </style>
+<div id="graph"></div>
 <script>
-    var margin = {top: 40, right: 20, bottom: 40, left: 40},
-            width = 720 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
-
-    var x = d3.scale.linear().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
-
-    var xAxis = d3.svg.axis().scale(x).orient("bottom");
-    var yAxis = d3.svg.axis().scale(y).orient("left");
-
-    var tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-10, 0])
-            .html(function(d) {
-                return d.rank + ": <strong>" + d.name + "</strong> (" + d.avg_depth.toFixed(3) + ")";
-            });
-
-    var svg = d3.select("#graph-ranking")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    svg.call(tip);
-
-    var data;
     d3.json("{% url 'contracts_data_selector' 'category-ranking-index-json' %}", function(data) {
-        var min_x = d3.min(data, function(d) { return d.rank; });
-        var max_x = d3.max(data, function(d) { return d.rank; });
 
-        var min_y = d3.min(data, function(d) { return d.avg_depth; });
-        var max_y = d3.max(data, function(d) { return d.avg_depth; });
+        data.forEach(function(series) {
+            series['values'].forEach(function(d) {
+                d.x = (+d.rank);
+                d.y = (+d.avg_depth);
+            });
+        });
 
-        // the bar width varies with number of data points.
-        var bar_width = width/(max_x+1);
+        nv.addGraph(function() {
+            var chart = nv.models.multiBarChart()
+                            .margin({left: 100, right: 100})
+                            .transitionDuration(500)
+                            .reduceXTicks(true)
+                            .rotateLabels(0)
+                            .groupSpacing(0)
+                            .showControls(false)
+                            .tooltip(function(key, x, y, e, graph) {
+                                var d = e.series.values[e.pointIndex];
+                                return '<h3>' + d.rank + ": " + d.name + "</h3>" +
+                                       "<p>{% trans "Average of" %} " + d.avg_depth.toFixed(1) +
+                                        "</p>";
+                });
+            chart.xAxis
+                    .tickFormat(d3.format(',.0f'))
+                    .axisLabel('{% trans "Ranking" %}');
 
-        x.domain([min_x-0.2, max_x + 1]);
-        y.domain([min_y-0.2, max_y + 0.2]);
+            chart.yAxis
+                    .tickFormat(d3.format(',.0d'))
+                    .axisLabel('{% trans "Average depth" %}');
 
-        svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .append("text")
-                .attr("y", 30)
-                .attr("x", width/2)
-                .style("text-anchor", "end")
-                .text("Ranking");
+            d3.select('#graph').append('svg')
+                    .datum(data)
+                    .call(chart);
 
-        svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("x", 100)
-                .attr("y", -10)
-                .style("text-anchor", "end")
-                .text("Especificidade média");
+            nv.utils.windowResize(chart.update);
 
-        svg.selectAll(".bar")
-                .data(data).enter()
-                .append("rect")
-                .attr("class", "bar")
-                .attr("x", function(d) { return x(d.rank); })
-                .attr("width", bar_width)
-                .attr("y", function(d) { return y(d.avg_depth); })
-                .attr("height", function(d) { return height - y(d.avg_depth); })
-                .on('mouseover', tip.show)
-                .on('mouseout', tip.hide);
+            return chart;
+        });
     });
 </script>

@@ -2,10 +2,6 @@
 {% load i18n %}
 {% load static %}
 {% block title %}Municípios - tempo médio de publicação{% endblock %}
-{% block forejs %}
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-{% endblock %}
 {% block content %}
     <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">Quando tempo demoram os municípios portugueses a publicar os seus contratos?</h2>
@@ -77,7 +73,4 @@
             });
         });
     </script>
-{% endblock %}
-{% block sidebar %}
-    {% include "contracts/municipalities_delta_time/sidebar.html" %}
 {% endblock %}
