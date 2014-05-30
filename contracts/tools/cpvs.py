@@ -1,9 +1,12 @@
 import xml.etree.ElementTree
+import logging
 
 from . import set_up
 set_up.set_up_django_environment()
 
 from contracts.models import Category
+
+logger = logging.getLogger(__name__)
 
 
 def get_xml():
@@ -36,7 +39,6 @@ def build_categories(file_path=''):
     root = tree.getroot()
 
     data = {}
-    count = 0
     for child in root:
         data['code'] = child.attrib['CODE']
         data['description_en'] = child.findall("TEXT")[5].text
@@ -45,12 +47,10 @@ def build_categories(file_path=''):
 
         # which depth on the tree?
         depth = 1
-        #print pure_code
         while depth != 7:
             if pure_code[depth + 1] == '0':
                 break
             depth += 1
-        #print pure_code, depth
 
         if depth == 1:
             try:
@@ -58,14 +58,14 @@ def build_categories(file_path=''):
                 assert depth == category.depth, 'category %s with different depth' % data['code']
             except Category.DoesNotExist:
                 Category.add_root(**data)
-                print('category %s added' % data['code'])
+                logger.info('category %s added', data['code'])
         else:
             # we need to build the parent code:
             # we will use __startwith, dropping the "-#".
             s = list(pure_code)  # turn string into a mutable object
             s[depth] = '0'  # pick the parent code
             parent_pure_code = "".join(s)
-            #print parent_pure_code
+
             try:
                 category = Category.objects.get(code=data['code'])
                 assert depth == category.depth, 'category %s with different depth' % data['code']
@@ -75,12 +75,11 @@ def build_categories(file_path=''):
                 try:
                     parent_category = Category.objects.get(code__startswith=parent_pure_code)
                     parent_category.add_child(**data)
-                    print('category %s added' % data['code'])
+                    logger.info('category %s added', data['code'])
                 except Category.DoesNotExist:
-                    print('category %s not added because lacks parent' % data['code'])
+                    logger.warning('category %s not added because lacks parent', data['code'])
                     continue
 
-        count += 1
 
 if __name__ == "__main__":
     build_categories()
