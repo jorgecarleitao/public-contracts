@@ -18,6 +18,10 @@ def update():
         c = StaticDataCrawler()
         c.retrieve_and_save_all()
 
+    if not models.Category.objects.exists():
+        from contracts.tools.cpvs import build_categories
+        build_categories()
+
     # retrieve latest dynamic data.
     crawler = DynamicDataCrawler()
     affected_entities = crawler.update_all()
