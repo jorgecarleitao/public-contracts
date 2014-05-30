@@ -210,7 +210,7 @@ class Contract(models.Model):
     procedure_type = models.ForeignKey('ProcedureType', null=True)
     description = models.TextField(null=True)
     contract_description = models.TextField()
-    cpvs = models.CharField(max_length=254)
+    cpvs = models.CharField(max_length=254, null=True)
     category = models.ForeignKey('Category', null=True)
     price = models.BigIntegerField()
 
@@ -273,7 +273,7 @@ class Tender(models.Model):
     publication_date = models.DateField()
     deadline_date = models.DateField()
 
-    cpvs = models.CharField(max_length=254)
+    cpvs = models.CharField(max_length=254, null=True)
     category = models.ForeignKey('Category', null=True)
     price = models.BigIntegerField()
 
