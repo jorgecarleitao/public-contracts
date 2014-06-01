@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
+from django.views.decorators.cache import cache_page
 
 from . import models
 
@@ -36,6 +37,7 @@ def home(request):
     return render(request, "law/home.html")
 
 
+@cache_page(60 * 60 * 24)
 def law_list(request):
     context = {'laws': models.Document.objects
         .exclude(type_id__in=[95, 97, 145, 150])
@@ -49,6 +51,7 @@ def law_list(request):
     return render(request, "law/law_list/main.html", context)
 
 
+@cache_page(60 * 60 * 24)
 def types_list(request):
     types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document')).order_by('name')
 
@@ -69,6 +72,7 @@ def type_view(request, type_id):
     return render(request, "law/type_view/main.html", context)
 
 
+@cache_page(60 * 60 * 24 * 31)  # one month
 def law_view(request, law_id, slug=None):
     law = get_object_or_404(models.Document, id=law_id)
 
