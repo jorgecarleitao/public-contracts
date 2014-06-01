@@ -327,6 +327,8 @@ class ContractsCrawler(DynamicCrawler):
     object_name = 'contract'
     object_model = models.Contract
 
+    MAX_ALLOWED_FAILS = 5000  # obtained by trial and error
+
     @staticmethod
     def clean_data(data):
 
