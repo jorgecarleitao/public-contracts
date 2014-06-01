@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-01 06:26+0100\n"
+"POT-Creation-Date: 2014-06-01 09:23+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,7 +75,7 @@ msgstr "nome"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
 #: deputies/views.py:25 deputies/templates/deputies/search_bar.html:49
-#: law/views.py:15 law/templates/law/law_list/search_law.html:22
+#: law/views.py:16 law/templates/law/law_list/search_law.html:22
 msgid "search"
 msgstr "procura"
 
@@ -98,7 +98,7 @@ msgid "sorting"
 msgstr "ordem"
 
 #: contracts/entity_views.py:84 contracts/views.py:39 contracts/views.py:118
-#: contracts/views.py:172 deputies/views.py:43 law/views.py:22
+#: contracts/views.py:172 deputies/views.py:43 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -275,7 +275,7 @@ msgstr "contratos publicados demasiado tarde"
 
 #: contracts/templates/contracts/analysis.html:5
 #: contracts/templates/contracts/base/header.html:17
-#: law/templates/law/analysis.html:5 law/templates/law/base/header.html:7
+#: law/templates/law/analysis.html:5 law/templates/law/base/header.html:12
 msgid "Analysis"
 msgstr "Análises"
 
@@ -1669,23 +1669,23 @@ msgstr "lei"
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:22
+#: law/urls.py:22 law/urls.py:23
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:24 law/urls.py:25
+#: law/urls.py:25 law/urls.py:26
 msgid "document"
 msgstr "documento"
 
-#: law/views.py:77
+#: law/views.py:84
 msgid "How many laws are enacted yearly?"
 msgstr "Quantas leis são criadas anualmente?"
 
-#: law/views.py:78
+#: law/views.py:85
 msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
 
-#: law/views.py:79
+#: law/views.py:86
 msgid "Evolution of the portuguese Law"
 msgstr "Evolução da Lei portuguesa"
 
@@ -2033,7 +2033,7 @@ msgstr ""
 "\n"
 "Neste trabalho vizualizamos como os diferentes tipos de leis evoluiram no "
 "tempo. Para isso, considerei todos os documentos na Série I do Diário da "
-"República e construi a evolução temporal do número de documentos de cada "
+"República e construí a evolução temporal do número de documentos de cada "
 "tipo."
 
 #: law/templates/law/analysis/law_types_time_series/main.html:20
@@ -2223,11 +2223,11 @@ msgstr ""
 "Gostaria de agradecer ao <a href=\"%(home_url)s\">Pedro Magalhães</a> pela "
 "<a href=\"%(suggestion_url)s\">sugestão</a> que levou a este gráfico."
 
-#: law/templates/law/base/header.html:5
+#: law/templates/law/base/header.html:6
 msgid "Documents"
 msgstr "Documentos"
 
-#: law/templates/law/base/header.html:6
+#: law/templates/law/base/header.html:9
 msgid "Types"
 msgstr "Tipos"
 
