@@ -75,7 +75,8 @@ def law_view(request, law_id, slug=None):
 
 
 ANALYSIS_TITLES = {'law_count_time_series': _('How many laws are enacted yearly?'),
-                   'law_eu_impact_time_series': _('Impact of EU Law in the Portuguese Law')}
+                   'law_eu_impact_time_series': _('Impact of EU Law in the Portuguese Law'),
+                   'law_types_time_series': _('Evolution of the portuguese Law')}
 
 
 def analysis_list(request):
@@ -105,7 +106,8 @@ def law_analysis(request, analysis_id, slug=None):
     name = law.analysis.PRIMARY_KEY[analysis_id]
 
     templates = {'law_count_time_series': 'law/analysis/laws_time_series.html',
-                 'law_eu_impact_time_series': 'law/analysis/eu_impact.html'}
+                 'law_eu_impact_time_series': 'law/analysis/eu_impact.html',
+                 'law_types_time_series': 'law/analysis/law_types_time_series/main.html'}
 
     if name not in templates:
         raise IndexError('Template for analysis "%s" not found' % name)

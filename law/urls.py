@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext_lazy as _
 
-from . import views
+from . import views, views_data
 
 urlpatterns = patterns('',
                        url(r'^%s/%s$' % (_('law'), _('home')), views.home, name='law_home'),
@@ -11,7 +11,11 @@ urlpatterns = patterns('',
                            views.law_analysis, name='law_analysis_selector'),
                        url(r'^%s/%s/(\d+)' % (_('law'), _('analysis')),
                            views.law_analysis, name='law_analysis_internal_selector',
-                        ),
+                           ),
+
+                       url(r'^%s/%s/([-\w]+)/data' % (_('law'), _('analysis')),
+                           views_data.analysis_selector, name='law_data_selector',
+                           ),
 
                        url(r'^%s$' % _('law'), views.law_list, name='law_law_list'),
                        url(r'^%s$' % _('types'), views.types_list, name='law_types_list'),

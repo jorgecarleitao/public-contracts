@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-26 19:10+0100\n"
+"POT-Creation-Date: 2014-06-01 06:26+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,6 +149,7 @@ msgstr "início"
 
 #: contracts/urls.py:16 contracts/urls.py:19 contracts/urls.py:21
 #: contracts/urls.py:25 law/urls.py:8 law/urls.py:10 law/urls.py:12
+#: law/urls.py:16
 msgid "analysis"
 msgstr "analises"
 
@@ -683,6 +684,7 @@ msgstr "Número de contratos assinados"
 #: contracts/templates/contracts/entity_view/tab_data/graph.html:51
 #: contracts/templates/contracts/legislation_application_time_series/graph.html:55
 #: contracts/templates/contracts/procedure_type_time_series/graph.html:56
+#: law/templates/law/analysis/law_types_time_series/graph.html:51
 msgid "Download data"
 msgstr "Baixar dados"
 
@@ -1659,28 +1661,33 @@ msgid "Deputies list"
 msgstr "Lista de deputados"
 
 #: law/urls.py:7 law/urls.py:8 law/urls.py:10 law/urls.py:12 law/urls.py:16
+#: law/urls.py:20
 msgid "law"
 msgstr "lei"
 
-#: law/urls.py:17
+#: law/urls.py:21
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:18
+#: law/urls.py:22
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:20 law/urls.py:21
+#: law/urls.py:24 law/urls.py:25
 msgid "document"
 msgstr "documento"
 
-#: law/views.py:82 law/templates/law/analysis/laws_time_series.html:6
+#: law/views.py:77
 msgid "How many laws are enacted yearly?"
 msgstr "Quantas leis são criadas anualmente?"
 
-#: law/views.py:83
-msgid "Impact of EU law in the Portuguese Law"
+#: law/views.py:78
+msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
+
+#: law/views.py:79
+msgid "Evolution of the portuguese Law"
+msgstr "Evolução da Lei portuguesa"
 
 #: law/templates/law/analysis.html:9
 msgid "Analysis to the law"
@@ -1724,7 +1731,7 @@ msgstr ""
 "documentos foram publicados em cada ano. Eis o resultado:"
 
 #: law/templates/law/home.html:31
-#: law/templates/law/analysis/laws_time_series.html:18
+#: law/templates/law/analysis/laws_time_series.html:16
 msgid "Details:"
 msgstr "Detalhes:"
 
@@ -1754,16 +1761,11 @@ msgstr ""
 "e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
 "melhorado este projeto."
 
-#: law/templates/law/analysis/eu_impact.html:5
 #: law/templates/law/analysis/eu_impact.html:6
-msgid "Impact of EU Law in the Portuguese Law"
-msgstr "Impacto da lei Europeia na lei Portuguesa"
-
-#: law/templates/law/analysis/eu_impact.html:8
 msgid "Introduction"
 msgstr "Introdução"
 
-#: law/templates/law/analysis/eu_impact.html:10
+#: law/templates/law/analysis/eu_impact.html:8
 msgid ""
 "\n"
 "            The Laws of a country are probably the written documents with "
@@ -1776,7 +1778,7 @@ msgstr ""
 "importância na vida dos portugueses, pois definem as regras que estamos "
 "sujeitos."
 
-#: law/templates/law/analysis/eu_impact.html:16
+#: law/templates/law/analysis/eu_impact.html:14
 msgid ""
 "\n"
 "            The European Union (EU) is today an important legislative body "
@@ -1791,7 +1793,7 @@ msgstr ""
 "que afectam Portugal nas diferentes àreas de governação e tem sido afirmado "
 "que estas eleições europeias são as mais importantes até hoje."
 
-#: law/templates/law/analysis/eu_impact.html:23
+#: law/templates/law/analysis/eu_impact.html:21
 msgid ""
 "\n"
 "            Here we try to quantify this. Our assumption is that european "
@@ -1805,7 +1807,7 @@ msgstr ""
 "eleições europeias são importantes quando a lei europeia tem impacto na vida "
 "dos portugueses, e isto é quantificável pelo seu impacto na lei nacional."
 
-#: law/templates/law/analysis/eu_impact.html:29
+#: law/templates/law/analysis/eu_impact.html:27
 msgid ""
 "\n"
 "            With this in mind, we posed the question:\n"
@@ -1816,11 +1818,11 @@ msgstr ""
 "Com isto em mente, colocámos a pergunta: qual o impacto da lei europeia na "
 "lei portuguesa?"
 
-#: law/templates/law/analysis/eu_impact.html:34
+#: law/templates/law/analysis/eu_impact.html:32
 msgid "Main result"
 msgstr "Resultado principal"
 
-#: law/templates/law/analysis/eu_impact.html:36
+#: law/templates/law/analysis/eu_impact.html:34
 msgid ""
 "\n"
 "            To answer this, we picked all documents published in the Series "
@@ -1841,11 +1843,12 @@ msgstr ""
 "nível, dependem directamente de uma lei europeia, que argumentamos ser uma "
 "medida realista do seu impacto. O resultado é o seguinte:"
 
-#: law/templates/law/analysis/eu_impact.html:49
+#: law/templates/law/analysis/eu_impact.html:47
+#: law/templates/law/analysis/law_types_time_series/main.html:27
 msgid "Details"
-msgstr "Detalhes:"
+msgstr "Detalhes"
 
-#: law/templates/law/analysis/eu_impact.html:53
+#: law/templates/law/analysis/eu_impact.html:51
 #, python-format
 msgid ""
 "\n"
@@ -1858,11 +1861,11 @@ msgstr ""
 "Se um documento não tiver texto integral acessível, ignorámo-lo; isto "
 "representa 17%% de todos os documentos."
 
-#: law/templates/law/analysis/eu_impact.html:59
+#: law/templates/law/analysis/eu_impact.html:57
 msgid "Discussion"
 msgstr "Discussão"
 
-#: law/templates/law/analysis/eu_impact.html:61
+#: law/templates/law/analysis/eu_impact.html:59
 #, python-format
 msgid ""
 "\n"
@@ -1877,7 +1880,7 @@ msgstr ""
 "UE) quantificado em 14%% de todas as leis criadas em 2013 terem citado pelo "
 "menos uma vez uma lei europeia."
 
-#: law/templates/law/analysis/eu_impact.html:67
+#: law/templates/law/analysis/eu_impact.html:65
 #, python-format
 msgid ""
 "\n"
@@ -1893,11 +1896,11 @@ msgstr ""
 "observamos que o crescimento nos últimos 10 anos foi também de 7%%, que "
 "representa o dobro."
 
-#: law/templates/law/analysis/eu_impact.html:73
+#: law/templates/law/analysis/eu_impact.html:71
 msgid "Conclusion"
 msgstr "Conclusões"
 
-#: law/templates/law/analysis/eu_impact.html:75
+#: law/templates/law/analysis/eu_impact.html:73
 #, python-format
 msgid ""
 "\n"
@@ -1914,7 +1917,7 @@ msgstr ""
 "mostrámos que a legislação europeia tem um forte impacto: em 2013 cerca de "
 "14%% de toda a lei citou pelo menos uma vez uma lei europeia."
 
-#: law/templates/law/analysis/eu_impact.html:82
+#: law/templates/law/analysis/eu_impact.html:80
 msgid ""
 "\n"
 "            Furthermore, we have shown that the velocity of this impact "
@@ -1929,7 +1932,7 @@ msgstr ""
 "desde ~2005: em 10 anos (2003-2013) a percentagem de leis que citam leis "
 "europeias cresceu tanto como nos 20 anos anteriores (1985-2005)."
 
-#: law/templates/law/analysis/eu_impact.html:89
+#: law/templates/law/analysis/eu_impact.html:87
 msgid ""
 "\n"
 "            This seems to support the idea that the European elections are "
@@ -1944,7 +1947,7 @@ msgstr ""
 "estão a tornar mais importantes pois têm cada vez mais impacto na legislação "
 "nacional e consequentemente nos cidadãos portugueses."
 
-#: law/templates/law/analysis/eu_impact.html:96
+#: law/templates/law/analysis/eu_impact.html:94
 msgid ""
 "\n"
 "            It remains to be studied if this effect is similar in other "
@@ -1954,15 +1957,12 @@ msgstr ""
 "\n"
 "Fica por estudar se este efeito é similar noutros estados membros."
 
-#: law/templates/law/analysis/eu_impact.html:100
+#: law/templates/law/analysis/eu_impact.html:98
+#: law/templates/law/analysis/law_types_time_series/main.html:116
 msgid "Licence"
 msgstr "Licença"
 
-#: law/templates/law/analysis/laws_time_series.html:5
-msgid "Number of portuguese laws enacted yearly"
-msgstr "Número de leis criadas anualmente"
-
-#: law/templates/law/analysis/laws_time_series.html:8
+#: law/templates/law/analysis/laws_time_series.html:6
 msgid ""
 "\n"
 "        We picked all documents published in the Series I of \"Diário da "
@@ -1998,6 +1998,230 @@ msgstr ""
 "\n"
 "Por simplicidade, definimos \"Lei\" como sendo qualquer documento que é "
 "oficialmente publicado na Série I do Diário da República."
+
+#: law/templates/law/analysis/law_types_time_series/graph.html:30
+msgid "Year"
+msgstr "Ano"
+
+#: law/templates/law/analysis/law_types_time_series/graph.html:38
+msgid "Number of documents"
+msgstr "Número de documentos"
+
+#: law/templates/law/analysis/law_types_time_series/main.html:6
+msgid ""
+"\n"
+"            The types of laws that ever exist or existed in the Portuguese "
+"Law\n"
+"            are shown since the first Republic.\n"
+"        "
+msgstr ""
+"\n"
+"Evolução dos tipos de leis que existem ou existiram desde a Primeira "
+"República."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:12
+msgid ""
+"\n"
+"            In this work I take a look at how the number of different laws "
+"evolved\n"
+"            over time. To that, I considered all documents in the Series I "
+"of \"Diário da República\",\n"
+"            and plotted the time evolution of the number of documents of a "
+"given type.\n"
+"        "
+msgstr ""
+"\n"
+"Neste trabalho vizualizamos como os diferentes tipos de leis evoluiram no "
+"tempo. Para isso, considerei todos os documentos na Série I do Diário da "
+"República e construi a evolução temporal do número de documentos de cada "
+"tipo."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:20
+msgid "How to use"
+msgstr "Como usar"
+
+#: law/templates/law/analysis/law_types_time_series/main.html:22
+msgid ""
+"\n"
+"            To exclude one type, click on it; to select only one type, "
+"double click on it.\n"
+"            Over the mouse for detailed information on each year.\n"
+"        "
+msgstr ""
+"\n"
+"Para excluir um tipo, clique nele; para selecionar apenas um tipo, clique "
+"duas vezes nele. Passe o rato para informação detalhada de cada ano."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:29
+msgid ""
+"\n"
+"            Only the 17 most common types are shown to simplify the "
+"visualization; \"Outros\"\n"
+"            represent the others types; types are ordered by\n"
+"            commonness (\"Portaria\" is the commonest, then \"Decreto\", "
+"etc.)\n"
+"        "
+msgstr ""
+"\n"
+"Só os 17 tipos mais frequentes são mostrados para simplificar a "
+"vizualização; \"Outros\" representam todos os outros tipos; tipos estão "
+"ordenados pela sua frequência."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:36
+msgid ""
+"\n"
+"            Here we are interested in the phenomena of <em>creation of new "
+"laws</em>;\n"
+"            naturally most of the documents here were already revoked.\n"
+"        "
+msgstr ""
+"\n"
+"Aqui estou interessado no fenómeno de <em>criação de novas leis</em>; a "
+"maioria dos documentos aqui já foram revogados."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:41
+msgid "Observations"
+msgstr "Observações"
+
+#: law/templates/law/analysis/law_types_time_series/main.html:45
+msgid ""
+"\n"
+"                    <strong>Portaria</strong> is by far the most common type "
+"of document;\n"
+"                    it was used consistently throughout our modern history.\n"
+"                "
+msgstr ""
+"\n"
+"<strong>Portaria</strong> é de longe o tipo de documento mais frequente; foi "
+"usado consistemente ao longo da nossa história moderna."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:49
+msgid ""
+"\n"
+"                    This is consistent since portarias are administrative "
+"and regulatory laws\n"
+"                    with narrow scope.\n"
+"                "
+msgstr ""
+"\n"
+"Isto faz sentido dado que Portarias são leis regulatórias e administativas "
+"de âmbito específico."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:55
+msgid ""
+"\n"
+"                    It is relevant to point out that since 2011 it has been "
+"used very little\n"
+"                    when compared to previous decades; only in the 50' "
+"Portaria was\n"
+"                    used this little.\n"
+"                "
+msgstr ""
+"\n"
+"Merece ser destacado que em 2011 houve uma quebra significativa do seu uso "
+"quando comparado com décadas anteriores; apenas nos anos 50 a Portaria foi "
+"usada tão pouco."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:64
+msgid ""
+"\n"
+"                    <strong>Decreto</strong> was used very often until the "
+"dictatorship (1933),\n"
+"                    and it seems to have been replaced by other types,\n"
+"                    notably <strong>Declaração</strong> and <strong>Decreto-"
+"Lei</strong>.\n"
+"                "
+msgstr ""
+"\n"
+"<strong>Decreto</strong> foi usado muito frequentemente até à ditadura "
+"(1910-1933) e parece ter sido posterioremente substituído por outros tipos, "
+"em particular por <strong>Declaração</strong> e <strong>Decreto-Lei</strong>."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:74
+#, python-format
+msgid ""
+"\n"
+"                    If we exclude \"Portaria\", we observe that, overall, "
+"the number of laws\n"
+"                    is decreasing since 1976 (year of <a href=\"%(the_url)s"
+"\">approval of a new Constitution</a>).\n"
+"                "
+msgstr ""
+"\n"
+"Se excluirmos Portaria, observamos que o número de leis criadas está a "
+"diminuir desde 1976 (ano da <a href=\"%(the_url)s\">aprovação da nova "
+"constituição</a>)."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:82
+msgid ""
+"\n"
+"                    In <strong>radical governmental changes</strong> (1933, "
+"1974) new types appear and old\n"
+"                    become extinct [hide \"Portaria\" and \"Decreto\" to "
+"notice this]\n"
+"                "
+msgstr ""
+"\n"
+"Em <strong>alterações radicais de governação</strong> (1933, 1974) é "
+"frequentente novos tipos serem criados e antigos tipos serem extintos. "
+"[exclua \"Portaria\" e \"Decreto\" para facilitar a vizualização desde "
+"fenómeno]."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:88
+msgid ""
+"\n"
+"                    \"Decreto-Lei\" is highly used immediately after these "
+"changes,\n"
+"                    which is consistent with its used to define general "
+"principles\n"
+"                    [hide \"Portaria\" and \"Decreto\" to see this better].\n"
+"                "
+msgstr ""
+"\n"
+"\"Decreto-Lei\" é consideravelmente mais usado em anos imediatos a estas "
+"alterações radicais que é consistente com o seu fim de definir regras gerais."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:97
+msgid ""
+"\n"
+"                    <strong>Declaração</strong> seems to have been used less "
+"in recent years,\n"
+"                    but in fact it has been replaced by more specific types "
+"of declarations (also part of \"Others\").\n"
+"                "
+msgstr ""
+"\n"
+"<strong>Declaração</strong> parece ter sido usada menos nos últimos anos, "
+"mas é necessário ter em conta que tipos de declaração mais específicos têm "
+"surgido (alguns inseridos em \"Outros\")."
+
+#: law/templates/law/analysis/law_types_time_series/main.html:104
+msgid ""
+"\n"
+"                Further observations are left as exercise to the reader. ;)\n"
+"            "
+msgstr ""
+"\n"
+"Outras observações são deixadas como exercício para o leitor. ;)"
+
+#: law/templates/law/analysis/law_types_time_series/main.html:109
+#: main/templates/about.html:30
+msgid "Acknowledgments"
+msgstr "Agradecimentos"
+
+#: law/templates/law/analysis/law_types_time_series/main.html:111
+#, python-format
+msgid ""
+"\n"
+"            I would like to thank <a href=\"%(home_url)s\">Pedro Magalhães</"
+"a> for the\n"
+"            <a href=\"%(suggestion_url)s\">discussion</a> that lead to this "
+"plot.\n"
+"        "
+msgstr ""
+"\n"
+"Gostaria de agradecer ao <a href=\"%(home_url)s\">Pedro Magalhães</a> pela "
+"<a href=\"%(suggestion_url)s\">sugestão</a> que levou a este gráfico."
 
 #: law/templates/law/base/header.html:5
 msgid "Documents"
@@ -2104,10 +2328,6 @@ msgstr ""
 "científica. Na sua essência, elas são apenas respostas a curiosidades e "
 "consequentemente <strong>não são revista por pares</strong>."
 
-#: main/templates/about.html:30
-msgid "Acknowledgments"
-msgstr "Agradecimentos"
-
 #: main/templates/about.html:33
 #, python-format
 msgid ""
@@ -2200,31 +2420,3 @@ msgstr "Acerca"
 #: main/templates/base/top_header.html:13
 msgid "Law"
 msgstr "Lei"
-
-#~ msgid "Key points"
-#~ msgstr "Pontos chave"
-
-#~ msgid ""
-#~ "\n"
-#~ "                The <a href=\"%(base)s\">oficial database</a> is a useful "
-#~ "and insightful\n"
-#~ "                tool to analyse the portuguese procurement.\n"
-#~ "            "
-#~ msgstr ""
-#~ "\n"
-#~ "A <a href=\"%(base)s\">base de dados oficial</a> é uma ferramenta útil e "
-#~ "madura para analizar a contratação pública portuguesa."
-
-#~ msgid ""
-#~ "About 90 percent of all procurements from municipalities are today made "
-#~ "by direct procurement."
-#~ msgstr ""
-#~ "Cerca de 90 porcento de todos os contratos públicos dos municípios são "
-#~ "hoje decididos por ajuste direto."
-
-#~ msgid ""
-#~ "In the last 5 years, there has been a slight increase to use the public "
-#~ "tender."
-#~ msgstr ""
-#~ "Nos últimos 5 anos, tem havido uma pequena têndencia para usar mais o "
-#~ "concurso público."

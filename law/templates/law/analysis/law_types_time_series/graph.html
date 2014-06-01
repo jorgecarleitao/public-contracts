@@ -1,0 +1,58 @@
+{% load i18n %}
+<style>
+    #graph svg {
+        width: 920px;
+        height: 400px;
+    }
+</style>
+<div id="graph">
+</div>
+<script>
+    /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
+    d3.json('{{ url }}', function(error, data) {
+        var parseDate = d3.time.format('%Y-%m');
+
+        data.forEach(function(series) {
+            series['values'].forEach(function(d) {
+                d.x = parseDate.parse(d.month);
+                d.y = (+d.value);
+            });
+        });
+
+        nv.addGraph(function() {
+            var chart = nv.models.stackedAreaChart()
+                  .margin({right: 80, left: 80})
+                  .useInteractiveGuideline(true)
+                  .transitionDuration(1000)
+                  .showControls(false);
+
+            chart.xAxis
+                    .axisLabel('{% trans 'Year' %}')
+                    .tickFormat(function(d) {
+                        return d3.time.format('%Y')(new Date(d));
+                    });
+
+            chart.xScale(d3.time.scale());
+
+            chart.yAxis     //Chart y-axis settings
+                    .axisLabel("{% trans 'Number of documents' %}")
+                    .tickFormat(d3.format(',.0d'));
+
+            var svg = d3.select('#graph').append('svg')
+                    .datum(data)
+                    .call(chart);
+
+            // link to data
+            var a = svg.append("a")
+                    .attr("xlink:href", '{{ url }}')
+                    .attr("target", "_blank");
+            a.append("svg:text")
+                    .attr("x", 700).attr("y", 380)
+                    .text('{% trans "Download data" %}');
+
+            //Update the chart when window resizes.
+            nv.utils.windowResize(function() { chart.update() });
+            return chart;
+        });
+    });
+</script>
