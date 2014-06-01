@@ -44,13 +44,15 @@ def law_list(request):
 
     context = build_laws_list_context(context, request.GET)
 
+    context['navigation_tab'] = 'documents'
+
     return render(request, "law/law_list/main.html", context)
 
 
 def types_list(request):
     types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document')).order_by('name')
 
-    context = {'types': types}
+    context = {'types': types, 'navigation_tab': 'types'}
 
     return render(request, "law/type_list/main.html", context)
 
@@ -59,7 +61,8 @@ def type_view(request, type_id):
     type = get_object_or_404(models.Type, id=type_id)
 
     context = {'type': type,
-               'laws': type.document_set.order_by("-date", "-number").prefetch_related("type")}
+               'laws': type.document_set.order_by("-date", "-number").prefetch_related("type"),
+               'navigation_tab': 'types'}
 
     context = build_laws_list_context(context, request.GET)
 
@@ -69,7 +72,7 @@ def type_view(request, type_id):
 def law_view(request, law_id, slug=None):
     law = get_object_or_404(models.Document, id=law_id)
 
-    context = {'law': law}
+    context = {'law': law, 'navigation_tab': 'documents'}
 
     return render(request, "law/document_view/main.html", context)
 
@@ -92,7 +95,7 @@ def analysis_list(request):
             'title': ANALYSIS_TITLES[analysis]
         })
 
-    return render(request, "law/analysis.html", {'analysis': analysis_list})
+    return render(request, "law/analysis.html", {'analysis': analysis_list, 'navigation_tab': 'analysis'})
 
 
 def law_analysis(request, analysis_id, slug=None):
@@ -112,6 +115,6 @@ def law_analysis(request, analysis_id, slug=None):
     if name not in templates:
         raise IndexError('Template for analysis "%s" not found' % name)
 
-    context = {'title': ANALYSIS_TITLES[name]}
+    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis'}
 
     return render(request, templates[name], context)
