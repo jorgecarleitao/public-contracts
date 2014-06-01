@@ -47,6 +47,10 @@ dre_url_formater = "http://dre.pt/cgi/dr1s.exe?" \
 class Type(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
+    def get_absolute_url(self):
+        name = "%s" % slugify(self.name)
+        return reverse('law_type', args=[self.pk, name])
+
     def __unicode__(self):
         return self.name
 
