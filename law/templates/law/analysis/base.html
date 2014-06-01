@@ -2,10 +2,10 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
-    <div itemscope itemtype="http://schema.org/WebPage">
-        <h2 itemprop="name">{% block analysis_title %}{% endblock %}</h2>
+    <div itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">{{ title }}</h2>
         {% block analysis_content %}
         {% endblock %}
     </div>
