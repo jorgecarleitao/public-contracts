@@ -30,6 +30,7 @@
                 evolução temporal de indicadores macroscópicos da contratação pública portuguesa.
             </li>
         </ul>
+        {% include "contracts/contracts_price_histogram/graph.html" %}
         <p><a href="{% url "contracts_home" %}">Mais informações</a></p>
         <h2>Leis</h2>
         <p>
@@ -44,6 +45,8 @@
                 quando novas leis surgem.
             </li>
         </ul>
+        {% url 'law_data_selector' 'law-types-time-series-json' as the_url %}
+        {% include "law/analysis/law_types_time_series/graph.html" with url=the_url%}
         <p><a href="{% url "law_home" %}">Mais informações</a></p>
         <h2>Deputados</h2>
         <p>
@@ -62,6 +65,7 @@
                 as leis já existentes.
             </li>
         </ul>
+        {% include "deputies/analysis/mandates_distribution/graph.html" %}
         <p><a href="{% url "deputies_home" %}">Mais informações</a></p>
         <h3>Outras informações:</h3>
         <ul>

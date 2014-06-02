@@ -1,11 +1,11 @@
 {% load i18n %}
 <style>
-    #graph-histogram svg {
+    #graph-mandates svg {
         width: 920px;
         height: 300px;
     }
 </style>
-<div id="graph-histogram"></div>
+<div id="graph-mandates"></div>
 <script>
     d3.json("{% url 'deputies_data_selector' 'mandates-distribution-json' %}", function(data) {
 
@@ -37,7 +37,7 @@
                     .tickFormat(d3.format(',.d'))
                     .axisLabel('{% trans "Number of deputies" %}');
 
-            d3.select('#graph-histogram').append('svg')
+            d3.select('#graph-mandates').append('svg')
                     .datum(data)
                     .call(chart);
 
