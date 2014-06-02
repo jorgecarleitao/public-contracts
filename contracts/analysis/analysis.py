@@ -27,7 +27,7 @@ def get_price_histogram():
     40 was arbitrarily chosen, but includes all prices.
     """
     data = []
-    for x in range(40):
+    for x in range(7, 40):
         count = models.Contract.objects.filter(price__gte=2**x, price__lt=2**(x+1)).count()
         data.append([(2**x)/100., count])  # price in euros
 
