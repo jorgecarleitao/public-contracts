@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 08:03+0100\n"
+"POT-Creation-Date: 2014-06-02 19:54+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,7 +62,7 @@ msgstr "valor"
 #: contracts/entity_views.py:47
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:18
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
-#: deputies/views.py:11 deputies/views.py:38
+#: deputies/views.py:15 deputies/views.py:42
 #: deputies/templates/deputies/search_bar.html:18
 #: deputies/templates/deputies/search_bar.html:35
 msgid "name"
@@ -74,7 +74,7 @@ msgstr "nome"
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
-#: deputies/views.py:25 deputies/templates/deputies/search_bar.html:49
+#: deputies/views.py:29 deputies/templates/deputies/search_bar.html:49
 #: law/views.py:16 law/templates/law/law_list/search_law.html:22
 msgid "search"
 msgstr "procura"
@@ -91,14 +91,14 @@ msgstr "procura"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:44
 #: contracts/templates/contracts/tender_list/search.html:34
 #: contracts/templates/contracts/tender_list/search.html:36
-#: deputies/views.py:32 deputies/views.py:33
+#: deputies/views.py:36 deputies/views.py:37
 #: deputies/templates/deputies/search_bar.html:35
 #: deputies/templates/deputies/search_bar.html:37
 msgid "sorting"
 msgstr "ordem"
 
 #: contracts/entity_views.py:84 contracts/views.py:39 contracts/views.py:118
-#: contracts/views.py:172 deputies/views.py:43 law/views.py:23
+#: contracts/views.py:172 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -148,8 +148,9 @@ msgid "home"
 msgstr "início"
 
 #: contracts/urls.py:16 contracts/urls.py:19 contracts/urls.py:21
-#: contracts/urls.py:25 law/urls.py:8 law/urls.py:10 law/urls.py:12
-#: law/urls.py:16
+#: contracts/urls.py:25 deputies/urls.py:14 deputies/urls.py:17
+#: deputies/urls.py:19 deputies/urls.py:23 law/urls.py:8 law/urls.py:10
+#: law/urls.py:12 law/urls.py:16
 msgid "analysis"
 msgstr "analises"
 
@@ -275,6 +276,8 @@ msgstr "contratos publicados demasiado tarde"
 
 #: contracts/templates/contracts/analysis.html:5
 #: contracts/templates/contracts/base/header.html:17
+#: deputies/templates/deputies/analysis.html:5
+#: deputies/templates/deputies/base/header.html:12
 #: law/templates/law/analysis.html:5 law/templates/law/base/header.html:12
 msgid "Analysis"
 msgstr "Análises"
@@ -1343,7 +1346,10 @@ msgid_plural "%(value)s quadrillion"
 msgstr[0] "%(value)s quadrilião"
 msgstr[1] "%(value)s quadriliões"
 
-#: deputies/urls.py:9 deputies/urls.py:10
+#: deputies/urls.py:9 deputies/urls.py:10 deputies/urls.py:14
+#: deputies/urls.py:17 deputies/urls.py:19 deputies/urls.py:23
+#: deputies/views_data.py:22
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:29
 #: deputies/templates/deputies/deputies_survival_distribution/graph.html:29
 msgid "deputies"
 msgstr "deputados"
@@ -1356,26 +1362,27 @@ msgstr "partidos"
 msgid "party"
 msgstr "partido"
 
-#: deputies/urls.py:14
-msgid "deputies-time-distribution"
-msgstr "distribuicao-de-tempos-de-deputados"
-
-#: deputies/urls.py:17
-msgid "mandates-distribution"
-msgstr "distribuicao-de-mandatos"
-
-#: deputies/views.py:11 deputies/views.py:38
+#: deputies/views.py:15 deputies/views.py:42
 #: deputies/templates/deputies/search_bar.html:23
 #: deputies/templates/deputies/search_bar.html:37
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:30
 msgid "mandates"
 msgstr "mandatos"
 
-#: deputies/views_data.py:12 deputies/views_data.py:22
+#: deputies/views.py:109
+msgid "How many mandates a deputy is in the Parliament?"
+msgstr "Quantos mandatos um deputado está no Parlamento?"
+
+#: deputies/views_data.py:12
 msgid "time in office"
 msgstr "tempo no parlamento"
 
+#: deputies/templates/deputies/analysis.html:9
+msgid "Analysis of deputies"
+msgstr "Análises aos deputados"
+
 #: deputies/templates/deputies/deputies_list.html:3
-#: deputies/templates/deputies/base/header.html:5
+#: deputies/templates/deputies/base/header.html:6
 #: deputies/templates/deputies/deputies_survival_distribution/graph.html:38
 #: main/templates/base/top_header.html:10
 msgid "Deputies"
@@ -1485,7 +1492,7 @@ msgstr ""
 "\">site oficial</a> do parlamento, colocámos a questão de quanto tempo um "
 "deputado está no parlamento. Eis o resultado:"
 
-#: deputies/templates/deputies/main_page.html:49
+#: deputies/templates/deputies/main_page.html:47
 msgid ""
 "\n"
 "                The data accounts for ~750 deputies since 1992. For each "
@@ -1503,7 +1510,7 @@ msgstr ""
 "deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento "
 "(eixo-x), cada barra corresponde a 50 dias."
 
-#: deputies/templates/deputies/main_page.html:57
+#: deputies/templates/deputies/main_page.html:55
 msgid ""
 "\n"
 "                For instance, if a deputy has 2 mandates (consecutives or "
@@ -1516,7 +1523,7 @@ msgstr ""
 "Por exemplo, se um deputado tem 2 mandados (consecutivos ou não), um de 1500 "
 "dias e outro de 1010 dias, pertence ao intervalo [2050, 2100]."
 
-#: deputies/templates/deputies/main_page.html:63
+#: deputies/templates/deputies/main_page.html:61
 msgid ""
 "\n"
 "                The data seems to show an exponential decay with an half-"
@@ -1527,7 +1534,7 @@ msgstr ""
 "Os dados parecem ter um decaimento exponencial, com um tempo de semi-vida de "
 "~1500 dias (1 legislatura completa)."
 
-#: deputies/templates/deputies/main_page.html:69
+#: deputies/templates/deputies/main_page.html:67
 #, python-format
 msgid ""
 "\n"
@@ -1543,7 +1550,7 @@ msgstr ""
 "\"%(url)s?ordem=mandatos\">aqui</a>.\n"
 "            "
 
-#: deputies/templates/deputies/main_page.html:75
+#: deputies/templates/deputies/main_page.html:73
 #, python-format
 msgid ""
 "\n"
@@ -1558,11 +1565,11 @@ msgstr ""
 "legislatura (E.g. eleições antecipadas). Obrigado ao João Miranda e Pedro "
 "Magalhães, discussão <a href=\"%(url)s\">aqui</a>."
 
-#: deputies/templates/deputies/main_page.html:80
+#: deputies/templates/deputies/main_page.html:78
 msgid "Other informations about this project"
 msgstr "Outras informações sobre este projeto"
 
-#: deputies/templates/deputies/main_page.html:84
+#: deputies/templates/deputies/main_page.html:82
 msgid ""
 "\n"
 "                        We use Twitter to announce updates and new "
@@ -1572,7 +1579,7 @@ msgstr ""
 "\n"
 "Usamos o Twitter para anunciar novas análises e resultados."
 
-#: deputies/templates/deputies/main_page.html:91
+#: deputies/templates/deputies/main_page.html:89
 #, python-format
 msgid ""
 "\n"
@@ -1596,7 +1603,25 @@ msgstr "procurar deputados"
 msgid "order by mandates"
 msgstr "ordenar por número de mandatos"
 
-#: deputies/templates/deputies/base/header.html:6
+#: deputies/templates/deputies/analysis/mandates_distribution.html:6
+#: law/templates/law/analysis/eu_impact.html:98
+#: law/templates/law/analysis/law_types_time_series/main.html:116
+msgid "Licence"
+msgstr "Licença"
+
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:29
+msgid "with"
+msgstr "com"
+
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:34
+msgid "Number of mandates"
+msgstr "Número de mandatos"
+
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:38
+msgid "Number of deputies"
+msgstr "Número de deputados"
+
+#: deputies/templates/deputies/base/header.html:9
 #: deputies/templates/deputies/parties_list/main.html:3
 msgid "Parties"
 msgstr "Partidos"
@@ -2002,11 +2027,6 @@ msgid ""
 msgstr ""
 "\n"
 "Fica por estudar se este efeito é similar noutros estados membros."
-
-#: law/templates/law/analysis/eu_impact.html:98
-#: law/templates/law/analysis/law_types_time_series/main.html:116
-msgid "Licence"
-msgstr "Licença"
 
 #: law/templates/law/analysis/laws_time_series.html:6
 msgid ""

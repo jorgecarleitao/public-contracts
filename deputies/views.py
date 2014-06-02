@@ -106,7 +106,7 @@ def party_view(request, party_id):
     return render(request, 'deputies/party_view/main.html', context)
 
 
-ANALYSIS_TITLES = {}  #{'mandates_distribution': _('How many mandates a deputy is in the Parliament?')}
+ANALYSIS_TITLES = {'mandates_distribution': _('How many mandates a deputy is in the Parliament?')}
 
 
 def analysis_list(request):
@@ -136,7 +136,7 @@ def analysis(request, analysis_id, slug=None):
 
     name = PRIMARY_KEY[analysis_id]
 
-    templates = {}  #{'mandates_distribution': 'deputies/analysis/mandates_distribution.html'}
+    templates = {'mandates_distribution': 'deputies/analysis/mandates_distribution.html'}
 
     if name not in templates:
         raise IndexError('Template for analysis "%s" not found' % name)

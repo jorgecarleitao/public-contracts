@@ -1,0 +1,19 @@
+{% extends "deputies/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Analysis" %}{% endblock %}
+{% block content %}
+    <div>
+        <h1>
+            {% trans "Analysis of deputies" %}
+        </h1>
+        <ul>
+            {% for analys in analysis %}
+                <li><a href="{{ analys.url }}">
+                    {{ analys.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

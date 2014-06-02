@@ -1,0 +1,12 @@
+{% extends "deputies/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <div itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">{{ title }}</h2>
+        {% block analysis_content %}
+        {% endblock %}
+    </div>
+{% endblock %}

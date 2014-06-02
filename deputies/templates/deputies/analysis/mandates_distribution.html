@@ -1,0 +1,8 @@
+{% extends "deputies/analysis/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block analysis_content %}
+    {% include "deputies/analysis/mandates_distribution/graph.html" %}
+    <h4>{% trans "Licence" %}</h4>
+    {% include "licence.html" with author="Jorge C. Leitão" author_url="https://sites.google.com/site/jorgecarleitao/" %}
+{% endblock %}
