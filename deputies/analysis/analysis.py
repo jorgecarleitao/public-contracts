@@ -43,9 +43,6 @@ def get_time_in_office_distribution():
 
         bin += 1
 
-    for x in cumulative:
-        x['count'] = x['count']*1./len(data)
-
     return cumulative
 
 
