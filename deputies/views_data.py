@@ -1,6 +1,7 @@
 import json
 
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
 
 from .analysis import analysis_manager
 
@@ -8,7 +9,8 @@ from .analysis import analysis_manager
 def deputies_time_distribution_json(request):
     data = analysis_manager.get_analysis('deputies_time_distribution')
 
+    time_series = {'values': [], 'key': _('time in office')}
     for x in data:
-        x['value'] = x['count']
+        time_series['values'].append({'from': x['min'], 'value': x['count']})
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([time_series]), content_type="application/json")
