@@ -57,7 +57,7 @@ def home(request):
     return render(request, 'deputies/main_page.html')
 
 
-def deputies(request):
+def deputies_list(request):
     deputies = models.Deputy.objects.all()
     deputies = deputies.annotate(mandate_count=Count('mandate'))
 
@@ -70,7 +70,7 @@ def deputies(request):
     return render(request, 'deputies/deputies_list.html', context)
 
 
-def parties(request):
+def parties_list(request):
 
     parties = models.Party.objects.all()
 

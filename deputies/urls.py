@@ -7,8 +7,8 @@ from . import views_data
 
 urlpatterns = patterns('',
                        url(r'^%s/%s$' % (_('deputies'), _('home')), views.home, name='deputies_home'),
-                       url(r'^%s' % _('deputies'), views.deputies, name='deputies_deputies'),
-                       url(r'^%s$' % _('parties'), views.parties, name='deputies_parties'),
+                       url(r'^%s' % _('deputies'), views.deputies_list, name='deputies_deputies'),
+                       url(r'^%s$' % _('parties'), views.parties_list, name='deputies_parties'),
                        url(r'^%s/(\d+)$' % _('party'), views.party_view, name='party_view'),
 
                        url(r'^%s/data$' % _('deputies-time-distribution'), views_data.deputies_time_distribution_json,
