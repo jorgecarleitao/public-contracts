@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-01 10:25+0100\n"
+"POT-Creation-Date: 2014-06-02 08:03+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -879,6 +879,8 @@ msgstr "Especificidade média"
 #: contracts/templates/contracts/entity_rank/histogram.html:31
 #: contracts/templates/contracts/municipalities_delta_time/graph.html:30
 #: contracts/templates/contracts/municipalities_delta_time/histogram.html:31
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:30
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:34
 msgid "days"
 msgstr "dias"
 
@@ -1342,6 +1344,7 @@ msgstr[0] "%(value)s quadrilião"
 msgstr[1] "%(value)s quadriliões"
 
 #: deputies/urls.py:9 deputies/urls.py:10
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:29
 msgid "deputies"
 msgstr "deputados"
 
@@ -1357,14 +1360,23 @@ msgstr "partido"
 msgid "deputies-time-distribution"
 msgstr "distribuicao-de-tempos-de-deputados"
 
+#: deputies/urls.py:17
+msgid "mandates-distribution"
+msgstr "distribuicao-de-mandatos"
+
 #: deputies/views.py:11 deputies/views.py:38
 #: deputies/templates/deputies/search_bar.html:23
 #: deputies/templates/deputies/search_bar.html:37
 msgid "mandates"
 msgstr "mandatos"
 
+#: deputies/views_data.py:12 deputies/views_data.py:22
+msgid "time in office"
+msgstr "tempo no parlamento"
+
 #: deputies/templates/deputies/deputies_list.html:3
 #: deputies/templates/deputies/base/header.html:5
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:38
 #: main/templates/base/top_header.html:10
 msgid "Deputies"
 msgstr "Deputados"
@@ -1589,13 +1601,9 @@ msgstr "ordenar por número de mandatos"
 msgid "Parties"
 msgstr "Partidos"
 
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:106
-msgid "Number of days (a legislature is ~ 1500)"
-msgstr "Número de dias (uma legislatura são ~1500 dias)"
-
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:115
-msgid "Percentage of deputies"
-msgstr "Percentagem de deputados"
+#: deputies/templates/deputies/deputies_survival_distribution/graph.html:29
+msgid "with at least"
+msgstr "com pelo menos"
 
 #: deputies/templates/deputies/parties_list/party_summary.html:14
 #, python-format
@@ -2075,8 +2083,8 @@ msgstr ""
 "\n"
 "Neste trabalho vizualizamos como os diferentes tipos de leis evoluiram no "
 "tempo. Para isso, considerei todos os documentos na Série I do Diário da "
-"República e apresento o número de documentos de cada "
-"tipo publicados num dado ano."
+"República e apresento o número de documentos de cada tipo publicados num "
+"dado ano."
 
 #: law/templates/law/analysis/law_types_time_series/main.html:20
 msgid "How to use"

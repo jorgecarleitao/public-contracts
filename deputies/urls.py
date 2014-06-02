@@ -13,4 +13,7 @@ urlpatterns = patterns('',
 
                        url(r'^%s/data$' % _('deputies-time-distribution'), views_data.deputies_time_distribution_json,
                            name='deputies_survival_distribution_json'),
+
+                       url(r'^%s/data$' % _('mandates-distribution'), views_data.mandates_distribution_json,
+                           name='mandates_distribution_json'),
                        )

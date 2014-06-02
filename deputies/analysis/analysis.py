@@ -1,4 +1,8 @@
 from datetime import timedelta, date
+import collections
+
+from django.db.models import Count
+
 from deputies import models
 
 
@@ -43,3 +47,21 @@ def get_time_in_office_distribution():
         x['count'] = x['count']*1./len(data)
 
     return cumulative
+
+
+def get_mandates_in_office_distribution():
+
+    deputies = models.Deputy.objects.all().annotate(count=Count('mandate__id'))
+
+    # build histogram
+    count = 0
+    histogram = collections.defaultdict(int)
+    for deputy in deputies:
+        histogram[deputy.count] += 1
+        count += 1
+
+    data = []
+    for x in histogram:
+        data.append({'mandates': x, 'count': histogram[x]})
+
+    return data
