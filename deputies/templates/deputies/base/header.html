@@ -2,6 +2,13 @@
 {% load static %}
 {% load i18n %}
 {% block scope_nav %}
-    <li><a href="{% url "deputies_deputies" %}">{% trans "Deputies" %}</a></li>
-    <li><a href="{% url "deputies_parties" %}">{% trans "Parties" %}</a></li>
+    <li {% if navigation_tab == 'deputies' %}class="active"{% endif %}>
+        <a href="{% url "deputies_deputies" %}">{% trans "Deputies" %}</a>
+    </li>
+    <li {% if navigation_tab == 'parties' %}class="active"{% endif %}>
+        <a href="{% url "deputies_parties" %}">{% trans "Parties" %}</a>
+    </li>
+    <li {% if navigation_tab == 'analysis' %}class="active"{% endif %}>
+        <a href="{% url "deputies_analysis" %}">{% trans "Analysis" %}</a>
+    </li>
 {% endblock %}

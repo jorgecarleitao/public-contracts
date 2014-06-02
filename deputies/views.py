@@ -67,7 +67,7 @@ def deputies_list(request):
 
     deputies = deputies.select_related("party__abbrev")
 
-    context = {'deputies': deputies}
+    context = {'deputies': deputies, 'navigation_tab': 'deputies'}
 
     context = build_deputies_list_context(context, request.GET)
 
@@ -78,9 +78,11 @@ def parties_list(request):
 
     parties = models.Party.objects.all()
 
-    parties = parties.annotate(mandates_count=Count('mandate'), deputies_count=Count('mandate__deputy', distinct=True))
+    parties = parties.annotate(mandates_count=Count('mandate'),
+                               deputies_count=Count('mandate__deputy', distinct=True))
 
-    return render(request, 'deputies/parties_list/main.html', {'parties': parties})
+    return render(request, 'deputies/parties_list/main.html', {'parties': parties,
+                                                               'navigation_tab': 'parties'})
 
 
 def party_view(request, party_id):
@@ -95,18 +97,13 @@ def party_view(request, party_id):
 
     party.mandates_count = party.mandate_set.count()
 
-    context = {'party': party, 'deputies': deputies}
+    context = {'party': party,
+               'deputies': deputies,
+               'navigation_tab': 'parties'}
 
     context = build_deputies_list_context(context, request.GET)
 
     return render(request, 'deputies/party_view/main.html', context)
-
-
-def legislatures(request):
-
-    context = {'legislatures': models.Legislature.objects.all()}
-
-    return render(request, 'deputies/legislatures_list.html', context)
 
 
 ANALYSIS_TITLES = {}  #{'mandates_distribution': _('How many mandates a deputy is in the Parliament?')}
