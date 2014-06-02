@@ -33,5 +33,7 @@ class AnalysisManager(dict):
         analysis.idem = primary_key
         self[analysis.name] = analysis
 
-    def get_analysis(self, name):
+    def get_analysis(self, name, flush=False):
+        if flush:
+            self[name].update()
         return self[name].get()
