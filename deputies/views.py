@@ -1,9 +1,13 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.shortcuts import render
 from django.db.models import Q, Count
+from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 from . import models
+from deputies.analysis import ANALYSIS, PRIMARY_KEY
 
 
 def build_deputies_list_context(context, GET):
@@ -103,3 +107,43 @@ def legislatures(request):
     context = {'legislatures': models.Legislature.objects.all()}
 
     return render(request, 'deputies/legislatures_list.html', context)
+
+
+ANALYSIS_TITLES = {}  #{'mandates_distribution': _('How many mandates a deputy is in the Parliament?')}
+
+
+def analysis_list(request):
+    analysis_list = []
+    analysis_dict = ANALYSIS
+
+    for analysis in analysis_dict:
+        if analysis in ANALYSIS_TITLES:
+            analysis_list.append({
+                'id': analysis_dict[analysis],
+                'url': reverse('deputies_analysis_selector',
+                               args=(analysis_dict[analysis],
+                                     slugify(ANALYSIS_TITLES[analysis]))),
+                'title': ANALYSIS_TITLES[analysis]
+            })
+
+    return render(request, "deputies/analysis.html", {'analysis': analysis_list, 'navigation_tab': 'analysis'})
+
+
+def analysis(request, analysis_id, slug=None):
+    try:
+        analysis_id = int(analysis_id)
+    except:
+        raise Http404
+    if analysis_id not in PRIMARY_KEY:
+        raise Http404
+
+    name = PRIMARY_KEY[analysis_id]
+
+    templates = {}  #{'mandates_distribution': 'deputies/analysis/mandates_distribution.html'}
+
+    if name not in templates:
+        raise IndexError('Template for analysis "%s" not found' % name)
+
+    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis'}
+
+    return render(request, templates[name], context)

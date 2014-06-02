@@ -7,7 +7,7 @@
 </style>
 <div id="graph-histogram"></div>
 <script>
-    d3.json("{% url 'deputies_survival_distribution_json' %}", function(data) {
+    d3.json("{% url 'deputies_data_selector' 'deputies-time-distribution-json' %}", function(data) {
 
         data.forEach(function(series) {
             series['values'].forEach(function(d) {
