@@ -8,9 +8,9 @@ Thanks for checking it out.
 The portuguese state does not provide a consistent way to query public data, nor relating this data.
 This website aims to:
 
- 1. Provide a consistent way to query portuguese public data using Django ORM
- 2. Interrelate different public data
- 3. Extract and present statistical features of the data
+1. Provide a consistent way to query portuguese public data using Django ORM
+2. Interrelate different public data
+3. Extract and present statistical features of the data
 
 This project consists of 4 components:
 
@@ -23,9 +23,9 @@ This project consists of 4 components:
 
 We focus on three aspects of the portuguese state:
 
-1- Public Contracts: **contracts** between **entities** with a **value** and other fields.
-2- Members of the Parliament: **Persons** that have **mandates** in **legislatures** of the parliament.
-3- Laws: **documents** that are officially published as laws.
+1. Public Contracts: **contracts** between **entities** with a **value** and other fields.
+2. Members of the Parliament: **Persons** that have **mandates** in **legislatures** of the parliament.
+3. Laws: **documents** that are officially published as laws.
 
 ## The code
 
