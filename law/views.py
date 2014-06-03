@@ -60,7 +60,7 @@ def types_list(request):
     return render(request, "law/type_list/main.html", context)
 
 
-def type_view(request, type_id):
+def type_view(request, type_id, slug=None):
     type = get_object_or_404(models.Type, id=type_id)
 
     context = {'type': type,
