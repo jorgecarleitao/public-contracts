@@ -102,6 +102,19 @@ class CountryChoiceField(ModelChoiceField):
         return super(CountryChoiceField, self).clean(value)
 
 
+class CouncilChoiceField(Field):
+    """
+    Validates a relation to a ``models.Council``.
+    """
+    def clean(self, value):
+        if value['council'] is None:
+            return None
+        district = value['district']
+        council = value['council']
+
+        return models.Council.objects.get(name=council, district__name=district)
+
+
 class CategoryField(ModelChoiceField):
     """
     Validates a relation to a ``models.Category``.
@@ -181,7 +194,7 @@ class ContractForm(Form):
 
     country = ModelChoiceField(queryset=models.Country.objects, to_field_name='name', required=False)
     district = ModelChoiceField(queryset=models.District.objects, to_field_name='name', required=False)
-    council = ModelChoiceField(queryset=models.Council.objects, to_field_name='name', required=False)
+    council = CouncilChoiceField(required=False)
 
 
 class TenderForm(Form):

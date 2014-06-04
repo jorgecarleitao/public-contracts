@@ -372,7 +372,7 @@ class ContractsCrawler(DynamicCrawler):
                          'price': data['initialContractualPrice'],
                          'country': places[0],
                          'district': places[1],
-                         'council': places[2],
+                         'council': {'district': places[1], 'council': places[2]},
                          'contractors': data['contracting'],
                          'contracted': data['contracted']
                          }
