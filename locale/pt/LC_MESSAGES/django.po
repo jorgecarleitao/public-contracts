@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 19:54+0100\n"
+"POT-Creation-Date: 2014-06-04 08:47+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,7 +75,7 @@ msgstr "nome"
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
 #: deputies/views.py:29 deputies/templates/deputies/search_bar.html:49
-#: law/views.py:16 law/templates/law/law_list/search_law.html:22
+#: law/views.py:16 law/templates/law/law_list/search_law.html:23
 msgid "search"
 msgstr "procura"
 
@@ -882,8 +882,8 @@ msgstr "Especificidade média"
 #: contracts/templates/contracts/entity_rank/histogram.html:31
 #: contracts/templates/contracts/municipalities_delta_time/graph.html:30
 #: contracts/templates/contracts/municipalities_delta_time/histogram.html:31
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:30
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:34
+#: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:30
+#: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:34
 msgid "days"
 msgstr "dias"
 
@@ -1349,8 +1349,8 @@ msgstr[1] "%(value)s quadriliões"
 #: deputies/urls.py:9 deputies/urls.py:10 deputies/urls.py:14
 #: deputies/urls.py:17 deputies/urls.py:19 deputies/urls.py:23
 #: deputies/views_data.py:22
+#: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:29
 #: deputies/templates/deputies/analysis/mandates_distribution/graph.html:29
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:29
 msgid "deputies"
 msgstr "deputados"
 
@@ -1382,8 +1382,8 @@ msgid "Analysis of deputies"
 msgstr "Análises aos deputados"
 
 #: deputies/templates/deputies/deputies_list.html:3
+#: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:38
 #: deputies/templates/deputies/base/header.html:6
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:38
 #: main/templates/base/top_header.html:10
 msgid "Deputies"
 msgstr "Deputados"
@@ -1495,7 +1495,7 @@ msgstr ""
 #: deputies/templates/deputies/main_page.html:47
 msgid ""
 "\n"
-"                The data accounts for ~750 deputies since 1992. For each "
+"                The data accounts for ~1200 deputies since 1992. For each "
 "deputy, we\n"
 "                considered the total time of all his mandates.\n"
 "                The graph shows the percentage of deputies (y-axis, log-"
@@ -1505,7 +1505,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Os dados são de ~750 deputados, desde 1992. Para cada deputado, considerámos "
+"Os dados são de ~1200 deputados, desde 1992. Para cada deputado, considerámos "
 "o tempo total de todos os seus mandados. O gráfico mostra a percentagem de "
 "deputados (eixo-y, escala logaritmica) com pelo menos x dias no parlamento "
 "(eixo-x), cada barra corresponde a 50 dias."
@@ -1609,6 +1609,10 @@ msgstr "ordenar por número de mandatos"
 msgid "Licence"
 msgstr "Licença"
 
+#: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:29
+msgid "with at least"
+msgstr "com pelo menos"
+
 #: deputies/templates/deputies/analysis/mandates_distribution/graph.html:29
 msgid "with"
 msgstr "com"
@@ -1625,10 +1629,6 @@ msgstr "Número de deputados"
 #: deputies/templates/deputies/parties_list/main.html:3
 msgid "Parties"
 msgstr "Partidos"
-
-#: deputies/templates/deputies/deputies_survival_distribution/graph.html:29
-msgid "with at least"
-msgstr "com pelo menos"
 
 #: deputies/templates/deputies/parties_list/party_summary.html:14
 #, python-format
@@ -1693,32 +1693,52 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
+#: law/feed.py:16
+#, python-format
+msgid "Laws in %s"
+msgstr "Leis em %s"
+
+#: law/feed.py:22
+#, python-format
+msgid "Latest laws in %s"
+msgstr "Últimas leis em %s"
+
+#: law/feed.py:25 law/feed.py:48
+#, python-format
+msgid "%s of %s - %s"
+msgstr "%s de %s - %s"
+
+#: law/feed.py:45
+#, python-format
+msgid "Documents \"%s\""
+msgstr "Documentos \"%s\""
+
 #: law/urls.py:7 law/urls.py:8 law/urls.py:10 law/urls.py:12 law/urls.py:16
-#: law/urls.py:20
+#: law/urls.py:20 law/urls.py:21
 msgid "law"
 msgstr "lei"
 
-#: law/urls.py:21
+#: law/urls.py:23
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:22 law/urls.py:23
+#: law/urls.py:25 law/urls.py:26 law/urls.py:28 law/urls.py:29
 msgid "type"
 msgstr "tipo"
 
-#: law/urls.py:25 law/urls.py:26
+#: law/urls.py:32 law/urls.py:33
 msgid "document"
 msgstr "documento"
 
-#: law/views.py:84
+#: law/views.py:83
 msgid "How many laws are enacted yearly?"
 msgstr "Quantas leis são criadas anualmente?"
 
-#: law/views.py:85
+#: law/views.py:84
 msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
 
-#: law/views.py:86
+#: law/views.py:85
 msgid "Evolution of the portuguese Law"
 msgstr "Evolução da Lei portuguesa"
 
