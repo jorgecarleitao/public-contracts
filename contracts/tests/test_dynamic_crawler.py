@@ -14,7 +14,7 @@ class DynamicCrawlerTestCase(TestCase):
         raise JSONLoadError
         """
         self.assertRaises(JSONLoadError, self.crawler.goToPage,
-                          'http://www.base.gov.pt/base2/rest/entidades/0')
+                          'http://www.base.gov.pt/base2/rest/entidades/322')
 
         self.assertRaises(JSONLoadError, self.crawler.goToPage,
                           'http://www.base.gov.pt/base2/rest/contratos/0')

@@ -14,15 +14,6 @@ from contracts.crawler_forms import EntityForm, ContractForm, TenderForm, clean_
 
 logger = logging.getLogger(__name__)
 
-# default values of specific fields
-# in case object does not exist
-BASE_DEFAULTS = {'id': 0,
-                 'announcementId': 0,
-                 'contractsCount': 0,
-                 'increments': False}
-# default value for all other fields
-BASE_DEFAULT = None
-
 
 class EntityNotFoundError(Exception):
     def __init__(self, entities_base_ids):
@@ -215,15 +206,9 @@ class DynamicCrawler(JSONCrawler):
         data = super(DynamicCrawler, self).goToPage(url)
 
         # ensures that data is not None
-        for x in data:
-            if x in BASE_DEFAULTS:
-                cannot_be = BASE_DEFAULTS[x]
-            else:
-                cannot_be = BASE_DEFAULT
-
-            if data[x] != cannot_be:
-                return data
-        raise JSONLoadError(url)
+        if data['id'] == 0:
+            raise JSONLoadError(url)
+        return data
 
     def get_data(self, base_id, flush=False):
         """
