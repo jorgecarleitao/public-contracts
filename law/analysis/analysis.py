@@ -120,10 +120,10 @@ def get_types_time_series():
             # append a new entry for this time-point
             for t in types_time_series:
                 types_time_series[t]['values'].append(
-                    {'month': entry['from'].strftime('%Y-%m'),
+                    {'year': entry['from'].strftime('%Y'),
                      'value': 0})
             others_time_series['values'].append(
-                {'month': entry['from'].strftime('%Y-%m'),
+                {'year': entry['from'].strftime('%Y'),
                  'value': 0})
 
             # add value to type or "others"

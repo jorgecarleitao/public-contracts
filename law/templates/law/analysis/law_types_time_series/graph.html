@@ -10,11 +10,11 @@
 <script>
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
     d3.json('{{ url }}', function(error, data) {
-        var parseDate = d3.time.format('%Y-%m');
+        var parseDate = d3.time.format('%Y');
 
         data.forEach(function(series) {
             series['values'].forEach(function(d) {
-                d.x = parseDate.parse(d.month);
+                d.x = parseDate.parse(d.year);
                 d.y = (+d.value);
             });
         });
