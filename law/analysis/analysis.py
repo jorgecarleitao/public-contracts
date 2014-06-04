@@ -48,8 +48,7 @@ def get_eu_impact_time_series():
         # We also exclude documents that don't have full
         # text since we cannot tell if they mention EU laws
         # and we don't want to bias the result to any side.
-        documents = models.Document.objects.filter(date__year=year).order_by("-date")\
-            .exclude(type_id__in=[95, 97, 145, 150])\
+        documents = models.Document.laws.filter(date__year=year).order_by("-date")\
             .exclude(text=None)
 
         # a dictionary of the form {id, list}

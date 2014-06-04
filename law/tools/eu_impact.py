@@ -13,8 +13,7 @@ if __name__ == "__main__":
 
     # 95, 97, 145, 150 are types that are not laws:
     # are summaries and technical sheets of the diary
-    documents = Document.objects.filter(date__gt=date)\
-        .exclude(type_id__in=[95, 97, 145, 150])
+    documents = Document.laws.filter(date__gt=date)
 
     total = documents.count()
     actual = documents.filter(text=None).count()

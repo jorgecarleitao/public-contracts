@@ -39,10 +39,9 @@ def home(request):
 
 @cache_page(60 * 60 * 24)
 def law_list(request):
-    context = {'laws': models.Document.objects
-        .exclude(type_id__in=[95, 97, 145, 150])
-        .order_by("-dre_doc_id")
-        .prefetch_related("type")}
+    context = {'laws': models.Document.laws
+                             .order_by("-dre_doc_id")
+                             .prefetch_related("type")}
 
     context = build_laws_list_context(context, request.GET)
 

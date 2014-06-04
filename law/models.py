@@ -62,6 +62,15 @@ class Creator(models.Model):
         return self.name
 
 
+class LawDocumentManager(models.Manager):
+    """
+    A Document manager that only returns laws,
+    excluding Diary summaries and technical sheets.
+    """
+    def get_queryset(self):
+        return super(LawDocumentManager, self).get_queryset().exclude(type__id__in=[95, 97, 145, 150])
+
+
 class Document(models.Model):
     type = models.ForeignKey(Type)
     creator = models.ForeignKey(Creator, null=True)
@@ -82,6 +91,9 @@ class Document(models.Model):
     series_number = models.CharField(max_length=10)
     series_other = models.CharField(max_length=30, blank=True)
     series_pages = models.CharField(max_length=50)
+
+    objects = models.Manager()  # default manager.
+    laws = LawDocumentManager()
 
     def get_base_url(self):
         return dre_url_formater.format(document_id=self.dre_doc_id)
