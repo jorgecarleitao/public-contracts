@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 
@@ -28,8 +29,8 @@ def build_contract_list_context(context, GET):
     key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
-        context['contracts'] = context['contracts'].filter(description__search=GET[key],
-                                                           contract_description__search=GET[key])
+        context['contracts'] = context['contracts'].filter(Q(description__search=GET[key]) |
+                                                           Q(contract_description__search=GET[key]))
         context['search'] = GET[key]
 
     key = 'sorting'
