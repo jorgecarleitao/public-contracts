@@ -7,7 +7,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            moment.lang('pt');
+            moment.lang('{{ LANGUAGE_CODE }}');
             var locale = {applyLabel: '{% trans 'Apply' %}',
                           cancelLabel: '{% trans 'Cancel' %}',
                           fromLabel: '{% trans 'From' %}',

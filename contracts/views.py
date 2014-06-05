@@ -25,6 +25,8 @@ def build_contract_list_context(context, GET):
     page = GET.get(_('page'))
     if context['selector'].is_valid():
         GET = context['selector'].cleaned_data
+    else:
+        GET = {}
 
     key = 'search'
     if key in GET and GET[key]:
