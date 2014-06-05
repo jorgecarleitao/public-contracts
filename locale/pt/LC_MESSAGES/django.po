@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 16:50+0100\n"
+"POT-Creation-Date: 2014-06-05 19:05+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,8 +68,7 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:60 contracts/views.py:22 contracts/views.py:96
-#: contracts/views.py:158
+#: contracts/entity_views.py:60 contracts/views.py:107 contracts/views.py:169
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
@@ -79,8 +78,8 @@ msgid "search"
 msgstr "procura"
 
 #: contracts/entity_views.py:74 contracts/entity_views.py:75
-#: contracts/views.py:29 contracts/views.py:30 contracts/views.py:110
-#: contracts/views.py:111 contracts/views.py:164 contracts/views.py:165
+#: contracts/views.py:121 contracts/views.py:122 contracts/views.py:175
+#: contracts/views.py:176
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
@@ -94,8 +93,8 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:84 contracts/views.py:40 contracts/views.py:121
-#: contracts/views.py:175 deputies/views.py:47 law/views.py:23
+#: contracts/entity_views.py:84 contracts/views.py:24 contracts/views.py:132
+#: contracts/views.py:186 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -140,27 +139,35 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/forms.py:9
+#: contracts/forms.py:20
 msgid "filter contracts"
-msgstr "procurar contratos"
+msgstr "filtrar contratos"
 
-#: contracts/forms.py:14
+#: contracts/forms.py:25
 msgid "order"
 msgstr "ordem"
 
-#: contracts/forms.py:15 contracts/views.py:15 contracts/views.py:35
-#: contracts/views.py:151 contracts/views.py:170
+#: contracts/forms.py:26 contracts/views.py:15 contracts/views.py:42
+#: contracts/views.py:162 contracts/views.py:181
 #: contracts/templates/contracts/tender_list/search.html:21
 #: contracts/templates/contracts/tender_list/search.html:36
 msgid "date"
 msgstr "data"
 
-#: contracts/forms.py:16 contracts/views.py:15 contracts/views.py:35
-#: contracts/views.py:151 contracts/views.py:170
+#: contracts/forms.py:27 contracts/views.py:15 contracts/views.py:42
+#: contracts/views.py:162 contracts/views.py:181
 #: contracts/templates/contracts/tender_list/search.html:16
 #: contracts/templates/contracts/tender_list/search.html:34
 msgid "price"
 msgstr "preço"
+
+#: contracts/forms.py:32
+msgid "date range"
+msgstr "filtrar por data"
+
+#: contracts/forms.py:48
+msgid "range"
+msgstr "datas"
 
 #: contracts/urls.py:15 deputies/urls.py:9 law/urls.py:7
 msgid "home"
@@ -195,13 +202,13 @@ msgstr "entidade"
 msgid "category"
 msgstr "categoria"
 
-#: contracts/views.py:85 contracts/views.py:91 contracts/views.py:116
+#: contracts/views.py:96 contracts/views.py:102 contracts/views.py:127
 #: contracts/templates/contracts/entity_list/search_entities.html:18
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:85 contracts/views.py:93 contracts/views.py:116
+#: contracts/views.py:96 contracts/views.py:104 contracts/views.py:127
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "expenses"
@@ -570,13 +577,26 @@ msgstr "Nesta categoria:"
 msgid "Categorized as:"
 msgstr "Categorizado como:"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:9
+#: contracts/templates/contracts/contract_list/search_contracts.html:8
 msgid "Apply filter and order"
 msgstr "Aplicar filtros e ordenação"
 
-#: contracts/templates/contracts/contract_list/search_contracts.html:9
+#: contracts/templates/contracts/contract_list/search_contracts.html:8
+#: contracts/templates/contracts/contract_list/selector_template.html:11
 msgid "Apply"
 msgstr "Aplicar"
+
+#: contracts/templates/contracts/contract_list/selector_template.html:12
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: contracts/templates/contracts/contract_list/selector_template.html:13
+msgid "From"
+msgstr "De"
+
+#: contracts/templates/contracts/contract_list/selector_template.html:14
+msgid "To"
+msgstr "A"
 
 #: contracts/templates/contracts/contract_view/main.html:21
 msgid "Signed:"

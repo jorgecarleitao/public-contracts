@@ -19,15 +19,22 @@ def build_contract_list_context(context, GET):
 
         return querySet.order_by(ordering[order]), True
 
-    key = _('search')
+    context['selector'] = ContractSelectorForm(GET)
+
+    page = GET.get(_('page'))
+    if context['selector'].is_valid():
+        GET = context['selector'].cleaned_data
+
+    key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
         context['contracts'] = context['contracts'].filter(description__search=GET[key],
                                                            contract_description__search=GET[key])
         context['search'] = GET[key]
 
-    if _('sorting') in GET:
-        order = GET[_('sorting')]
+    key = 'sorting'
+    if key in GET and GET[key]:
+        order = GET[key]
 
         context['contracts'], applied = apply_order(context['contracts'], order)
 
@@ -36,8 +43,14 @@ def build_contract_list_context(context, GET):
         if applied:
             context['ordering'] = order_name[order]
 
+    key = 'range'
+    if key in GET and GET[key]:
+        start_date = GET[key][0]
+        end_date = GET[key][1]
+        context['contracts'] = context['contracts'].filter(signing_date__gte=start_date,
+                                                           signing_date__lte=end_date)
+
     paginator = Paginator(context['contracts'], 20)
-    page = GET.get(_('page'))
     try:
         context['contracts'] = paginator.page(page)
     except PageNotAnInteger:
@@ -46,8 +59,6 @@ def build_contract_list_context(context, GET):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         context['contracts'] = paginator.page(paginator.num_pages)
-
-    context['selector'] = ContractSelectorForm(GET)
 
     return context
 

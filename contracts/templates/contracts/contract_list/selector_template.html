@@ -1,7 +1,21 @@
+{% load i18n %}
 {% for field in form %}
     <div class="form-group">
-    {{ field.errors }}
+        {{ field.errors }}
         <label for="{{field.auto_id}}" class="sr-only">{{ field.title }}</label>
         {{ field }}
     </div>
+    <script>
+        $(document).ready(function() {
+            moment.lang('pt');
+            var locale = {applyLabel: '{% trans 'Apply' %}',
+                          cancelLabel: '{% trans 'Cancel' %}',
+                          fromLabel: '{% trans 'From' %}',
+                          toLabel: '{% trans 'To' %}'};
+            $('.datepicker').daterangepicker({
+                opens: 'left',
+                format: moment()._lang._longDateFormat['L'],
+                locale: locale});
+        });
+    </script>
 {% endfor %}
