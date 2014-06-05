@@ -3,6 +3,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 
 from . import models
+from contracts.forms import ContractSelectorForm
 
 
 def home(request):
@@ -45,6 +46,8 @@ def build_contract_list_context(context, GET):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         context['contracts'] = paginator.page(paginator.num_pages)
+
+    context['selector'] = ContractSelectorForm(GET)
 
     return context
 
