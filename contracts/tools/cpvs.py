@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def get_xml():
     """
-    Gets the xml directly from the server.
+    Gets the xml file directly from the server.
 
     This does not work as of May 2014 since the zip is compressed using type 9,
     which is proprietary and Python doesn't support it.
@@ -28,14 +28,14 @@ def get_xml():
     return tree.getroot()
 
 
-def build_categories(file_path=''):
+def build_categories(file_directory=''):
     """
     Builds the Categories with tree from the xml file available in:
     http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip
     """
-    file_path += 'cpv_2008.xml'
+    file_directory += 'cpv_2008.xml'
 
-    tree = xml.etree.ElementTree.parse(file_path)
+    tree = xml.etree.ElementTree.parse(file_directory)
     root = tree.getroot()
 
     data = {}

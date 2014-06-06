@@ -22,8 +22,6 @@ def clean_place(value):
 
     # split each in (country, district, council)
     places = [re.split(', ', place) for place in places]
-
-
     place = places[0]
     # remove locations not determined
     place = [location for location in place if 'não determinado' not in location]
