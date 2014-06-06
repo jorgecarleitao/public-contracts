@@ -8,29 +8,23 @@ CPVS importer
 .. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
 .. _`nested set`: https://en.wikipedia.org/wiki/Nested_set_model
 
-This document documents how we build the database of categories, and how we create a tree out of it.
+This section documents how we create the initial fixture for :class:`contracts.models.Category`.
 
 Europe Union has a categorisation system for public contracts, CPVS_, that translates a string of 8 digits
 into a category to be used in public contracts.
 
 More than categories, the system builds a tree_ with broader categories like "agriculture",
-and more specific ones like "potatos". For more information, see CPVS_.
+and more specific ones like "potatos", see CPVS_.
 
-In their website, they provide an .xml file with all these categories.
-We use it to build our database.
+In their website, they provide an <XML file `http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip`>
+with all these categories. We use it to build the tree.
 
-We have two methods:
+.. function:: build_categories(file_directory='')
 
-.. function:: build_cpvs([file_path])
+    Imports the XML file and constructs the category tree, using :class:`contracts.models.Category`.
 
-    Imports the file to a python xml.etree.ElementTree and saves each CPV into a table for CPVs.
-    If the CPV already exists, it skips it.
+    Gets the most general categories, and saves then, repeating this recursively to more specific categories
+    until it reaches the leaves of the tree.
 
-    The optional file_path defaults to '../data/cpv_2008.xml'
-
-.. function:: build_tree()
-
-    Builds the tree of CPVs from the table of CPVs.
-
-    Filters the most general category, and saves it. Associates each of the more
-    specific categories within the general category, and saves then. Repeats this for all the levels.
+    Assumes the file is named ``cpv_2008.xml``, and can be supplied with the directory where
+    the file is.

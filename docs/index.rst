@@ -10,6 +10,7 @@ Contents:
    usage
    api
    tools
+   website/website
    contribute
 
 .. include:: introduction.rst

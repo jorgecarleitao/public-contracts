@@ -14,11 +14,13 @@ and that you start a Python session from there (e.g. enter "python" in the termi
 Setup
 -----
 
-To use Django_, we have to setup it first. In the module set_up in package tools,
-we provide a function to that, which we use::
+To use Django_, we have to setup it first. In the module ``set_up`` in package tools,
+we provide a function to that, which we now use::
 
     >>> from tools.set_up import set_up_django_environment
     >>> set_up_django_environment('tools.settings')
+
+This sets up a minimal Django environment using the settings file ``tools/settings.py``.
 
 Accessing the database
 ----------------------
@@ -49,13 +51,13 @@ entities (a joint contract), but also each entity can have several contracts.
 
 In fact, each contract has two ManyToMany: the entities that paid, and the entities that were paid.
 
-Lets say we want the entity that paid contract 791452. In that case, we pick the set of all entities that paid,
+Lets say we want the entity that paid this contract. In that case, we pick the set of all entities that paid,
 and select the first one::
 
     >>> entity = contract.contractors.all()[0]
     >>> print(entity)
 
-Let's pick the contracts this entity made. To that, we use the "contracts_made" of the entity::
+Let's now pick the contracts that this entity made. To that, we use the "contracts_made" of the entity::
 
     >>> entity_contracts = entity.contracts_made.all()
 
@@ -85,13 +87,16 @@ is the following::
 Again, you `can check`_ on the official website.
 
 As a final example, we are going to use a filter. Lets say you want all the above
-contracts, but restricted to prices higher than 10.000€. For this, we need to "filter" the contracts::
+contracts, but restricted to prices higher than 10.000€. For this, we need to "filter" these contracts::
 
     >>> expensive_contracts = entity_contracts.filter(price__gt=10000*100)
     >>> print(expensive_contracts.count())
 
 The "price__gt" means price `(g)reater (t)han <Django queries API>`_, and we multiply by 100 because
-:attr:`prices are in euro cents price <models.Contract.price>`.
+:attr:`prices are in euro cents <models.Contract.price>`.
+
+For now, that's it. You now have the minimal knowledge to ask your own questions. In section :doc:`here <api>`
+you can find references of all models.
 
 Notes:
 
