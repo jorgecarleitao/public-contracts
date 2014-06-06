@@ -12,13 +12,23 @@ def home(request):
 
 
 def build_contract_list_context(context, GET):
+    """
+    Uses parameters GET (from a request) to modify the context
+    of contracts lists.
+
+    Validates GET using ``ContractSelectorForm``, and uses
+    the ``cleaned_data`` to apply date filter, search,
+    and ordering to ``context['contracts']``.
+
+    Returns the modified context.
+    """
     def apply_order(querySet, order):
         ordering = {_('price'): '-price', _('date'): '-signing_date'}
 
         if order not in ordering:
-            return querySet, False
+            return querySet
 
-        return querySet.order_by(ordering[order]), True
+        return querySet.order_by(ordering[order])
 
     context['selector'] = ContractSelectorForm(GET)
 
@@ -33,18 +43,6 @@ def build_contract_list_context(context, GET):
         context[key] = GET[key]
         context['contracts'] = context['contracts'].filter(Q(description__search=GET[key]) |
                                                            Q(contract_description__search=GET[key]))
-        context['search'] = GET[key]
-
-    key = 'sorting'
-    if key in GET and GET[key]:
-        order = GET[key]
-
-        context['contracts'], applied = apply_order(context['contracts'], order)
-
-        # if it is a valid ordering, we send it to the template.
-        order_name = {_('price'): 'price', _('date'): 'date'}
-        if applied:
-            context['ordering'] = order_name[order]
 
     key = 'range'
     if key in GET and GET[key]:
@@ -52,6 +50,10 @@ def build_contract_list_context(context, GET):
         end_date = GET[key][1]
         context['contracts'] = context['contracts'].filter(signing_date__gte=start_date,
                                                            signing_date__lte=end_date)
+
+    key = 'sorting'
+    if key in GET and GET[key]:
+        context['contracts'] = apply_order(context['contracts'], GET[key])
 
     paginator = Paginator(context['contracts'], 20)
     try:
