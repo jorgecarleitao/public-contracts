@@ -3,7 +3,10 @@ from unittest import TestCase
 import datetime
 from django.core.exceptions import ValidationError
 
-from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField
+from contracts.crawler import ContractsStaticDataCrawler
+from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField, \
+    CountryChoiceField
+from contracts import models
 
 
 class PriceFieldTestCase(TestCase):
@@ -68,3 +71,21 @@ class CPVSFieldTestCase(TestCase):
 
     def test_none(self):
         self.assertEqual(self.field.clean(''), None)
+
+
+class CountryChoiceFieldTestCase(TestCase):
+    def setUp(self):
+        crawler = ContractsStaticDataCrawler()
+        crawler.retrieve_and_save_countries()
+
+        self.field = CountryChoiceField(required=False)
+
+    def test_none(self):
+        self.assertEqual(self.field.clean('Não definido.'), None)
+
+    def test_valid(self):
+        self.assertEqual(self.field.clean('Portugal'), models.Country.objects.get(name='Portugal'))
+        self.assertEqual(self.field.clean('Alemanha'), models.Country.objects.get(name='Alemanha'))
+
+    def test_invalid(self):
+        self.assertRaises(ValidationError, self.field.clean, 'Non-country')
