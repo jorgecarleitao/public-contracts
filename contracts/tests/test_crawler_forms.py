@@ -54,3 +54,17 @@ class TimeDeltaFieldTestCase(TestCase):
 
     def test_zero(self):
         self.assertEqual(self.field.clean('0 dias.'), datetime.timedelta(days=0))
+
+
+class CPVSFieldTestCase(TestCase):
+    def setUp(self):
+        self.field = CPVSField(required=False)
+
+    def test_correct(self):
+        self.assertEqual(self.field.clean('45233141-9, Manutenção de estradas'), '45233141-9')
+
+    def test_incorrect(self):
+        self.assertRaises(ValidationError, self.field.clean, '4523314-9, Manutenção de estradas')
+
+    def test_none(self):
+        self.assertEqual(self.field.clean(''), None)

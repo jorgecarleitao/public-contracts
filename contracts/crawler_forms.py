@@ -63,7 +63,7 @@ class CPVSField(CharField):
     """
     def clean(self, value):
         value = super(CPVSField, self).clean(value)
-        if value is None:
+        if value == '':
             return None
 
         expression = re.compile("(\d{8}-\d),.*")
@@ -72,7 +72,7 @@ class CPVSField(CharField):
         if match:
             return match.group(1)
         else:
-            return None
+            raise ValidationError('CPV "%s" not correct', value)
 
 
 class EntitiesField(ModelMultipleChoiceField):
