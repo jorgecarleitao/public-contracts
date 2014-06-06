@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 from contracts.crawler import ContractsStaticDataCrawler
 from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField, \
-    CountryChoiceField
+    CountryChoiceField, ContractTypeField
 from contracts import models
 
 
@@ -89,3 +89,29 @@ class CountryChoiceFieldTestCase(TestCase):
 
     def test_invalid(self):
         self.assertRaises(ValidationError, self.field.clean, 'Non-country')
+
+
+class ContractTypeFieldTestCase(TestCase):
+    def setUp(self):
+        crawler = ContractsStaticDataCrawler()
+        crawler.retrieve_and_save_contracts_types()
+
+        self.field = ContractTypeField(required=False)
+
+    def test_none(self):
+        self.assertEqual(self.field.clean('Não definido.'), None)
+        self.assertEqual(self.field.clean('Outros Tipos (Não Preenchido)'), None)
+
+    def test_one(self):
+        self.assertEqual(self.field.clean('Concessão de obras públicas'),
+                         models.ContractType.objects.get(name='Concessão de obras públicas'))
+
+    def test_more_than_one(self):
+        self.assertEqual(self.field.clean('Concessão de obras públicas<br/>Aquisição de bens móveis'),
+                         models.ContractType.objects.get(name='Concessão de obras públicas'))
+
+        self.assertEqual(self.field.clean('Aquisição de bens móveis<br/>Concessão de obras públicas'),
+                         models.ContractType.objects.get(name='Aquisição de bens móveis'))
+
+        self.assertEqual(self.field.clean('Aquisição de bens móveis; Concessão de obras públicas'),
+                         models.ContractType.objects.get(name='Aquisição de bens móveis'))
