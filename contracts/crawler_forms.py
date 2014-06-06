@@ -1,3 +1,4 @@
+# coding=utf-8
 from datetime import timedelta
 import re
 
@@ -17,10 +18,20 @@ def clean_place(value):
     value='Portugal, Faro<BR/>Portugal'
     returns 'Portugal', 'Faro'
     """
-    names = re.split(', |<BR/>', value)
-    while len(names) < 3:
-        names.append(None)
-    return tuple(names)
+    places = re.split('<BR/>', value)  # different locations
+
+    # split each in (country, district, council)
+    places = [re.split(', ', place) for place in places]
+
+
+    place = places[0]
+    # remove locations not determined
+    place = [location for location in place if 'não determinado' not in location]
+
+    # fill place with Nones if incomplete
+    while len(place) < 3:
+        place.append(None)
+    return tuple(place)
 
 
 class PriceField(IntegerField):
