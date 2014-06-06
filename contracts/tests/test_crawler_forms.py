@@ -1,8 +1,9 @@
 # coding=utf-8
 from unittest import TestCase
+import datetime
 from django.core.exceptions import ValidationError
 
-from contracts.crawler_forms import PriceField, clean_place
+from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField
 
 
 class PriceFieldTestCase(TestCase):
@@ -41,3 +42,15 @@ class CleanPlaceTestCase(TestCase):
     def test_incomplete_more(self):
         value = clean_place('Portugal, Porto<BR/>Portugal')
         self.assertEqual(value, ('Portugal', 'Porto', None))
+
+
+class TimeDeltaFieldTestCase(TestCase):
+
+    def setUp(self):
+        self.field = TimeDeltaField()
+
+    def test_clean(self):
+        self.assertEqual(self.field.clean('10 dias.'), datetime.timedelta(days=10))
+
+    def test_zero(self):
+        self.assertEqual(self.field.clean('0 dias.'), datetime.timedelta(days=0))
