@@ -45,7 +45,7 @@ The API and the crawler are [documented](http://public-contracts.readthedocs.org
 
 `pip install django`
 
-`pip install mysql-python` 
+`pip install PyMySQL`
 
 2- Install [django-treebeard](https://github.com/tabo/django-treebeard), a dependency.
 
