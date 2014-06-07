@@ -152,13 +152,16 @@ class ContractTypeField(ModelChoiceField):
                                                 to_field_name='name', **kwargs)
 
     def clean(self, value):
-        if value == 'Outros Tipos (Não Preenchido)' or value == 'Não definido.':
+        if value == 'Não definido.':
             return None
         ## sometimes it has more than one type (~1 in 100.000); we only consider the first.
         if '<br/>' in value:
             value = value.split('<br/>')[0]
         elif '; ' in value:
             value = value.split('; ')[0]
+
+        if value.startswith('Outros'):
+            value = 'Outros'
 
         return super(ContractTypeField, self).clean(value)
 

@@ -100,7 +100,6 @@ class ContractTypeFieldTestCase(TestCase):
 
     def test_none(self):
         self.assertEqual(self.field.clean('Não definido.'), None)
-        self.assertEqual(self.field.clean('Outros Tipos (Não Preenchido)'), None)
 
     def test_one(self):
         self.assertEqual(self.field.clean('Concessão de obras públicas'),
@@ -115,3 +114,7 @@ class ContractTypeFieldTestCase(TestCase):
 
         self.assertEqual(self.field.clean('Aquisição de bens móveis; Concessão de obras públicas'),
                          models.ContractType.objects.get(name='Aquisição de bens móveis'))
+
+    def test_others(self):
+        self.assertEqual(self.field.clean('Outros Tipos (Concessão de exploração de bens do domínio público)'),
+                         models.ContractType.objects.get(name='Outros'))
