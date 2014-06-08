@@ -27,21 +27,21 @@ To crawl webpages, we use the Python package requests::
 
     pip install requests
 
-django-debug-toolbar (optional)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django-debug-toolbar
+^^^^^^^^^^^^^^^^^^^^
 
-To develop, we strongly recommend using ``django-debug-toolbar``, an
+To develop, we use ``django-debug-toolbar``, an
 utility Django app to debug Django websites::
 
     pip install django-debug-toolbar
 
-memcache (optional)
-^^^^^^^^^^^^^^^^^^^
+memcache
+^^^^^^^^
 
 We use a caching system, memcache, to minimize database hits and store analysis.
-To use it, you need to install memcache in your system, and its binding for Python::
+You need to install memcache in your system, and its binding for Python::
 
-    pip install python-memcached
+    pip install python3-memcached
 
 
 Running the website
