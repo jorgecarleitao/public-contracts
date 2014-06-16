@@ -325,6 +325,8 @@ class EntitiesCrawler(DynamicCrawler):
         form = EntityForm(prepared_data)
 
         if not form.is_valid():
+            logging.error('Validation of entity "%d" failed' %
+                          data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data
@@ -365,6 +367,8 @@ class ContractsCrawler(DynamicCrawler):
         form = ContractForm(prepared_data)
 
         if not form.is_valid():
+            logging.error('Validation of contract "%d" failed' %
+                          data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data
@@ -414,6 +418,8 @@ class TendersCrawler(DynamicCrawler):
         form = TenderForm(prepared_data)
 
         if not form.is_valid():
+            logging.error('Validation of tender "%d" failed' %
+                          data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data

@@ -61,7 +61,7 @@ class CPVSField(CharField):
     """
     def clean(self, value):
         value = super(CPVSField, self).clean(value)
-        if value == '':
+        if value in ('', 'Não definido.'):
             return None
 
         expression = re.compile("(\d{8}-\d),.*")

@@ -28,7 +28,7 @@ def update():
     affected_entities = crawler.update_all()
 
     # update entities cached data
-    for entity in affected_entities:
+    for entity in models.Entity.objects.all():
         entity.compute_data()
 
     # update categories cached data
