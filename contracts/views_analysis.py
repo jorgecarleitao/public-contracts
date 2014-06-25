@@ -125,7 +125,7 @@ def analysis(request):
     titles = OrderedDict([
         ('contracts_time_series', _('When do Portugal contract most?')),
         ('contracts_price_distribution', _('Distribution of prices of contracts')),
-        ('entities_values_distribution', _('Distribution of earnings')),
+        ('entities_values_distribution', _('Distribution of earnings of entities')),
         ('procedure_type_time_series', _('Percentage of contracts by direct procurement or public tender')),
         ('legislation_application_time_series', _('How many contracts are published too late?')),
 
