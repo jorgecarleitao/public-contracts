@@ -34,6 +34,29 @@ def get_price_histogram():
     return data
 
 
+def get_entities_value_histogram():
+    """
+    Since the distribution is broad, we use logarithmic bins.
+
+    For each bin, we filter contracts within these values.
+    40 was arbitrarily chosen, but includes all prices.
+    """
+    data = []
+    total_checker = 0
+    for x in range(5, 40):
+        expended = models.Entity.objects.filter(data__total_earned__gte=2**x,
+                                                data__total_earned__lt=2**(x+1)).count()
+        print(expended)
+        earned = models.Entity.objects.filter(data__total_expended__gte=2**x,
+                                              data__total_expended__lt=2**(x+1)).count()
+        data.append([(2**x)/100., earned, expended])  # price in euros
+
+    total = models.Entity.objects.count()
+    print(total, total_checker)
+
+    return data
+
+
 def get_entities_specificity(startswith_string):
     """
     1. We filter entities that start with "startswith_string"

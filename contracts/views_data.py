@@ -60,6 +60,26 @@ def contracts_price_histogram_json(request):
     return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
+def entities_values_histogram_json(request):
+
+    distribution = analysis_manager.get_analysis('entities_values_distribution')
+
+    earnings = {'values': [], 'key': _('entities earning')}
+    expenses = {'values': [], 'key': _('entities expending')}
+    for entry in distribution:
+        if entry[1] > 10 or entry[2] > 10:
+            earnings['values'].append(
+                {'min_position': int(entry[0] + 0.5),
+                 'max_position': int(entry[0]*2 + 0.5),
+                 'value': entry[1]})
+            expenses['values'].append(
+                {'min_position': int(entry[0] + 0.5),
+                 'max_position': int(entry[0]*2 + 0.5),
+                 'value': entry[2]})
+
+    return HttpResponse(json.dumps([earnings, expenses]), content_type="application/json")
+
+
 def contracts_macro_statistics_json(request):
     data = analysis_manager.get_analysis('contracts_macro_statistics')
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -199,7 +219,9 @@ AVAILABLE_VIEWS = {
 
     'ministries-contracts-time-series-json': ministries_contracts_time_series_json,
     'legislation-application-time-series-json': legislation_application_time_series_json,
-    }
+
+    'entities-values-histogram-json': entities_values_histogram_json,
+}
 
 
 def analysis_selector(request, analysis_name):

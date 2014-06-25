@@ -51,6 +51,13 @@ def contracts_price_histogram(request):
     return render(request, 'contracts/contracts_price_histogram/main.html', context)
 
 
+def entities_values_histogram(request):
+
+    context = {'navigation_tab': 'analysis'}
+
+    return render(request, 'contracts/entities_values_histogram/main.html', context)
+
+
 def procedure_types_time_series(request):
     context = {'navigation_tab': 'analysis'}
     return render(request, 'contracts/procedure_type_time_series/main.html', context)
@@ -106,6 +113,7 @@ AVAILABLE_VIEWS = {
     #'ministries_delta_time': ministries_delta_time,
 
     'contracts_price_distribution': contracts_price_histogram,
+    'entities_values_distribution': entities_values_histogram,
     'procedure_type_time_series': procedure_types_time_series,
     'contracts_time_series': contracts_time_series,
     'legislation_application_time_series': legislation_application_time_series
@@ -117,6 +125,7 @@ def analysis(request):
     titles = OrderedDict([
         ('contracts_time_series', _('When do Portugal contract most?')),
         ('contracts_price_distribution', _('Distribution of prices of contracts')),
+        ('entities_values_distribution', _('Distribution of earnings')),
         ('procedure_type_time_series', _('Percentage of contracts by direct procurement or public tender')),
         ('legislation_application_time_series', _('How many contracts are published too late?')),
 

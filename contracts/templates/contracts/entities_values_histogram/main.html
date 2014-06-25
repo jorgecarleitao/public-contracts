@@ -1,0 +1,32 @@
+{% extends "contracts/two_column_body.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block title %}{% trans "Distribution of earnings"%}{% endblock %}
+{% block content %}
+    <div class="text-element">
+        <h2>{% trans "How many entities earned/expended X Euros?"%}</h2>
+        <p>
+            A base de dados oficial de contratos públicos contém hoje milhares de contratos e entidades.
+            Nesta análise pretendemos conhecer a distribuição de ganhos e despesas das entidades, i.e,
+            quantas entidades ganharam/gastaram X euros:
+        </p>
+        {% include "contracts/entities_values_histogram/graph.html" %}
+        <p>
+            O gráfico contém todas as entidades até hoje (atualizado diariamente)
+            e foi construído contando o total de ganho/despesa de cada entidade.
+            As barras correspondem ao número de entidades que ganhou/gastou um valor em €
+            apresentado em cada barra (i.e. um histograma).
+        </p>
+        <ul>
+            <li>
+                Entidades que gastaram e ganharam são contabilizadas em ambos os gráficos.
+            </li>
+            <li>
+                Note que os valores no eixo do x estão em escala exponencial.
+            </li>
+            <li>
+                Pode filtrar os gráficos clicando nos círculos respectivos.
+            </li>
+        </ul>
+    </div>
+{% endblock %}

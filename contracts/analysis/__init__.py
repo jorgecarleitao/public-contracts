@@ -25,7 +25,9 @@ _allAnalysis = [Analysis('municipalities_delta_time',
                 Analysis('ministries_delta_time', get_entities_delta_time,
                          'Secretaria-Geral do Ministério'),
                 Analysis('legislation_application_time_series',
-                         get_legislation_application_time_series)
+                         get_legislation_application_time_series),
+                Analysis('entities_values_distribution',
+                         get_entities_value_histogram)
                 ]
 
 ANALYSIS = {'municipalities_delta_time': 1,
@@ -39,7 +41,8 @@ ANALYSIS = {'municipalities_delta_time': 1,
             'contracts_price_distribution': 9,
             'ministries_contracts_time_series': 10,
             'ministries_delta_time': 11,
-            'legislation_application_time_series': 12
+            'legislation_application_time_series': 12,
+            'entities_values_distribution': 13
             }
 
 PRIMARY_KEY = dict()

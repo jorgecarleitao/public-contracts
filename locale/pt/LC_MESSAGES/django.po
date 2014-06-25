@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 19:05+0100\n"
+"POT-Creation-Date: 2014-06-25 18:56+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,9 +19,9 @@ msgstr ""
 #: contracts/entity_urls.py:11 contracts/entity_urls.py:14
 #: contracts/entity_views.py:47 contracts/urls.py:15 contracts/urls.py:16
 #: contracts/urls.py:19 contracts/urls.py:21 contracts/urls.py:25
-#: contracts/urls.py:29 contracts/urls.py:30 contracts/views_data.py:124
-#: contracts/views_data.py:147 contracts/views_data.py:157
-#: contracts/views_data.py:167
+#: contracts/urls.py:29 contracts/urls.py:30 contracts/views_data.py:144
+#: contracts/views_data.py:167 contracts/views_data.py:177
+#: contracts/views_data.py:187
 #: contracts/templates/contracts/category_list/categories_loop.html:9
 #: contracts/templates/contracts/category_view/tab_summary/main.html:9
 #: contracts/templates/contracts/contracts_price_histogram/graph.html:29
@@ -68,7 +68,7 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:60 contracts/views.py:107 contracts/views.py:169
+#: contracts/entity_views.py:60 contracts/views.py:112 contracts/views.py:174
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
@@ -78,8 +78,8 @@ msgid "search"
 msgstr "procura"
 
 #: contracts/entity_views.py:74 contracts/entity_views.py:75
-#: contracts/views.py:121 contracts/views.py:122 contracts/views.py:175
-#: contracts/views.py:176
+#: contracts/views.py:126 contracts/views.py:127 contracts/views.py:180
+#: contracts/views.py:181
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
@@ -93,8 +93,8 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:84 contracts/views.py:24 contracts/views.py:132
-#: contracts/views.py:186 deputies/views.py:47 law/views.py:23
+#: contracts/entity_views.py:84 contracts/views.py:35 contracts/views.py:137
+#: contracts/views.py:191 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -147,15 +147,15 @@ msgstr "filtrar contratos"
 msgid "order"
 msgstr "ordem"
 
-#: contracts/forms.py:26 contracts/views.py:15 contracts/views.py:42
-#: contracts/views.py:162 contracts/views.py:181
+#: contracts/forms.py:26 contracts/views.py:26 contracts/views.py:167
+#: contracts/views.py:186
 #: contracts/templates/contracts/tender_list/search.html:21
 #: contracts/templates/contracts/tender_list/search.html:36
 msgid "date"
 msgstr "data"
 
-#: contracts/forms.py:27 contracts/views.py:15 contracts/views.py:42
-#: contracts/views.py:162 contracts/views.py:181
+#: contracts/forms.py:27 contracts/views.py:26 contracts/views.py:167
+#: contracts/views.py:186
 #: contracts/templates/contracts/tender_list/search.html:16
 #: contracts/templates/contracts/tender_list/search.html:34
 msgid "price"
@@ -185,6 +185,7 @@ msgid "categories"
 msgstr "categorias"
 
 #: contracts/urls.py:37
+#: contracts/templates/contracts/entities_values_histogram/graph.html:30
 #: contracts/templates/contracts/entity_rank/histogram.html:29
 #: contracts/templates/contracts/municipalities_delta_time/histogram.html:29
 msgid "entities"
@@ -202,67 +203,72 @@ msgstr "entidade"
 msgid "category"
 msgstr "categoria"
 
-#: contracts/views.py:96 contracts/views.py:102 contracts/views.py:127
+#: contracts/views.py:101 contracts/views.py:107 contracts/views.py:132
 #: contracts/templates/contracts/entity_list/search_entities.html:18
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:96 contracts/views.py:104 contracts/views.py:127
+#: contracts/views.py:101 contracts/views.py:109 contracts/views.py:132
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "expenses"
 msgstr "despesa"
 
-#: contracts/views_analysis.py:118
+#: contracts/views_analysis.py:126
 msgid "When do Portugal contract most?"
 msgstr "Quando é que o estado mais contrata?"
 
-#: contracts/views_analysis.py:119
+#: contracts/views_analysis.py:127
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/views_analysis.py:120
+#: contracts/views_analysis.py:128
+#: contracts/templates/contracts/entities_values_histogram/main.html:4
+msgid "Distribution of earnings"
+msgstr "Distribuição de ganhos"
+
+#: contracts/views_analysis.py:129
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/views_analysis.py:121
+#: contracts/views_analysis.py:130
 #: contracts/templates/contracts/legislation_application_time_series/main.html:4
 #: contracts/templates/contracts/legislation_application_time_series/main.html:7
 msgid "How many contracts are published too late?"
 msgstr "Quantos contratos são publicados demasiado tarde?"
 
-#: contracts/views_analysis.py:123
+#: contracts/views_analysis.py:132
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:4
 #: contracts/templates/contracts/municipalities_contracts_time_series/main.html:7
 msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
-#: contracts/views_analysis.py:124
+#: contracts/views_analysis.py:133
 msgid "How do portuguese municipalities contract most?"
 msgstr "Como é que os municípios mais contratam?"
 
-#: contracts/views_analysis.py:125
+#: contracts/views_analysis.py:134
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/views_analysis.py:126
+#: contracts/views_analysis.py:135
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/views_analysis.py:128
+#: contracts/views_analysis.py:137
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:4
 #: contracts/templates/contracts/ministries_contracts_time_series/main.html:7
 msgid "When do portuguese ministries contract most?"
 msgstr "Quando é que os ministérios mais contratam?"
 
-#: contracts/views_data.py:10 contracts/views_data.py:82
+#: contracts/views_data.py:10 contracts/views_data.py:102
 #: contracts/templates/contracts/entity_rank/graph.html:35
 #: contracts/templates/contracts/municipalities_delta_time/graph.html:34
 msgid "Ranking"
 msgstr "Ranking"
 
-#: contracts/views_data.py:31 contracts/views_data.py:104
+#: contracts/views_data.py:31 contracts/views_data.py:124
 msgid "Histogram"
 msgstr "Histograma"
 
@@ -270,15 +276,23 @@ msgstr "Histograma"
 msgid "histogram of contracts values"
 msgstr "Histograma do preços dos contratos"
 
-#: contracts/views_data.py:71 contracts/views_data.py:134
+#: contracts/views_data.py:67
+msgid "entities earning"
+msgstr "entidades que ganharam"
+
+#: contracts/views_data.py:68
+msgid "entities expending"
+msgstr "entidades que gastaram"
+
+#: contracts/views_data.py:91 contracts/views_data.py:154
 msgid "tender"
 msgstr "concurso público"
 
-#: contracts/views_data.py:72 contracts/views_data.py:135
+#: contracts/views_data.py:92 contracts/views_data.py:155
 msgid "direct procurement"
 msgstr "ajuste direto"
 
-#: contracts/views_data.py:177
+#: contracts/views_data.py:197
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
 
@@ -626,6 +640,7 @@ msgid "between"
 msgstr "entre"
 
 #: contracts/templates/contracts/contracts_price_histogram/graph.html:30
+#: contracts/templates/contracts/entities_values_histogram/graph.html:31
 #: contracts/templates/contracts/entity_rank/histogram.html:30
 #: contracts/templates/contracts/municipalities_delta_time/histogram.html:30
 msgid "and"
@@ -856,6 +871,24 @@ msgstr ""
 "contratos realizados pelos municípios que, por sua vez, influencia o número "
 "de contratos total."
 
+#: contracts/templates/contracts/entities_values_histogram/graph.html:30
+msgid "earned between"
+msgstr "ganharam entre"
+
+#: contracts/templates/contracts/entities_values_histogram/graph.html:36
+msgid "Earnings in €"
+msgstr "Ganhos em €"
+
+#: contracts/templates/contracts/entities_values_histogram/graph.html:40
+#: contracts/templates/contracts/entity_rank/histogram.html:39
+#: contracts/templates/contracts/municipalities_delta_time/histogram.html:39
+msgid "Number of entities"
+msgstr "Número de entidades"
+
+#: contracts/templates/contracts/entities_values_histogram/main.html:7
+msgid "How many entities earned/expended X Euros?"
+msgstr "Quantas entidades ganharam X euros?"
+
 #: contracts/templates/contracts/entity_list/entity_summary.html:12
 msgid "Expenses:"
 msgstr "Despesa:"
@@ -907,11 +940,6 @@ msgstr "dias"
 #: contracts/templates/contracts/municipalities_delta_time/histogram.html:35
 msgid "Average time (days)"
 msgstr "Tempo médio (dias)"
-
-#: contracts/templates/contracts/entity_rank/histogram.html:39
-#: contracts/templates/contracts/municipalities_delta_time/histogram.html:39
-msgid "Number of entities"
-msgstr "Número de entidades"
 
 #: contracts/templates/contracts/entity_rank/main.html:4
 msgid "Entities index"
