@@ -14,6 +14,9 @@ class DateRangeField(forms.DateField):
 
 
 class ContractSelectorForm(forms.Form):
+    CHOICES = ((_('date'), _('date')),
+               (_('price'), _('price')))
+    SORTING_LOOKUPS = {_('date'): '-signing_date', _('price'): '-price'}
 
     search = forms.CharField(required=False,
                              widget=forms.TextInput(attrs={'class': 'form-control',
@@ -23,9 +26,7 @@ class ContractSelectorForm(forms.Form):
     sorting = forms.ChoiceField(required=False,
                                 widget=forms.Select(attrs={'class': 'form-control',
                                                            'title': _('order')}),
-                                choices=((_('date'), _('date')),
-                                         (_('price'), _('price')),
-                                         )
+                                choices=CHOICES,
                                 )
 
     range = DateRangeField(required=False,

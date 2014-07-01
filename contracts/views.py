@@ -24,17 +24,9 @@ def build_contract_list_context(context, GET):
 
     Returns the modified context.
     """
-    def apply_order(querySet, order):
-        ordering = {_('price'): '-price', _('date'): '-signing_date'}
-
-        if order not in ordering:
-            return querySet
-
-        return querySet.order_by(ordering[order])
+    page = GET.get(_('page'))
 
     context['selector'] = ContractSelectorForm(GET)
-
-    page = GET.get(_('page'))
     if context['selector'].is_valid():
         GET = context['selector'].cleaned_data
     else:
@@ -43,19 +35,23 @@ def build_contract_list_context(context, GET):
     key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
-        context['contracts'] = context['contracts'].filter(Q(description__search=GET[key]) |
-                                                           Q(contract_description__search=GET[key]))
+        context['contracts'] = context['contracts'].search(GET[key])
 
     key = 'range'
     if key in GET and GET[key]:
         start_date = GET[key][0]
         end_date = GET[key][1]
-        context['contracts'] = context['contracts'].filter(signing_date__gte=start_date,
-                                                           signing_date__lte=end_date)
+        if context['contracts'].search_mode:
+            context['contracts'] = context['contracts'].search_filter(signing_date__gte=start_date,
+                                                                      signing_date__lte=end_date)
+        else:
+            context['contracts'] = context['contracts'].filter(signing_date__gte=start_date,
+                                                               signing_date__lte=end_date)
 
     key = 'sorting'
-    if key in GET and GET[key]:
-        context['contracts'] = apply_order(context['contracts'], GET[key])
+    if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
+        context['contracts'] = context['contracts'].order_by(
+            context['selector'].SORTING_LOOKUPS[GET[key]])
 
     paginator = Paginator(context['contracts'], 20)
     try:
@@ -74,7 +70,7 @@ def contracts_list(request):
     """
     View that controls the contracts list.
     """
-    contracts = models.Contract.objects.all().prefetch_related("contracted", "contractors", "category")
+    contracts = indexes.ContractIndex.objects.all().prefetch_related("contracted", "contractors", "category")
     context = {'contracts': contracts, 'navigation_tab': 'contracts'}
 
     context = build_contract_list_context(context, request.GET)
@@ -90,11 +86,8 @@ def categories_list(request):
 
     context = {'navigation_tab': 'categories',
                'categories': categories,
-               'contracts': models.Contract.objects.filter(category=None).prefetch_related("contracted", "contractors", "category"),
                'no_code': True,
                }
-
-    context = build_contract_list_context(context, request.GET)
 
     return render(request, 'contracts/category_list/main.html', context)
 
@@ -121,7 +114,7 @@ def build_entity_list_context(context, GET):
         except ValueError:
             nif = None
         if not nif:
-            context['entities'] = context['entities'].search('@name ' + GET[key])
+            context['entities'] = context['entities'].search(GET[key])
 
         context['search'] = GET[key]
 

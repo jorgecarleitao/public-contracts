@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
 from . import models
+from . import indexes
 from .views import build_contract_list_context, build_tender_list_context
 from .analysis.analysis import add_months
 
@@ -30,12 +31,14 @@ def main_view(request, entity_id, slug=None):
 def contracts(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    all_contracts = entity.last_contracts().prefetch_related("contracted", "contractors", "category")
+    contracts = indexes.ContractIndex.objects.filter(id__in=entity.get_contracts_ids())\
+        .search_filter(id__in=entity.get_contracts_ids())\
+        .prefetch_related("contracted", "contractors", "category")
 
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'contracts',
-               'contracts': all_contracts}
+               'contracts': contracts}
 
     ## filter contracts by ordering and pagination
     context = build_contract_list_context(context, request.GET)

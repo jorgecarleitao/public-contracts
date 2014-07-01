@@ -1,5 +1,5 @@
 from sphinxql import indexes, fields
-from .models import Entity
+from .models import Entity, Contract
 
 
 class EntityIndex(indexes.Index):
@@ -9,9 +9,13 @@ class EntityIndex(indexes.Index):
         model = Entity
 
 
-# class ContractIndex(indexes.Index):
-#     name = fields.Text('description')
-#     description = fields.Text('contract_description')
-#
-#     class Meta:
-#         model = Contract
+class ContractIndex(indexes.Index):
+    name = fields.Text('description')
+    description = fields.Text('contract_description')
+
+    signing_date = fields.Date('signing_date')
+
+    category_id = fields.Integer('category')
+
+    class Meta:
+        model = Contract

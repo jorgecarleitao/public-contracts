@@ -1,6 +1,7 @@
 from django.db.models import Sum, Count
 from django.shortcuts import render, get_object_or_404
 
+from . import indexes
 from . import models
 from .views import build_contract_list_context, build_tender_list_context
 from .entity_views import build_costumer_list_context
@@ -27,9 +28,11 @@ def main_view(request, category_id):
 
 def contracts(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
-    categories_ids = list(models.Category.get_tree(category).values_list('id'))
+    categories_ids = models.Category.get_tree(category).values_list('id', flat=True)
 
-    contracts = models.Contract.objects.filter(category_id__in=categories_ids).prefetch_related("contracted", "contractors", "category")
+    contracts = indexes.ContractIndex.objects.filter(category_id__in=categories_ids)\
+        .search_filter(category_id__in=list(categories_ids))\
+        .prefetch_related("contracted", "contractors", "category")
 
     context = {'navigation_tab': 'categories',
                'category': category,
