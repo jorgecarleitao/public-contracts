@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect
 from . import models
 from contracts.forms import ContractSelectorForm
 
+from . import indexes
+
 
 def home(request):
     return render(request, 'contracts/main_page.html')
@@ -105,9 +107,9 @@ def build_entity_list_context(context, GET):
             return querySet, False
 
         if order == _('earnings'):
-            return querySet.order_by('-data__total_earned'), True
+            return querySet.order_by('-data__total_earned').search_order_by(), True
         elif order == _('expenses'):
-            return querySet.order_by('-data__total_expended'), True
+            return querySet.order_by('-data__total_expended').search_order_by(), True
 
     key = _('search')
     if key in GET and GET[key]:
@@ -119,7 +121,7 @@ def build_entity_list_context(context, GET):
         except ValueError:
             nif = None
         if not nif:
-            context['entities'] = context['entities'].filter(name__search=GET[key])
+            context['entities'] = context['entities'].search('@name ' + GET[key])
 
         context['search'] = GET[key]
 
@@ -148,7 +150,7 @@ def build_entity_list_context(context, GET):
 
 
 def entities_list(request):
-    entities = models.Entity.objects.all().select_related("data")
+    entities = indexes.EntityIndex.objects.all().select_related("data")
 
     context = {'navigation_tab': 'entities',
                'entities': entities}

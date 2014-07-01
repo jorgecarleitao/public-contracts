@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     'deputies',
     'law',
     'treebeard',  # for model in trees
+    'sphinxql',
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
 )
@@ -124,6 +125,23 @@ INSTALLED_APPS = (
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
     MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
+
+
+INDEXES = {
+    'PATH': os.path.join(site_directory, '_index'),
+    'sphinx_path': site_directory,
+    'index_params': {
+        'charset_table':
+        'U+00C0..U+00C3->U+00E0..U+00E3, U+00E0..U+00E3, '  # Á..Â -> á..â
+        'U+00EA, U+00CA->U+00EA, '  #Ê -> ê
+        'U+00E9, U+00C9->U+00E9, '  #É -> é
+        'U+00ED, U+00CD->U+00ED, '  #Í -> í
+        'U+00F2..U+00F5, U+00D2..U+00D5->U+00F2..U+00F5, '  #Ó -> ó
+        'U+00FA, U+00DA->U+00FA, '  #Ú -> ú
+        'U+00E7, U+00C7->U+00E7, '  #Ç -> ç
+        '0..9, A..Z->a..z, _, a..z'
+    },
+}
 
 
 LOGGING = {
