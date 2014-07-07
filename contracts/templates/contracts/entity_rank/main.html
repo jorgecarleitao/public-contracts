@@ -1,4 +1,4 @@
-{% extends "contracts/two_column_body.html" %}
+{% extends "contracts/base.html" %}
 {% load i18n %}
 {% load static %}
 {% block title %}{% trans "Entities index"%}{% endblock %}
@@ -33,8 +33,4 @@
             });
         });
     </script>
-
-{% endblock %}
-{% block sidebar %}
-    {% include "contracts/entity_rank/sidebar.html" %}
 {% endblock %}

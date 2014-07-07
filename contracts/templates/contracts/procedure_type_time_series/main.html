@@ -1,4 +1,4 @@
-{% extends "contracts/two_column_body.html" %}
+{% extends "contracts/base.html" %}
 {% load i18n %}
 {% load static %}
 {% block title %}Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?{% endblock %}
@@ -56,7 +56,4 @@
             deste projecto.
         </p>
     </div>
-{% endblock %}
-{% block sidebar %}
-    {% include "contracts/procedure_type_time_series/sidebar.html" %}
 {% endblock %}
