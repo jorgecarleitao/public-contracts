@@ -128,14 +128,6 @@ class Entity(models.Model):
     def get_absolute_url(self):
         return reverse('entity', args=(self.id, slugify(self.name)))
 
-    def add_contract_as_contracted(self, contract):
-        self.data.total_earned += contract.price
-        self.data.save()
-
-    def add_contract_as_contractor(self, contract):
-        self.data.total_expended += contract.price
-        self.data.save()
-
     def compute_data(self):
         """
         Computes the data of this entity from the existing relations.

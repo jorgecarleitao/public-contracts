@@ -59,19 +59,6 @@ API
 
         This method is used when the crawler updates new contracts.
 
-    .. method:: add_contract_as_contractor(contract)
-
-        Updates its data expenses by adding contract's value.
-
-    .. method:: add_contract_as_contracted(contract)
-
-        Updates its data earnings by adding contract's value.
-
-    While :meth:`compute_data` computes the totals by summing all contract's value,
-    :meth:`add_contract_as_contractor` and :meth:`add_contract_as_contracted` updates
-    the totals with using the information of one contract.
-
-
 .. class:: models.EntityData
 
     Data of an entity that is not retrieved from Base, i.e, it is computed with existing data.
