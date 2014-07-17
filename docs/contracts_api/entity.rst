@@ -48,6 +48,10 @@ API
 
         Returns the url of this entity in Base_.
 
+    .. method:: get_absolute_url()
+
+        Returns the url of this entity on this website.
+
     And the following setters:
 
     .. method:: compute_data()
