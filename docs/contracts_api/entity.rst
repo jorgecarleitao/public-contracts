@@ -48,10 +48,6 @@ API
 
         Returns the url of this entity in Base_.
 
-    .. method:: count_contracts()
-
-        Returns the number of contracts this entity is a contractor.
-
     And the following setters:
 
     .. method:: compute_data()

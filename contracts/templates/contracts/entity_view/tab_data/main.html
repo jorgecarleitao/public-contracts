@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load contracts.humanize %}
 {% block entity_content %}
-    {% with count_contracts=entity.count_contracts count_contracts_received=entity.count_contracts_received %}
+    {% with count_contracts=entity.contracts_made.count count_contracts_received=entity.contract_set.count %}
         <div class="container">
             <ul>
                 <li>
