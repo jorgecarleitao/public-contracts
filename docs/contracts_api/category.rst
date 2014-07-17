@@ -53,7 +53,7 @@ API
 
     .. method:: get_children()
 
-        Returns all children categories.
+        Returns all children categories, excluding itself.
 
     .. method:: get_ancestors()
 
@@ -63,26 +63,12 @@ API
 
         Returns the url of this category in the website.
 
-    .. method:: own_contracts()
-
-        Returns all contracts that specifically belong to this category (i.e. have same CPVS code).
-
-    .. method:: contracts()
-
-        Returns all contracts that belong to either this category or any of its children.
-
-    .. method:: own_contracts_count()
     .. method:: contracts_count()
 
-        Counts the contracts that:
-            belong to this category
+        Counts the number of all contracts that belong to this category or any of
+        its children.
 
-            belong to this category or any of its children.
-
-    .. method:: own_contracts_price()
     .. method:: contracts_price()
 
-        Sums the prices of the contracts that:
-            belong to this category
-
-            belong to this category or any of its children.
+        Sums the prices of all contracts that belong to this category or any of
+        its children.

@@ -35,38 +35,39 @@ class Category(NS_Node):
     def get_absolute_url(self):
         return reverse('category', args=[self.pk])
 
-    def _own_contracts_aggregate(self, flush_cache=False):
-        cache_name = __name__ + '>_own_contracts_aggregate' + '>%s' % self.code
-        aggregate = cache.get(cache_name)
-        if aggregate is None or flush_cache:
-            aggregate = dict(self.contract_set.aggregate(Sum('price'), Count('price')))
-            cache.set(cache_name, aggregate, 60*60*24)
-        return aggregate
-
-    def own_contracts_count(self):
-        return self._own_contracts_aggregate()['price__count']
-
-    def own_contracts_price(self):
-        return self._own_contracts_aggregate()['price__sum']
-
     def _contracts_aggregate(self, flush_cache=False):
+        """
+        Stores in cache and returns the count and sum of prices of all contracts
+        with this and child categories.
+
+        If `flush_cache` is true, the aggregate is re-computed and re-cached.
+        """
         cache_name = __name__ + '>_contracts_aggregate' + '>%s' % self.code
         aggregate = cache.get(cache_name)
+
         if aggregate is None or flush_cache:
-            categories = self.get_tree(self)
-            aggregate = dict(categories.aggregate(count=Count("contract__id"), price_sum=Sum("contract__price")))
+            # get ids of all categories child of self (self included)
+            categories_ids = list(self.get_tree(self).values_list('id'))
+
+            # construct the aggregate over contracts
+            aggregate = Contract.objects.filter(category_id__in=categories_ids)\
+                .aggregate(count=Count('id'), price=Sum('price'))
+
+            # hit db
+            aggregate = dict(aggregate)
+
             cache.set(cache_name, aggregate, 60*60*24)
+
         return aggregate
 
     def contracts_price(self):
-        return self._contracts_aggregate()['price_sum']
+        return self._contracts_aggregate()['price']
 
     def contracts_count(self):
         return self._contracts_aggregate()['count']
 
     def compute_data(self):
         self._contracts_aggregate(flush_cache=True)
-        self._own_contracts_aggregate(flush_cache=True)
 
 
 class Council(models.Model):

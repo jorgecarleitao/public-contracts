@@ -16,9 +16,8 @@ def main_view(request, category_id):
                'categories': category.get_children(),
                'tab': 'summary'}
 
-    result = models.Contract.objects.filter(category_id__in=categories_ids).aggregate(count=Count('id'), price=Sum('price'))
-    context['contract_count'] = result['count']
-    context['contract_price'] = result['price']
+    context['contract_count'] = category.contracts_count()
+    context['contract_price'] = category.contracts_price()
 
     context['contractors_count'] = models.Entity.objects.filter(contracts_made__category_id__in=categories_ids).distinct().count()
     context['contracted_count'] = models.Entity.objects.filter(contract__category_id__in=categories_ids).distinct().count()
