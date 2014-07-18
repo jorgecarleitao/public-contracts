@@ -13,6 +13,12 @@
                             <span>{{ entity.nif }}</span>
                         </li>
                         <li class="list-group-item">
+                            <span class="glyphicon glyphicon-link"></span>
+                            <span><strong>{% trans "Official record" %}:</strong></span>
+                            <a href="{{ entity.get_base_url }}">
+                                {{ entity.base_id }}</a>
+                        </li>
+                        <li class="list-group-item">
                             <span class="glyphicon glyphicon-upload"></span>
                             <span><strong>{% trans "Earned" %}:</strong></span>
                             <span>{{ entity.total_earned|intword }} &euro;</span>
@@ -39,10 +45,22 @@
                 <div class="panel panel-default">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <span class="glyphicon glyphicon-link"></span>
-                            <span><strong>{% trans "Official record" %}:</strong></span>
-                            <a href="{{ entity.get_base_url }}">
-                                {{ entity.base_id }}</a>
+                            <span class="glyphicon glyphicon-briefcase"></span>
+                            <span><strong>
+                                {% trans "Last contracts" %}:</strong></span>
+                            <ul class="list-group">
+                                {% for contract in last_contracts %}
+                                    <li class="list-group-item">
+                                        <a href="
+                                        {{ contract.get_absolute_url }}">{{contract.contract_description}}</a>
+                                        <br>
+                                        <span>
+                                            {% include "contracts/contract_list/colored_price.html" with price=contract.price %}</span>,
+                                        {{ contract.signing_date }}
+                                    </li>
+                                {% endfor %}
+                                <p><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></p>
+                            </ul>
                         </li>
                         {% if clients_hiring %}
                             <li class="list-group-item">
@@ -82,11 +100,4 @@
             </div>
         </div>
     {% endwith %}
-    <hr>
-    <h3>{% trans "Last contracts" %}</h3>
-    {% include "contracts/contract_list/contracts_loop.html" with contracts=last_contracts%}
-    <p><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></p>
-    <hr>
-    <h3>{% trans "Last categories" %}</h3>
-    {% include "contracts/category_list/categories_loop.html" with categories=last_categories%}
 {% endblock %}
