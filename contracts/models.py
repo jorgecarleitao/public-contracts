@@ -35,14 +35,14 @@ class Category(NS_Node):
     def get_absolute_url(self):
         return reverse('category', args=[self.pk])
 
-    def _contracts_aggregate(self, flush_cache=False):
+    def _contracts_aggregates(self, flush_cache=False):
         """
         Stores in cache and returns the count and sum of prices of all contracts
         with this and child categories.
 
         If `flush_cache` is true, the aggregate is re-computed and re-cached.
         """
-        cache_name = __name__ + '>_contracts_aggregate' + '>%s' % self.code
+        cache_name = __name__ + '>_contracts_aggregates' + '>%s' % self.code
         aggregate = cache.get(cache_name)
 
         if aggregate is None or flush_cache:
@@ -61,13 +61,13 @@ class Category(NS_Node):
         return aggregate
 
     def contracts_price(self):
-        return self._contracts_aggregate()['price']
+        return self._contracts_aggregates()['price']
 
     def contracts_count(self):
-        return self._contracts_aggregate()['count']
+        return self._contracts_aggregates()['count']
 
     def compute_data(self):
-        self._contracts_aggregate(flush_cache=True)
+        self._contracts_aggregates(flush_cache=True)
 
 
 class Council(models.Model):
