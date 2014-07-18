@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-18 13:51+0100\n"
+"POT-Creation-Date: 2014-07-18 14:37+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -604,10 +604,6 @@ msgstr "Contratados"
 msgid "In this category:"
 msgstr "Nesta categoria:"
 
-#: contracts/templates/contracts/contract_list/contract_summary.html:8
-msgid "Categorized as:"
-msgstr "Categorizado como:"
-
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
 msgid "Apply filter and order"
 msgstr "Aplicar filtros e ordenação"
@@ -644,6 +640,10 @@ msgstr "Tipo"
 #: contracts/templates/contracts/contract_view/main.html:44
 msgid "Date"
 msgstr "Data"
+
+#: contracts/templates/contracts/contract_view/main.html:45
+msgid "registered at"
+msgstr "registado a"
 
 #: contracts/templates/contracts/contract_view/main.html:50
 msgid "Category"
@@ -2599,18 +2599,3 @@ msgstr "Acerca"
 #: main/templates/base/top_header.html:13
 msgid "Law"
 msgstr "Lei"
-
-#~ msgid "Signed:"
-#~ msgstr "Assinado:"
-
-#~ msgid "Categorized as"
-#~ msgstr "Categorizado como"
-
-#~ msgid "Added:"
-#~ msgstr "Adicionado em:"
-
-#~ msgid "Total earned"
-#~ msgstr "Ganho"
-
-#~ msgid "Total expended"
-#~ msgstr "Despesa"

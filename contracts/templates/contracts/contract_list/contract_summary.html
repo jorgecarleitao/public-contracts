@@ -2,21 +2,21 @@
 {% load i18n %}
 {% block summary_content %}
     <h4><a href="{{ contract.get_absolute_url }}">{{ contract.contract_description }}</a></h4>
-    <div class="age">{{contract.signing_date}}</div>
-    {% with category=contract.category %}
-        <div class="category">
-            {% trans "Categorized as:" %}
-            {% include "contracts/category_a.html" %}
-        </div>
-    {% endwith %}
-    <div class="transfer">
-        {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
-        {% for contracted in contract.contractors.all %}
-            {% include "contracts/entity_inline.html" with entity=contracted %}
+    <p>
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span>{% include "contracts/contract_list/colored_price.html" with price=contract.price %}</span>
+        <br>
+        <span class="glyphicon glyphicon-calendar"></span>
+        <span>{{contract.signing_date}}</span>
+        <br>
+        <span class="glyphicon glyphicon-download"></span>
+        {% for contrator in contract.contractors.all %}
+            {% include "contracts/entity_inline.html" with entity=contrator %}
         {% endfor %}
-        <span class="entity-summary">&rarr;</span>
+        &rarr;
+        <span class="glyphicon glyphicon-upload"></span>
         {% for contracted in contract.contracted.all %}
             {% include "contracts/entity_inline.html" with entity=contracted %}
         {% endfor %}
-    </div>
+    </p>
 {% endblock %}
