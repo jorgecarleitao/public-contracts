@@ -14,16 +14,23 @@ from .analysis.analysis import add_months
 
 
 def main_view(request, entity_id, slug=None):
-    entity = get_object_or_404(models.Entity, pk=entity_id)
+    entity = get_object_or_404(models.Entity.objects.select_related('data'),
+                               pk=entity_id)
 
-    contracts = entity.last_contracts(5).prefetch_related("contracted", "contractors", "category")
-    categories = models.Category.objects.filter(pk__in=list(contracts.values_list('category__id', flat=True)))
+    contracts = list(entity.contract_set.prefetch_related("contracted",
+                                                          "contractors",
+                                                          "category")[:5])
+    categories = models.Category.objects.filter(pk__in=[c.category_id
+                                                        for c in contracts])
+    clients_hiring, hired_clients = entity.main_costumers()
 
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'summary',
                'last_contracts': contracts,
-               'last_categories': categories}
+               'last_categories': categories,
+               'hired_clients': hired_clients,
+               'clients_hiring': clients_hiring}
 
     return render(request, 'contracts/entity_view/tab_data/main.html', context)
 

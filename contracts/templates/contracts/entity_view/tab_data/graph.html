@@ -1,7 +1,7 @@
 {% load i18n %}
 <style>
     #graph-{{ url|slugify }} svg {
-        width: 600px;
+        width: 450px;
         height: 200px;
     }
 </style>
@@ -22,7 +22,7 @@
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
-                            .margin({left: 100, right: 100})
+                            .margin({left: 80, right: 50})
                             .useInteractiveGuideline(true)
                             .transitionDuration(750)
                             .showYAxis(true)
@@ -47,7 +47,7 @@
                 .attr("xlink:href", '{{ url }}')
                     .attr("target", "_blank");
             a.append("svg:text")
-                .attr("x", 420).attr("y", 180)
+                .attr("x", 350).attr("y", 180)
                 .text('{% trans "Download data" %}');
 
             //Update the chart when window resizes.

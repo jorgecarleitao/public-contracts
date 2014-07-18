@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 19:19+0100\n"
+"POT-Creation-Date: 2014-07-18 13:51+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 #: contracts/category_urls.py:9 contracts/category_urls.py:10
 #: contracts/entity_urls.py:9 contracts/entity_urls.py:10
 #: contracts/entity_urls.py:11 contracts/entity_urls.py:14
-#: contracts/entity_views.py:47 contracts/urls.py:15 contracts/urls.py:16
+#: contracts/entity_views.py:57 contracts/urls.py:15 contracts/urls.py:16
 #: contracts/urls.py:19 contracts/urls.py:21 contracts/urls.py:25
 #: contracts/urls.py:29 contracts/urls.py:30 contracts/views_data.py:144
 #: contracts/views_data.py:167 contracts/views_data.py:177
@@ -29,6 +29,8 @@ msgstr ""
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:9
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:23
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:44
+#: contracts/templates/contracts/entity_view/tab_data/main.html:19
+#: contracts/templates/contracts/entity_view/tab_data/main.html:29
 #: contracts/templates/contracts/municipalities_delta_time/summary.html:5
 msgid "contracts"
 msgstr "contratos"
@@ -53,13 +55,13 @@ msgstr "concursos"
 msgid "costumers"
 msgstr "clientes"
 
-#: contracts/entity_views.py:47
+#: contracts/entity_views.py:57
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:28
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:42
 msgid "value"
 msgstr "valor"
 
-#: contracts/entity_views.py:47
+#: contracts/entity_views.py:57
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:18
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
 #: deputies/views.py:15 deputies/views.py:42
@@ -68,7 +70,7 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:60 contracts/views.py:112 contracts/views.py:174
+#: contracts/entity_views.py:70 contracts/views.py:107 contracts/views.py:169
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: contracts/templates/contracts/tender_list/search.html:48
@@ -77,9 +79,9 @@ msgstr "nome"
 msgid "search"
 msgstr "procura"
 
-#: contracts/entity_views.py:74 contracts/entity_views.py:75
-#: contracts/views.py:126 contracts/views.py:127 contracts/views.py:180
-#: contracts/views.py:181
+#: contracts/entity_views.py:84 contracts/entity_views.py:85
+#: contracts/views.py:121 contracts/views.py:122 contracts/views.py:175
+#: contracts/views.py:176
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
@@ -93,19 +95,17 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:84 contracts/views.py:35 contracts/views.py:137
-#: contracts/views.py:191 deputies/views.py:47 law/views.py:23
+#: contracts/entity_views.py:94 contracts/views.py:27 contracts/views.py:132
+#: contracts/views.py:186 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
-#: contracts/entity_views.py:150
-#: contracts/templates/contracts/entity_view/tab_data/main.html:18
+#: contracts/entity_views.py:160
 msgid "Contracts as hiring"
 msgstr "Contratos como contratante"
 
-#: contracts/entity_views.py:186
-#: contracts/templates/contracts/entity_view/tab_data/main.html:21
+#: contracts/entity_views.py:196
 msgid "Contracts as hired"
 msgstr "Contratos como contratado"
 
@@ -139,33 +139,33 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/forms.py:20
-msgid "filter contracts"
-msgstr "filtrar contratos"
-
-#: contracts/forms.py:25
-msgid "order"
-msgstr "ordem"
-
-#: contracts/forms.py:26 contracts/views.py:26 contracts/views.py:167
-#: contracts/views.py:186
+#: contracts/forms.py:17 contracts/forms.py:19 contracts/views.py:162
+#: contracts/views.py:181
 #: contracts/templates/contracts/tender_list/search.html:21
 #: contracts/templates/contracts/tender_list/search.html:36
 msgid "date"
 msgstr "data"
 
-#: contracts/forms.py:27 contracts/views.py:26 contracts/views.py:167
-#: contracts/views.py:186
+#: contracts/forms.py:18 contracts/forms.py:19 contracts/views.py:162
+#: contracts/views.py:181
 #: contracts/templates/contracts/tender_list/search.html:16
 #: contracts/templates/contracts/tender_list/search.html:34
 msgid "price"
 msgstr "preço"
 
-#: contracts/forms.py:32
+#: contracts/forms.py:23
+msgid "filter contracts"
+msgstr "filtrar contratos"
+
+#: contracts/forms.py:28
+msgid "order"
+msgstr "ordem"
+
+#: contracts/forms.py:33
 msgid "date range"
 msgstr "filtrar por data"
 
-#: contracts/forms.py:48
+#: contracts/forms.py:49
 msgid "range"
 msgstr "datas"
 
@@ -203,13 +203,13 @@ msgstr "entidade"
 msgid "category"
 msgstr "categoria"
 
-#: contracts/views.py:101 contracts/views.py:107 contracts/views.py:132
+#: contracts/views.py:96 contracts/views.py:102 contracts/views.py:127
 #: contracts/templates/contracts/entity_list/search_entities.html:18
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:101 contracts/views.py:109 contracts/views.py:132
+#: contracts/views.py:96 contracts/views.py:104 contracts/views.py:127
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "expenses"
@@ -295,6 +295,21 @@ msgstr "ajuste direto"
 #: contracts/views_data.py:197
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
+
+#: contracts/templates/inline_contracts_number.html:3
+#, python-format
+msgid ""
+"\n"
+"    %(contracts_count)s contract\n"
+msgid_plural ""
+"\n"
+"    %(contracts_count)s contracts\n"
+msgstr[0] ""
+"\n"
+"    %(contracts_count)s contrato\n"
+msgstr[1] ""
+"\n"
+"    %(contracts_count)s contratos\n"
 
 #: contracts/templates/contracts/analysis.html:5
 #: contracts/templates/contracts/base/header.html:17
@@ -576,10 +591,12 @@ msgid "Summary"
 msgstr "Sumário"
 
 #: contracts/templates/contracts/category_view/selector.html:10
+#: contracts/templates/contracts/contract_view/main.html:20
 msgid "Contractors"
 msgstr "Contratantes"
 
 #: contracts/templates/contracts/category_view/selector.html:13
+#: contracts/templates/contracts/contract_view/main.html:27
 msgid "Contracted"
 msgstr "Contratados"
 
@@ -612,26 +629,38 @@ msgstr "De"
 msgid "To"
 msgstr "A"
 
-#: contracts/templates/contracts/contract_view/main.html:21
-msgid "Signed:"
-msgstr "Assinado:"
+#: contracts/templates/contracts/contract_view/main.html:13
+msgid "Description"
+msgstr "Descrição"
 
-#: contracts/templates/contracts/contract_view/main.html:24
-msgid "Categorized as"
-msgstr "Categorizado como"
+#: contracts/templates/contracts/contract_view/main.html:34
+msgid "Value"
+msgstr "Valor"
 
-#: contracts/templates/contracts/contract_view/main.html:26
+#: contracts/templates/contracts/contract_view/main.html:39
+msgid "Type"
+msgstr "Tipo"
+
+#: contracts/templates/contracts/contract_view/main.html:44
+msgid "Date"
+msgstr "Data"
+
+#: contracts/templates/contracts/contract_view/main.html:50
+msgid "Category"
+msgstr "Categoria"
+
+#: contracts/templates/contracts/contract_view/main.html:54
 msgid "No category assigned."
 msgstr "Sem categoria."
 
-#: contracts/templates/contracts/contract_view/main.html:30
-#: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
-msgid "Value:"
-msgstr "Valor:"
+#: contracts/templates/contracts/contract_view/main.html:59
+msgid "Location"
+msgstr "Localização"
 
-#: contracts/templates/contracts/contract_view/main.html:32
-msgid "Added:"
-msgstr "Adicionado em:"
+#: contracts/templates/contracts/contract_view/main.html:64
+#: contracts/templates/contracts/entity_view/tab_data/main.html:43
+msgid "Official record"
+msgstr "Registo oficial"
 
 #: contracts/templates/contracts/contracts_price_histogram/graph.html:29
 #: contracts/templates/contracts/entity_rank/histogram.html:29
@@ -950,6 +979,10 @@ msgstr "Especificidade média:"
 msgid "Costumers"
 msgstr "Clientes"
 
+#: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
+msgid "Value:"
+msgstr "Valor:"
+
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:16
 #: deputies/templates/deputies/search_bar.html:16
 msgid "order by name"
@@ -963,27 +996,35 @@ msgstr "ordenar por número de contratos"
 msgid "order by value"
 msgstr "ordenar por valor"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:9
+#: contracts/templates/contracts/entity_view/tab_data/main.html:12
 msgid "Fiscal Number"
 msgstr "NIF"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:12
-msgid "Total earned"
-msgstr "Ganho"
+#: contracts/templates/contracts/entity_view/tab_data/main.html:17
+msgid "Earned"
+msgstr "Lucro"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:15
-msgid "Total expended"
+#: contracts/templates/contracts/entity_view/tab_data/main.html:27
+msgid "Expended"
 msgstr "Despesa"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:36
+#: contracts/templates/contracts/entity_view/tab_data/main.html:52
+msgid "Main clients (hired)"
+msgstr "Principais clientes (contrataram)"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:68
+msgid "Main clients (were hired)"
+msgstr "Principais clientes (contratados)"
+
+#: contracts/templates/contracts/entity_view/tab_data/main.html:86
 msgid "Last contracts"
 msgstr "Últimos contratos"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:38
+#: contracts/templates/contracts/entity_view/tab_data/main.html:88
 msgid "Full list"
 msgstr "Lista completa"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:40
+#: contracts/templates/contracts/entity_view/tab_data/main.html:90
 msgid "Last categories"
 msgstr "Últimas categorias"
 
@@ -2558,3 +2599,18 @@ msgstr "Acerca"
 #: main/templates/base/top_header.html:13
 msgid "Law"
 msgstr "Lei"
+
+#~ msgid "Signed:"
+#~ msgstr "Assinado:"
+
+#~ msgid "Categorized as"
+#~ msgstr "Categorizado como"
+
+#~ msgid "Added:"
+#~ msgstr "Adicionado em:"
+
+#~ msgid "Total earned"
+#~ msgstr "Ganho"
+
+#~ msgid "Total expended"
+#~ msgstr "Despesa"

@@ -1,0 +1,8 @@
+{% load i18n %}
+{% spaceless %}
+{% blocktrans count contracts_count=contracts_count %}
+    {{ contracts_count }} contract
+{% plural %}
+    {{ contracts_count }} contracts
+{% endblocktrans %}
+{% endspaceless %}

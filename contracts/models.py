@@ -149,6 +149,20 @@ class Entity(models.Model):
         # update list of contracts
         self.get_contracts_ids(flush_cache=True)
 
+    def main_costumers(self):
+        all_costumers = Entity.objects.filter(
+            contracts_made__contracted__id=self.id)\
+            .distinct().annotate(total_expended=Sum("contracts_made__price"),
+                                 total_contracts=Count("contracts_made__price"))\
+            .order_by('-total_contracts')[:5]
+
+        all_costumers1 = Entity.objects.filter(
+            contract__contractors__id=self.id)\
+            .distinct().annotate(total_expended=Sum("contract__price"),
+                                 total_contracts=Count("contract__price"))\
+            .order_by('-total_contracts')[:5]
+
+        return all_costumers, all_costumers1
 
 class EntityData(models.Model):
     """

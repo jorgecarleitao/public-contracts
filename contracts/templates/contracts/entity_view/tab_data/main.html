@@ -3,34 +3,84 @@
 {% load contracts.humanize %}
 {% block entity_content %}
     {% with count_contracts=entity.contracts_made.count count_contracts_received=entity.contract_set.count %}
-        <div class="container">
-            <ul>
-                <li>
-                    {% trans "Fiscal Number" %}: {{ entity.nif }}
-                </li>
-                <li>
-                    {% trans "Total earned" %}: {{ entity.total_earned|intword }} €
-                </li>
-                <li>
-                    {% trans "Total expended" %}: {{ entity.total_expended|intword }} €
-                </li>
-                <li>
-                    {% trans "Contracts as hiring" %}: {{ count_contracts }}
-                </li>
-                <li>
-                    {% trans "Contracts as hired" %}: {{ count_contracts_received }}
-                </li>
-            </ul>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="glyphicon glyphicon-bookmark"></span>
+                            <span><strong>{% trans "Fiscal Number" %}:</strong></span>
+                            <span>{{ entity.nif }}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="glyphicon glyphicon-upload"></span>
+                            <span><strong>{% trans "Earned" %}:</strong></span>
+                            <span>{{ entity.total_earned|intword }} &euro;</span>
+                            <span>({{ count_contracts_received }} {% trans "contracts" %})</span>
+                            {% if count_contracts_received %}
+                                {% url 'entity_contracts_received_time_series' entity.id as the_url %}
+                                {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="glyphicon glyphicon-download"></span>
+                            <span><strong>{% trans "Expended" %}:</strong></span>
+                            <span>{{ entity.total_expended|intword }} &euro;</span>
+                            <span>({{ count_contracts }} {% trans "contracts" %})</span>
+                            {% if count_contracts %}
+                                {% url 'entity_contracts_made_time_series' entity.id as the_url %}
+                                {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="glyphicon glyphicon-link"></span>
+                            <span><strong>{% trans "Official record" %}:</strong></span>
+                            <a href="{{ entity.get_base_url }}">
+                                {{ entity.base_id }}</a>
+                        </li>
+                        {% if clients_hiring %}
+                            <li class="list-group-item">
+                                <span class="glyphicon glyphicon-briefcase"></span>
+                                <span class="glyphicon glyphicon-upload"></span>
+                            <span><strong>
+                                {% trans "Main clients (hired)" %}:</strong></span>
+                                <ul class="list-group">
+                                    {% for client in clients_hiring %}
+                                        <li class="list-group-item">
+                                            <a href="
+                                            {{ client.get_absolute_url }}">{{client.name}}</a>:
+                                            {% include "inline_contracts_number.html" with contracts_count=client.total_contracts %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if hired_clients %}
+                            <li class="list-group-item">
+                                <span class="glyphicon glyphicon-briefcase"></span>
+                                <span class="glyphicon glyphicon-download"></span>
+                                <span><strong>{% trans "Main clients (were hired)" %}:</strong></span>
+                                <ul class="list-group">
+                                    {% for client in hired_clients %}
+                                        <li class="list-group-item">
+                                            <a href="
+                                            {{ client.get_absolute_url }}">{{client.name}}</a>:
+                                            {% include "inline_contracts_number.html" with contracts_count=client.total_contracts %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% if count_contracts %}
-            {% url 'entity_contracts_made_time_series' entity.id as the_url %}
-            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
-        {% endif %}
-
-        {% if count_contracts_received %}
-            {% url 'entity_contracts_received_time_series' entity.id as the_url %}
-            {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
-        {% endif %}
     {% endwith %}
     <hr>
     <h3>{% trans "Last contracts" %}</h3>
