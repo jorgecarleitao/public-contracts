@@ -37,32 +37,32 @@
     float: right;
 }
 
-.summary .price-1 {
+.price-1 {
     color: green;
     font-weight: bold;
 }
 
-.summary .price-2 {
+.price-2 {
     color: #278000;
     font-weight: bold;
 }
 
-.summary .price-3 {
+.price-3 {
     color: #588000;
     font-weight: bold;
 }
 
-.summary .price-4 {
+.price-4 {
     color: #7d8000;
     font-weight: bold;
 }
 
-.summary .price-5 {
+.price-5 {
     color: #803c00;
     font-weight: bold;
 }
 
-.summary .price-6 {
+.price-6 {
     color: #800200;
     font-weight: bold;
 }
