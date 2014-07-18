@@ -3,33 +3,70 @@
 
 {% block title %}{{ contract.id }} - {{ contract.contract_description }}{% endblock %}
 {% block content %}
-    <div class="text-element">
-        <h2>{{ contract.description }} (<a href="{{ contract.get_base_url }}">BASE</a>)</h2>
-        <p>
-            {{ contract.contract_description }}
-        </p>
-        <p>
-            <span class="entity-summary">{{ contract.procedure_type.name }}: </span>
-            {% for contracted in contract.contractors.all %}
-                {% include "contracts/entity_inline.html" with entity=contracted %}
-            {% endfor %}
-            <span class="entity-summary">&rarr;</span>
-            {% for contracted in contract.contracted.all %}
-                {% include "contracts/entity_inline.html" with entity=contracted %}
-            {% endfor %}
-        </p>
-        <p>{% trans "Signed:" %} {{contract.signing_date}}</p>
-        <p>
-            {% if contract.category %}
-                {% trans "Categorized as" %} {% include "contracts/category_a.html" with category=contract.category %}
-            {% else %}
-                {% trans "No category assigned." %}
-            {% endif %}
-        </p>
-        <p>
-            {% trans "Value:" %} {% include "contracts/contract_list/colored_price.html" with price=contract.price %}
-        </p>
-        <p>{% trans "Added:" %} {{contract.added_date}}</p>
-
+    <div class="row">
+        <div class="col-md-8">
+            <h3>{{ contract.description }}</h3>
+            <div class="panel panel-default">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-file"></span>
+                        <span><strong>{% trans "Description" %}:</strong></span>
+                        <span>
+                            {{ contract.contract_description }}
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-download"></span>
+                        <span><strong>{% trans "Contractors" %}:</strong></span>
+                        {% for contrator in contract.contractors.all %}
+                            {% include "contracts/entity_inline.html" with entity=contrator %}
+                        {% endfor %}
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-upload"></span>
+                        <span><strong>{% trans "Contracted" %}:</strong></span>
+                        {% for contracted in contract.contracted.all %}
+                            {% include "contracts/entity_inline.html" with entity=contracted %}
+                        {% endfor %}
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span><strong>{% trans "Value" %}:</strong></span>
+                        <span>{% include "contracts/contract_list/colored_price.html" with price=contract.price %}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-briefcase"></span>
+                        <span><strong>{% trans "Type" %}:</strong></span>
+                        <span>{{ contract.contract_type.name }}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span><strong>{% trans "Date" %}:</strong></span>
+                        <span>{{contract.signing_date}} (registered at
+                        {{contract.added_date}})</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-tag"></span>
+                        <span><strong>{% trans "Category" %}:</strong></span>
+                        {% if contract.category %}
+                            {% include "contracts/category_a.html" with category=contract.category %}
+                        {% else %}
+                            {% trans "No category assigned." %}
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span><strong>{% trans "Location" %}:</strong></span>
+                        {% include "inline_location.html" %}
+                    </li>
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-link"></span>
+                        <span><strong>{% trans "Official record" %}:</strong></span>
+                        <a href="{{ contract.get_base_url }}">
+                            {{ contract.base_id }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock %}
