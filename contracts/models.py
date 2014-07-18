@@ -98,14 +98,15 @@ class Entity(models.Model):
     def get_contracts_ids(self, flush_cache=False):
         """
         Retrieves a list of all contracts' ids the entity participated in.
-        The result is cached for 1 month because it is updated on server side using cron.
+        The result is cached for 1 month because it is updated using cron.
         """
         cache_name = __name__ + '>contracts_ids' + '>%s' % self.id
         result = cache.get(cache_name)
         if result is None or flush_cache:
             # retrieves the list. This is an expensive query.
-            result = list(self.contract_set.all().values_list('id', flat=True)) + \
-                     list(self.contracts_made.all().values_list('id', flat=True))
+            result = \
+                list(self.contract_set.all().values_list('id', flat=True)) + \
+                list(self.contracts_made.all().values_list('id', flat=True))
             cache.set(cache_name, result, 60*60*24*30)
         return result
 
@@ -124,7 +125,8 @@ class Entity(models.Model):
         return self.name
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#%s' % self.base_id
+        return 'http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#%s' \
+               % self.base_id
 
     def get_absolute_url(self):
         return reverse('entity', args=(self.id, slugify(self.name)))
@@ -142,8 +144,10 @@ class Entity(models.Model):
             self.data = EntityData(entity=self)
 
         # we update the total earnings and total expenses.
-        self.data.total_earned = self.contract_set.aggregate(Sum('price'))['price__sum'] or 0
-        self.data.total_expended = self.contracts_made.aggregate(Sum('price'))['price__sum'] or 0
+        aggregate = self.contract_set.aggregate(Sum('price'))
+        self.data.total_earned = aggregate['price__sum'] or 0
+        aggregate = self.contracts_made.aggregate(Sum('price'))
+        self.data.total_expended = aggregate['price__sum'] or 0
         self.data.save()
 
         # update list of contracts
@@ -163,6 +167,7 @@ class Entity(models.Model):
             .order_by('-total_contracts')[:5]
 
         return all_costumers, all_costumers1
+
 
 class EntityData(models.Model):
     """
@@ -226,11 +231,13 @@ class Contract(models.Model):
         return reverse('contract', args=(self.id,))
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' % self.base_id
+        return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' \
+               % self.base_id
 
     def get_first_contractor(self):
         # there are at least two contracts with errors in the official database,
-        # which leads to 0 contractors. These contracts don't have any information.
+        # which leads to 0 contractors.
+        # These contracts don't have any information.
         try:
             return self.contractors.all()[0]
         except IndexError:
@@ -238,7 +245,8 @@ class Contract(models.Model):
 
     def get_first_contracted(self):
         # there are at least two contracts with errors in the official database,
-        # which leads to 0 contracted. These contracts don't have any information.
+        # which leads to 0 contracted.
+        # These contracts don't have any information.
         try:
             return self.contracted.all()[0]
         except IndexError:
@@ -283,14 +291,19 @@ class Tender(models.Model):
     dre_document = models.IntegerField()
 
     def get_dre_url(self):
-        return 'http://dre.pt/util/getpdf.asp?s=udrcp&serie=%d&data=%s&iddr=%d&iddip=%d' %\
+        return 'http://dre.pt/util/getpdf.asp?s=udrcp' \
+               '&serie=%d' \
+               '&data=%s' \
+               '&iddr=%d' \
+               '&iddip=%d' %\
                (self.dre_series,
                 self.publication_date.strftime('%Y-%m-%d'),
                 self.dre_number,
                 self.dre_document)
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/anuncios.shtml#%d' % self.base_id
+        return 'http://www.base.gov.pt/base2/html/pesquisas/anuncios.shtml#%d' \
+               % self.base_id
 
     class Meta:
         ordering = ['-publication_date']
