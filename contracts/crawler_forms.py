@@ -39,7 +39,7 @@ class PriceField(IntegerField):
     def clean(self, value):
         value = value.split(' ')[0]
         value = value.replace(".", "").replace(",", "")
-        return super(PriceField, self).clean(value)
+        return super().clean(value)
 
 
 class TimeDeltaField(Field):
@@ -78,14 +78,14 @@ class EntitiesField(ModelMultipleChoiceField):
     Validates multiple entities based on BASE data.
     """
     def __init__(self, **kwargs):
-        super(EntitiesField, self).__init__(queryset=models.Entity.objects,
-                                            to_field_name='base_id', **kwargs)
+        super().__init__(queryset=models.Entity.objects,
+                         to_field_name='base_id', **kwargs)
 
     def clean(self, value):
         value = [item['id'] for item in value]
 
         try:
-            return super(EntitiesField, self).clean(value)
+            return super().clean(value)
         except ValidationError:
             # in case we don't have the entity, we try to retrieve it from BASE.
             import contracts.crawler
@@ -94,7 +94,7 @@ class EntitiesField(ModelMultipleChoiceField):
             for base_id in value:
                 entity_crawler.update_instance(base_id)
 
-            return super(EntitiesField, self).clean(value)
+            return super().clean(value)
 
 
 class CountryChoiceField(ModelChoiceField):
@@ -102,13 +102,13 @@ class CountryChoiceField(ModelChoiceField):
     Validates a relation to a ``models.Country``.
     """
     def __init__(self, **kwargs):
-        super(CountryChoiceField, self).__init__(queryset=models.Country.objects,
-                                                 to_field_name='name', **kwargs)
+        super().__init__(queryset=models.Country.objects,
+                         to_field_name='name', **kwargs)
 
     def clean(self, value):
         if value == 'Não definido.':
             value = None
-        return super(CountryChoiceField, self).clean(value)
+        return super().clean(value)
 
 
 class CouncilChoiceField(Field):
@@ -129,8 +129,8 @@ class CategoryField(ModelChoiceField):
     Validates a relation to a ``models.Category``.
     """
     def __init__(self, **kwargs):
-        super(CategoryField, self).__init__(queryset=models.Category.objects,
-                                            to_field_name='code', **kwargs)
+        super().__init__(queryset=models.Category.objects,
+                         to_field_name='code', **kwargs)
 
     def clean(self, value):
         if value == 'Não definido.':
@@ -138,7 +138,7 @@ class CategoryField(ModelChoiceField):
 
         cpvs = CPVSField(required=self.required).clean(value)
         try:
-            return super(CategoryField, self).clean(cpvs)
+            return super().clean(cpvs)
         except ValidationError:
             return None
 
@@ -148,13 +148,14 @@ class ContractTypeField(ModelChoiceField):
     Validates a relation to a ``models.ContractType``.
     """
     def __init__(self, **kwargs):
-        super(ContractTypeField, self).__init__(queryset=models.ContractType.objects,
-                                                to_field_name='name', **kwargs)
+        super().__init__(queryset=models.ContractType.objects,
+                         to_field_name='name', **kwargs)
 
     def clean(self, value):
         if value == 'Não definido.':
             return None
-        ## sometimes it has more than one type (~1 in 100.000); we only consider the first.
+        # sometimes it has more than one type (~1 in 100.000);
+        # we only consider the first.
         if '<br/>' in value:
             value = value.split('<br/>')[0]
         elif '; ' in value:
@@ -163,7 +164,7 @@ class ContractTypeField(ModelChoiceField):
         if value.startswith('Outros'):
             value = 'Outros'
 
-        return super(ContractTypeField, self).clean(value)
+        return super().clean(value)
 
 
 class DREDocument(CharField):
@@ -198,14 +199,17 @@ class ContractForm(Form):
 
     cpvs = CPVSField(required=False)
     category = CategoryField(required=False)
-    procedure_type = ModelChoiceField(queryset=models.ProcedureType.objects, to_field_name='name', required=False)
+    procedure_type = ModelChoiceField(queryset=models.ProcedureType.objects,
+                                      to_field_name='name', required=False)
     contract_type = ContractTypeField(required=False)
 
     contractors = EntitiesField()
     contracted = EntitiesField()
 
-    country = ModelChoiceField(queryset=models.Country.objects, to_field_name='name', required=False)
-    district = ModelChoiceField(queryset=models.District.objects, to_field_name='name', required=False)
+    country = ModelChoiceField(queryset=models.Country.objects,
+                               to_field_name='name', required=False)
+    district = ModelChoiceField(queryset=models.District.objects,
+                                to_field_name='name', required=False)
     council = CouncilChoiceField(required=False)
 
 
@@ -220,8 +224,10 @@ class TenderForm(Form):
     cpvs = CPVSField(required=False)
     category = CategoryField(required=False)
 
-    act_type = ModelChoiceField(queryset=models.ActType.objects, to_field_name='name', required=False)
-    model_type = ModelChoiceField(queryset=models.ModelType.objects, to_field_name='name', required=False)
+    act_type = ModelChoiceField(queryset=models.ActType.objects,
+                                to_field_name='name', required=False)
+    model_type = ModelChoiceField(queryset=models.ModelType.objects,
+                                  to_field_name='name', required=False)
     contract_type = ContractTypeField(required=False)
 
     announcement_number = CharField(required=False)
