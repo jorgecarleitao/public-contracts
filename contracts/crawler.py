@@ -9,7 +9,8 @@ import requests
 import requests.exceptions
 
 from . import models
-from contracts.crawler_forms import EntityForm, ContractForm, TenderForm, clean_place
+from contracts.crawler_forms import EntityForm, ContractForm, \
+    TenderForm, clean_place
 
 
 logger = logging.getLogger(__name__)
@@ -30,13 +31,15 @@ class JSONLoadError(Exception):
 
 
 class AbstractCrawler(object):
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko)'
+    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) ' \
+                 'AppleWebKit/537.36 (KHTML, like Gecko)'
 
     class NoMoreEntriesError(Exception):
         pass
 
     def goToPage(self, url):
-        response = requests.get(url, headers={'User-agent': self.user_agent}, timeout=5)
+        response = requests.get(url, headers={'User-agent': self.user_agent},
+                                timeout=5)
         return response.text
 
 
@@ -67,7 +70,8 @@ class ContractsStaticDataCrawler(JSONCrawler):
                 models.ContractType.objects.get(base_id=element['id'])
                 pass
             except models.ContractType.DoesNotExist:
-                contract_type = models.ContractType(name=element['description'], base_id=element['id'])
+                contract_type = models.ContractType(name=element['description'],
+                                                    base_id=element['id'])
                 contract_type.save()
 
     def retrieve_and_save_procedures_types(self):
@@ -82,7 +86,8 @@ class ContractsStaticDataCrawler(JSONCrawler):
                 models.ProcedureType.objects.get(name=element['description'])
                 pass
             except models.ProcedureType.DoesNotExist:
-                procedure_type = models.ProcedureType(name=element['description'], base_id=element['id'])
+                procedure_type = models.ProcedureType(name=element['description'],
+                                                      base_id=element['id'])
                 procedure_type.save()
 
     def retrieve_and_save_countries(self):
@@ -99,7 +104,9 @@ class ContractsStaticDataCrawler(JSONCrawler):
                 country.save()
 
     def retrieve_and_save_districts(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=187'  # 187 is Portugal.
+        # We currently only retrieve from Portugal (187) because BASE only has
+        # from it.
+        url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=187'
         data = self.goToPage(url)
 
         portugal = models.Country.objects.get(name="Portugal")
@@ -112,12 +119,15 @@ class ContractsStaticDataCrawler(JSONCrawler):
                 models.District.objects.get(base_id=element['id'])
                 pass
             except models.District.DoesNotExist:
-                district = models.District(name=element['description'], base_id=element['id'], country=portugal)
+                district = models.District(name=element['description'],
+                                           base_id=element['id'],
+                                           country=portugal)
                 district.save()
 
     def retrieve_and_save_councils(self):
+        base_url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d'
         for district in models.District.objects.all():
-            url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d' % district.base_id
+            url = base_url % district.base_id
             data = self.goToPage(url)
 
             for element in data['items']:
@@ -128,7 +138,9 @@ class ContractsStaticDataCrawler(JSONCrawler):
                     models.Council.objects.get(base_id=element['id'])
                     pass
                 except models.Council.DoesNotExist:
-                    council = models.Council(name=element['description'], base_id=element['id'], district=district)
+                    council = models.Council(name=element['description'],
+                                             base_id=element['id'],
+                                             district=district)
                     council.save()
 
     def retrieve_and_save_all(self):
@@ -157,7 +169,8 @@ class TendersStaticDataCrawler(JSONCrawler):
                 models.ActType.objects.get(base_id=element['id'])
                 pass
             except models.ActType.DoesNotExist:
-                act_type = models.ActType(name=element['description'], base_id=element['id'])
+                act_type = models.ActType(name=element['description'],
+                                          base_id=element['id'])
                 act_type.save()
 
     def retrieve_and_save_model_types(self):
@@ -172,7 +185,8 @@ class TendersStaticDataCrawler(JSONCrawler):
                 models.ModelType.objects.get(base_id=element['id'])
                 pass
             except models.ModelType.DoesNotExist:
-                act_type = models.ModelType(name=element['description'], base_id=element['id'])
+                act_type = models.ModelType(name=element['description'],
+                                            base_id=element['id'])
                 act_type.save()
 
     def retrieve_and_save_all(self):
@@ -243,7 +257,8 @@ class DynamicCrawler(JSONCrawler):
         Saves or updates the instance using cleaned_data
         """
         try:
-            instance = self.object_model.objects.get(base_id=cleaned_data['base_id'])
+            instance = self.object_model.objects.get(
+                base_id=cleaned_data['base_id'])
             for (key, value) in cleaned_data.items():
                 setattr(instance, key, value)
             action = 'updated'
@@ -251,7 +266,8 @@ class DynamicCrawler(JSONCrawler):
             instance = self.object_model(**cleaned_data)
             action = 'created'
         instance.save()
-        logger.info('%s "%d" %s' % (self.object_name, cleaned_data['base_id'], action))
+        logger.info('%s "%d" %s' % (self.object_name, cleaned_data['base_id'],
+                                    action))
 
         return instance, (action == 'created')
 
@@ -302,7 +318,8 @@ class DynamicCrawler(JSONCrawler):
                     break
 
         logging.info("Update completed - last base_id %d", last_base_id)
-        logging.info("Update completed - %d new instances", len(created_instances))
+        logging.info("Update completed - %d new instances",
+                     len(created_instances))
 
         return created_instances
 
@@ -376,7 +393,8 @@ class ContractsCrawler(DynamicCrawler):
     def save_instance(self, cleaned_data):
         contractors = cleaned_data.pop('contractors')
         contracted = cleaned_data.pop('contracted')
-        contract, created = super(ContractsCrawler, self).save_instance(cleaned_data)
+        contract, created = super(ContractsCrawler, self)\
+            .save_instance(cleaned_data)
 
         contract.contracted.clear()
         contract.contracted.add(*list(contracted))
@@ -426,11 +444,11 @@ class TendersCrawler(DynamicCrawler):
 
     def save_instance(self, cleaned_data):
         contractors = cleaned_data.pop('contractors')
-        contract, created = super(TendersCrawler, self).save_instance(cleaned_data)
-        contract.contractors.clear()
-        contract.contractors.add(*list(contractors))
+        tender, created = super(TendersCrawler, self).save_instance(cleaned_data)
+        tender.contractors.clear()
+        tender.contractors.add(*list(contractors))
 
-        return contract, created
+        return tender, created
 
 
 class DynamicDataCrawler():
