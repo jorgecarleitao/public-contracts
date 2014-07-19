@@ -23,19 +23,18 @@ class EntityNotFoundError(Exception):
 
 class JSONLoadError(Exception):
     """
-    Error when JSON fails to parse
-    an url content.
+    When JSON fails to parse the content of an url.
     """
     def __init__(self, url):
         self.url = url
 
 
 class AbstractCrawler(object):
+    """
+    A thin wrapper of request.get with a custom user agent and timeout.
+    """
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) ' \
                  'AppleWebKit/537.36 (KHTML, like Gecko)'
-
-    class NoMoreEntriesError(Exception):
-        pass
 
     def goToPage(self, url):
         response = requests.get(url, headers={'User-agent': self.user_agent},

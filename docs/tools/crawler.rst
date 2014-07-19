@@ -6,7 +6,7 @@ Crawler for Contracts and Tenders
 .. _Base: http://www.base.gov.pt/base2
 .. _requests: http://docs.python-requests.org/en/latest/
 
-This document explains how Base_ provides its data and what the crawler works.
+This document explains how Base_ provides its data and how the crawler works.
 
 .. important::
     Please, take precautions on using the crawler as it can generate Denial of
@@ -37,23 +37,26 @@ and map it to this API.
 What the crawler does
 ---------------------
 
-The crawler accesses Base_ urls using the same procedure for entities, contracts and tenders.
+The crawler accesses Base_ urls using the same procedure for entities, contracts
+and tenders. Starting with ``base_id = 1``, it does:
 
-1. Set ``base_id = 1`` and retrieves json ``data`` from one of the links above
+1. retrieves json ``data`` from one of the links above
 2. Stores ``data`` in a .json file
 3. Cleans and validates ``data`` into ``cleaned_data``
-4. Uses ``cleaned_data`` to construct or update an instance of a model (e.g. :class:`~contracts.models.Entity`)
+4. Uses ``cleaned_data`` to construct or update an instance of a model (e.g.
+   :class:`~contracts.models.Entity`)
 5. Saves the model, does ``base_id += 1``, goes to 1.
 
-BASE returns status ``500`` if the ``base_id`` doesn't exist in their database.
-The procedure stops if status ``500`` occurs for 100 consecutive ``base_id``,
+BASE returns an object with ``base_id = 0`` if the ``base_id`` doesn't exist in
+their database. The above procedure stops if ``base_id = 0`` occurs for
+``MAX_ALLOWED_FAILS`` consecutive events (depending of the type),
 which we interpret as the end of the list.
 
 Because Base_ database is constantly being updated with new contracts and entities,
-this procedure is repeated once a day.
+this procedure is repeated every day.
 
-API
------
+API references
+--------------
 
 This section introduces the different crawlers we use to crawl Base_.
 
@@ -77,28 +80,26 @@ This section introduces the different crawlers we use to crawl Base_.
 
 .. class:: ContractsStaticDataCrawler
 
-    A subclass :class:`JSONCrawler` for static data of contracts. This crawler only needs to be run once and
-    is used to populate the database the first time.
+    A subclass :class:`JSONCrawler` for static data of contracts. This crawler
+    only needs to be run once and is used to populate the database the first time.
 
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of contracts.
 
-
 .. class:: TendersStaticDataCrawler
 
-    A subclass :class:`JSONCrawler` for static data of tenders. This crawler only needs to be run once and
-    is used to populate the database the first time.
+    A subclass :class:`JSONCrawler` for static data of tenders. This crawler
+    only needs to be run once and is used to populate the database the first time.
 
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of tenders.
 
-
 .. class:: StaticDataCrawler
 
-    A crawler that uses :class:`ContractsStaticDataCrawler` and :class:`TendersStaticDataCrawler`
-    to extract all static data.
+    A crawler that uses :class:`ContractsStaticDataCrawler` and
+    :class:`TendersStaticDataCrawler` to extract all static data.
 
     .. method:: retrieve_and_save_all()
 
@@ -109,16 +110,18 @@ contracts, entities and tenders, use the following approach:
 
 .. class:: DynamicCrawler
 
-    An abstract subclass of :class:`JSONCrawler` that implements
-    the crawling procedure described in the previous section.
+    An abstract subclass of :class:`JSONCrawler` that implements the crawling
+    procedure described in the previous section.
 
     .. attribute:: object_directory = None
 
-        A string with the directory where the ``.json`` files are stored; to be overwritten.
+        A string with the directory where the ``.json`` files are stored;
+        to be overwritten.
 
     .. attribute:: object_name = None
 
-        A string with the name of the object used to name the ``.json`` files; to be overwritten.
+        A string with the name of the object used to name the ``.json`` files;
+        to be overwritten.
 
     .. attribute:: object_url = None
 
@@ -138,8 +141,9 @@ contracts, entities and tenders, use the following approach:
 
     .. staticmethod:: clean_data(data)
 
-        Cleans ``data``, returning a ``cleaned_data`` dictionary with keys being fields
-        of the :attr:`object_model` and values being extracted from ``data``.
+        Cleans ``data``, returning a ``cleaned_data`` dictionary with keys being
+        fields of the :attr:`object_model` and values being extracted from
+        ``data``.
 
         This method is not implemented and has to be overwritten for each object.
 
@@ -148,16 +152,16 @@ contracts, entities and tenders, use the following approach:
         Saves or updates an instance of type :attr:`object_model`
         using the dictionary ``cleaned_data``.
 
-        This method can be overwritten for
-        changing how the instance is saved.
+        This method can be overwritten for changing how the instance is saved.
 
-        Returns a tuple ``(instance, created)`` where ``created`` is ``True`` if the instance
-        was created (and not just updated).
+        Returns a tuple ``(instance, created)`` where ``created`` is ``True``
+        if the instance was created (and not just updated).
 
     .. method:: update_instance(base_id, flush=False)
 
         Uses :meth:`get_data`, :meth:`clean_data` and :meth:`save_instance` to
-        create or update an instance identified by ``base_id``. ``flush`` is passed to :meth:`get_data`.
+        create or update an instance identified by ``base_id``. ``flush`` is
+        passed to :meth:`get_data`.
 
         Returns the output of :meth:`save_instance`.
 
@@ -170,32 +174,39 @@ contracts, entities and tenders, use the following approach:
 
         Runs a loop over :meth:`update_instance` from ``base_id`` equal to :meth:`last_base_id`
         with increase by 1 on each iteration until
-        no more results are returned for 100 consecutive calls of :meth:`update_instance`.
+        no more results are returned for X consecutive calls of
+        :meth:`update_instance`.
 
         Returns all instances created during the loop.
 
+        This is the entry point of the Method.
 
 .. class:: EntitiesCrawler
 
-    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Entity` table.
+    A subclass of :class:`DynamicCrawler` to populate
+    :class:`~contracts.models.Entity` table.
 
-    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Entity`.
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to
+    :class:`~contracts.models.Entity`.
 
     Uses:
 
     * :attr:`~DynamicCrawler.object_directory`: ``'../../data/entities'``
     * :attr:`~DynamicCrawler.object_name`: ``'entity'``;
-    * :attr:`~DynamicCrawler.object_url`: ``'http://www.base.gov.pt/base2/rest/entidades/%d'``
+    * :attr:`~DynamicCrawler.object_url`:
+      ``'http://www.base.gov.pt/base2/rest/entidades/%d'``
     * :attr:`~DynamicCrawler.object_model`: :class:`~contracts.models.Entity`.
-
+    * :attr:`MAX_ALLOWED_FAILS`: 100
 
 .. class:: ContractsCrawler
 
-    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Contract` table.
+    A subclass of :class:`DynamicCrawler` to populate
+    :class:`~contracts.models.Contract` table.
 
-    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Contract`
-    and :meth:`~DynamicCrawler.save_instance` to also save ``ManytoMany`` relationships
-    of the :class:`~contracts.models.Contract`.
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to
+    :class:`~contracts.models.Contract`
+    and :meth:`~DynamicCrawler.save_instance` to also save ``ManytoMany``
+    relationships of the :class:`~contracts.models.Contract`.
 
     Uses:
 
@@ -203,15 +214,17 @@ contracts, entities and tenders, use the following approach:
     * :attr:`object_name`: ``'contract'``;
     * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/contratos/%d'``
     * :attr:`object_model`: :class:`~contracts.models.Contract`.
-
+    * :attr:`MAX_ALLOWED_FAILS`: 5000
 
 .. class:: TenderCrawler
 
-    A subclass of :class:`DynamicCrawler` to populate :class:`~contracts.models.Tender` table.
+    A subclass of :class:`DynamicCrawler` to populate
+    :class:`~contracts.models.Tender` table.
 
-    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to :class:`~contracts.models.Tender`
-    and :meth:`~DynamicCrawler.save_instance` to also save ``ManytoMany`` relationships
-    of the :class:`~contracts.models.Tender`.
+    Overwrites :meth:`~DynamicCrawler.clean_data` to clean data to
+    :class:`~contracts.models.Tender` and :meth:`~DynamicCrawler.save_instance`
+    to also save ``ManytoMany`` relationships of the
+    :class:`~contracts.models.Tender`.
 
     Uses:
 
@@ -219,3 +232,4 @@ contracts, entities and tenders, use the following approach:
     * :attr:`object_name`: ``'tender'``;
     * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/anuncios/%d'``
     * :attr:`object_model`: :class:`~contracts.models.Tender`.
+    * :attr:`MAX_ALLOWED_FAILS`: 10000
