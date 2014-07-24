@@ -31,14 +31,12 @@ def normalize(text):
     # older documents use "Art." instead of "Artigo"; change it
     text = re.sub('Art\. (\d+)\.º (.*?)',
                   lambda m: "Artigo %s.º %s" % m.group(1, 2),
-                  text
-    )
+                  text)
 
     # older documents use "Artigo #.º - 1 -" instead of "Artigo #.º 1 -"; change it
     text = re.sub('Artigo (\d+)\.º - (.*?)',
                   lambda m: "Artigo %s.º %s" % m.group(1, 2),
-                  text
-    )
+                  text)
 
     # create <p>'s specifically for start of articles
     text = re.sub("<p>Artigo (\d+)\.º (.*?)</p>",
@@ -67,7 +65,7 @@ def add_pdf_references(text, document):
     """
     document.get_pdf_url()
 
-    def replace_docs(match):
+    def replace_docs(_):
         return '<a href=%s>(ver documento original)</a>' % document.get_pdf_url()
 
     text = re.sub('\(ver documento original\)', replace_docs, text)
@@ -77,39 +75,38 @@ def add_pdf_references(text, document):
 
 def add_references(text):
     from .models import Type, Document
+
+    # pick all types (except some weird ones)
     types = list(Type.objects.exclude(name__contains='('))
 
     def create_regex():
         """
-        Regex to catch expressions of the form "type.name (\d+).º".
+        Regex to catch expressions of the form "type_name (\d+).º".
         """
-        regex = '('
-        for name in [type.name for type in types]:
-            regex += name + '|'
-        regex = regex[:-1]
-        regex += r') n.º (.*?/\d+)'
-        return regex
+        regex = '({0}) n.º (.*?/\d+)'
+        return regex.format('|'.join([type.name for type in types]))
 
     def replace_docs(match):
         """
-        callback of re.sub to substitute the document expression by a anchor with link to the document.
+        callback of re.sub to substitute the document expression by a anchor with
+        link to the document.
         """
         matched_type_name, matched_number = match.group(1, 2)
-        matched_type = next(type for type in types if type.name == matched_type_name)
+        matched_type = next(type for type in types
+                            if type.name == matched_type_name)
         matched_number = matched_number.strip()
 
         default = '%s n.º %s' % (matched_type_name, matched_number)
 
         try:
-            doc = Document.objects.get(type_id=matched_type.id, number=matched_number)
+            doc = Document.objects.get(type_id=matched_type.id,
+                                       number=matched_number)
         except Document.DoesNotExist:
             return default
 
         summary_soup = BeautifulSoup(doc.summary)
-        return '<a class="reference-%d" title="%s" href="%s">%s</a>' % (doc.id,
-                                                                        summary_soup.getText(),
-                                                                        doc.get_absolute_url(),
-                                                                        default)
+        return '<a class="reference-%d" title="%s" href="%s">%s</a>' \
+               % (doc.id, summary_soup.getText(), doc.get_absolute_url(), default)
 
     return re.sub(create_regex(), replace_docs, text)
 
@@ -135,17 +132,18 @@ hierarchy_classes = {'Anexo': 'anexo',
                      'Alínea': 'alinea list-unstyled'}
 
 hierarchy_ids = {'Anexo': 'anexo',
-                     'Parte': 'parte',
-                     'Título': 'titulo',
-                     'Capítulo': 'capitulo',
-                     'Secção': 'seccao',
-                     'Sub-Secção': 'subseccao',
-                     'Artigo': 'artigo',
-                     'Número': 'numero',
-                     'Alínea': 'alinea'}
+                 'Parte': 'parte',
+                 'Título': 'titulo',
+                 'Capítulo': 'capitulo',
+                 'Secção': 'seccao',
+                 'Sub-Secção': 'subseccao',
+                 'Artigo': 'artigo',
+                 'Número': 'numero',
+                 'Alínea': 'alinea'}
 
 
-hierarchy_classes_with_titles = ['anexo', 'parte', 'titulo', 'capitulo', 'seccao', 'subseccao', 'artigo']
+hierarchy_classes_with_titles = ['anexo', 'parte', 'titulo', 'capitulo',
+                                 'seccao', 'subseccao', 'artigo']
 
 hierarchy_html_titles = {'Parte': 'h2',
                          'Título': 'h3',
@@ -208,9 +206,11 @@ def organize_soup(soup):
                 # we create the list
                 current_element[format_to_receive].append(soup.new_tag('ol'))
             # we add the current_element to the list
-            current_element[format_to_receive].contents[-1].append(current_element[format_to_move])
+            current_element[format_to_receive].contents[-1]\
+                .append(current_element[format_to_move])
         else:
-            current_element[format_to_receive].append(current_element[format_to_move])
+            current_element[format_to_receive]\
+                .append(current_element[format_to_move])
 
     body = soup.html.body
     for element in body.select('p'):
@@ -225,31 +225,37 @@ def organize_soup(soup):
             while format_to_receive_index != -1:
                 format_to_receive = hierarchy_priority[format_to_receive_index]
 
-                if current_element[format_to_receive] is not None and current_element[format] is not None:
+                if current_element[format_to_receive] is not None and \
+                        current_element[format] is not None:
                     add_element(format_to_move, format_to_receive)
                     break
                 format_to_receive_index -= 1
 
-            for format_to_move in reversed(hierarchy_priority[hierarchy_priority.index(format)+1:]):
+            for format_to_move in reversed(hierarchy_priority[
+                                           hierarchy_priority.index(format)+1:]):
                 if current_element[format_to_move] is None:
                     continue
 
-                for format_to_receive_index in reversed(range(hierarchy_priority.index(format_to_move))):
+                for format_to_receive_index in reversed(range(
+                        hierarchy_priority.index(format_to_move))):
                     format_to_receive = hierarchy_priority[format_to_receive_index]
                     if current_element[format_to_receive] is not None:
                         add_element(format_to_move, format_to_receive)
                         break
 
             if format in hierarchy_html_lists:
-                current_element[format] = soup.new_tag(hierarchy_html_lists[format],
-                                                       **{'class': hierarchy_classes[format]})
+                current_element[format] = soup.new_tag(
+                    hierarchy_html_lists[format],
+                    **{'class': hierarchy_classes[format]})
             else:
-                current_element[format] = soup.new_tag('div',
-                                                       **{'class': hierarchy_classes[format]})
+                current_element[format] = soup.new_tag(
+                    'div',
+                    **{'class': hierarchy_classes[format]})
 
             element.replaceWith(current_element[format])
             if format in hierarchy_html_titles:
-                current_element_title = soup.new_tag(hierarchy_html_titles[format], **{'class': 'title'})
+                current_element_title = soup.new_tag(
+                    hierarchy_html_titles[format], **{'class': 'title'})
                 current_element[format].append(current_element_title)
                 current_element_title.append(element)
             else:
@@ -269,7 +275,10 @@ def organize_soup(soup):
                     sufix = '-' + slugify(search.group(1).strip())
                 current_element[format]['id'] = prefix + hierarchy_ids[format] + sufix
 
-                anchor_tag = soup.new_tag('a', **{'class': 'headerlink', 'href': '#%s' % current_element[format]['id']})
+                anchor_tag = soup.new_tag('a',
+                                          **{'class': 'headerlink',
+                                             'href': '#%s' % current_element[
+                                                 format]['id']})
                 anchor_tag.insert(0, NavigableString(' ¶'))
 
                 if format in hierarchy_html_titles:
