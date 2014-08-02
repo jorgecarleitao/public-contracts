@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import datetime
 import calendar
 
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 from django.db import connection
 
 from contracts import models
@@ -326,3 +326,37 @@ def get_legislation_application_time_series():
         data.append(entry)
 
     return data
+
+
+def get_lorenz_curve():
+    # number of points in the curve. Too much degrades user performance.
+    NUMBER_OF_POINTS = 500
+
+    # all entities with earnings above 1 euro, sorted by earnings.
+    entities = models.Entity.objects\
+        .filter(data__total_earned__gt=F('data__total_expended'))\
+        .order_by('data__total_earned')
+
+    entities = entities.select_related('data')  # a Django-related optimization
+
+    # compute total earnings and total number of entities
+    total_earned = entities.aggregate(total=Sum('data__total_earned'))['total']
+    total_count = entities.count()
+
+    # compute and annotate the relative cumulative (entity.cumulative) and
+    # relative rank (entity.rank)
+    data = []
+    cumulative = 0
+    integral = 0
+    for rank, entity in enumerate(entities):
+        cumulative += entity.data.total_earned/total_earned
+        entity.rank = rank/(total_count - 1)
+        entity.cumulative = cumulative
+
+        # down-sample (but always store last point)
+        if rank % (total_count//NUMBER_OF_POINTS) == 0 or rank == total_count - 1:
+            data.append(entity)
+
+        integral += entity.cumulative/total_count
+
+    return data, 1 - 2*integral  # lorenz curve, gini index

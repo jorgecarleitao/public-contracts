@@ -18,6 +18,22 @@ def entities_category_ranking_json(request):
     return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
+def lorenz_curve(request):
+
+    entities, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
+
+    data = {'values': [], 'key': _('Lorenz curve of private entities')}
+    equality = {'values': [], 'key': _('Equality line')}
+    for entity in entities:
+        data['values'].append({'rank': entity.rank,
+                               'cumulative': entity.cumulative})
+        equality['values'].append({'rank': entity.rank,
+                                   'cumulative': entity.rank})
+
+    return HttpResponse(json.dumps([equality, data]),
+                        content_type="application/json")
+
+
 def entities_category_ranking_histogram_json(request):
 
     entities = analysis_manager.get_analysis('municipalities_categories_ranking')
@@ -225,6 +241,8 @@ AVAILABLE_VIEWS = {
     'legislation-application-time-series-json': legislation_application_time_series_json,
 
     'entities-values-histogram-json': entities_values_histogram_json,
+
+    'contracted-lorenz-curve-json': lorenz_curve,
 }
 
 

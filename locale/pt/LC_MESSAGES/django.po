@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-20 08:21+0100\n"
+"POT-Creation-Date: 2014-08-21 07:10+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,9 +19,9 @@ msgstr ""
 #: contracts/entity_urls.py:11 contracts/entity_urls.py:14
 #: contracts/entity_views.py:57 contracts/urls.py:16 contracts/urls.py:19
 #: contracts/urls.py:22 contracts/urls.py:25 contracts/urls.py:30
-#: contracts/urls.py:43 contracts/urls.py:44 contracts/views_data.py:148
-#: contracts/views_data.py:171 contracts/views_data.py:181
-#: contracts/views_data.py:191
+#: contracts/urls.py:43 contracts/urls.py:44 contracts/views_data.py:164
+#: contracts/views_data.py:187 contracts/views_data.py:197
+#: contracts/views_data.py:207
 #: contracts/templates/contracts/analysis/contracts_price_histogram/graph.html:29
 #: contracts/templates/contracts/analysis/entity_rank/summary.html:7
 #: contracts/templates/contracts/analysis/municipalities_delta_time/summary.html:5
@@ -211,84 +211,98 @@ msgstr "ganho"
 msgid "expenses"
 msgstr "despesa"
 
-#: contracts/views_analysis.py:132
+#: contracts/views_analysis.py:141
 msgid "When do Portugal contract most?"
 msgstr "Quando é que o estado mais contrata?"
 
-#: contracts/views_analysis.py:133
+#: contracts/views_analysis.py:142
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/views_analysis.py:134
+#: contracts/views_analysis.py:143
 #: contracts/templates/contracts/analysis/entities_values_histogram/main.html:4
 msgid "Distribution of earnings of entities"
 msgstr "Distribuição de ganhos de entidades"
 
-#: contracts/views_analysis.py:135
+#: contracts/views_analysis.py:144
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/views_analysis.py:136
+#: contracts/views_analysis.py:145
 #: contracts/templates/contracts/analysis/legislation_application_time_series/main.html:4
 #: contracts/templates/contracts/analysis/legislation_application_time_series/main.html:7
 msgid "How many contracts are published too late?"
 msgstr "Quantos contratos são publicados demasiado tarde?"
 
-#: contracts/views_analysis.py:138
+#: contracts/views_analysis.py:147
 #: contracts/templates/contracts/analysis/municipalities_contracts_time_series/main.html:4
 #: contracts/templates/contracts/analysis/municipalities_contracts_time_series/main.html:7
 msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
-#: contracts/views_analysis.py:139
+#: contracts/views_analysis.py:148
 msgid "How do portuguese municipalities contract most?"
 msgstr "Como é que os municípios mais contratam?"
 
-#: contracts/views_analysis.py:140
+#: contracts/views_analysis.py:149
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/views_analysis.py:141
+#: contracts/views_analysis.py:150
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/views_analysis.py:143
+#: contracts/views_analysis.py:152
 #: contracts/templates/contracts/analysis/ministries_contracts_time_series/main.html:4
 #: contracts/templates/contracts/analysis/ministries_contracts_time_series/main.html:7
 msgid "When do portuguese ministries contract most?"
 msgstr "Quando é que os ministérios mais contratam?"
 
-#: contracts/views_data.py:10 contracts/views_data.py:106
+#: contracts/views_analysis.py:154
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:4
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:7
+msgid "Income Inequality in Public Contracts"
+msgstr "Desigualdade de Rendimentos em Contratos Públicos"
+
+#: contracts/views_data.py:10 contracts/views_data.py:122
 #: contracts/templates/contracts/analysis/entity_rank/graph.html:35
 #: contracts/templates/contracts/analysis/municipalities_delta_time/graph.html:34
 msgid "Ranking"
 msgstr "Ranking"
 
-#: contracts/views_data.py:31 contracts/views_data.py:128
+#: contracts/views_data.py:25
+msgid "Lorenz curve of private entities"
+msgstr "Curva de Lorenz de entidades privadas"
+
+#: contracts/views_data.py:26
+msgid "Equality line"
+msgstr "Linha de igualdade"
+
+#: contracts/views_data.py:47 contracts/views_data.py:144
 msgid "Histogram"
 msgstr "Histograma"
 
-#: contracts/views_data.py:52
+#: contracts/views_data.py:68
 msgid "histogram of contracts values"
 msgstr "Histograma do preços dos contratos"
 
-#: contracts/views_data.py:67
+#: contracts/views_data.py:83
 msgid "entities earning"
 msgstr "entidades que ganharam"
 
-#: contracts/views_data.py:68
+#: contracts/views_data.py:84
 msgid "entities expending"
 msgstr "entidades que gastaram"
 
-#: contracts/views_data.py:158
+#: contracts/views_data.py:174
 msgid "tender"
 msgstr "concurso público"
 
-#: contracts/views_data.py:159
+#: contracts/views_data.py:175
 msgid "direct procurement"
 msgstr "ajuste direto"
 
-#: contracts/views_data.py:201
+#: contracts/views_data.py:217
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
 
@@ -592,6 +606,256 @@ msgstr ""
 msgid "closes at"
 msgstr "fecha a"
 
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/graph.html:26
+msgid "Rank"
+msgstr "Ranking"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/graph.html:29
+#, fuzzy
+msgid "Relative cumulative earnings"
+msgstr "Cumulativo relativo"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/graph.html:42
+#: contracts/templates/contracts/analysis/contracts_time_series/graph.html:53
+#: contracts/templates/contracts/analysis/legislation_application_time_series/graph.html:55
+#: contracts/templates/contracts/analysis/procedure_type_time_series/graph.html:56
+#: contracts/templates/contracts/entity_view/tab_data/graph.html:51
+#: law/templates/law/analysis/law_types_time_series/graph.html:51
+msgid "Download data"
+msgstr "Baixar dados"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:10
+msgid ""
+"\n"
+"                A popular tool among economists to visualize the income "
+"inequality\n"
+"                between entities (typically households) is to plot the so "
+"called\n"
+"                <strong>Lorenz curve</strong>.\n"
+"            "
+msgstr ""
+"\n"
+"Uma ferramenta popular entre economistas para visualizar a desigualdade "
+"entre entidades (tipicamente agregados familiares) é a chamada <strong>curva "
+"de Lorenz</strong>."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:17
+msgid ""
+"\n"
+"                The Lorenz curve relates the income of an entity with its "
+"relative\n"
+"                position among all other entities.\n"
+"                <a id=\"extend-button-1\" href=\"#\">(how it is "
+"constructed)</a>\n"
+"            "
+msgstr ""
+"\n"
+"A curva de Lorenz relaciona o rendimento de uma entidade com a sua posição "
+"relativa nos rendimentos de outras entidades. <a id=\"extend-button-1\" href="
+"\"#\">(como é construída)</a>"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:26
+msgid ""
+"\n"
+"                        On the x axis, the entity's relative rank: 0 is the "
+"entity with\n"
+"                        lowest income; 1 is the entity with highest income.\n"
+"                    "
+msgstr ""
+"\n"
+"No eixo do x, o ranking relativo da entidade: 0 é a entidade com menor "
+"rendimento; 1 a entidade com maior rendimento."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:32
+msgid ""
+"\n"
+"                        On the y axis, the relative cumulative income: the "
+"1st entity\n"
+"                        value is its income; the 2nd entity value is its "
+"income plus the\n"
+"                        income of the 1st entity, and so forth such that, "
+"the last\n"
+"                        entity (who earned more) value is the total earned "
+"by all\n"
+"                        entities.\n"
+"                        These values are then divided by the total, such "
+"that the last\n"
+"                        entity has value 1.\n"
+"                    "
+msgstr ""
+"\n"
+"No eixo do y, o rendimento cumulativo relativo: a 1a entidade tem o valor do "
+"seu rendimento, a segunda o valor do seu rendimento + o rendimento da "
+"entidade anterior, e por ai em diante. A última entidade (com maior "
+"rendimento), tem o valor o total de rendimentos de todas as entidades. De "
+"seguida, os valores são todos divididos pelo total, de forma que a última "
+"entidade tem valor 1."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:45
+msgid ""
+"\n"
+"                The Lorenz curve starts at (x, y) = (0, 0) and ends at (x, "
+"y) =\n"
+"                (1, 1). If all entities have the same income, the curve is a "
+"strait\n"
+"                line; if only one entity has income, the curve is a constant "
+"at 0,\n"
+"                except on the last entity, which has value 1.\n"
+"            "
+msgstr ""
+"\n"
+"A curva de Lorenz começa em (x, y) = (0, 0) e acaba em (x, y) = (1, 1). Se "
+"todas as entidades tiverem o mesmo rendimento, é uma linha recta; se apenas "
+"uma entidade tiver rendimento, é uma linha constante em y = 0, excepto em x "
+"= 1, que salta para valor y = 1."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:53
+msgid ""
+"\n"
+"                The relevance of the Lorenz curve is that it measures the "
+"income\n"
+"                inequality of the entities considered: the farther away from "
+"the\n"
+"                strait line, the larger the inequality. In particular, the "
+"area\n"
+"                between the strait line and the curve is proportional to the "
+"<strong>Gini\n"
+"                index</strong>, a popular macroscopic indicator of income "
+"inequality.\n"
+"            "
+msgstr ""
+"\n"
+"A relevância da curva de Lorenz é que esta mede a desigualdade de rendimentos: "
+"quanto mais longe estiver da linha recta, maior a desigualdade. Em "
+"particular, a área entre a linha recta e a curva de Lorenz é proporcional ao "
+"<strong>índice de Gini</strong>, um popular indicador macroscópico de "
+"desigualdade de rendimentos."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:61
+msgid "Lorenz Curve"
+msgstr "Curva de Lorenz"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:63
+msgid ""
+"\n"
+"                In this analysis we consider the Lorenz curve of all private "
+"entities\n"
+"                that were ever contracted on a public contract, over their "
+"income by\n"
+"                public contracts.\n"
+"                For each entity, we compute the income over all public "
+"contracts\n"
+"                of that entity, and use the procedure above to compute the "
+"Lorenz\n"
+"                Curve, using all private entities.\n"
+"                <a id=\"extend-button-2\" href=\"#\">(what is a private "
+"entity)</a>\n"
+"                The curve was computed from all entities (~100.000), and "
+"here\n"
+"                we plot 200 of them uniformly distributed on the x axis.\n"
+"            "
+msgstr ""
+"\n"
+"Nesta análise calculamos a curva de Lorenz de todas as entidades privadas "
+"que alguma vez realizaram um contrato público, sobre os seus rendimentos por "
+"contratos públicos. Ou seja, para cada entidade, calculamos o rendimento "
+"sobre todos os contratos públicos em que foi contratata, e usamos o "
+"procedimento acima para calcular a curva de Lorenz, usando todas as "
+"entidades privadas. <a id=\"extend-button-2\" href=\"#\">(O que é uma "
+"entidade privada)</a>"
+"A curva foi calculada usando todas as entidades, e aqui "
+"representamos 200 delas uniformemente distribuídas no eixo do x."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:77
+msgid ""
+"\n"
+"                    The database has both public and private entities.\n"
+"                    We used the following approximation to exclude public "
+"entities:\n"
+"                    entities where the total earned is higher than the total "
+"expended\n"
+"                    are considered private: so far, we never found a public\n"
+"                    entity with profit in this database.\n"
+"                "
+msgstr ""
+"\n"
+"Como a base de dados contém entidades públicas e privadas sem distinção, "
+"usámos a seguinte aproximação para excluir entidades públicas: entidades em "
+"que o rendimento total é superior aos gastos totais são consideradas "
+"privadas. Até hoje nunca encontrámos uma entidade pública com lucro nesta "
+"base de dados. Algumas entidades privadas que contrataram uma entidade "
+"pública mas nunca foram contratadas poderão estar incluidas, que assumimos "
+"serem poucas."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:88
+msgid "Gini Index"
+msgstr "Índice de Gini"
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:90
+msgid ""
+"\n"
+"                The Gini index is a popular index to quantify inequality: a\n"
+"                Gini index of 0 means that all entities have the same "
+"income; a Gini\n"
+"                index of 1 means that only one entity has income.\n"
+"            "
+msgstr ""
+"\n"
+"O índice de Gini é um índice macroscópico popular para quantificar "
+"desigualdade de rendimentos: 0 significa que as entidades têm os mesmos "
+"rendimentos; 1 significa que apenas uma entidade tem rendimentos."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:97
+#, python-format
+msgid ""
+"\n"
+"                From our data, we computed the Gini index, from which we "
+"obtain the\n"
+"                numeric value of <strong>%(gini_index)s</strong>.\n"
+"            "
+msgstr ""
+"\n"
+"Pela curva, calculamos que o índice de Gini tem o valor numérico de <strong>"
+"%(gini_index)s</strong>."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:103
+msgid ""
+"\n"
+"                Compared to the Gini index of household income,\n"
+"                <strong>~0.34</strong> <a href=\"http://www.pordata.pt/en/"
+"Portugal/Gini+index-2166\">[PORDATA]</a>,\n"
+"                the value seems to be high. However, one should note that "
+"here\n"
+"                entities can be very different: e.g. different number of\n"
+"                employees, different economical sectors.\n"
+"                This naturally leads to a higher Gini index as larger "
+"companies likely\n"
+"                have higher income.\n"
+"            "
+msgstr ""
+"\n"
+"Comparado com o índice de Gini de rendimentos familiares, <strong>~0.34</"
+"strong> <a href=\"http://www.pordata.pt/en/Portugal/Gini"
+"+index-2166\">[PORDATA]</a>, o valor parece ser extremamente elevado. No "
+"entanto, notamos que diferentes entidades podem ser extremamente diferentes: "
+"número de trabalhadores ou sectores económicos diferentes fazem com que "
+"entidades sejam desiguais, e isso naturalmente reflecte-se no índice de Gini."
+
+#: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:114
+msgid ""
+"\n"
+"                It would be interesting to compare this value to the Gini "
+"index\n"
+"                computed from the taxes-declared income of portuguese "
+"entities,\n"
+"                and see if income by public contracts is different.\n"
+"            "
+msgstr ""
+"\n"
+"Seria interessante comparar este valor com o índice de Gini calculado pelos "
+"rendimentos de entidades declarados em impostos, e ver se a contratação "
+"pública difere significamente destes."
+
 #: contracts/templates/contracts/analysis/contracts_price_histogram/graph.html:29
 #: contracts/templates/contracts/analysis/entity_rank/histogram.html:29
 #: contracts/templates/contracts/analysis/municipalities_delta_time/histogram.html:29
@@ -672,14 +936,6 @@ msgstr "mês"
 #: contracts/templates/contracts/analysis/contracts_time_series/graph.html:40
 msgid "Number of signed contracts"
 msgstr "Número de contratos assinados"
-
-#: contracts/templates/contracts/analysis/contracts_time_series/graph.html:53
-#: contracts/templates/contracts/analysis/legislation_application_time_series/graph.html:55
-#: contracts/templates/contracts/analysis/procedure_type_time_series/graph.html:56
-#: contracts/templates/contracts/entity_view/tab_data/graph.html:51
-#: law/templates/law/analysis/law_types_time_series/graph.html:51
-msgid "Download data"
-msgstr "Baixar dados"
 
 #: contracts/templates/contracts/analysis/contracts_time_series/main.html:4
 #: contracts/templates/contracts/analysis/contracts_time_series/main.html:7
@@ -2461,7 +2717,7 @@ msgid ""
 msgstr ""
 "\n"
 "O autor e resposável por este website é <strong>%(author)s</strong>, <a href="
-"\"mailto:%(email)s\">%(email)s</a>.Se tiver alguma dúvida ou sugestão, por "
+"\"mailto:%(email)s\">%(email)s</a>. Se tiver alguma dúvida ou sugestão, por "
 "favor contacte-me."
 
 #: main/templates/about.html:21

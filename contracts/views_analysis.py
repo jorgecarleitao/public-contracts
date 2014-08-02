@@ -111,6 +111,14 @@ def legislation_application_time_series(request):
                   'contracts/analysis/legislation_application_time_series/main.html', context)
 
 
+def contracted_lorenz_curve(request):
+
+    _, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
+
+    context = {'navigation_tab': 'analysis', 'gini_index': gini_index}
+    return render(request, 'contracts/analysis/contracted_lorenz_curve/main.html', context)
+
+
 AVAILABLE_VIEWS = {
     'municipalities_delta_time': municipalities_delta_time,
     'municipalities_contracts_time_series': municipalities_contracts_time_series,
@@ -124,7 +132,8 @@ AVAILABLE_VIEWS = {
     'entities_values_distribution': entities_values_histogram,
     'procedure_type_time_series': procedure_types_time_series,
     'contracts_time_series': contracts_time_series,
-    'legislation_application_time_series': legislation_application_time_series
+    'legislation_application_time_series': legislation_application_time_series,
+    'contracted_lorenz_curve': contracted_lorenz_curve,
 }
 
 
@@ -141,6 +150,8 @@ titles = OrderedDict([
         ('municipalities_categories_ranking', _('Ranking of specificity of municipalities')),
 
         ('ministries_contracts_time_series', _('When do portuguese ministries contract most?')),
+
+        ('contracted_lorenz_curve', _('Income Inequality in Public Contracts')),
 ])
 
 
