@@ -88,14 +88,18 @@ def contracts_macro_statistics_json(request):
 def procedure_types_time_series_json(request):
     data = analysis_manager.get_analysis('procedure_type_time_series')
 
-    tender_time_series = {'values': [], 'key': _('tender')}
-    direct_time_series = {'values': [], 'key': _('direct procurement')}
+    types = [name for name in data[0] if name not in ('from', 'to')]
+
+    series = []
+    for type in types:
+        series.append({'values': [], 'key': type})
 
     for x in data:
-        tender_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['tender']})
-        direct_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['direct']})
+        for s in series:
+            s['values'].append({'month': x['from'].strftime('%Y-%m'),
+                                'value': x[s['key']]})
 
-    return HttpResponse(json.dumps([tender_time_series, direct_time_series]), content_type="application/json")
+    return HttpResponse(json.dumps(series), content_type="application/json")
 
 
 def municipalities_delta_time_json(request):

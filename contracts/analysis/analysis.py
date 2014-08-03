@@ -104,22 +104,42 @@ def get_all_procedure_types_time_series():
     min_date = datetime.date(2010, 1, 1)
     end_date = datetime.date(date.today().year, date.today().month, 1)
 
-    data = []
-    for i in range(100):
-        max_date = add_months(min_date, 1)
-        contracts = models.Contract.objects.filter(signing_date__gte=min_date,
-                                                   signing_date__lt=max_date)
+    # ignore procedure types with less than 100 contracts
+    valid_types = models.ProcedureType.objects\
+        .annotate(count=Count('contract'))\
+        .exclude(count__lt=100)
+    # avoid subqueries (Django related optimization)
+    valid_types = list(valid_types)
 
-        count = contracts.count()
-        if count == 0:
-            break
+    data = []
+    while True:
+        max_date = add_months(min_date, 1)
+
+        # restrict to date bounds
+        counts = models.ProcedureType.objects\
+            .filter(id__in=[p.id for p in valid_types])\
+            .filter(contract__signing_date__gte=min_date,
+                    contract__signing_date__lt=max_date)
+
+        # annotate number of contracts
+        counts = counts.annotate(count=Count('contract'))
+
+        # hit db and make it a dictionary
+        counts = dict(counts.values_list('id', 'count'))
+
+        # total of this month (to make percentages)
+        total = sum([count for count in counts.values()])
 
         entry = {'from': min_date,
-                 'to': max_date,
-                 'direct': contracts.filter(procedure_type_id=2).count()*1./count,
-                 'tender': contracts.filter(procedure_type_id=3).count()*1./count
-        }
+                 'to': max_date}
+
+        for procedure_type in valid_types:
+            if procedure_type.id in counts:
+                entry[procedure_type.name] = counts[procedure_type.id]/total
+            else:
+                entry[procedure_type.name] = 0
         data.append(entry)
+
         min_date = max_date
         if min_date == end_date:
             break
