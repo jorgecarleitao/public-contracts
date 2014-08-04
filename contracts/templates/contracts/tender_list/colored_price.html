@@ -1,0 +1,7 @@
+{% load i18n %}
+{% if price %}
+    {% include "contracts/contract_list/colored_price.html" %}
+{% else %}
+    {% include "contracts/contract_list/colored_price.html" %}
+    <span class="price-1">({% trans "Value negotiable" %})</span>
+{% endif %}

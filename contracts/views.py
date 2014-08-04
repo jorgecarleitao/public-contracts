@@ -1,10 +1,9 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 
 from . import models
-from contracts.forms import ContractSelectorForm
+from contracts.forms import ContractSelectorForm, TenderSelectorForm
 
 from . import indexes
 
@@ -158,32 +157,33 @@ def entities_list(request):
 
 
 def build_tender_list_context(context, GET):
-    def apply_order(querySet, order):
-        ordering = {_('price'): '-price', _('date'): '-publication_date'}
+    page = GET.get(_('page'))
 
-        if order not in ordering:
-            return querySet, False
+    context['selector'] = TenderSelectorForm(GET)
+    if context['selector'].is_valid():
+        GET = context['selector'].cleaned_data
+    else:
+        GET = {}
 
-        return querySet.order_by(ordering[order]), True
-
-    key = _('search')
+    key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
         context['tenders'] = context['tenders'].filter(description__search=GET[key])
-        context['search'] = GET[key]
 
-    if _('sorting') in GET:
-        order = GET[_('sorting')]
+    key = 'range'
+    if key in GET and GET[key]:
+        start_date = GET[key][0]
+        end_date = GET[key][1]
+        context['tenders'] = context['tenders'].filter(
+            publication_date__gte=start_date,
+            publication_date__lte=end_date)
 
-        context['tenders'], applied = apply_order(context['tenders'], order)
-
-        # if it is a valid ordering, we send it to the template.
-        order_name = {_('price'): 'price', _('date'): 'date'}
-        if applied:
-            context['ordering'] = order_name[order]
+    key = 'sorting'
+    if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
+        context['tenders'] = context['tenders'].order_by(
+            context['selector'].SORTING_LOOKUPS[GET[key]])
 
     paginator = Paginator(context['tenders'], 20)
-    page = GET.get(_('page'))
     try:
         context['tenders'] = paginator.page(page)
     except PageNotAnInteger:

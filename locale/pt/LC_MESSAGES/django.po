@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-04 13:04+0100\n"
+"POT-Creation-Date: 2014-08-04 14:04+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,33 +70,29 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:70 contracts/views.py:107 contracts/views.py:169
+#: contracts/entity_views.py:70 contracts/views.py:106
 #: contracts/templates/contracts/entity_list/search_entities.html:49
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
-#: contracts/templates/contracts/tender_list/search.html:48
 #: deputies/views.py:29 deputies/templates/deputies/search_bar.html:49
 #: law/views.py:16 law/templates/law/law_list/search_law.html:23
 msgid "search"
 msgstr "procura"
 
 #: contracts/entity_views.py:84 contracts/entity_views.py:85
-#: contracts/views.py:121 contracts/views.py:122 contracts/views.py:175
-#: contracts/views.py:176
+#: contracts/views.py:120 contracts/views.py:121
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:42
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:44
-#: contracts/templates/contracts/tender_list/search.html:34
-#: contracts/templates/contracts/tender_list/search.html:36
 #: deputies/views.py:36 deputies/views.py:37
 #: deputies/templates/deputies/search_bar.html:35
 #: deputies/templates/deputies/search_bar.html:37
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:94 contracts/views.py:27 contracts/views.py:132
-#: contracts/views.py:186 deputies/views.py:47 law/views.py:23
+#: contracts/entity_views.py:94 contracts/views.py:26 contracts/views.py:131
+#: contracts/views.py:160 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
@@ -139,17 +135,13 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/forms.py:17 contracts/forms.py:19 contracts/views.py:162
-#: contracts/views.py:181
-#: contracts/templates/contracts/tender_list/search.html:21
-#: contracts/templates/contracts/tender_list/search.html:36
+#: contracts/forms.py:17 contracts/forms.py:19 contracts/forms.py:54
+#: contracts/forms.py:56
 msgid "date"
 msgstr "data"
 
-#: contracts/forms.py:18 contracts/forms.py:19 contracts/views.py:162
-#: contracts/views.py:181
-#: contracts/templates/contracts/tender_list/search.html:16
-#: contracts/templates/contracts/tender_list/search.html:34
+#: contracts/forms.py:18 contracts/forms.py:19 contracts/forms.py:55
+#: contracts/forms.py:56
 msgid "price"
 msgstr "preço"
 
@@ -168,6 +160,10 @@ msgstr "filtrar por data"
 #: contracts/forms.py:49
 msgid "range"
 msgstr "datas"
+
+#: contracts/forms.py:61
+msgid "filter tenders"
+msgstr "filtrar concursos"
 
 #: contracts/urls.py:16 deputies/urls.py:9 law/urls.py:7
 msgid "home"
@@ -203,13 +199,13 @@ msgstr "categorias"
 msgid "entities"
 msgstr "entidades"
 
-#: contracts/views.py:96 contracts/views.py:102 contracts/views.py:127
+#: contracts/views.py:95 contracts/views.py:101 contracts/views.py:126
 #: contracts/templates/contracts/entity_list/search_entities.html:18
 #: contracts/templates/contracts/entity_list/search_entities.html:35
 msgid "earnings"
 msgstr "ganho"
 
-#: contracts/views.py:96 contracts/views.py:104 contracts/views.py:127
+#: contracts/views.py:95 contracts/views.py:103 contracts/views.py:126
 #: contracts/templates/contracts/entity_list/search_entities.html:23
 #: contracts/templates/contracts/entity_list/search_entities.html:37
 msgid "expenses"
@@ -1341,17 +1337,13 @@ msgstr ""
 "perguntámos que percentagem deles foi feita por ajuste direto e por concurso "
 "público. Eis o resultado:"
 
-#: contracts/templates/contracts/tender_list/search.html:10
-msgid "search tenders"
-msgstr "procurar concursos"
+#: contracts/templates/contracts/tender_list/colored_price.html:6
+msgid "Value negotiable"
+msgstr "Valor negociável"
 
-#: contracts/templates/contracts/tender_list/search.html:15
-msgid "order by price"
-msgstr "ordenar por preço"
-
-#: contracts/templates/contracts/tender_list/search.html:19
-msgid "order by date"
-msgstr "ordenar por data"
+#: contracts/templates/contracts/tender_list/tender_summary.html:10
+msgid "deadline"
+msgstr "data limite"
 
 #: contracts/templatetags/contracts/humanize.py:11
 #, python-format

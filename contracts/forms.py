@@ -48,3 +48,14 @@ class ContractSelectorForm(forms.Form):
         if field_name == 'range':
             return _('range')
         return _(field_name)
+
+
+class TenderSelectorForm(ContractSelectorForm):
+    CHOICES = ((_('date'), _('date')),
+               (_('price'), _('price')))
+    SORTING_LOOKUPS = {_('date'): '-publication_date', _('price'): '-price'}
+
+    search = forms.CharField(required=False,
+                             widget=forms.TextInput(
+                                 attrs={'class': 'form-control',
+                                        'placeholder': _('filter tenders')}))

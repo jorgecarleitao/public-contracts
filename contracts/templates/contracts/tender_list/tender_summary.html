@@ -2,11 +2,16 @@
 {% load i18n %}
 {% block summary_content %}
     <h4><a href="{{ tender.get_dre_url }}">{{ tender.description }}</a> (<a href="{{ tender.get_base_url }}">BASE</a>)</h4>
-    <div class="age">{{tender.publication_date}}&rarr;{{tender.deadline_date}}</div>
-    <div class="transfer">
-        {% include "contracts/contract_list/colored_price.html" with price=tender.price %}
+    <p>
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span>{% include "contracts/tender_list/colored_price.html" with price=tender.price %}</span>
+        <br>
+        <span class="glyphicon glyphicon-calendar"></span>
+        <span>{{tender.publication_date}} ({% trans "deadline" %}: {{tender.deadline_date}})</span>
+        <br>
+        <span class="glyphicon glyphicon-download"></span>
         {% for contractor in tender.contractors.all %}
             {% include "contracts/entity_inline.html" with entity=contractor %}
         {% endfor %}
-    </div>
+    </p>
 {% endblock %}
