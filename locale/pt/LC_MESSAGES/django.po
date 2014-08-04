@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-04 11:21+0100\n"
+"POT-Creation-Date: 2014-08-04 13:04+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2431,47 +2431,43 @@ msgstr[1] ""
 msgid "about"
 msgstr "acerca"
 
-#: main/templates/about.html:3 main/templates/about.html.py:6
+#: main/templates/about.html:3 main/templates/about.html.py:41
 msgid "About Publics"
 msgstr "Sobre o Públicos"
 
-#: main/templates/about.html:8
+#: main/templates/about.html:7
+msgid "Author"
+msgstr "Autor"
+
+#: main/templates/about.html:11
 #, python-format
 msgid ""
 "\n"
-"                This project is under the responsibility of %(author)s, <a "
-"href=\"mailto:%(email)s\">reachable by email</a>.\n"
-"            "
+"                    The author and responsible for this website is <strong>"
+"%(author)s</strong>,\n"
+"                    <a href=\"mailto:%(email)s\">%(email)s</a>.\n"
+"                    If you have any suggestion or criticism, please contact "
+"me.\n"
+"                "
 msgstr ""
 "\n"
-"Este projeto está sobre a responsabilidade de %(author)s, <a href=\"mailto:"
-"%(email)s\">através de email</a>."
+"O autor e resposável por este website é <strong>%(author)s</strong>, <a href="
+"\"mailto:%(email)s\">%(email)s</a>.Se tiver alguma dúvida ou sugestão, por "
+"favor contacte-me."
 
-#: main/templates/about.html:11
-msgid ""
-"\n"
-"                If you have any suggestion or criticism, please contact me "
-"or\n"
-"                post it in our public mailing-list.\n"
-"            "
-msgstr ""
-"\n"
-"Se tem alguma crítica ou sugestão, por favor contacte-me ou coloque-a na "
-"mailing-list."
-
-#: main/templates/about.html:16
+#: main/templates/about.html:21
 msgid "Disclaimer"
 msgstr "Termo de responsabilidade"
 
-#: main/templates/about.html:18
+#: main/templates/about.html:25
 msgid ""
 "\n"
-"                We make a huge effort to have the data in this website "
-"syncronized with the different official websites,\n"
-"                however, sometimes it simply does not happen. Ultimately, "
-"real-time and up-to-date\n"
-"                information can only be obtained trough them.\n"
-"            "
+"                    We make a huge effort to have the data in this website "
+"synchronized with the different official websites,\n"
+"                    however, sometimes it simply does not happen. "
+"Ultimately, real-time and up-to-date\n"
+"                    information can only be obtained trough them.\n"
+"                "
 msgstr ""
 "\n"
 "Fazemos um grande esforço para que a informação neste website esteja "
@@ -2479,15 +2475,15 @@ msgstr ""
 "contudo, por vezes isso simplesmente não acontece. Em última instância, "
 "informação em tempo real e actualizada só pode ser obtida a partir deles."
 
-#: main/templates/about.html:25
+#: main/templates/about.html:32
 msgid ""
 "\n"
-"                While we always try to be rigorous on the analysis found in "
-"this website, they <strong>are not</strong> intended to be or substitute "
+"                    While we always try to be rigorous on the analysis found "
+"in this website, they <strong>are not</strong> intended to be or substitute "
 "scientific investigations.\n"
-"                Fundamentally, they are answers to simple curiosities and "
-"<strong>this work is not peer-reviewed</strong>.\n"
-"            "
+"                    Fundamentally, they are answers to simple curiosities "
+"and <strong>this work is not peer-reviewed</strong>.\n"
+"                "
 msgstr ""
 "\n"
 "Enmbora procuremos ser sempre rigorosos nas análises que fazemos neste "
@@ -2495,78 +2491,143 @@ msgstr ""
 "científica. Na sua essência, elas são apenas respostas a curiosidades e "
 "consequentemente <strong>não são revista por pares</strong>."
 
-#: main/templates/about.html:33
+#: main/templates/about.html:45
+msgid ""
+"\n"
+"                    This website was created in the hope that it may be "
+"useful\n"
+"                    to anyone who wants to have better access to the\n"
+"                    portuguese public information.\n"
+"                "
+msgstr ""
+"\n"
+"Este website foi criado com a esperança de ser útil a qualquer pessoa que "
+"procure melhor acesso a informação pública portuguesa."
+
+#: main/templates/about.html:52
+msgid ""
+"\n"
+"                    Our objectives are:\n"
+"                "
+msgstr ""
+"\n"
+"Os nossos objetivos são:"
+
+#: main/templates/about.html:58
+msgid ""
+"\n"
+"                        <strong>Help companies</strong> to have better\n"
+"                        access to public information to take more informed "
+"decisions.\n"
+"                    "
+msgstr ""
+"\n"
+"<strong>Ajudar empresas</strong> a ter melhor acesso a informação pública "
+"para tomarem decisões mais informadas."
+
+#: main/templates/about.html:64
+msgid ""
+"\n"
+"                        <strong>Help citizens</strong> to have better access "
+"to\n"
+"                        public information and to better understand "
+"portuguese public\n"
+"                        procurements.\n"
+"                    "
+msgstr ""
+"\n"
+"<strong>Ajudar cidadãos</strong> a ter melhor acesso a informação pública e "
+"a perceberem melhor a contratação pública portuguesa."
+
+#: main/templates/about.html:71
+msgid ""
+"\n"
+"                        <strong>Help scientists and policy makers</strong> "
+"with a\n"
+"                        tool to study portuguese open data.\n"
+"                    "
+msgstr ""
+"\n"
+"<strong>Ajudar cientístas e legisladores</strong> com uma ferramenta e apoio "
+"técnico para estudar dados abertos portugueses."
+
+#: main/templates/about.html:85
+msgid ""
+"\n"
+"                    This website could not be possible without the help of\n"
+"                    numerous persons that gave a lot to open data,\n"
+"                    web development and active citizenship. We would like "
+"to\n"
+"                    thank to:\n"
+"                "
+msgstr ""
+"\n"
+"Este website não seria possível sem a ajuda de centenas de pessoas que deram "
+"imenso para web development, dados abertos, e cidadania activa. Gostariamos "
+"de agradecer especialmente a:"
+
+#: main/templates/about.html:94
 #, python-format
 msgid ""
 "\n"
-"                    <a href=\"%(mailing_list)s\">Django foundation and its "
-"contributors</a> for the\n"
-"                    extraordinary software and helpful community they are;\n"
-"                "
+"                        <a href=\"%(mailing_list)s\">Django foundation and "
+"its contributors</a> for the\n"
+"                        extraordinary software and helpful community they "
+"are;\n"
+"                    "
 msgstr ""
 "\n"
 "<a href=\"%(mailing_list)s\">Fundação Django e contribuidores</a> pelo "
 "software extraordinário e comunidade fantástica que é;"
 
-#: main/templates/about.html:39
+#: main/templates/about.html:100
 #, python-format
 msgid ""
 "\n"
-"                    <a href=\"%(mailing_list)s\">Má despesa pública</a>, a "
-"portuguese blog,\n"
-"                    for publicizing some of our analysis;\n"
-"                "
+"                        <a href=\"%(mailing_list)s\">Má despesa pública</a>, "
+"a portuguese blog,\n"
+"                        for publicizing some of our analysis;\n"
+"                    "
 msgstr ""
 "\n"
 "<a href=\"%(mailing_list)s\">Blog Má despesa pública</a> por ajudarem a "
 "divulgar algumas das nossas análises;"
 
-#: main/templates/about.html:45
+#: main/templates/about.html:106
 #, python-format
 msgid ""
 "\n"
-"                    <a href=\"%(mailing_list)s\">The portuguese's official "
-"database</a>\n"
-"                    for insights on the current law about public contracts;\n"
-"                "
+"                        <a href=\"%(mailing_list)s\">The portuguese's "
+"official database</a>\n"
+"                        for insights on the current law about public "
+"contracts;\n"
+"                    "
 msgstr ""
 "\n"
 "<a href=\"%(mailing_list)s\">Base de dados oficial portuguesa, BASE</a> pela "
 "ajuda na interpretação da lei e ajuda técnica;"
 
-#: main/templates/about.html:51
+#: main/templates/about.html:112
 #, python-format
 msgid ""
 "\n"
-"                    <a href=\"%(mailing_list)s\">The European Union's "
+"                        <a href=\"%(mailing_list)s\">The European Union's "
 "website</a>\n"
-"                    for the insightful information about public contracts;\n"
-"                "
+"                        for the insightful information about public "
+"contracts;\n"
+"                    "
 msgstr ""
 "\n"
 "<a href=\"%(mailing_list)s\">Website da União Europeia</a> que contém "
 "informação importante sobre contratação pública e legislação;"
 
-#: main/templates/about.html:57
+#: main/templates/about.html:118
 #, python-format
 msgid ""
 "\n"
-"                    <a href=\"%(mailing_list)s\">Django-treebeard package</"
-"a>\n"
-"                    for the efficient tree storage;\n"
-"                "
-msgstr ""
-"\n"
-"<a href=\"%(mailing_list)s\">Django-treebeard</a> que nos facilita "
-"tecnicamente a implementação das categorias;"
-
-#: main/templates/about.html:63
-#, python-format
-msgid ""
-"\n"
-"                    <a href=\"%(mailing_list)s\">read the docs</a> for "
+"                        <a href=\"%(mailing_list)s\">read the docs</a> for "
 "hosting our documentation.\n"
-"                "
+"                    "
 msgstr ""
 "\n"
 "<a href=\"%(mailing_list)s\">read the docs</a> que aloja a documentação da "

@@ -2,68 +2,124 @@
 {% load i18n %}
 {% block title %}{% trans "About Publics"%}{% endblock %}
 {% block content %}
-    <div class="text-element">
-        <h2>{% trans "About Publics"%}</h2>
-        <p>
-            {% blocktrans with author="Jorge C. Leitão" email="jorgecarleitao@publicos.pt" %}
-                This project is under the responsibility of {{ author }}, <a href="mailto:{{ email }}">reachable by email</a>.
-            {% endblocktrans %}
-            {% blocktrans with author="Jorge C. Leitão" %}
-                If you have any suggestion or criticism, please contact me or
-                post it in our public mailing-list.
-            {% endblocktrans %}
-        </p>
-        <h4>{% trans "Disclaimer"%}</h4>
-        <p>
-            {% blocktrans %}
-                We make a huge effort to have the data in this website syncronized with the different official websites,
-                however, sometimes it simply does not happen. Ultimately, real-time and up-to-date
-                information can only be obtained trough them.
-            {% endblocktrans %}
-        </p>
-        <p>
-            {% blocktrans %}
-                While we always try to be rigorous on the analysis found in this website, they <strong>are not</strong> intended to be or substitute scientific investigations.
-                Fundamentally, they are answers to simple curiosities and <strong>this work is not peer-reviewed</strong>.
-            {% endblocktrans %}
-        </p>
-        <h2>{% trans "Acknowledgments"%}</h2>
-        <ul>
-            <li>
-                {% blocktrans with mailing_list="https://www.djangoproject.com/"%}
-                    <a href="{{ mailing_list }}">Django foundation and its contributors</a> for the
-                    extraordinary software and helpful community they are;
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Author"%}</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans with author="Jorge C. Leitão" email="jorgecarleitao@publicos.pt" %}
+                    The author and responsible for this website is <strong>{{ author }}</strong>,
+                    <a href="mailto:{{ email }}">{{ email }}</a>.
+                    If you have any suggestion or criticism, please contact me.
                 {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans with mailing_list="http://madespesapublica.blogspot.pt/"%}
-                    <a href="{{ mailing_list }}">Má despesa pública</a>, a portuguese blog,
-                    for publicizing some of our analysis;
+            </p>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Disclaimer"%}</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans %}
+                    We make a huge effort to have the data in this website synchronized with the different official websites,
+                    however, sometimes it simply does not happen. Ultimately, real-time and up-to-date
+                    information can only be obtained trough them.
                 {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans with mailing_list="http://www.base.gov.pt/base2/"%}
-                    <a href="{{ mailing_list }}">The portuguese's official database</a>
-                    for insights on the current law about public contracts;
+            </p>
+            <p>
+                {% blocktrans %}
+                    While we always try to be rigorous on the analysis found in this website, they <strong>are not</strong> intended to be or substitute scientific investigations.
+                    Fundamentally, they are answers to simple curiosities and <strong>this work is not peer-reviewed</strong>.
                 {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans with mailing_list="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm"%}
-                    <a href="{{ mailing_list }}">The European Union's website</a>
-                    for the insightful information about public contracts;
+            </p>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "About Publics"%}</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans %}
+                    This website was created in the hope that it may be useful
+                    to anyone who wants to have better access to the
+                    portuguese public information.
                 {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans with mailing_list="https://github.com/tabo/django-treebeard"%}
-                    <a href="{{ mailing_list }}">Django-treebeard package</a>
-                    for the efficient tree storage;
+            </p>
+            <p>
+                {% blocktrans %}
+                    Our objectives are:
                 {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans with mailing_list="https://readthedocs.org/"%}
-                    <a href="{{ mailing_list }}">read the docs</a> for hosting our documentation.
+            </p>
+            <ul>
+                <li>
+                    {% blocktrans %}
+                        <strong>Help companies</strong> to have better
+                        access to public information to take more informed decisions.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        <strong>Help citizens</strong> to have better access to
+                        public information and to better understand portuguese public
+                        procurements.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        <strong>Help scientists and policy makers</strong> with a
+                        tool to study portuguese open data.
+                    {% endblocktrans %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Acknowledgments"%}</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans %}
+                    This website could not be possible without the help of
+                    numerous persons that gave a lot to open data,
+                    web development and active citizenship. We would like to
+                    thank to:
                 {% endblocktrans %}
-            </li>
-        </ul>
+            </p>
+            <ul>
+                <li>
+                    {% blocktrans with mailing_list="https://www.djangoproject.com/"%}
+                        <a href="{{ mailing_list }}">Django foundation and its contributors</a> for the
+                        extraordinary software and helpful community they are;
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans with mailing_list="http://madespesapublica.blogspot.pt/"%}
+                        <a href="{{ mailing_list }}">Má despesa pública</a>, a portuguese blog,
+                        for publicizing some of our analysis;
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans with mailing_list="http://www.base.gov.pt/base2/"%}
+                        <a href="{{ mailing_list }}">The portuguese's official database</a>
+                        for insights on the current law about public contracts;
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans with mailing_list="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm"%}
+                        <a href="{{ mailing_list }}">The European Union's website</a>
+                        for the insightful information about public contracts;
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans with mailing_list="https://readthedocs.org/"%}
+                        <a href="{{ mailing_list }}">read the docs</a> for hosting our documentation.
+                    {% endblocktrans %}
+                </li>
+            </ul>
+        </div>
     </div>
 {% endblock %}
