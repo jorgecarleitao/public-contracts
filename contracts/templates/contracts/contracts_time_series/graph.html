@@ -38,7 +38,7 @@
 
             chart.yAxis     //Chart y-axis settings
                     .axisLabel("{% trans "Number of signed contracts" %}")
-                    .tickFormat(d3.format(',.02f'));
+                    .tickFormat(d3.format(',d'));
 
             var svg = d3.select('#graph-{{ url|slugify }}').append('svg')
                     .datum(data)
