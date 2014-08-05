@@ -1,0 +1,11 @@
+<ul class="list-group">
+    {% for contract in contracts %}
+        <li class="list-group-item">
+            <a href="{{ contract.get_absolute_url }}">
+                {{contract.contract_description|truncatewords:15}}</a>
+            <br>
+            <span>{% include "contracts/contract_list/colored_price.html" with price=contract.price %}</span>,
+            {{ contract.signing_date }}
+        </li>
+    {% endfor %}
+</ul>

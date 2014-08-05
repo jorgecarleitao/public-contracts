@@ -120,9 +120,7 @@ AVAILABLE_VIEWS = {
 }
 
 
-def analysis(request):
-
-    titles = OrderedDict([
+titles = OrderedDict([
         ('contracts_time_series', _('When do Portugal contract most?')),
         ('contracts_price_distribution', _('Distribution of prices of contracts')),
         ('entities_values_distribution', _('Distribution of earnings of entities')),
@@ -135,7 +133,10 @@ def analysis(request):
         ('municipalities_categories_ranking', _('Ranking of specificity of municipalities')),
 
         ('ministries_contracts_time_series', _('When do portuguese ministries contract most?')),
-    ])
+])
+
+
+def analysis_list():
 
     analysis_list = []
     for analysis in titles:
@@ -146,4 +147,11 @@ def analysis(request):
                                  slugify(titles[analysis]))),
             'title': titles[analysis]
         })
-    return render(request, 'contracts/analysis.html', {'analysis': analysis_list, 'navigation_tab': 'analysis'})
+
+    return analysis_list
+
+
+def analysis(request):
+    return render(request, 'contracts/analysis.html', {
+        'analysis': analysis_list(),
+        'navigation_tab': 'analysis'})

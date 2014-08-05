@@ -1,0 +1,7 @@
+<ul class="list-group">
+    {% for entity in entities %}
+        <li class="list-group-item">
+            <a href="{{ entity.get_absolute_url }}">{{entity.name}}</a>
+        </li>
+    {% endfor %}
+</ul>

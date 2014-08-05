@@ -1,15 +1,35 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 
 from . import models
+from contracts.analysis import add_months
 from contracts.forms import ContractSelectorForm, TenderSelectorForm
 
 from . import indexes
+from contracts.views_analysis import analysis_list
 
 
 def home(request):
-    return render(request, 'contracts/main_page.html')
+
+    today = now().date()
+    last_month = add_months(today, -1)
+
+    latest_contracts = models.Contract.objects.filter(
+        signing_date__gt=last_month).order_by('-price')[:5]
+
+    latest_entities = models.Entity.objects.order_by('-id')[:5]
+
+    latest_tenders = models.Tender.objects.order_by('-id')[:5]
+
+    latest_analysis = analysis_list()[-5:]
+
+    return render(request, 'contracts/main_page.html', {
+        'latest_contracts': latest_contracts,
+        'latest_entities': latest_entities,
+        'latest_tenders': latest_tenders,
+        'latest_analysis': latest_analysis})
 
 
 def build_contract_list_context(context, GET):

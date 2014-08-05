@@ -48,19 +48,8 @@
                             <span class="glyphicon glyphicon-briefcase"></span>
                             <span><strong>
                                 {% trans "Last contracts" %}:</strong></span>
-                            <ul class="list-group">
-                                {% for contract in last_contracts %}
-                                    <li class="list-group-item">
-                                        <a href="
-                                        {{ contract.get_absolute_url }}">{{contract.contract_description}}</a>
-                                        <br>
-                                        <span>
-                                            {% include "contracts/contract_list/colored_price.html" with price=contract.price %}</span>,
-                                        {{ contract.signing_date }}
-                                    </li>
-                                {% endfor %}
-                                <p><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></p>
-                            </ul>
+                            {% include "contracts/contracts_minor_list.html" with contracts=last_contracts %}
+                            <p><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></p>
                         </li>
                         {% if clients_hiring %}
                             <li class="list-group-item">

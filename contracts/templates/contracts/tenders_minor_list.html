@@ -1,0 +1,12 @@
+{% load i18n %}
+<ul class="list-group">
+    {% for tender in tenders %}
+        <li class="list-group-item">
+            <a href="{{ tender.get_dre_url }}">
+                {{tender.description|truncatewords:15}}</a>
+            <br>
+            <span>{% include "contracts/tender_list/colored_price.html" with price=tender.price %}</span>,
+            {% trans "closes at" %}: {{ tender.deadline_date }}
+        </li>
+    {% endfor %}
+</ul>

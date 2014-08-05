@@ -1,4 +1,4 @@
-{% extends "contracts/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 
@@ -39,10 +39,12 @@
                         <li><strong>{% trans "what was the price" %}</strong></li>
                         <li><strong>{% trans "on which economical sector" %}</strong></li>
                     </ul>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span><strong>{% trans "Most expensive of the month" %}:</strong></span>
+                    {% include "contracts/contracts_minor_list.html" with contracts=latest_contracts %}
 
-                    <h5><a href="{% url "contracts_list" %}">
-                        {% trans "Contracts" %}
-                    </a></h5>
+                    <p><a class="btn btn-success" role="button" href="{% url "contracts_list" %}">
+                        {% trans "Contracts" %}</a></p>
                 </div>
             </div>
             <div class="panel panel-primary">
@@ -63,9 +65,13 @@
                         <li><strong>{% trans "its economical sectors" %}</strong></li>
                         <li><strong>{% trans "its clients" %}</strong></li>
                     </ul>
-                    <h5><a href="{% url "entities_list" %}">
+
+                    <span class="glyphicon glyphicon-briefcase"></span>
+                    <span><strong>{% trans "Most recent" %}:</strong></span>
+                    {% include "contracts/entities_minor_list.html" with entities=latest_entities %}
+                    <p><a class="btn btn-success" role="button" href="{% url "entities_list" %}">
                         {% trans "Entities" %}
-                    </a></h5>
+                    </a></p>
                 </div>
             </div>
         </div>
@@ -87,9 +93,14 @@
                         <li><strong>{% trans "what and at what price" %}</strong></li>
                         <li><strong>{% trans "when is the deadline" %}</strong></li>
                     </ul>
-                    <h5><a href="{% url "tenders_list" %}">
+
+                    <span class="glyphicon glyphicon-briefcase"></span>
+                    <span><strong>{% trans "Most recent" %}:</strong></span>
+                    {% include "contracts/tenders_minor_list.html" with tenders=latest_tenders %}
+
+                    <p><a class="btn btn-success" role="button" href="{% url "tenders_list" %}">
                         {% trans "Tenders" %}
-                    </a></h5>
+                    </a></p>
                 </div>
             </div>
 
@@ -110,9 +121,36 @@
                         <li><strong>{% trans "who was contracted in this sector" %}</strong></li>
                         <li><strong>{% trans "what is the value of the sector" %}</strong></li>
                     </ul>
-                    <h5><a href="{% url "categories_list" %}">
+                    <p><a class="btn btn-success" role="button" href="{% url "categories_list" %}">
                         {% trans "Categories" %}
-                    </a></h5>
+                    </a></p>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{% trans "Analysis" %}</h2>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        {% blocktrans %}
+                            In this website we analyse portuguese public
+                            procurement.
+                        {% endblocktrans %}
+                    </p>
+
+                    <span><strong>{% trans "Most recent" %}:</strong></span>
+                    <ul class="list-group">
+                        {% for analys in latest_analysis %}
+                            <li class="list-group-item">
+                                <a href="{{ analys.url }}">{{ analys.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <p><a class="btn btn-success" role="button" href="
+                    {% url "contracts_analysis" %}">{% trans "Analysis" %}
+                    </a></p>
                 </div>
             </div>
         </div>
