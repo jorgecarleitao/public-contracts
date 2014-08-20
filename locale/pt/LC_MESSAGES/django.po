@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-20 07:51+0100\n"
+"POT-Creation-Date: 2014-08-20 08:21+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1799,15 +1799,9 @@ msgstr "Leis em %s"
 msgid "Latest laws in %s"
 msgstr "Últimas leis em %s"
 
-#: law/feed.py:25 law/feed.py:48
-#, python-format
-msgid "%s of %s - %s"
-msgstr "%s de %s - %s"
-
-#: law/feed.py:45
-#, python-format
-msgid "Documents \"%s\""
-msgstr "Documentos \"%s\""
+#: law/feed.py:48 law/templates/law/base/header.html:6
+msgid "Documents"
+msgstr "Documentos"
 
 #: law/urls.py:7 law/urls.py:8 law/urls.py:10 law/urls.py:12 law/urls.py:16
 #: law/urls.py:20 law/urls.py:21
@@ -2408,10 +2402,6 @@ msgstr ""
 "\n"
 "Gostaria de agradecer ao <a href=\"%(home_url)s\">Pedro Magalhães</a> pela "
 "<a href=\"%(suggestion_url)s\">sugestão</a> que levou a este gráfico."
-
-#: law/templates/law/base/header.html:6
-msgid "Documents"
-msgstr "Documentos"
 
 #: law/templates/law/base/header.html:9
 msgid "Types"

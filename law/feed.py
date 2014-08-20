@@ -22,13 +22,16 @@ class LawsFeed(Feed):
         return _("Latest laws in %s" % SITE_NAME)
 
     def item_title(self, item):
-        return _('%s of %s - %s' % (item.name(), formats.date_format(item.date), item.creator.name))
+        return '%s of %s - %s' % (item.name(),
+                                  formats.date_format(item.date),
+                                  item.creator.name)
 
     def item_description(self, item):
         return item.summary
 
     def items(self, _):
-        return Document.laws.order_by('-date').prefetch_related('type', 'creator')[:200]
+        return Document.laws.order_by('-date')\
+            .prefetch_related('type', 'creator')[:200]
 
 
 class TypeDocumentsFeed(Feed):
@@ -42,13 +45,16 @@ class TypeDocumentsFeed(Feed):
         return obj.get_absolute_url()
 
     def description(self, obj):
-        return _("Documents \"%s\"" % obj.name)
+        return _("Documents") + "\"%s\"" % obj.name
 
     def item_title(self, item):
-        return _('%s of %s - %s' % (item.name(), formats.date_format(item.date), item.creator.name))
+        return '%s of %s - %s' % (item.name(),
+                                  formats.date_format(item.date),
+                                  item.creator.name)
 
     def item_description(self, item):
         return item.summary
 
     def items(self, obj):
-        return obj.document_set.order_by('-date').prefetch_related('type', 'creator')[:200]
+        return obj.document_set.order_by('-date')\
+            .prefetch_related('type', 'creator')[:200]
