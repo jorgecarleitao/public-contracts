@@ -37,7 +37,7 @@ def entities_category_ranking(request):
     context = {'navigation_tab': 'analysis',
                'entities': entities}
 
-    return render(request, 'contracts/entity_rank/main.html', context)
+    return render(request, 'contracts/analysis/entity_rank/main.html', context)
 
 
 def contracts_price_histogram(request):
@@ -48,19 +48,22 @@ def contracts_price_histogram(request):
                'count': data['total_count'],
                'price': data['total_sum']}
 
-    return render(request, 'contracts/contracts_price_histogram/main.html', context)
+    return render(request,
+                  'contracts/analysis/contracts_price_histogram/main.html', context)
 
 
 def entities_values_histogram(request):
 
     context = {'navigation_tab': 'analysis'}
 
-    return render(request, 'contracts/entities_values_histogram/main.html', context)
+    return render(request,
+                  'contracts/analysis/entities_values_histogram/main.html', context)
 
 
 def procedure_types_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/procedure_type_time_series/main.html', context)
+    return render(request,
+                  'contracts/analysis/procedure_type_time_series/main.html', context)
 
 
 @cache_page(60 * 60 * 24)
@@ -75,32 +78,37 @@ def municipalities_delta_time(request):
     context = {'navigation_tab': 'analysis',
                'entities': entities}
 
-    return render(request, 'contracts/municipalities_delta_time/main.html', context)
+    return render(request,
+                  'contracts/analysis/municipalities_delta_time/main.html', context)
 
 
 def municipalities_contracts_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/municipalities_contracts_time_series/main.html', context)
+    return render(request,
+                  'contracts/analysis/municipalities_contracts_time_series/main.html', context)
 
 
 def municipalities_procedure_types_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/municipalities_procedure_type_time_series/main.html', context)
+    return render(request,
+                  'contracts/analysis/municipalities_procedure_type_time_series/main.html', context)
 
 
 def ministries_contracts_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/ministries_contracts_time_series/main.html', context)
+    return render(request,
+                  'contracts/analysis/ministries_contracts_time_series/main.html', context)
 
 
 def contracts_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/contracts_time_series/main.html', context)
+    return render(request, 'contracts/analysis/contracts_time_series/main.html', context)
 
 
 def legislation_application_time_series(request):
     context = {'navigation_tab': 'analysis'}
-    return render(request, 'contracts/legislation_application_time_series/main.html', context)
+    return render(request,
+                  'contracts/analysis/legislation_application_time_series/main.html', context)
 
 
 AVAILABLE_VIEWS = {

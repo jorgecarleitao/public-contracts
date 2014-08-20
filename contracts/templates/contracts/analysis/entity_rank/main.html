@@ -3,9 +3,9 @@
 {% load static %}
 {% block title %}{% trans "Entities index"%}{% endblock %}
 {% block content %}
-    {% include "contracts/entity_rank/text.html" %}
-    {% include "contracts/entity_rank/graph.html" %}
-    {% include "contracts/entity_rank/histogram.html" %}
+    {% include "contracts/analysis/entity_rank/text.html" %}
+    {% include "contracts/analysis/entity_rank/graph.html" %}
+    {% include "contracts/analysis/entity_rank/histogram.html" %}
     <div class="text-element">
         <h3>
             Municípios ordenados de acordo com a especificidade média dos seus contratos
@@ -16,7 +16,7 @@
         {% if entities %}
             <div class="list-loop">
                 {% for entity in entities %}
-                    {% include "contracts/entity_rank/summary.html" %}
+                    {% include "contracts/analysis/entity_rank/summary.html" %}
                 {% endfor %}
             </div>
         {% endif %}

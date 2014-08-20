@@ -20,7 +20,7 @@
         </p>
     </div>
     {% url 'contracts_data_selector' 'contracts-time-series-json' as the_url %}
-    {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
+    {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
     <div class="text-element">
         <h4>{% trans "Observations and context" %}</h4>
         <p>
@@ -57,7 +57,7 @@
         </p>
         <h4>{% trans "Municipalities only:" %}</h4>
         {% url 'contracts_data_selector' 'municipalities-contracts-time-series-json' as the_url %}
-        {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
+        {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
         <ul>
             <li>
                 {% url "contracts_analysis_internal_selector" 2 as the_url %}
@@ -69,7 +69,7 @@
         </ul>
         <h4>{% trans "Non-Municipalities only:" %}</h4>
         {% url 'contracts_data_selector' 'excluding-municipalities-contracts-time-series-json' as the_url %}
-        {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
+        {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
         <p>
             {% blocktrans %}
                 If we exclude all contracts from municipalities, this peak disappears, showing that

@@ -20,7 +20,7 @@
         </p>
     </div>
     {% url 'contracts_data_selector' 'ministries-contracts-time-series-json' as the_url %}
-    {% include "contracts/contracts_time_series/graph.html" with url=the_url %}
+    {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
     <div class="text-element">
         <p>
             {% blocktrans %}

@@ -36,8 +36,8 @@
             Eis o resultado (passe o rato pelo gráfico):
         </p>
     </div>
-    {% include "contracts/municipalities_delta_time/graph.html" %}
-    {% include "contracts/municipalities_delta_time/histogram.html" %}
+    {% include "contracts/analysis/municipalities_delta_time/graph.html" %}
+    {% include "contracts/analysis/municipalities_delta_time/histogram.html" %}
     <div class="text-element">
         <p>
             Verificamos que a maioria dos municípios pública os seus
@@ -57,7 +57,7 @@
         {% if entities %}
             <div class="list-loop">
                 {% for entity in entities %}
-                    {% include "contracts/municipalities_delta_time/summary.html" %}
+                    {% include "contracts/analysis/municipalities_delta_time/summary.html" %}
                 {% endfor %}
             </div>
         {% endif %}
