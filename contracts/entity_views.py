@@ -17,9 +17,12 @@ def main_view(request, entity_id, slug=None):
     entity = get_object_or_404(models.Entity.objects.select_related('data'),
                                pk=entity_id)
 
-    contracts = list(entity.contract_set.prefetch_related("contracted",
-                                                          "contractors",
-                                                          "category")[:5])
+    ids = entity.get_contracts_ids()
+    contracts = models.Contract.objects.filter(id__in=ids['made'] + ids['set'])
+
+    # optimization
+    contracts = contracts.prefetch_related("contracted", "contractors")[:5]
+
     categories = models.Category.objects.filter(pk__in=[c.category_id
                                                         for c in contracts])
     clients_hiring, hired_clients = entity.main_costumers()
@@ -27,6 +30,8 @@ def main_view(request, entity_id, slug=None):
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'summary',
+               'contracts_made_count': len(ids['made']),
+               'contracts_received_count': len(ids['set']),
                'last_contracts': contracts,
                'last_categories': categories,
                'hired_clients': hired_clients,
@@ -38,9 +43,11 @@ def main_view(request, entity_id, slug=None):
 def contracts(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    contracts = indexes.ContractIndex.objects.filter(id__in=entity.get_contracts_ids())\
-        .search_filter(id__in=entity.get_contracts_ids())\
-        .prefetch_related("contracted", "contractors", "category")
+    contracts = indexes.ContractIndex.objects\
+        .filter(id__in=entity.get_contracts_ids())\
+        .search_filter(id__in=entity.get_contracts_ids())
+
+    contracts = contracts.prefetch_related("contracted", "contractors")
 
     context = {'navigation_tab': 'entities',
                'entity': entity,

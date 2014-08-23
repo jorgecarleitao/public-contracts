@@ -89,40 +89,14 @@ class Entity(models.Model):
 
     country = models.ForeignKey('Country', null=True)
 
+    def __unicode__(self):
+        return self.name
+
     def total_earned(self):
         return self.data.total_earned
 
     def total_expended(self):
         return self.data.total_expended
-
-    def get_contracts_ids(self, flush_cache=False):
-        """
-        Retrieves a list of all contracts' ids the entity participated in.
-        The result is cached for 1 month because it is updated using cron.
-        """
-        cache_name = __name__ + '>contracts_ids' + '>%s' % self.id
-        result = cache.get(cache_name)
-        if result is None or flush_cache:
-            # retrieves the list. This is an expensive query.
-            result = \
-                list(self.contract_set.all().values_list('id', flat=True)) + \
-                list(self.contracts_made.all().values_list('id', flat=True))
-            cache.set(cache_name, result, 60*60*24*30)
-        return result
-
-    def last_contracts(self, slice_value=None):
-        query = Contract.objects.filter(id__in=self.get_contracts_ids())
-
-        if slice_value is None:
-            return query
-
-        try:
-            return query[:slice_value]
-        except IndexError:
-            return query
-
-    def __unicode__(self):
-        return self.name
 
     def get_base_url(self):
         return 'http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#%s' \
@@ -130,6 +104,26 @@ class Entity(models.Model):
 
     def get_absolute_url(self):
         return reverse('entity', args=(self.id, slugify(self.name)))
+
+    def get_contracts_ids(self, flush_cache=False):
+        """
+        Lists all contracts ids the entity participated in.
+        The result is cached for 1 month since it is updated using cron.
+
+        Returns a dictionary with keys 'made' and 'set' with the list of
+        ids of contracts_made and contract_set respectively.
+        """
+        cache_name = __name__ + '>contracts_ids' + '>%s' % self.id
+        result = cache.get(cache_name)
+        if result is None or flush_cache:
+            # retrieves the lists.
+            result = {'made': list(self.contracts_made.all()
+                                   .values_list('id', flat=True)),
+                      'set': list(self.contract_set.all()
+                                  .values_list('id', flat=True))
+                      }
+            cache.set(cache_name, result, 60*60*24*30)
+        return result
 
     def compute_data(self):
         """
