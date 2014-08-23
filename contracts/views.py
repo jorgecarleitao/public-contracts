@@ -217,7 +217,7 @@ def build_tender_list_context(context, GET):
 
 
 def tenders_list(request):
-    tenders = models.Tender.objects.all()
+    tenders = models.Tender.objects.all().prefetch_related('contractors')
 
     context = {'navigation_tab': 'tenders',
                'tenders': tenders}
