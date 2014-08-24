@@ -4,19 +4,13 @@
 
 {% block title %}{% trans "Analysis"%}{% endblock %}
 {% block content %}
-    <div class="container">
-        <ul>
-            {% for analys in analysis %}
-                <li><h4><a href="{{ analys.url }}">
-                    {{ analys.title }}</a></h4>
-            </li>
-            {% endfor %}
-        </ul>
-        <p>
-            {% blocktrans with mailing_list="https://groups.google.com/forum/#!forum/public-contracts" %}
-                If you want a new analysis or have any suggestion, post it in
-                <a href="{{ mailing_list }}">our mailing list</a>.
-            {% endblocktrans %}
-        </p>
+    <div class="list-group">
+        {% for analys in analysis %}
+            <a class="list-group-item" href="{{ analys.url }}">
+                <h4 class="list-group-item-heading">
+                    {{ analys.title }}
+                </h4>
+            </a>
+        {% endfor %}
     </div>
 {% endblock %}
