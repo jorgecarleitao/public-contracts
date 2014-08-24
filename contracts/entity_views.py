@@ -44,8 +44,8 @@ def contracts(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
     contracts = indexes.ContractIndex.objects\
-        .filter(id__in=entity.get_contracts_ids())\
-        .search_filter(id__in=entity.get_contracts_ids())
+        .filter(id__in=entity.get_all_contracts_ids())\
+        .search_filter(id__in=entity.get_all_contracts_ids())
 
     contracts = contracts.prefetch_related("contracted", "contractors")
 

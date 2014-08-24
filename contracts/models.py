@@ -125,6 +125,10 @@ class Entity(models.Model):
             cache.set(cache_name, result, 60*60*24*30)
         return result
 
+    def get_all_contracts_ids(self):
+        ids = self.get_contracts_ids()
+        return ids['made'] + ids['set']
+
     def compute_data(self):
         """
         Computes the data of this entity from the existing relations.
@@ -144,7 +148,7 @@ class Entity(models.Model):
         self.data.total_expended = aggregate['price__sum'] or 0
         self.data.save()
 
-        # update list of contracts
+        # update list of contracts on cache
         self.get_contracts_ids(flush_cache=True)
 
     def main_costumers(self):

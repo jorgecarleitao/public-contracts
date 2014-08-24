@@ -116,7 +116,7 @@ class EntityContractsFeed(Feed):
         return result[:-2]
 
     def items(self, obj):
-        return Contract.objects.filter(id__in=obj.get_contracts_ids())[:200]
+        return Contract.objects.filter(id__in=obj.get_all_contracts_ids())[:200]
 
 
 class EntityTendersFeed(EntityContractsFeed):
