@@ -89,7 +89,8 @@ def contracts_list(request):
     """
     View that controls the contracts list.
     """
-    contracts = indexes.ContractIndex.objects.all().prefetch_related("contracted", "contractors", "category")
+    contracts = indexes.ContractIndex.objects.all()\
+        .prefetch_related("contracted", "contractors")
     context = {'contracts': contracts, 'navigation_tab': 'contracts'}
 
     context = build_contract_list_context(context, request.GET)
