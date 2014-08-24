@@ -5,7 +5,9 @@
         {% include "pagination.html" with items=contracts %}
     {% endif %}
 </div>
-{% include "contracts/contract_list/contracts_loop.html" %}
+{% for contract in contracts %}
+    {% include "contracts/contract_list/contract_summary.html" %}
+{% endfor %}
 {% if contracts %}
     {% include "pagination.html" with items=contracts %}
 {% endif %}
