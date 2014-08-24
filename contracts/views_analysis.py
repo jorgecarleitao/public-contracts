@@ -167,7 +167,7 @@ def analysis_list():
             'title': titles[analysis]
         })
 
-    return reversed(analysis_list)
+    return list(reversed(analysis_list))
 
 
 def analysis(request):
