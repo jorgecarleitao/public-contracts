@@ -13,25 +13,7 @@ class DateRangeField(forms.DateField):
         return from_date, to_date
 
 
-class ContractSelectorForm(forms.Form):
-    CHOICES = ((_('date'), _('date')),
-               (_('price'), _('price')))
-    SORTING_LOOKUPS = {_('date'): '-signing_date', _('price'): '-price'}
-
-    search = forms.CharField(required=False,
-                             widget=forms.TextInput(attrs={'class': 'form-control',
-                                                           'placeholder': _('filter contracts')})
-                             )
-
-    sorting = forms.ChoiceField(required=False,
-                                widget=forms.Select(attrs={'class': 'form-control',
-                                                           'title': _('order')}),
-                                choices=CHOICES,
-                                )
-
-    range = DateRangeField(required=False,
-                           widget=forms.TextInput(attrs={'placeholder': _('date range'),
-                                                         'class': 'form-control datepicker'}))
+class BootstrapForm(forms.Form):
 
     def as_div(self):
         """
@@ -44,7 +26,24 @@ class ContractSelectorForm(forms.Form):
             help_text_html='',
             errors_on_separate_row=True)
 
+
+class ContractSelectorForm(BootstrapForm):
+    CHOICES = ((_('date'), _('date')),
+               (_('price'), _('price')))
+    SORTING_LOOKUPS = {_('date'): '-signing_date', _('price'): '-price'}
+
+    search = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control', 'placeholder': _('filter contracts')}))
+
+    sorting = forms.ChoiceField(required=False, widget=forms.Select(
+        attrs={'class': 'form-control', 'title': _('order')}), choices=CHOICES)
+
+    range = DateRangeField(required=False, widget=forms.TextInput(
+        attrs={'placeholder': _('date range'),
+               'class': 'form-control datepicker'}))
+
     def add_prefix(self, field_name):
+        # HACK: ensures 'range' is translated.
         if field_name == 'range':
             return _('range')
         return _(field_name)
