@@ -58,3 +58,21 @@ class TenderSelectorForm(ContractSelectorForm):
                              widget=forms.TextInput(
                                  attrs={'class': 'form-control',
                                         'placeholder': _('filter tenders')}))
+
+
+class EntitySelectorForm(BootstrapForm):
+    CHOICES = ((_('earnings'), _('earnings')),
+               (_('expenses'), _('expenses')))
+    SORTING_LOOKUPS = {_('earnings'): '-data__total_earned',
+                       _('expenses'): '-data__total_expended'}
+
+    search = forms.CharField(required=False,
+                             widget=forms.TextInput(
+                                 attrs={'class': 'form-control',
+                                        'placeholder': _('filter entities')}))
+
+    sorting = forms.ChoiceField(required=False, widget=forms.Select(
+        attrs={'class': 'form-control', 'title': _('order')}), choices=CHOICES)
+
+    def add_prefix(self, field_name):
+        return _(field_name)

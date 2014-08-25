@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-21 07:10+0100\n"
+"POT-Creation-Date: 2014-08-25 06:57+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 #: contracts/category_urls.py:9 contracts/category_urls.py:10
 #: contracts/entity_urls.py:9 contracts/entity_urls.py:10
 #: contracts/entity_urls.py:11 contracts/entity_urls.py:14
-#: contracts/entity_views.py:57 contracts/urls.py:16 contracts/urls.py:19
+#: contracts/entity_views.py:64 contracts/urls.py:16 contracts/urls.py:19
 #: contracts/urls.py:22 contracts/urls.py:25 contracts/urls.py:30
 #: contracts/urls.py:43 contracts/urls.py:44 contracts/views_data.py:164
 #: contracts/views_data.py:187 contracts/views_data.py:197
@@ -30,8 +30,7 @@ msgstr ""
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:9
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:23
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:44
-#: contracts/templates/contracts/entity_view/tab_data/main.html:25
-#: contracts/templates/contracts/entity_view/tab_data/main.html:35
+#: contracts/templates/contracts/entity_view/tab_data/main.html:34
 msgid "contracts"
 msgstr "contratos"
 
@@ -55,13 +54,13 @@ msgstr "concursos"
 msgid "costumers"
 msgstr "clientes"
 
-#: contracts/entity_views.py:57
+#: contracts/entity_views.py:64
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:28
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:42
 msgid "value"
 msgstr "valor"
 
-#: contracts/entity_views.py:57
+#: contracts/entity_views.py:64
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:18
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
 #: deputies/views.py:15 deputies/views.py:42
@@ -70,18 +69,14 @@ msgstr "valor"
 msgid "name"
 msgstr "nome"
 
-#: contracts/entity_views.py:70 contracts/views.py:126
-#: contracts/templates/contracts/entity_list/search_entities.html:49
+#: contracts/entity_views.py:77
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:56
 #: deputies/views.py:29 deputies/templates/deputies/search_bar.html:49
 #: law/views.py:16 law/templates/law/law_list/search_law.html:23
 msgid "search"
 msgstr "procura"
 
-#: contracts/entity_views.py:84 contracts/entity_views.py:85
-#: contracts/views.py:140 contracts/views.py:141
-#: contracts/templates/contracts/entity_list/search_entities.html:35
-#: contracts/templates/contracts/entity_list/search_entities.html:37
+#: contracts/entity_views.py:91 contracts/entity_views.py:92
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:40
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:42
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:44
@@ -91,17 +86,17 @@ msgstr "procura"
 msgid "sorting"
 msgstr "ordem"
 
-#: contracts/entity_views.py:94 contracts/views.py:46 contracts/views.py:151
-#: contracts/views.py:180 deputies/views.py:47 law/views.py:23
+#: contracts/entity_views.py:101 contracts/views.py:47 contracts/views.py:126
+#: contracts/views.py:178 deputies/views.py:47 law/views.py:23
 #: main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
-#: contracts/entity_views.py:160
+#: contracts/entity_views.py:167
 msgid "Contracts as hiring"
 msgstr "Contratos como contratante"
 
-#: contracts/entity_views.py:196
+#: contracts/entity_views.py:203
 msgid "Contracts as hired"
 msgstr "Contratos como contratado"
 
@@ -135,35 +130,47 @@ msgstr "Concursos criados por \"%s\""
 msgid "Latest tenders in %s"
 msgstr "Últimos concursos em %s"
 
-#: contracts/forms.py:17 contracts/forms.py:19 contracts/forms.py:54
-#: contracts/forms.py:56
+#: contracts/forms.py:31 contracts/forms.py:33 contracts/forms.py:53
+#: contracts/forms.py:55
 msgid "date"
 msgstr "data"
 
-#: contracts/forms.py:18 contracts/forms.py:19 contracts/forms.py:55
-#: contracts/forms.py:56
+#: contracts/forms.py:32 contracts/forms.py:33 contracts/forms.py:54
+#: contracts/forms.py:55
 msgid "price"
 msgstr "preço"
 
-#: contracts/forms.py:23
+#: contracts/forms.py:36
 msgid "filter contracts"
 msgstr "filtrar contratos"
 
-#: contracts/forms.py:28
+#: contracts/forms.py:39 contracts/forms.py:75
 msgid "order"
 msgstr "ordem"
 
-#: contracts/forms.py:33
+#: contracts/forms.py:42
 msgid "date range"
 msgstr "filtrar por data"
 
-#: contracts/forms.py:49
+#: contracts/forms.py:48
 msgid "range"
 msgstr "datas"
 
-#: contracts/forms.py:61
+#: contracts/forms.py:60
 msgid "filter tenders"
 msgstr "filtrar concursos"
+
+#: contracts/forms.py:64 contracts/forms.py:66
+msgid "earnings"
+msgstr "ganho"
+
+#: contracts/forms.py:65 contracts/forms.py:67
+msgid "expenses"
+msgstr "despesa"
+
+#: contracts/forms.py:72
+msgid "filter entities"
+msgstr "filtrar entidades"
 
 #: contracts/urls.py:16 deputies/urls.py:9 law/urls.py:7
 msgid "home"
@@ -198,18 +205,6 @@ msgstr "categorias"
 #: contracts/templates/contracts/analysis/municipalities_delta_time/histogram.html:29
 msgid "entities"
 msgstr "entidades"
-
-#: contracts/views.py:115 contracts/views.py:121 contracts/views.py:146
-#: contracts/templates/contracts/entity_list/search_entities.html:18
-#: contracts/templates/contracts/entity_list/search_entities.html:35
-msgid "earnings"
-msgstr "ganho"
-
-#: contracts/views.py:115 contracts/views.py:123 contracts/views.py:146
-#: contracts/templates/contracts/entity_list/search_entities.html:23
-#: contracts/templates/contracts/entity_list/search_entities.html:37
-msgid "expenses"
-msgstr "despesa"
 
 #: contracts/views_analysis.py:141
 msgid "When do Portugal contract most?"
@@ -306,7 +301,7 @@ msgstr "ajuste direto"
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
 
-#: contracts/templates/inline_contracts_number.html:3
+#: contracts/templates/inline_contracts_number.html:2
 #, python-format
 msgid ""
 "\n"
@@ -330,19 +325,6 @@ msgstr[1] ""
 #: law/templates/law/analysis.html:5 law/templates/law/base/header.html:12
 msgid "Analysis"
 msgstr "Análises"
-
-#: contracts/templates/contracts/analysis.html:16
-#, python-format
-msgid ""
-"\n"
-"                If you want a new analysis or have any suggestion, post it "
-"in\n"
-"                <a href=\"%(mailing_list)s\">our mailing list</a>.\n"
-"            "
-msgstr ""
-"\n"
-"Se tem uma análise que gostaria de ver feita ou alguma sugestão, <a href="
-"\"%(mailing_list)s\">entre em contacto connosco</a>."
 
 #: contracts/templates/contracts/main_page.html:5
 msgid "Public contracts"
@@ -380,6 +362,7 @@ msgstr ""
 #: contracts/templates/contracts/category_view/selector.html:7
 #: contracts/templates/contracts/contract_list/main.html:3
 #: contracts/templates/contracts/entity_view/selector.html:7
+#: contracts/templates/contracts/entity_view/tab_contracts/main.html:5
 #: contracts/templates/contracts/entity_view/tab_data/graph.html:38
 #: main/templates/base/top_header.html:7
 msgid "Contracts"
@@ -725,10 +708,10 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"A relevância da curva de Lorenz é que esta mede a desigualdade de rendimentos: "
-"quanto mais longe estiver da linha recta, maior a desigualdade. Em "
-"particular, a área entre a linha recta e a curva de Lorenz é proporcional ao "
-"<strong>índice de Gini</strong>, um popular indicador macroscópico de "
+"A relevância da curva de Lorenz é que esta mede a desigualdade de "
+"rendimentos: quanto mais longe estiver da linha recta, maior a desigualdade. "
+"Em particular, a área entre a linha recta e a curva de Lorenz é proporcional "
+"ao <strong>índice de Gini</strong>, um popular indicador macroscópico de "
 "desigualdade de rendimentos."
 
 #: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:61
@@ -762,8 +745,7 @@ msgstr ""
 "sobre todos os contratos públicos em que foi contratata, e usamos o "
 "procedimento acima para calcular a curva de Lorenz, usando todas as "
 "entidades privadas. <a id=\"extend-button-2\" href=\"#\">(O que é uma "
-"entidade privada)</a>"
-"A curva foi calculada usando todas as entidades, e aqui "
+"entidade privada)</a>A curva foi calculada usando todas as entidades, e aqui "
 "representamos 200 delas uniformemente distribuídas no eixo do x."
 
 #: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:77
@@ -1485,11 +1467,13 @@ msgid "In this category:"
 msgstr "Nesta categoria:"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
+#: contracts/templates/contracts/entity_list/search_entities.html:8
 msgid "Apply filter and order"
 msgstr "Aplicar filtros e ordenação"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
 #: contracts/templates/contracts/contract_list/selector_template.html:11
+#: contracts/templates/contracts/entity_list/search_entities.html:8
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -1538,7 +1522,7 @@ msgid "Location"
 msgstr "Localização"
 
 #: contracts/templates/contracts/contract_view/main.html:64
-#: contracts/templates/contracts/entity_view/tab_data/main.html:17
+#: contracts/templates/contracts/entity_view/tab_data/main.html:16
 msgid "Official record"
 msgstr "Registo oficial"
 
@@ -1558,19 +1542,6 @@ msgstr "Ganhos:"
 msgid "No earnings"
 msgstr "Sem ganhos"
 
-#: contracts/templates/contracts/entity_list/search_entities.html:10
-#: contracts/templates/contracts/entity_view/tab_costumers/search.html:10
-msgid "search entities"
-msgstr "procurar entidades"
-
-#: contracts/templates/contracts/entity_list/search_entities.html:16
-msgid "order by earnings"
-msgstr "ordenar por ganhos"
-
-#: contracts/templates/contracts/entity_list/search_entities.html:21
-msgid "order by expenses"
-msgstr "ordenar por despesa"
-
 #: contracts/templates/contracts/entity_view/selector.html:10
 msgid "Costumers"
 msgstr "Clientes"
@@ -1578,6 +1549,10 @@ msgstr "Clientes"
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
 msgid "Value:"
 msgstr "Valor:"
+
+#: contracts/templates/contracts/entity_view/tab_costumers/search.html:10
+msgid "search entities"
+msgstr "procurar entidades"
 
 #: contracts/templates/contracts/entity_view/tab_costumers/search.html:16
 #: deputies/templates/deputies/search_bar.html:16
@@ -1592,31 +1567,31 @@ msgstr "ordenar por número de contratos"
 msgid "order by value"
 msgstr "ordenar por valor"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:12
+#: contracts/templates/contracts/entity_view/tab_data/main.html:11
 msgid "Fiscal Number"
 msgstr "NIF"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:23
+#: contracts/templates/contracts/entity_view/tab_data/main.html:22
 msgid "Earned"
 msgstr "Lucro"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:33
+#: contracts/templates/contracts/entity_view/tab_data/main.html:32
 msgid "Expended"
 msgstr "Despesa"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:50
+#: contracts/templates/contracts/entity_view/tab_data/main.html:49
 msgid "Last contracts"
 msgstr "Últimos contratos"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:52
+#: contracts/templates/contracts/entity_view/tab_data/main.html:51
 msgid "Full list"
 msgstr "Lista completa"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:59
+#: contracts/templates/contracts/entity_view/tab_data/main.html:58
 msgid "Main clients (hired)"
 msgstr "Principais clientes (contrataram)"
 
-#: contracts/templates/contracts/entity_view/tab_data/main.html:75
+#: contracts/templates/contracts/entity_view/tab_data/main.html:74
 msgid "Main clients (were hired)"
 msgstr "Principais clientes (contratados)"
 

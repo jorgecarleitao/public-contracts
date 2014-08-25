@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect
 
 from . import models
 from contracts.analysis import add_months
-from contracts.forms import ContractSelectorForm, TenderSelectorForm
+from contracts.forms import ContractSelectorForm, TenderSelectorForm,\
+    EntitySelectorForm
 
 from . import indexes
 from contracts.views_analysis import analysis_list
@@ -113,43 +114,39 @@ def categories_list(request):
 
 
 def build_entity_list_context(context, GET):
-    ordering = {_('earnings'): None, _('expenses'): None}
+    """
+    Uses parameters GET (from a request) to modify the context
+    of entities lists.
 
-    def apply_order(querySet, order):
-        if order not in ordering:
-            return querySet, False
+    Validates GET using ``EntitySelectorForm``, and uses the ``cleaned_data``
+    to apply search and ordering to ``context['entities']``.
 
-        if order == _('earnings'):
-            return querySet.order_by('-data__total_earned').search_order_by(), True
-        elif order == _('expenses'):
-            return querySet.order_by('-data__total_expended').search_order_by(), True
+    Returns the modified context.
+    """
+    page = GET.get(_('page'))
 
-    key = _('search')
+    context['selector'] = EntitySelectorForm(GET)
+    if context['selector'].is_valid():
+        GET = context['selector'].cleaned_data
+    else:
+        GET = {}
+
+    key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
-
         try:
             nif = int(GET[key])
             context['entities'] = context['entities'].filter(nif__contains=nif)
         except ValueError:
-            nif = None
-        if not nif:
             context['entities'] = context['entities'].search(GET[key])
 
-        context['search'] = GET[key]
-
-    if _('sorting') in GET:
-        order = GET[_('sorting')]
-
-        context['entities'], applied = apply_order(context['entities'], order)
-
-        # if it is a valid ordering, we send it to the template.
-        order_name = {_('earnings'): 'earnings', _('expenses'): 'expenses'}
-        if applied:
-            context['ordering'] = order_name[order]
+    key = 'sorting'
+    if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
+        context['entities'] = context['entities'].order_by(
+            context['selector'].SORTING_LOOKUPS[GET[key]])\
+            .search_order_by()  # always ignore search weight
 
     paginator = Paginator(context['entities'], 20)
-    page = GET.get(_('page'))
     try:
         context['entities'] = paginator.page(page)
     except PageNotAnInteger:
