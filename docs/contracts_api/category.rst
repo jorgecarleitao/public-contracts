@@ -7,7 +7,7 @@ Category
 .. _Base: http://www.base.gov.pt/base2
 
 This document provides the API references for the categories of contracts in
-the database. See :doc:`tools/cpvs_importer` for how these categories are
+the database. See :doc:`../tools/cpvs_importer` for how these categories are
 built.
 
 API References
@@ -15,11 +15,14 @@ API References
 
 .. class:: models.Category
 
-    A category is an OneToMany relationship to :class:`~models.Contract`: each
+    A category is a formal way to categorize public contracts within European
+    Union. It is a tag assigned to a contract.
+
+    A category as an OneToMany relationship to :class:`~models.Contract`: each
     contract has one category, each category can have more than one contract.
     This relationship is thus defined in the contract model.
 
-    It has the following attributes:
+    A category has the following attributes:
 
     .. attribute:: code
 
