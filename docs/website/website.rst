@@ -1,37 +1,31 @@
 Install development environment
 ===============================
 
-This part of the documentation explains how you can jump
-to the development of publicos.pt.
+This part of the documentation explains how you can jump to the development of
+publicos.pt and deploy the website on your computer. To only interact with the
+database, e.g. to do statistics, you only need to
+:doc:`install the API dependencies <../installation>`.
 
-It assumes you know Python and a minimum of Django.
+We assume here that you know Python and a minimum of Django.
 
 Dependencies for the website
 ----------------------------
 
-Besides the :doc:`dependencies of the API <installation>`, this website
-uses other packages that need to be installed:
+Besides the :doc:`dependencies of the API <../installation>`, the website uses
+the following packages:
 
 BeautifulSoup 4
 ^^^^^^^^^^^^^^^
 
-For crawling websites, we use a Python package to handle HTML elements. You need to install
-it, using::
+For crawling websites, we use a Python package to handle HTML elements. To
+install it, use::
 
     pip install beautifulsoup4
-
-requests
-^^^^^^^^
-
-To crawl webpages, we use the Python package requests::
-
-    pip install requests
 
 django-debug-toolbar
 ^^^^^^^^^^^^^^^^^^^^
 
-To develop, we use ``django-debug-toolbar``, an
-utility Django app to debug Django websites::
+To develop, we use ``django-debug-toolbar``, an utility to debug Django websites::
 
     pip install django-debug-toolbar
 
@@ -47,7 +41,8 @@ You need to install memcache in your system, and its binding for Python::
 Running the website
 -------------------
 
-Once you have the dependencies installed, you can run the website from the root directory using::
+Once you have the dependencies installed, you can run the website from the root
+directory using::
 
     python manage.py runserver
 
@@ -62,12 +57,20 @@ please drop by our `mailing list`_ so we can help you.
 Running tests
 -------------
 
-We use standard Django unit test cases.
-To run tests, use::
+We use standard Django unit test cases. To run tests, use::
 
     python manage.py test <package, module, or function>
 
-for instance, for running the test suite of contracts app, run::
+For instance, for running the test suite of contracts app, run::
 
     python manage.py test contracts.tests
+
+
+Running the crawler
+-------------------
+
+To run the :doc:`../tools/crawler` to populate the database,
+you require an additional package::
+
+    pip install requests
 
