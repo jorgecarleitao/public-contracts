@@ -3,36 +3,21 @@ Category
 
 .. currentmodule:: contracts
 
+.. _CPVS: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
 .. _Base: http://www.base.gov.pt/base2
 
-This document provides the API references for the categories of contracts in the database.
+This document provides the API references for the categories of contracts in
+the database. See :doc:`tools/cpvs_importer` for how these categories are
+built.
 
-From CPVS to categories
------------------------
-
-.. _CPVS: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
-.. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
-.. _`nested set model`: https://en.wikipedia.org/wiki/Nested_set_model
-
-Europe Union has a categorisation system for public contracts, CPVS_, that maps a string of 8 digits
-into a category (i.e. a name) to be used in each public contract.
-
-More than categories, the system builds a tree_ with broader categories like "agriculture",
-and more specific ones like "potatos".
-
-In our database, we construct a tree (using a `nested set model`_) of categories, and abstract the idea of digits:
-each category has a parent, a depth, and child categories.
-
-Each contract in Base_ has one (or none) of such CPVS and thus, each contract is
-:attr:`associated <models.Contract.category>` with one (or none) category.
-
-API
-------
+API References
+--------------
 
 .. class:: models.Category
 
-    A category is an OneToMany relationship to :class:`~models.Contract`: each contract has one category,
-    each category can have more than one contract. This relationship is thus defined in the contract model.
+    A category is an OneToMany relationship to :class:`~models.Contract`: each
+    contract has one category, each category can have more than one contract.
+    This relationship is thus defined in the contract model.
 
     It has the following attributes:
 
@@ -43,7 +28,8 @@ API
     .. attribute:: description_en
     .. attribute:: description_pt
 
-        The official descriptions of the category in english and portuguese, respectively.
+        The official descriptions of the category in english and portuguese,
+        respectively.
 
     .. attribute:: depth
 
@@ -57,7 +43,7 @@ API
 
     .. method:: get_ancestors()
 
-        Returns all anscestor categories, excluding itself.
+        Returns all ancestor categories, excluding itself.
 
     .. method:: get_absolute_url()
 
@@ -65,8 +51,8 @@ API
 
     .. method:: contracts_count()
 
-        Counts the number of all contracts that belong to this category or any of
-        its children.
+        Counts the number of all contracts that belong to this category or any
+        of its children.
 
     .. method:: contracts_price()
 
