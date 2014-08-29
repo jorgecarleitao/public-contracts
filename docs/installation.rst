@@ -23,6 +23,8 @@ The source can be either downloaded_ or cloned from the GitHub_ repository using
 Like most Python code, the source doesn't need to be installed; you just have to
 put it somewhere in your computer.
 
+You need Python 3.
+
 Dependencies
 ------------
 
@@ -42,7 +44,7 @@ mysql-python
 Our remote database is in mysql. To Python communicate with it, we need a
 binding::
 
-    pip install mysql-python
+    pip install PyMySQL
 
 treebeard
 ^^^^^^^^^
