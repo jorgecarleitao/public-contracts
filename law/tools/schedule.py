@@ -5,7 +5,7 @@ and cache.
 ## setup the Django with its private settings for server.
 if __name__ == "__main__":
     from . import set_up
-    set_up.set_up_django_environment('law.tools.settings_private')
+    set_up.set_up_django_environment('main.settings_for_schedule')
 
 from law.crawler import FirstSeriesCrawler, Populator
 from law.analysis import analysis_manager

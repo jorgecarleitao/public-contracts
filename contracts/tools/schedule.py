@@ -5,7 +5,7 @@ and cache.
 ## setup the Django with its private settings for server.
 if __name__ == "__main__":
     from . import set_up
-    set_up.set_up_django_environment('tools.settings_private')
+    set_up.set_up_django_environment('main.settings_to_schedule')
 
 from contracts.crawler import DynamicDataCrawler, StaticDataCrawler
 from contracts import models

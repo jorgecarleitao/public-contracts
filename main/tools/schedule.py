@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 from . import set_up
 
-set_up.set_up_django_environment('main.tools.settings_private')
+set_up.set_up_django_environment('main.settings_for_schedule')
 
 from deputies.tools import schedule as deputies_schedule
 from contracts.tools import schedule as contracts_schedule
