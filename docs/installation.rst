@@ -64,8 +64,7 @@ Running the example
 
 Once you have the dependencies installed, enter in its directory and run::
 
-    cd contracts
-    python -m tools.example
+    python -m contracts.tools.example
 
 If everything went well, it outputs two numbers:
 
@@ -73,7 +72,8 @@ If everything went well, it outputs two numbers:
        with the `official number`_.
     2. the sum of the values of all contracts.
 
-If some problem occur, please drop by our mailing-list_ so we can help you.
+If some problem occur, please add an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
+so we can help you and improve these instructions.
 
 From here, you can see section :doc:`usage` for a tutorial, and section
 :doc:`api` for the complete documentation.

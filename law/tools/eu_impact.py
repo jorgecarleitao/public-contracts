@@ -1,12 +1,9 @@
-## setup the Django with public settings for using the database.
 if __name__ == "__main__":
-    from . import set_up
-    set_up.set_up_django_environment('law.tools.settings_public')
+    ## setup the Django with public settings for using the database
+    from main.tools import set_up
+    set_up.set_up_django_environment('main.tools.settings_for_script')
 
-from law.models import Document
-
-
-if __name__ == "__main__":
+    from law.models import Document
     # prints the relative number of laws that have no text
     import datetime
     date = datetime.date(1986, 1, 1)

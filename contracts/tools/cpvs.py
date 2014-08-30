@@ -1,8 +1,9 @@
 import xml.etree.ElementTree
 import logging
 
-from . import set_up
-set_up.set_up_django_environment()
+if __name__ == "__main__":
+    from main.tools import set_up
+    set_up.set_up_django_environment('main.settings_for_schedule')
 
 from contracts.models import Category
 

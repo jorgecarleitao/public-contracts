@@ -1,6 +1,6 @@
 # these first two lines are used to setup a minimal Django environment
-from . import set_up
-set_up.set_up_django_environment('tools.settings')
+from main.tools import set_up
+set_up.set_up_django_environment('contracts.tools.public_settings')
 # From this point on, we are ready to use Django for accessing the remote database.
 
 from contracts import models

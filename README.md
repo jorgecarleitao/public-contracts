@@ -55,13 +55,13 @@ The API and the crawler are [documented](http://public-contracts.readthedocs.org
 
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
 
-Enter in the directory `cd public-contracts/contracts`.
+Enter in the project's directory: `cd public-contracts`.
 
 4- Run the example:
 
-`python -m tools.example`
+`python -m contracts.tools.example`
 
 you should see two numbers.
 
 If something went wrong, please report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
-so we can improve these instructions.
+so we can help you and improve these instructions.

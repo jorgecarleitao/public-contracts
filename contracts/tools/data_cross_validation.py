@@ -5,9 +5,10 @@ against the data the official database has.
 import requests
 import json
 
-# these first two lines are used to setup a minimal Django environment
-from . import set_up
-set_up.set_up_django_environment('tools.settings')
+if __name__ == '__main__':
+    # these first two lines are used to setup a minimal Django environment
+    from main.tools import set_up
+    set_up.set_up_django_environment('main.tools.settings_for_script')
 
 from contracts.models import Entity, Contract
 

@@ -1,10 +1,8 @@
 """
-Module run every day by a cron job to update database
-and cache.
+Module run every day by a cron job to update database and cache.
 """
-## setup the Django with its private settings for server.
 if __name__ == "__main__":
-    from . import set_up
+    from main.tools import set_up
     set_up.set_up_django_environment('main.settings_for_schedule')
 
 from law.crawler import FirstSeriesCrawler, Populator

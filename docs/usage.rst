@@ -8,19 +8,21 @@ This tutorial assumes you already :doc:`installed <installation>` the source.
 .. _Django queries API: https://docs.djangoproject.com/en/dev/ref/models/querysets/
 .. _models: https://docs.djangoproject.com/en/dev/topics/db/models/
 
-We assume you are in directory "contracts", as the installation part ended there,
-and that you start a Python session from there (e.g. enter "python" in the terminal).
+We assume you are in directory "public-contracts", as the installation part ended
+there, and that you start a Python session from there (e.g. enter "python" in
+the terminal).
 
 Setup
 -----
 
-To use Django_, we have to setup it first. In the module ``set_up`` in package tools,
-we provide a function to that, which we now use::
+To use Django_, we have to setup it first. In the module ``set_up`` of package
+``main/tools``, we provide a function to that, which we now use::
 
-    >>> from tools.set_up import set_up_django_environment
-    >>> set_up_django_environment('tools.settings')
+    >>> from main.tools.set_up import set_up_django_environment
+    >>> set_up_django_environment('main.settings_for_script')
 
-This sets up a minimal Django environment using the settings file ``tools/settings.py``.
+This sets up a minimal Django environment using the settings
+``main/settings_for_script.py``.
 
 Accessing the database
 ----------------------
@@ -106,4 +108,5 @@ Notes:
 
 .. _mailing list: https://groups.google.com/forum/#!forum/public-contracts
 
-In any case, if you need help, drop by our `mailing list`_.
+If some problem occur, please add an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
+so we can help you and improve these instructions.

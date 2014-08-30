@@ -1,5 +1,5 @@
 if __name__ == "__main__":
-    from . import set_up
+    from main.tools import set_up
     set_up.set_up_django_environment('main.settings_to_schedule')
 
 from deputies import crawler as c
