@@ -11,6 +11,7 @@ Contents:
    api
    tools
    website/website
+   website/organization
    contribute
 
 .. include:: introduction.rst
