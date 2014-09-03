@@ -13,7 +13,7 @@ from contracts.analysis import analysis_manager
 
 
 def update():
-    # check if we need to download static data
+    # check if we need to retrieve static data
     if not models.ProcedureType.objects.exists():
         c = StaticDataCrawler()
         c.retrieve_and_save_all()
@@ -25,7 +25,7 @@ def update():
 
     # retrieve latest dynamic data.
     crawler = DynamicDataCrawler()
-    affected_entities = crawler.update_all()
+    crawler.update_all()
 
     # update entities cached data
     for entity in models.Entity.objects.all():
@@ -35,9 +35,14 @@ def update():
     for category in models.Category.objects.all():
         category.compute_data()
 
+    update_cache()
+
+
+def update_cache():
     # update analysis
     for analysis in list(analysis_manager.values()):
         analysis.update()
+
 
 if __name__ == "__main__":
     update()

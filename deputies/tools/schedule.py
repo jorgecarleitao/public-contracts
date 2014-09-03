@@ -15,9 +15,14 @@ def update():
         deputy = populator.populate_deputy(entry)
         deputy.update()
 
+    update_cache()
+
+
+def update_cache():
     # update analysis
     for analysis in list(analysis_manager.values()):
         analysis.update()
+
 
 if __name__ == "__main__":
     update()

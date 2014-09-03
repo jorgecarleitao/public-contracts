@@ -20,9 +20,14 @@ def update():
     p = Populator()
     p.populate_all(current_year - 1)
 
+    update_cache()
+
+
+def update_cache():
     # update analysis
     for analysis in list(analysis_manager.values()):
         analysis.update()
+
 
 if __name__ == "__main__":
     update()
