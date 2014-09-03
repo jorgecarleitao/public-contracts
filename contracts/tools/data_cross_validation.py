@@ -1,6 +1,6 @@
 """
-This module has methods that cross validate the data we have
-against the data the official database has.
+This module has methods that cross validate the data we have against the data
+the official database has.
 """
 import requests
 import json
@@ -8,7 +8,7 @@ import json
 if __name__ == '__main__':
     # these first two lines are used to setup a minimal Django environment
     from main.tools import set_up
-    set_up.set_up_django_environment('main.tools.settings_for_script')
+    set_up.set_up_django_environment('main.settings_for_script')
 
 from contracts.models import Entity, Contract
 
@@ -70,35 +70,73 @@ def get_entity_contracts_difference(base_id):
     if not _are_entity_contracts_synchronized(entity):
         # if counts don't match, we see difference
         return _get_entity_contracts_difference(entity)
+    else:
+        return {}
 
-    return {}
+
+def get_contracts_count():
+    """
+    Retrieves the number of contracts from a given entity from BASE
+    """
+    url = 'http://www.base.gov.pt/base2/rest/contratos'
+
+    response = requests.get(url, headers={'Range': 'items=0-24'})
+
+    # should be "items 0-%d/%d", we want the second %d that represents the
+    # total
+    results_range = response.headers['content-range']
+    _, count = results_range.split('/')
+
+    return int(count)
 
 
-def are_contracts_synchronized():
+def get_contracts_count_difference():
     """
     Checks if the number of contracts in BASE matches our number.
 
     Returns the difference as a percentage of all contracts.
     """
-    def get_contracts_count():
-        """
-        Retrieves the number of contracts from a given entity from BASE
-        """
-        url = 'http://www.base.gov.pt/base2/rest/contratos'
-
-        response = requests.get(url, headers={'Range': 'items=0-24'})
-
-        # should be "items 0-%d/%d", we want the second %d that represents the
-        # total
-        results_range = response.headers['content-range']
-        _, count = results_range.split('/')
-
-        return int(count)
-
     expected_count = get_contracts_count()
     count = Contract.objects.all().count()
 
-    return (expected_count - count) / expected_count * 100
+    return expected_count - count
+
+
+def get_contracts_difference():
+    """
+    Returns a set of all contracts that exist in BASE, but do not exist in our
+    database.
+
+    This function is expensive and performs multiple hits to BASE.
+    """
+    url = 'http://www.base.gov.pt/base2/rest/contratos'
+
+    count = get_contracts_count()
+
+    CONTRACTS_PER_REQUEST = 10000
+
+    total_difference = set()
+    for i in reversed(range(int(count/CONTRACTS_PER_REQUEST)+1)):
+        response = requests.get(url, headers={
+            'Range': 'items=%d-%d' % (i*CONTRACTS_PER_REQUEST,
+                                      (i+1)*CONTRACTS_PER_REQUEST - 1)})
+
+        contracts_ids = [contract['id'] for contract in
+                         json.loads(response.text)]
+
+        expected_ids = set(contracts_ids)
+
+        existing_ids = set(Contract.objects.values_list('base_id', flat=True)
+                           .filter(base_id__range=(contracts_ids[0],
+                                                   contracts_ids[-1])))
+
+        difference = expected_ids.difference(existing_ids)
+
+        total_difference = total_difference.union(difference)
+
+    return total_difference
+
 
 if __name__ == '__main__':
-    print(are_contracts_synchronized())
+    #print(are_contracts_synchronized())
+    print(get_contracts_difference())
