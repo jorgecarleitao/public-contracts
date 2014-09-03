@@ -22,7 +22,7 @@ To use Django_, we have to setup it first. In the module ``set_up`` of package
     >>> set_up_django_environment('main.settings_for_script')
 
 This sets up a minimal Django environment using the settings
-``main/settings_for_script.py``.
+``main/settings_for_script.py``, a minimal configuration to use the database.
 
 Accessing the database
 ----------------------
@@ -33,7 +33,8 @@ In this API, objects are Django models_, which we need to import::
 
 .. _`this contract`: http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#791452
 
-Look at `this contract`_ in the official database. It has the number "791452". Lets pick it up::
+Look at `this contract`_ in the official database. It has the number "791452".
+Lets pick it up::
 
     >>> contract = models.Contract.objects.get(base_id=791452)
 
@@ -47,19 +48,22 @@ and its description::
 
 .. _ManyToMany: https://docs.djangoproject.com/en/dev/topics/db/examples/many_to_many/
 
-Lets now pick the entity that made this contract. In this case there is only one, but in general
-there can be more: a contract has a ManyToMany_ relationship with entities because each contract can have several
-entities (a joint contract), but also each entity can have several contracts.
+Lets now pick the entity that made this contract. In this case there is only one,
+but in general there can be more: a contract has a ManyToMany_ relationship
+with entities because each contract can have several entities (a joint
+contract), but also each entity can have several contracts.
 
-In fact, each contract has two ManyToMany: the entities that paid, and the entities that were paid.
+In fact, each contract has two ManyToMany: the entities that paid, and the
+entities that were paid.
 
-Lets say we want the entity that paid this contract. In that case, we pick the set of all entities that paid,
-and select the first one::
+Lets say we want the entity that paid this contract. In that case, we pick the
+set of all entities that paid, and select the first one::
 
     >>> entity = contract.contractors.all()[0]
     >>> print(entity)
 
-Let's now pick the contracts that this entity made. To that, we use the "contracts_made" of the entity::
+Let's now pick the contracts that this entity made. To that, we use the
+"contracts_made" of the entity::
 
     >>> entity_contracts = entity.contracts_made.all()
 
@@ -79,8 +83,8 @@ Now, how much is the price of all those contracts?
 
 .. _aggregate: https://docs.djangoproject.com/en/dev/topics/db/aggregation/
 
-To answer that, we have to aggregate the prices. The `syntax <aggregate>`_ in Django
-is the following::
+To answer that, we have to aggregate the prices. The `syntax <aggregate>`_ in
+Django is the following::
 
     >>> from django.db.models import Sum
     >>> total_price = entity_contracts.aggregate(our_sum=Sum('price'))['our_sum']
@@ -89,24 +93,26 @@ is the following::
 Again, you `can check`_ on the official website.
 
 As a final example, we are going to use a filter. Lets say you want all the above
-contracts, but restricted to prices higher than 10.000€. For this, we need to "filter" these contracts::
+contracts, but restricted to prices higher than 10.000€. For this, we need to
+"filter" these contracts::
 
     >>> expensive_contracts = entity_contracts.filter(price__gt=10000*100)
     >>> print(expensive_contracts.count())
 
-The "price__gt" means price `(g)reater (t)han <Django queries API>`_, and we multiply by 100 because
-:attr:`prices are in euro cents <models.Contract.price>`.
+The "price__gt" means price `(g)reater (t)han <Django queries API>`_, and we
+multiply by 100 because :attr:`prices are in euro cents <models.Contract.price>`.
 
-For now, that's it. You now have the minimal knowledge to ask your own questions. In section :doc:`here <api>`
-you can find references of all models.
+For now, that's it. You now have the minimal knowledge to ask your own questions.
+In section :doc:`here <api>` you can find references of all models.
 
 Notes:
 
  - The syntax we use here (e.g. "contracts_made") **is** Django API.
- - If you don't know Django, you can look at the existing source code of the website and copy from it.
- - The API documentation is still not complete. You can find it :doc:`here <api>` or :doc:`help <contribute>` finishing it.
+ - If you don't know Django, you can look at the existing source code of the
+   website and start from there.
+ - You can find the documentation of the API :doc:`here <api>`.
 
-.. _mailing list: https://groups.google.com/forum/#!forum/public-contracts
+.. _issue: https://github.com/jorgecarleitao/public-contracts/issues
 
-If some problem occur, please add an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
-so we can help you and improve these instructions.
+If some problem occur, please add an issue_ so we can help you and improve
+these instructions.
