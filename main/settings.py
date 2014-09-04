@@ -195,7 +195,3 @@ LOGGING = {
         },
     }
 }
-
-# for celery
-if hasattr(settings_local, 'BROKER_URL'):
-    BROKER_URL = settings_local.BROKER_URL

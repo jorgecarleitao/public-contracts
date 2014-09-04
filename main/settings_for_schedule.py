@@ -65,3 +65,7 @@ LOGGING = {
 import logging
 requests_log = logging.getLogger("requests")
 requests_log.setLevel(logging.WARNING)
+
+# for celery
+if hasattr(settings_local, 'BROKER_URL'):
+    BROKER_URL = settings_local.BROKER_URL
