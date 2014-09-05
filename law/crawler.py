@@ -22,7 +22,7 @@ class DocumentNotFound(Exception):
 
 class FirstSeriesCrawler(AbstractCrawler):
 
-    data_directory = '../../law_data'
+    data_directory = '../law_data'
 
     # document_id is represented by 8 numbers: year#### (e.g. 19971111)
 
@@ -223,7 +223,7 @@ def clean_text(doc_text):
 
 class Populator:
 
-    data_directory = '../../law_data'
+    data_directory = '../law_data'
 
     def __init__(self):
         import locale
