@@ -1,5 +1,7 @@
-from time import sleep
-from celery import shared_task
+"""
+Contains tasks for celery.
+"""
+from celery import shared_task, group
 from celery.utils.log import get_task_logger
 
 from contracts.crawler import DynamicDataCrawler, StaticDataCrawler
@@ -27,8 +29,7 @@ def create_categories_fixture():
 
 @shared_task(ignore_result=True)
 def create_fixture():
-    create_static_fixture.delay()
-    create_categories_fixture.delay()
+    group([create_static_fixture.s(), create_categories_fixture.s()])()
 
 
 @shared_task(ignore_result=True)
@@ -57,7 +58,6 @@ def recompute_analysis():
 
 @shared_task(ignore_result=True)
 def update():
-    sleep(2)
-    #logger.info('Updating contracts')
-    #chain = create_static_fixture.s() | create_fixture.s()
-    #chain()
+    create_fixture()
+    group([recompute_entities_data.s(), recompute_categories_data()])()
+    recompute_analysis()

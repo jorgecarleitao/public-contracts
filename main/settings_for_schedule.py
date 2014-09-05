@@ -20,6 +20,8 @@ CACHES = settings_local.CACHES
 
 ADMINS = settings_local.ADMINS
 
+TIME_ZONE = 'Europe/Lisbon'
+
 if hasattr(settings_local, 'EMAIL_HOST'):
     EMAIL_HOST = settings_local.EMAIL_HOST
     EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
@@ -38,7 +40,7 @@ LOGGING = {
         },
     },
     'handlers': {
-        # DEBUG to console.
+        # INFO to console.
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
@@ -69,3 +71,12 @@ requests_log.setLevel(logging.WARNING)
 # for celery
 if hasattr(settings_local, 'BROKER_URL'):
     BROKER_URL = settings_local.BROKER_URL
+
+
+from celery.schedules import crontab
+CELERYBEAT_SCHEDULE = {
+    'sync-databases': {
+        'task': 'main.tasks.update',
+        'schedule': crontab(),
+    },
+}
