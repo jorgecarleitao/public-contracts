@@ -28,9 +28,6 @@ def get_documents_time_series():
                  'count': aggregate['count']}
         data.append(entry)
 
-    for x in data:
-        print("%s, %s" % (x['from'].year, x['count']))
-
     return data
 
 
