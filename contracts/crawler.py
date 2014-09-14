@@ -457,13 +457,16 @@ class DynamicDataCrawler():
         self.tenders_crawler = TendersCrawler()
 
     def update_all(self):
+        logger.info('Updating entities')
         modified_entities = self.entities_crawler.update()
 
+        logger.info('Updating contracts')
         contracts = self.contracts_crawler.update()
         for contract in contracts:
             modified_entities += list(contract.contractors.all())
             modified_entities += list(contract.contracted.all())
 
+        logger.info('Updating tenders')
         tenders = self.tenders_crawler.update()
         for tender in tenders:
             modified_entities += list(tender.contractors.all())
