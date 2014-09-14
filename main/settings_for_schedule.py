@@ -65,18 +65,16 @@ LOGGING = {
 
 # ignore requests logging
 import logging
-requests_log = logging.getLogger("requests")
-requests_log.setLevel(logging.WARNING)
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 # for celery
 if hasattr(settings_local, 'BROKER_URL'):
     BROKER_URL = settings_local.BROKER_URL
 
-
-from celery.schedules import crontab
-CELERYBEAT_SCHEDULE = {
-    'sync-databases': {
-        'task': 'main.tasks.update',
-        'schedule': crontab(),
-    },
-}
+    from celery.schedules import crontab
+    CELERYBEAT_SCHEDULE = {
+        'sync-databases': {
+            'task': 'main.tasks.update',
+            'schedule': crontab(minute='*/5'),
+        },
+    }
