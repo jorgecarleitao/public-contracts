@@ -75,6 +75,6 @@ if hasattr(settings_local, 'BROKER_URL'):
     CELERYBEAT_SCHEDULE = {
         'sync-databases': {
             'task': 'main.tasks.update',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute=0, hour=4),
         },
     }
