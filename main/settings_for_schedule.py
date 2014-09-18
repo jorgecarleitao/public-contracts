@@ -2,6 +2,8 @@
 Settings file for the scheduler. Requires a ``settings_local`` with private
 information about the database and cache.
 """
+from celery.schedules import crontab
+
 from . import settings_local
 from . import domain
 
@@ -11,6 +13,16 @@ INSTALLED_APPS = (
     'contracts',
     'main'
 )
+
+# for celery
+BROKER_URL = settings_local.BROKER_URL
+
+CELERYBEAT_SCHEDULE = {
+    'sync-databases': {
+        'task': 'main.tasks.update',
+        'schedule': crontab(minute=0, hour=4),
+    },
+}
 
 DATABASES = settings_local.DATABASES
 
@@ -66,15 +78,3 @@ LOGGING = {
 # ignore requests logging
 import logging
 logging.getLogger("requests").setLevel(logging.WARNING)
-
-# for celery
-if hasattr(settings_local, 'BROKER_URL'):
-    BROKER_URL = settings_local.BROKER_URL
-
-    from celery.schedules import crontab
-    CELERYBEAT_SCHEDULE = {
-        'sync-databases': {
-            'task': 'main.tasks.update',
-            'schedule': crontab(minute=0, hour=4),
-        },
-    }
