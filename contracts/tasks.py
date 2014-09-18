@@ -60,5 +60,5 @@ def recompute_analysis():
 def update():
     create_fixture()
     retrieve_new_contracts()
-    group([recompute_entities_data.s(), recompute_categories_data()])()
+    group([recompute_entities_data.s(), recompute_categories_data.s()])()
     recompute_analysis()
