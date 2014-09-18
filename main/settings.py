@@ -1,26 +1,12 @@
+import socket
+import os.path
+import sys
+
 # e.g. SITE_DOMAIN = 'www.example.com'
 from .domain import SITE_DOMAIN
 # This file has a set of private settings dependent on the particular host.
 from . import settings_local
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
-if hasattr(settings_local, 'ADMINS'):
-    ADMINS = settings_local.ADMINS
-    MANAGERS = ADMINS
-
-
-if hasattr(settings_local, 'EMAIL_HOST'):
-    EMAIL_HOST = settings_local.EMAIL_HOST
-    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
-    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
-    SERVER_EMAIL = settings_local.SERVER_EMAIL
-    EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_DOMAIN
-
-
-import socket
 
 if socket.gethostname() == settings_local.HOST_NAME:
     LIVE = True
@@ -28,8 +14,20 @@ if socket.gethostname() == settings_local.HOST_NAME:
     TEMPLATE_DEBUG = False
 else:
     LIVE = False
+    DEBUG = True
+    TEMPLATE_DEBUG = True
 
-import os.path
+if LIVE and hasattr(settings_local, 'ADMINS'):
+    ADMINS = settings_local.ADMINS
+    MANAGERS = ADMINS
+
+if LIVE and hasattr(settings_local, 'EMAIL_HOST'):
+    EMAIL_HOST = settings_local.EMAIL_HOST
+    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
+    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
+    SERVER_EMAIL = settings_local.SERVER_EMAIL
+    EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_DOMAIN
 
 main_directory = os.path.abspath(os.path.dirname(__file__))
 site_directory = os.path.abspath(os.path.dirname(main_directory))
@@ -50,11 +48,11 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
 if LIVE and hasattr(settings_local, 'DATABASES'):
     DATABASES = settings_local.DATABASES
 
 # to make tests run faster
-import sys
 if 'test' in sys.argv:
     DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
@@ -67,7 +65,7 @@ USE_TZ = True
 LOCALE_PATHS = (site_directory + '/locale',)
 
 STATIC_ROOT = os.path.join(main_directory, 'static')
-if LIVE:
+if LIVE and hasattr(settings_local, 'STATIC_ROOT'):
     STATIC_ROOT = settings_local.STATIC_ROOT
 
 STATIC_URL = '/static/'
@@ -90,24 +88,21 @@ MIDDLEWARE_CLASSES = (
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211'
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 60*60*24
     }
 }
+
+# caching is optional. We check if `settings_local.CACHES` exists.
 if LIVE and hasattr(settings_local, 'CACHES'):
     CACHES = settings_local.CACHES
-
-TIMEOUT = 60*60*24
 
 ROOT_URLCONF = 'main.urls'
 WSGI_APPLICATION = 'main.apache.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
-                               "django.core.context_processors.debug",
+TEMPLATE_CONTEXT_PROCESSORS = ("django.core.context_processors.debug",
                                "django.core.context_processors.i18n",
-                               "django.core.context_processors.media",
-                               "django.core.context_processors.static",
                                "django.core.context_processors.tz",
-                               "django.contrib.messages.context_processors.messages",
                                "django.core.context_processors.request",
                                "main.context_processors.site",)
 
@@ -117,7 +112,7 @@ INSTALLED_APPS = (
     'deputies',
     'law',
     'treebeard',  # for model in trees
-    'sphinxql',
+    'sphinxql',   # for search
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
 )

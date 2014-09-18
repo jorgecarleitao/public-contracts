@@ -1,15 +1,14 @@
-"""
-Module run every day by a cron job to update database and cache.
-"""
-if __name__ == "__main__":
-    from main.tools import set_up
-    set_up.set_up_django_environment('main.settings_for_schedule')
+from celery import shared_task, group
+from celery.utils.log import get_task_logger
 
-from law.crawler import FirstSeriesCrawler, Populator
 from law.analysis import analysis_manager
+from law.crawler import FirstSeriesCrawler, Populator
+
+logger = get_task_logger(__name__)
 
 
-def update():
+@shared_task(ignore_result=True)
+def update_documents():
     import datetime
     current_year = datetime.datetime.now().date().year
     for year in range(current_year - 1, current_year + 1):
@@ -20,14 +19,15 @@ def update():
     p = Populator()
     p.populate_all(current_year - 1)
 
-    update_cache()
 
-
-def update_cache():
+@shared_task(ignore_result=True)
+def update_analysis():
     # update analysis
     for analysis in list(analysis_manager.values()):
         analysis.update()
 
 
-if __name__ == "__main__":
-    update()
+@shared_task(ignore_result=True)
+def update():
+    update_documents()
+    update_analysis()

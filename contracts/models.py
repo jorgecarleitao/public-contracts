@@ -133,7 +133,7 @@ class Entity(models.Model):
         """
         Computes the data of this entity from the existing relations.
         """
-        logger.info('computing data of entity %d', self.base_id)
+        logger.debug('computing data of entity %d', self.base_id)
 
         # if data does not exist, we create it.
         try:

@@ -204,7 +204,7 @@ class StaticDataCrawler():
 
 
 class DynamicCrawler(JSONCrawler):
-    object_directory = '../../data'
+    object_directory = '../data'
     object_url = None
     object_name = None
     object_model = None
@@ -327,7 +327,7 @@ class EntitiesCrawler(DynamicCrawler):
     """
     Crawler used to retrieve entities.
     """
-    object_directory = '../../data/entities'
+    object_directory = '../data/entities'
     object_url = 'http://www.base.gov.pt/base2/rest/entidades/%d'
     object_name = 'entity'
     object_model = models.Entity
@@ -352,7 +352,7 @@ class ContractsCrawler(DynamicCrawler):
     """
     Crawler used to retrieve contracts.
     """
-    object_directory = '../../data/contracts'
+    object_directory = '../data/contracts'
     object_url = 'http://www.base.gov.pt/base2/rest/contratos/%d'
     object_name = 'contract'
     object_model = models.Contract
@@ -407,7 +407,7 @@ class TendersCrawler(DynamicCrawler):
     """
     Crawler used to retrieve tenders.
     """
-    object_directory = '../../data/tenders'
+    object_directory = '../data/tenders'
     object_url = 'http://www.base.gov.pt/base2/rest/anuncios/%d'
     object_name = 'tender'
     object_model = models.Tender
@@ -457,13 +457,16 @@ class DynamicDataCrawler():
         self.tenders_crawler = TendersCrawler()
 
     def update_all(self):
+        logger.info('Updating entities')
         modified_entities = self.entities_crawler.update()
 
+        logger.info('Updating contracts')
         contracts = self.contracts_crawler.update()
         for contract in contracts:
             modified_entities += list(contract.contractors.all())
             modified_entities += list(contract.contracted.all())
 
+        logger.info('Updating tenders')
         tenders = self.tenders_crawler.update()
         for tender in tenders:
             modified_entities += list(tender.contractors.all())
