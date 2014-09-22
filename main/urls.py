@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^', include(law.urls, app_name='law')),
                        (r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}),
                        (r'^robots\.txt$', views.robots),
+                       (r'^i18n/', include('django.conf.urls.i18n')),
                        )
 
 from django.conf import settings

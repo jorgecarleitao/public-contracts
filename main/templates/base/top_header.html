@@ -13,4 +13,23 @@
             <a href="{% url "law_home" %}">{% trans "Law" %}</a>
         </li>
     </ul>
+
+    <ul class="nav navbar-nav pull-right">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                {% trans "Language" %}<span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% for lang in LANGUAGES %}
+                    <li>
+                        <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
+                            <input name="next" type="hidden" value="" />
+                            <input name="language" type="hidden" value="{{ lang.0 }}" />
+                            <a class="btn{% if lang.0 == LANGUAGE_CODE %} disabled{% endif %}" href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;">{{ lang.1 }}</a>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
 </nav>
