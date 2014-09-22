@@ -3006,4 +3006,4 @@ msgstr "Lei"
 
 #: main/templates/base/top_header.html:20
 msgid "Language"
-msgstr "Língua"
+msgstr "Idioma"
