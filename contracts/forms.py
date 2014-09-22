@@ -9,7 +9,12 @@ class DateRangeField(forms.DateField):
             return None
         values = value.split(' - ')
         from_date = super(DateRangeField, self).to_python(values[0])
-        to_date = super(DateRangeField, self).to_python(values[1])
+
+        if len(values) > 1:
+            to_date = super(DateRangeField, self).to_python(values[1])
+        else:
+            # if no range, use equal dates
+            to_date = from_date
         return from_date, to_date
 
 
