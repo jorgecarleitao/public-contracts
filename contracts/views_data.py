@@ -54,7 +54,7 @@ def entities_category_ranking_histogram_json(request):
 
     for entity in entities:
         for x in range(n_bins):
-            if data['values'][x]['min_position'] < entity.average_delta_time <= data['values'][x]['max_position']:
+            if data['values'][x]['min_position'] < entity.avg_depth <= data['values'][x]['max_position']:
                 data['values'][x]['value'] += 1
                 break
 
