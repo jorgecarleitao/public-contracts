@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-22 18:31+0100\n"
+"POT-Creation-Date: 2014-09-22 19:22+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -364,7 +364,7 @@ msgstr ""
 #: contracts/templates/contracts/entity_view/selector.html:7
 #: contracts/templates/contracts/entity_view/tab_contracts/main.html:5
 #: contracts/templates/contracts/entity_view/tab_data/graph.html:38
-#: main/templates/base/top_header.html:7
+#: main/templates/main_page.html:28 main/templates/base/top_header.html:7
 msgid "Contracts"
 msgstr "Contratos"
 
@@ -554,6 +554,7 @@ msgstr ""
 "concursos no seu dispositivo."
 
 #: contracts/templates/contracts/main_page.html:173
+#: main/templates/main_page.html:83
 msgid "Other informations"
 msgstr "Outras informações:"
 
@@ -1711,7 +1712,7 @@ msgstr "Análises aos deputados"
 #: deputies/templates/deputies/deputies_list.html:3
 #: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:38
 #: deputies/templates/deputies/base/header.html:6
-#: main/templates/base/top_header.html:10
+#: main/templates/main_page.html:70 main/templates/base/top_header.html:10
 msgid "Deputies"
 msgstr "Deputados"
 
@@ -2638,7 +2639,7 @@ msgstr ""
 msgid "Types"
 msgstr "Tipos"
 
-#: law/templates/law/law_list/main.html:3
+#: law/templates/law/law_list/main.html:3 main/templates/main_page.html:55
 msgid "Laws"
 msgstr "Leis"
 
@@ -2873,9 +2874,123 @@ msgstr ""
 "<a href=\"%(mailing_list)s\">read the docs</a> que aloja a documentação da "
 "base de dados."
 
-#: main/templates/main_page.html:4 main/templates/base/top_header.html:5
+#: main/templates/main_page.html:4 main/templates/main_page.html.py:9
+#: main/templates/base/top_header.html:5
 msgid "Publics"
 msgstr "Públicos"
+
+#: main/templates/main_page.html:11
+msgid ""
+"\n"
+"                    Know the <strong>contracts</strong>, the <strong>laws</"
+"strong>\n"
+"                    and the <strong>deputies</strong> of the portuguese "
+"state.\n"
+"                "
+msgstr ""
+"\n"
+"Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os "
+"<strong>deputados</strong> do estado português."
+
+#: main/templates/main_page.html:17
+msgid ""
+"\n"
+"                    Here you can find any public contract, tender,\n"
+"                    law or deputy officially released by official sources. "
+"We\n"
+"                    aim to provide tools for you to extract meaningful "
+"answers\n"
+"                    about them. Learn how...\n"
+"                "
+msgstr ""
+"\n"
+"Aqui pode encontrar qualquer contrato, concurso público, lei ou deputado "
+"oficialmente anunciado por fontes oficiais. O nosso objetivo é dar-lhe "
+"ferramentas para você mesmo poder responder às perguntas que tem sobre o "
+"estado português. Aprenda como..."
+
+#: main/templates/main_page.html:32
+msgid ""
+"\n"
+"                    In this website you can find all contracts,\n"
+"                    entities and tenders officially published by the state.\n"
+"                    You can also find:\n"
+"                "
+msgstr ""
+"\n"
+"Neste website pode encontrar todas os contratos, entidades e concursos "
+"públicos existentes publicados oficialmente. Pode ainda conhecer:"
+
+#: main/templates/main_page.html:40
+msgid ""
+"which companies are most hired, which most hire, and in which economical "
+"sector."
+msgstr ""
+"que empresas são mais contratadas, que empresas mais contratam e em que "
+"sector económico."
+
+#: main/templates/main_page.html:43
+msgid ""
+"the last public tenders, or the public entities that are tendering most."
+msgstr ""
+"os últimos concursos públicos, ou que entidades públicas estão a contratar "
+"mais."
+
+#: main/templates/main_page.html:46
+msgid ""
+"temporal evolution of macroscopic indicators of portuguese public "
+"procurement."
+msgstr ""
+"evolução temporal de indicadores macroscópicos da contratação pública "
+"portuguesa."
+
+#: main/templates/main_page.html:50 main/templates/main_page.html.py:65
+#: main/templates/main_page.html:78
+msgid "More information"
+msgstr "Mais informações"
+
+#: main/templates/main_page.html:58
+msgid ""
+"\n"
+"                In this website you can find all portuguese laws officially\n"
+"                published.\n"
+"            "
+msgstr ""
+"\n"
+"Neste local pode encontrar todas as leis oficialmente publicadas."
+
+#: main/templates/main_page.html:73
+msgid ""
+"\n"
+"                In this website you can find all members of the portuguese\n"
+"                parliament since 1992.\n"
+"            "
+msgstr ""
+"\n"
+"Neste website pode encontrar todos os deputados portugueses desde 1992."
+
+#: main/templates/main_page.html:88
+msgid "This website is open source, public, and non-governamental."
+msgstr "Este website é open source, público e não-governamental."
+
+#: main/templates/main_page.html:92
+msgid ""
+"All data in this website is syncronized with official sources within 24h."
+msgstr ""
+"Todos os dados aqui apresentados estão sincronizados com os dados oficiais "
+"com o máximo de 24h de erro."
+
+#: main/templates/main_page.html:97
+msgid ""
+"The database is <strong>public</strong>. Check out the documentation to "
+"access it."
+msgstr ""
+"A base de dados deste website é <strong>pública</strong>. Consulte a "
+"documentação do website para a aceder."
+
+#: main/templates/main_page.html:103
+msgid "More about us"
+msgstr "Mais sobre nós"
 
 #: main/templates/rss_btn_group.html:4
 msgid "get RSS feed"

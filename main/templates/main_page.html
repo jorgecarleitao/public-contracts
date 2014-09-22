@@ -3,83 +3,104 @@
 {% load static %}
 {% block title %}{% trans "Publics"%}{% endblock %}
 {% block content %}
-    <div itemscope itemtype="http://schema.org/WebPage">
-        <div class="text-center">
-            <h1 itemprop="name">
-                Bem vindo ao Públicos
-            </h1>
+    <div class="jumbotron" itemscope itemtype="http://schema.org/WebPage">
+        <div class="container">
             <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
+            <h1>{% trans "Publics" %}</h1>
+            <p><small>
+                {% blocktrans %}
+                    Know the <strong>contracts</strong>, the <strong>laws</strong>
+                    and the <strong>deputies</strong> of the portuguese state.
+                {% endblocktrans %}
+            </small></p>
             <p itemprop="description">
-                Conheça os <strong>contratos</strong>, as <strong>leis</strong> e os <strong>deputados</strong>
-                do estado português.
+                {% blocktrans %}
+                    Here you can find any public contract, tender,
+                    law or deputy officially released by official sources. We
+                    aim to provide tools for you to extract meaningful answers
+                    about them. Learn how...
+                {% endblocktrans %}
             </p>
         </div>
-        <h2>Contratos</h2>
-        <p>
-            Neste website pode encontrar todas as entidades, contratos e concursos públicos existentes no <a href="http://www.base.gov.pt">site oficial de contratos públicos</a>.
-            Pode ainda conhecer:
-        </p>
-        <ul>
-            <li>
-                que empresas são mais contratadas, que empresas mais contratam e em que sector económico.
-            </li>
-            <li>
-                os últimos concursos públicos, ou que entidades públicas estão a contratar mais.
-            </li>
-            <li>
-                evolução temporal de indicadores macroscópicos da contratação pública portuguesa.
-            </li>
-        </ul>
-        {% include "contracts/analysis/contracts_price_histogram/graph.html" %}
-        <p><a href="{% url "contracts_home" %}">Mais informações</a></p>
-        <h2>Leis</h2>
-        <p>
-            Este website tem todas as leis presentes no <a href="http://dre.pt">site oficial do Diário da República</a>.
-        </p>
-        <ul>
-            <li>
-                [Em construção] Pode procurar no texto integral da lei.
-            </li>
-            <li>
-                [Em construção] Temos RSSs das listas de leis, caso queira receber actualizações no seu computador
-                quando novas leis surgem.
-            </li>
-        </ul>
-        {% url 'law_data_selector' 'law-types-time-series-json' as the_url %}
-        {% include "law/analysis/law_types_time_series/graph.html" with url=the_url%}
-        <p><a href="{% url "law_home" %}">Mais informações</a></p>
-        <h2>Deputados</h2>
-        <p>
-            Este website tem a lista de todos os deputados no <a href="http://parlamento.pt">site oficial do Parlamento Português</a>.
-        </p>
-        <ul>
-            <li>
-                Divulgamos a lista de todos os deputados que passaram pelo parlamento.
-            </li>
-            <li>
-                [Em construção]: temos os registos de interesses de todos os deputados, incluindo ligações para
-                as entidades presentes em contratos públicos.
-            </li>
-            <li>
-                [Em construção]: Temos os registo de que leis os deputados proposeram, ligando com
-                as leis já existentes.
-            </li>
-        </ul>
-        {% include "deputies/analysis/mandates_distribution/graph.html" %}
-        <p><a href="{% url "deputies_home" %}">Mais informações</a></p>
-        <h3>Outras informações:</h3>
-        <ul>
-            <li>
-                Este website é open source, público e não-governamental.
-            </li>
-            <li>
-                Todos os dados aqui apresentados estão
-                sincronizados com os dados oficiais com o máximo de 24h de erro.
-            </li>
-            <li>
-                A base de dados deste website é <strong>pública</strong>. Consulte a documentação
-                do website para a aceder.
-            </li>
-        </ul>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Contracts" %}</h2>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans %}
+                    In this website you can find all contracts,
+                    entities and tenders officially published by the state.
+                    You can also find:
+                {% endblocktrans %}
+            </p>
+            <ul>
+                <li>
+                    {% trans "which companies are most hired, which most hire, and in which economical sector." %}
+                </li>
+                <li>
+                    {% trans "the last public tenders, or the public entities that are tendering most." %}
+                </li>
+                <li>
+                    {% trans "temporal evolution of macroscopic indicators of portuguese public procurement." %}
+                </li>
+            </ul>
+            {% include "contracts/analysis/contracts_price_histogram/graph.html" %}
+            <p><a class="btn btn-success" role="button" href="{% url "contracts_home" %}">{% trans "More information"%}</a></p>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Laws" %}</h2>
+        </div>
+        <div class="panel-body">
+            {% blocktrans %}
+                In this website you can find all portuguese laws officially
+                published.
+            {% endblocktrans %}
+
+            {% url 'law_data_selector' 'law-types-time-series-json' as the_url %}
+            {% include "law/analysis/law_types_time_series/graph.html" with url=the_url%}
+            <p><a class="btn btn-success" role="button" href="{% url "law_home" %}">{% trans "More information"%}</a></p>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Deputies" %}</h2>
+        </div>
+        <div class="panel-body">
+            {% blocktrans %}
+                In this website you can find all members of the portuguese
+                parliament since 1992.
+            {% endblocktrans %}
+            {% include "deputies/analysis/mandates_distribution/graph.html" %}
+            <p><a class="btn btn-success" role="button" href="{% url "deputies_home" %}">{% trans "More information"%}</a></p>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Other informations" %}</h2>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>
+                    {% trans "This website is open source, public, and non-governamental." %}
+                    Este website é open source, público e não-governamental.
+                </li>
+                <li>
+                    {% trans "All data in this website is syncronized with official sources within 24h." %}
+                    Todos os dados aqui apresentados estão sincronizados com os
+                    dados oficiais com o máximo de 24h de erro.
+                </li>
+                <li>
+                    {% trans "The database is <strong>public</strong>. Check out the documentation to access it." %}
+                    A base de dados deste website é <strong>pública</strong>. Consulte a documentação
+                    do website para a aceder.
+                </li>
+            </ul>
+            <p><a class="btn btn-success" role="button" href="
+            {% url "about" %}">{% trans "More about us"%}</a></p>
+        </div>
     </div>
 {% endblock %}
