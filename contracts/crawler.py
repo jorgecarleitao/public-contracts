@@ -38,7 +38,7 @@ class AbstractCrawler(object):
 
     def goToPage(self, url):
         response = requests.get(url, headers={'User-agent': self.user_agent},
-                                timeout=5)
+                                timeout=10)
         return response.text
 
 
