@@ -283,17 +283,25 @@ class DynamicCrawler(JSONCrawler):
 
     def last_base_id(self):
         """
-        Returns the last known base_id
+        Returns the last known base_id.
         """
         regex = re.compile(r"%s_(\d+).json" % self.object_name)
         files = [int(re.findall(regex, f)[0])
                  for f in os.listdir('%s/' % self.object_directory)
                  if re.match(regex, f)]
-        files = sorted(files, key=lambda x: int(x), reverse=True)
-        if files:
-            return files[0]
+        ids_in_file = sorted(files, key=lambda x: int(x), reverse=True)
+        if ids_in_file:
+            max_id_from_files = ids_in_file[0]
         else:
-            return 0
+            max_id_from_files = 0
+
+        tender = self.object_model.objects.order_by("-base_id").first()
+        if tender:
+            max_id_from_db = tender.base_id
+        else:
+            max_id_from_db = 0
+
+        return min(max_id_from_files, max_id_from_db)
 
     def update(self, flush=False):
         """
