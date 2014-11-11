@@ -123,7 +123,7 @@ if DEBUG:
 
 
 INDEXES = {
-    'PATH': os.path.join(site_directory, '_index'),
+    'path': os.path.join(site_directory, '_index'),
     'sphinx_path': site_directory,
     'index_params': {
         'charset_table':
