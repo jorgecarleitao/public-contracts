@@ -2,7 +2,8 @@ import datetime
 import json
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Sum, Count, connection
+from django.db import connection
+from django.db.models import Sum, Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _

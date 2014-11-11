@@ -1,6 +1,7 @@
 def set_up_django_environment(settings):
     import os
     import sys
+    import django
 
     # Adds the previous path to the working path so we have access to 'contracts'
 
@@ -11,3 +12,5 @@ def set_up_django_environment(settings):
 
     # Sets Django settings to be the settings in this directory
     os.environ['DJANGO_SETTINGS_MODULE'] = settings
+
+    django.setup()
