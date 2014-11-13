@@ -85,14 +85,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'TIMEOUT': 60*60*24
-    }
-}
-
 # caching is optional. We check if `settings_local.CACHES` exists.
 if LIVE and hasattr(settings_local, 'CACHES'):
     CACHES = settings_local.CACHES

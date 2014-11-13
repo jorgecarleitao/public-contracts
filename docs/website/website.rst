@@ -29,15 +29,6 @@ To develop, we use ``django-debug-toolbar``, an utility to debug Django websites
 
     pip install django-debug-toolbar
 
-memcache
-^^^^^^^^
-
-We use a caching system, memcache, to minimize database hits and store analysis.
-You need to install memcache in your system, and its binding for Python::
-
-    pip install python3-memcached
-
-
 Running the website
 -------------------
 
