@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.4"
+
+install:
+  - pip install -r api_requirements.txt
+
+script:
+  - python -m contracts.tools.example

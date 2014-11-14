@@ -1,0 +1,4 @@
+Django
+PyMySQL
+django-treebeard
+Beautifulsoup4
