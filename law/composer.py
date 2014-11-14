@@ -212,7 +212,7 @@ def organize_soup(soup):
             current_element[format_to_receive]\
                 .append(current_element[format_to_move])
 
-    body = soup.html.body
+    body = soup
     for element in body.select('p'):
         for format in hierarchy_priority:
             search = re.search(hierarchy_regex[format], element.text)
