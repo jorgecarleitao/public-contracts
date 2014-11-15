@@ -1,14 +1,53 @@
+"""
+This is the entry point settings of manage.py runserver and wsgi.py.
+(I.e. we use it in production)
+
+What this module does depends on (1) whether module `settings_local` exists
+and (2) how the value of `settings_local.HOST_NAME` compares with
+`socket.gethostname()`. Specifically, this module:
+
+- tries to import `settings_local`. If it doesn't exist, uses DEBUG mode
+(LIVE = False);
+
+- if `settings_local` exists, checks if the machine name (`socket.gethostname(
+)`) is equal to `settings_local.HOST_NAME`. If `settings_local.HOST_NAME` doesn't
+exist or the names are different, uses DEBUG mode. Otherwise, LIVE = True;
+
+- In DEBUG mode, it ignores `settings_local` and uses the settings defined
+in this module;
+
+- In LIVE mode, it tries to overwrite some settings in this module
+with settings in `settings_local`.
+
+Mandatory settings in `settings_local` for LIVE mode:
+- `ALLOWED_HOSTS`
+- `SECRET_KEY`
+
+Optional settings in `settings_local` for LIVE or DEBUG:
+- `CACHES`
+
+Optional settings in `settings_local` for LIVE mode:
+- `ADMINS`
+- `EMAIL_HOST`
+- `DATABASES`
+- `STATIC_ROOT`
+- `STATIC_URL`
+
+"""
 import socket
 import os.path
-import sys
 
 # e.g. SITE_DOMAIN = 'www.example.com'
 from .domain import SITE_DOMAIN
-# This file has a set of private settings dependent on the particular host.
-from . import settings_local
+
+try:
+    from . import settings_local
+except ImportError:
+    settings_local = object
 
 
-if socket.gethostname() == settings_local.HOST_NAME:
+if hasattr(settings_local, 'HOST_NAME') and \
+        socket.gethostname() == settings_local.HOST_NAME:
     LIVE = True
     DEBUG = False
     TEMPLATE_DEBUG = False
@@ -17,6 +56,11 @@ else:
     DEBUG = True
     TEMPLATE_DEBUG = True
 
+main_directory = os.path.abspath(os.path.dirname(__file__))
+site_directory = os.path.abspath(os.path.dirname(main_directory))
+
+
+############## Email and email receivers ##############
 if LIVE and hasattr(settings_local, 'ADMINS'):
     ADMINS = settings_local.ADMINS
     MANAGERS = ADMINS
@@ -29,15 +73,8 @@ if LIVE and hasattr(settings_local, 'EMAIL_HOST'):
     SERVER_EMAIL = settings_local.SERVER_EMAIL
     EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_DOMAIN
 
-main_directory = os.path.abspath(os.path.dirname(__file__))
-site_directory = os.path.abspath(os.path.dirname(main_directory))
 
-TIME_ZONE = 'Europe/Lisbon'
-LANGUAGE_CODE = 'pt'
-
-LANGUAGES = (('en', 'English'),
-             ('pt', 'Portuguese'))
-
+############## Databases ##############
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -52,18 +89,34 @@ DATABASES = {
 if LIVE and hasattr(settings_local, 'DATABASES'):
     DATABASES = settings_local.DATABASES
 
-# to make tests run faster
-if 'test' in sys.argv:
-    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
+############## Security settings ##############
+
+# We force `settings_local` to contain `ALLOWED_HOSTS` so we don't go live
+# with all hosts allowed
 ALLOWED_HOSTS = ['*']
-SECRET_KEY = settings_local.SECRET_KEY
+if LIVE:
+    ALLOWED_HOSTS = settings_local.ALLOWED_HOSTS
+
+# We force `settings_local` to contain a `SECRET_KEY` so we don't go live
+# with a public key
+SECRET_KEY = 'a_public_key'
+if LIVE:
+    SECRET_KEY = settings_local.SECRET_KEY
+
+############## Time zones and internationalization ##############
+TIME_ZONE = 'Europe/Lisbon'
+LANGUAGE_CODE = 'pt'
+
+LANGUAGES = (('en', 'English'),
+             ('pt', 'Portuguese'))
 
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 LOCALE_PATHS = (site_directory + '/locale',)
 
+############## Location of the static files ##############
 STATIC_ROOT = os.path.join(main_directory, 'static')
 if LIVE and hasattr(settings_local, 'STATIC_ROOT'):
     STATIC_ROOT = settings_local.STATIC_ROOT
@@ -73,6 +126,7 @@ if LIVE:
     STATIC_URL = 'http://%s/static/' % SITE_DOMAIN
 
 
+############## Django specifics ##############
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
@@ -84,10 +138,6 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
 )
-
-# caching is optional. We check if `settings_local.CACHES` exists.
-if LIVE and hasattr(settings_local, 'CACHES'):
-    CACHES = settings_local.CACHES
 
 ROOT_URLCONF = 'main.urls'
 WSGI_APPLICATION = 'main.apache.wsgi.application'
@@ -114,6 +164,13 @@ if DEBUG:
     MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
 
 
+############## Caches ##############
+# We don't need to be LIVE to have caching.
+if hasattr(settings_local, 'CACHES'):
+    CACHES = settings_local.CACHES
+
+
+############## Django-SphinxQL specifics ##############
 INDEXES = {
     'path': os.path.join(site_directory, '_index'),
     'sphinx_path': site_directory,
@@ -131,6 +188,7 @@ INDEXES = {
 }
 
 
+############## Logging ##############
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
