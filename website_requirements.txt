@@ -1,0 +1,6 @@
+Django
+PyMySQL
+django-treebeard
+Beautifulsoup4
+django-debug-toolbar
+git+https://github.com/jorgecarleitao/django-sphinxql.git
