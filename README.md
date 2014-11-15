@@ -1,18 +1,19 @@
+[![Build Status](https://travis-ci.org/jorgecarleitao/public-contracts.svg)](https://travis-ci.org/jorgecarleitao/public-contracts)
+
 # Publics pt
 
-Publics pt is an open source Django website and API to query and analyse data of the portuguese state.
-Thanks for checking it out.
+Publics pt is an open source Django website and API to query and analyse data of
+the portuguese state. Thanks for checking it out.
 
 ## The problem we aim to solve
 
-The portuguese state does not provide a consistent way to query public data, nor relating this data.
 This website aims to:
 
 1. Provide a consistent way to query portuguese public data using Django ORM
 2. Interrelate different public data
 3. Extract and present statistical features of the data
 
-This project consists of 4 components:
+and consists in 4 components:
 
 1. A set of crawlers and validators that retrieve information from official databases and store them in Django models
 2. A set of Django models (in Django Apps) to store the data in a database
@@ -41,27 +42,40 @@ The API and the crawler are [documented](http://public-contracts.readthedocs.org
 
 ## Pre-requisites and installation
 
-1- Install Django and bindings to mysql.
+The installation depend on what you want to do:
 
-`pip install django`
+### To access and query the database 
 
-`pip install PyMySQL`
+1- Install Django, PyMySQL, [django-treebeard](https://github.com/tabo/django-treebeard) and BeautifulSoup4:
 
-2- Install [django-treebeard](https://github.com/tabo/django-treebeard), a dependency.
+`pip install -r api_requirements.txt` 
 
-`pip install django-treebeard`
-
-3- Download the source
+2- Download the source
 
 `git clone git@github.com:jorgecarleitao/public-contracts.git`
 
-Enter in the project's directory: `cd public-contracts`.
+3- Enter in the project's directory: 
+
+`cd public-contracts`
 
 4- Run the example:
 
 `python -m contracts.tools.example`
 
-you should see two numbers.
+you should see two numbers. You now have full access to the database.
+
+### To deploy the website locally
+
+1- Additionally to the installation above, install django-debug-toolbar and 
+[Django-SphinxQL](https://github.com/jorgecarleitao/django-sphinxql):
+
+`pip install -r website_requirements.txt`
+
+2- Start the server:
+
+`python manage.py runserver`
+
+3- Enter in the url `127.0.0.1:8000`.
 
 If something went wrong, please report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
 so we can help you and improve these instructions.
