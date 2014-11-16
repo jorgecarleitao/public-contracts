@@ -139,8 +139,8 @@ class EntityTendersFeed(EntityContractsFeed):
     def item_link(self, item):
         return item.get_dre_url()
 
-    def items(self, _):
-        return Tender.objects.all()[:200]
+    def items(self, obj):
+        return obj.tender_set.all()[:200]
 
 
 class TendersFeed(Feed):
