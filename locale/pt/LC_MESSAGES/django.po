@@ -51,7 +51,7 @@ msgid "tenders"
 msgstr "concursos"
 
 #: contracts/entity_urls.py:18
-msgid "costumers"
+msgid "customers"
 msgstr "clientes"
 
 #: contracts/entity_views.py:64
@@ -555,7 +555,7 @@ msgstr ""
 
 #: contracts/templates/contracts/main_page.html:173
 #: main/templates/main_page.html:83
-msgid "Other informations"
+msgid "Other information"
 msgstr "Outras informações:"
 
 #: contracts/templates/contracts/main_page.html:178
@@ -1544,7 +1544,7 @@ msgid "No earnings"
 msgstr "Sem ganhos"
 
 #: contracts/templates/contracts/entity_view/selector.html:10
-msgid "Costumers"
+msgid "Customers"
 msgstr "Clientes"
 
 #: contracts/templates/contracts/entity_view/tab_costumers/costumer_summary.html:8
@@ -2727,7 +2727,7 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Enmbora procuremos ser sempre rigorosos nas análises que fazemos neste "
+"Embora procuremos ser sempre rigorosos nas análises que fazemos neste "
 "website, elas <strong>não são</strong> um substituto a investigação "
 "científica. Na sua essência, elas são apenas respostas a curiosidades e "
 "consequentemente <strong>não são revista por pares</strong>."
@@ -2970,12 +2970,12 @@ msgstr ""
 "Neste website pode encontrar todos os deputados portugueses desde 1992."
 
 #: main/templates/main_page.html:88
-msgid "This website is open source, public, and non-governamental."
+msgid "This website is open source, public, and non-governmental."
 msgstr "Este website é open source, público e não-governamental."
 
 #: main/templates/main_page.html:92
 msgid ""
-"All data in this website is syncronized with official sources within 24h."
+"All data in this website is synchronized with official sources within 24h."
 msgstr ""
 "Todos os dados aqui apresentados estão sincronizados com os dados oficiais "
 "com o máximo de 24h de erro."

@@ -7,7 +7,7 @@
         <a href="{% url "entity_contracts" entity.id %}">{% trans "Contracts"%}</a>
     </li>
     <li {% if tab == 'costumers' %}class="active"{% endif %}>
-        <a href="{% url "entity_costumers" entity.id %}">{% trans "Costumers"%}</a>
+        <a href="{% url "entity_costumers" entity.id %}">{% trans "Customers"%}</a>
     </li>
     {% if entity.tender_set.exists %}
         <li {% if tab == 'tenders' %}class="active"{% endif %}>

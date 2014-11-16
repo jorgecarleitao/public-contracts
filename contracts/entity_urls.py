@@ -15,7 +15,7 @@ urlpatterns = patterns('',
                            entity_views.contracts_received_time_series,
                            name='entity_contracts_received_time_series'),
 
-                       url(r'(\d+)/%s$' % _('costumers'), entity_views.costumers, name='entity_costumers'),
+                       url(r'(\d+)/%s$' % _('customers'), entity_views.costumers, name='entity_costumers'),
 
                        url(r'(\d+)/%s$' % _('tenders'), entity_views.tenders, name='entity_tenders'),
                        url(r'(\d+)/%s/rss$' % _('tenders'), feed.EntityTendersFeed()),
