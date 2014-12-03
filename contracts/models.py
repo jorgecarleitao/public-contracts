@@ -99,7 +99,7 @@ class Entity(models.Model):
         return self.data.total_expended
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/entidades.shtml#%s' \
+        return 'http://www.base.gov.pt/Base/pt/Pesquisa/Entidade?a=%s' \
                % self.base_id
 
     def get_absolute_url(self):
@@ -229,7 +229,7 @@ class Contract(models.Model):
         return reverse('contract', args=(self.id,))
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/contratos.shtml#%d' \
+        return 'http://www.base.gov.pt/Base/pt/Pesquisa/Contrato?a=%d' \
                % self.base_id
 
     def get_first_contractor(self):
@@ -300,7 +300,7 @@ class Tender(models.Model):
                 self.dre_document)
 
     def get_base_url(self):
-        return 'http://www.base.gov.pt/base2/html/pesquisas/anuncios.shtml#%d' \
+        return 'http://www.base.gov.pt/Base/pt/Pesquisa/Anuncio?a=%d' \
                % self.base_id
 
     class Meta:
