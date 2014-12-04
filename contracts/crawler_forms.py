@@ -168,14 +168,6 @@ class ContractTypeField(ModelChoiceField):
         return super().clean(value)
 
 
-class DREDocument(CharField):
-    """
-    The integer value of the last argument of the url
-    """
-    def clean(self, value):
-        return int(value.split('=')[-1])
-
-
 class EntityForm(Form):
     """
     Validate data for a ``models.Entity``.
@@ -235,9 +227,7 @@ class TenderForm(Form):
 
     contractors = EntitiesField()
 
-    dre_document = DREDocument()
-    dre_number = CharField()
-    dre_series = CharField()
+    dre_url = CharField()
 
     @staticmethod
     def prepare_publication_date(data):

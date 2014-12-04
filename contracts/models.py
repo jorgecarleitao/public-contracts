@@ -285,20 +285,10 @@ class Tender(models.Model):
     category = models.ForeignKey('Category', null=True)
     price = models.BigIntegerField()
 
-    dre_number = models.IntegerField()
-    dre_series = models.IntegerField()
-    dre_document = models.IntegerField()
+    dre_url = models.TextField()
 
     def get_dre_url(self):
-        return 'http://dre.pt/util/getpdf.asp?s=udrcp' \
-               '&serie=%d' \
-               '&data=%s' \
-               '&iddr=%d' \
-               '&iddip=%d' %\
-               (self.dre_series,
-                self.publication_date.strftime('%Y-%m-%d'),
-                self.dre_number,
-                self.dre_document)
+        return self.dre_url
 
     def get_base_url(self):
         return 'http://www.base.gov.pt/Base/pt/Pesquisa/Anuncio?a=%d' \
