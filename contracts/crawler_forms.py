@@ -1,4 +1,5 @@
 # coding=utf-8
+import datetime
 from datetime import timedelta
 import re
 
@@ -238,8 +239,30 @@ class TenderForm(Form):
     dre_number = CharField()
     dre_series = CharField()
 
-    def clean_deadline_date(self):
-        deadline_date = self.cleaned_data['publication_date']
-        deadline_date += self.cleaned_data['deadline_date']
+    @staticmethod
+    def prepare_publication_date(data):
+        """
+        When publication_date is not available, we try to get it from the URL.
+        """
+        if not data['publication_date']:
+            try:
+                x = re.findall(r'&data=(\d+)\-(\d+)\-(\d+)&',
+                               data['dre_url'])[0]
+            except IndexError:
+                return None
 
-        return deadline_date
+            date = datetime.date(year=int(x[0]), month=int(x[1]), day=int(x[2]))
+            return date
+        else:
+            return data['publication_date']
+
+    def clean_deadline_date(self):
+        """
+        Deadline requires knowledge of publication date.
+        """
+        if 'publication_date' in self.cleaned_data:
+            deadline_date = self.cleaned_data['publication_date']
+            deadline_date += self.cleaned_data['deadline_date']
+
+            return deadline_date
+        # else validation will fail because publication_date is required.

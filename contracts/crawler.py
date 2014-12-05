@@ -440,6 +440,8 @@ class TendersCrawler(DynamicCrawler):
                          'price': data['basePrice'],
                          'contractors': data['contractingEntities']}
 
+        prepared_data['publication_date'] = \
+            TenderForm.prepare_publication_date(prepared_data)
         form = TenderForm(prepared_data)
 
         if not form.is_valid():
