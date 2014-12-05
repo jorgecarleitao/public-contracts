@@ -72,6 +72,7 @@ def recompute_analysis():
 @shared_task(ignore_result=True)
 def update():
     create_fixture()
-    retrieve_new_contracts()
+    retrieve_new_entities()
+    group([retrieve_new_contracts.s(), retrieve_new_tenders.s()])()
     group([recompute_entities_data.s(), recompute_categories_data.s()])()
     recompute_analysis()
