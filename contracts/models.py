@@ -270,7 +270,8 @@ class Tender(models.Model):
 
     contractors = models.ManyToManyField('Entity')
 
-    description = models.CharField(max_length=254)
+    description = models.TextField()
+
     model_type = models.ForeignKey('ModelType')
     act_type = models.ForeignKey('ActType')
     contract_type = models.ForeignKey('ContractType', null=True)
