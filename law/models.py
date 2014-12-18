@@ -99,7 +99,7 @@ class Document(models.Model):
         return dre_url_formater.format(document_id=self.dre_doc_id)
 
     def get_pdf_url(self):
-        return "http://dre.pt/%s" % self.pdf_url
+        return "http://dre.pt%s" % self.pdf_url.replace("\\", "/")
 
     def get_absolute_url(self):
         name = "%s" % slugify(self.type.name)

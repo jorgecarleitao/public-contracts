@@ -6,7 +6,7 @@
         <h2 itemprop="name">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
         <p>
             <small>
-                <a href="http://dre.pt/{{ law.pdf_url }}">PDF do Diário da República</a>,
+                <a href="{{ law.get_pdf_url }}">PDF do Diário da República</a>,
                 <a href="{{ law.get_base_url }}">Diário da República Electrónico</a>
             </small>
         </p>
