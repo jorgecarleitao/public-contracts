@@ -9,41 +9,6 @@ from django.utils.text import slugify
 
 from .composer import compose_text, compose_summary, normalize
 
-
-# document_id is represented by 8 numbers: year#### (e.g. 19971111)
-dre_url_formater = "http://dre.pt/cgi/dr1s.exe?" \
-                   "t=d" \
-                   "&cap=" \
-                   "&doc={document_id}" \
-                   "&v01=" \
-                   "&v02=" \
-                   "&v03=" \
-                   "&v04=" \
-                   "&v05=" \
-                   "&v06=" \
-                   "&v07=" \
-                   "&v08=" \
-                   "&v09=" \
-                   "&v10=" \
-                   "&v11=" \
-                   "&v12=" \
-                   "&v13=" \
-                   "&v14=" \
-                   "&v15=" \
-                   "&v16=" \
-                   "&v17=" \
-                   "&v18=" \
-                   "&v19=" \
-                   "&v20=" \
-                   "&v21=" \
-                   "&v22=" \
-                   "&v23=" \
-                   "&v24=" \
-                   "&v25=" \
-                   "&sort=0" \
-                   "&submit=Pesquisar"
-
-
 class Type(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
@@ -94,9 +59,6 @@ class Document(models.Model):
 
     objects = models.Manager()  # default manager.
     laws = LawDocumentManager()
-
-    def get_base_url(self):
-        return dre_url_formater.format(document_id=self.dre_doc_id)
 
     def get_pdf_url(self):
         return "http://dre.pt%s" % self.pdf_url.replace("\\", "/")
