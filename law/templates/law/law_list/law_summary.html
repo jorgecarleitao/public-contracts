@@ -1,7 +1,11 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% block summary_content %}
-    <h4><a href="{{ law.get_absolute_url }}">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</a></h4>
-    <div class="age">{{law.date}}</div>
+{% block summary_heading %}
+    <a href="{{ law.get_absolute_url }}">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</a>
+{% endblock %}
+{% block summary_body %}
+    <span class="glyphicon glyphicon-calendar"></span>
+    <span>{{law.date}}</span>
+    <br>
     <p>{{ law.compose_summary|safe }}</p>
 {% endblock %}

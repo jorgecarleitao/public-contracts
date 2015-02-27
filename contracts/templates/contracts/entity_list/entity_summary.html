@@ -2,28 +2,27 @@
 {% load i18n %}
 {% load contracts.humanize %}
 
-{% block summary_content %}
-    <h4><a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
-    <div class="price">
-        {% with earned=entity.total_earned %}
-            {% with expended=entity.total_expended %}
-                <p>
-                    {% if expended %}
-                        {% trans "Expenses:" %}
-                        {{ expended|intword }} €
-                    {% else %}
-                        {% trans "No expenses" %}
-                    {% endif %}
-                </p>
-                <p>
-                    {% if earned %}
-                        {% trans "Earnings:" %}
-                        {{ earned|intword }} €
-                    {% else %}
-                        {% trans "No earnings" %}
-                    {% endif %}
-                </p>
-            {% endwith %}
+{% block summary_heading %}
+    <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a>
+{% endblock %}
+
+{% block summary_body %}
+    {% with earned=entity.total_earned %}
+        {% with expended=entity.total_expended %}
+            <p>
+                {% if expended %}
+                    {% trans "Expenses:" %} {{ expended|intword }} €
+                {% else %}
+                    {% trans "No expenses" %}
+                {% endif %}
+            </p>
+            <p>
+                {% if earned %}
+                    {% trans "Earnings:" %} {{ earned|intword }} €
+                {% else %}
+                    {% trans "No earnings" %}
+                {% endif %}
+            </p>
         {% endwith %}
-    </div>
+    {% endwith %}
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% block summary_content %}
-    <h4><a href="{{ type.get_absolute_url }}">{{ type.name }}</a></h4>
-    <div class="age">
-        {% blocktrans count doc_number=type.count %}
-            {{ doc_number }} document
-        {% plural %}
-            {{ doc_number }} documents
-        {% endblocktrans %}
-    </div>
+{% block summary_heading %}
+    <a href="{{ type.get_absolute_url }}">{{ type.name }}</a>
+{% endblock %}
+{% block summary_body %}
+    {% blocktrans count doc_number=type.count %}
+        {{ doc_number }} document
+    {% plural %}
+        {{ doc_number }} documents
+    {% endblocktrans %}
 {% endblock %}

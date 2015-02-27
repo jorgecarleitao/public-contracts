@@ -1,9 +1,11 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% block summary_content %}
+{% block summary_heading %}
+    <a href="{{ deputy.get_absolute_url }}">{{ deputy.name }}</a>
+        ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}<a href="{{ deputy.party.get_absolute_url }}">{{deputy.party.abbrev}}</a>)
+{% endblock %}
+{% block summary_body %}
     <img src="{{ deputy.get_image_url }}" height="100">
-    <h4><a href="{{ deputy.get_absolute_url }}">{{ deputy.name }}</a>
-        ({% if deputy.is_active %}{% trans "in legislature"%}, {% endif %}<a href="{{ deputy.party.get_absolute_url }}">{{deputy.party.abbrev}}</a>)</h4>
     <div class="age">
         {% blocktrans count count=deputy.mandate_count %}
             {{ count }} mandate

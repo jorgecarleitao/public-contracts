@@ -1,20 +1,18 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% block summary_content %}
-    <h4>
-        <a href="{{ party.get_absolute_url }}">{{ party.abbrev }}</a>
-    </h4>
-    <div class="age">
-        {% blocktrans count count=party.mandates_count %}
-            {{ count }} mandate
-        {% plural %}
-            {{ count }} mandates
-        {% endblocktrans %}-
+{% block summary_heading %}
+    <a href="{{ party.get_absolute_url }}">{{ party.abbrev }}</a>
+{% endblock %}
+{% block summary_body %}
+    {% blocktrans count count=party.mandates_count %}
+        {{ count }} mandate
+    {% plural %}
+        {{ count }} mandates
+    {% endblocktrans %}-
 
-        {% blocktrans count count=party.deputies_count %}
-            {{ count }} deputy
-        {% plural %}
-            {{ count }} deputies
-        {% endblocktrans %}
-    </div>
+    {% blocktrans count count=party.deputies_count %}
+        {{ count }} deputy
+    {% plural %}
+        {{ count }} deputies
+    {% endblocktrans %}
 {% endblock %}
