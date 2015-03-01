@@ -4,7 +4,14 @@ from . import models
 
 
 def main_view(request, contract_id):
-    contract = get_object_or_404(models.Contract, pk=contract_id)
+    query = models.Contract.objects.select_related('contract_type__name',
+                                                   'category__id',
+                                                   'category__name',
+                                                   'country__name',
+                                                   'district__name',
+                                                   'council__name')
+
+    contract = get_object_or_404(query, pk=contract_id)
 
     context = {'navigation_tab': 'contracts',
                'contract': contract}
