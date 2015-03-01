@@ -134,6 +134,8 @@ def tenders(request, entity_id):
 
     all_tenders = entity.tender_set.all()
 
+    all_tenders = all_tenders.prefetch_related("contractors")
+
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'tenders',
