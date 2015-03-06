@@ -131,6 +131,18 @@ def build_entity_list_context(context, GET):
     else:
         GET = {}
 
+    key = 'type'
+    if key in GET and GET[key]:
+        context[key] = GET[key]
+        if context['selector'].LISTS_MAP[GET[key]] == 'municipality':
+            import contracts.tools.bp_db as bp_db
+            mun = bp_db.get_municipalities()
+            context['entities'] = context['entities'].filter(nif__in=[m['NIF'] for m in mun])
+        elif context['selector'].LISTS_MAP[GET[key]] == 'county':
+            import contracts.tools.dgal_db as dgal_db
+            mun = dgal_db.get_counties()
+            context['entities'] = context['entities'].filter(nif__in=[m['NIF'] for m in mun])
+
     key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]

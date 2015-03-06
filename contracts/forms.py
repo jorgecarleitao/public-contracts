@@ -66,18 +66,32 @@ class TenderSelectorForm(ContractSelectorForm):
 
 
 class EntitySelectorForm(BootstrapForm):
-    CHOICES = ((_('earnings'), _('earnings')),
-               (_('expenses'), _('expenses')))
+    SORTING_CHOICES = (('', _('any order')),
+                       (_('earnings'), _('earnings')),
+                       (_('expenses'), _('expenses')))
     SORTING_LOOKUPS = {_('earnings'): '-data__total_earned',
                        _('expenses'): '-data__total_expended'}
+
+    LISTS_CHOICES = (('', _('any entity')), (_('municipality'), _('municipality')),
+                     (_('county'), _('county')))
+    LISTS_MAP = {
+        _('municipality'): 'municipality',
+        _('county'): 'county'}
 
     search = forms.CharField(required=False,
                              widget=forms.TextInput(
                                  attrs={'class': 'form-control',
                                         'placeholder': _('filter entities')}))
 
+    type = forms.ChoiceField(required=False, widget=forms.Select(
+        attrs={'class': 'form-control', 'title':
+            _('limits list to specific entities')}), choices=LISTS_CHOICES)
+
     sorting = forms.ChoiceField(required=False, widget=forms.Select(
-        attrs={'class': 'form-control', 'title': _('order')}), choices=CHOICES)
+        attrs={'class': 'form-control', 'title': _('order')}), choices=SORTING_CHOICES)
 
     def add_prefix(self, field_name):
+        # HACK: ensures 'list' is translated.
+        if field_name == 'type':
+            return _('type')
         return _(field_name)
