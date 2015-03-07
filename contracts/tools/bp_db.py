@@ -7,12 +7,12 @@ This module uses the database from
  2. converted to utf-8 via a text program.
  3. saved in `contracts/DGAL_data/bp_list.tsv`
 """
-
 import csv
-import datetime
 import json
+import datetime
 
 import contracts.tools.caop as caop
+from contracts.tools.dgal_db import DGAL_PATH
 
 
 def handler(obj):
@@ -53,7 +53,7 @@ def parse_name(value):
 
 
 def normalize_data():
-    with open('contracts/DGAL_data/bp_list.tsv', 'r') as tsvin:
+    with open(DGAL_PATH + '/bp_list.tsv', 'r') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')
         tsvin = list(tsvin)
         assert(len(tsvin) == 5890)
@@ -68,7 +68,7 @@ def normalize_data():
                 'start_date': parse_date(line[3]),
                 'end_date': parse_date(line[4])})
 
-        with open('contracts/DGAL_data/bp_list_normalized.json', 'w') as outfile:
+        with open(DGAL_PATH + '/bp_list_normalized.json', 'w') as outfile:
             json.dump(results, outfile, default=handler)
 
 
@@ -144,7 +144,7 @@ def _get_municipalities():
         assert(key not in municipalities_index)
         municipalities_index[key] = m
 
-    with open('contracts/DGAL_data/bp_list_normalized.json', 'r') as in_file:
+    with open(DGAL_PATH + '/bp_list_normalized.json', 'r') as in_file:
         data = json.load(in_file)
 
     municipalities = []
@@ -166,7 +166,7 @@ def _get_municipalities():
 
 
 def get_municipalities():
-    file_name = 'contracts/DGAL_data/municipalities.json'
+    file_name = DGAL_PATH + '/municipalities.json'
     try:
         with open(file_name, 'r') as in_file:
             return json.load(in_file)

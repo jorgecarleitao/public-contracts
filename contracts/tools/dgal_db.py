@@ -7,15 +7,18 @@ This module uses the database from
  2. converted to utf-8 via a text program.
  3. saved in `contracts/DGAL_data/DGAL_Freguesias_2014_V7_utf8.txt`
 """
-
 import csv
 import json
+import os
 
 import contracts.tools.caop as caop
+from contracts.tools.caop import CONTRACTS_PATH
+
+DGAL_PATH = os.path.join(CONTRACTS_PATH, 'DGAL_data')
 
 
 def normalize_counties_to_json():
-    with open('contracts/DGAL_data/DGAL_Freguesias_2014_V7_utf8.txt', 'r') as tsvin:
+    with open(DGAL_PATH + '/DGAL_Freguesias_2014_V7_utf8.txt', 'r') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')
         tsvin = list(tsvin)[1:]  # ignore header
 
@@ -27,8 +30,10 @@ def normalize_counties_to_json():
                 'NIF': int(line[3])}
             )
 
-    assert(len(results) == caop.NUMBER_OF_COUNTIES - 1)  # we are missing 1
-    with open('contracts/DGAL_data/DGAL_counties.json', 'w') as outfile:
+    # CORVO exist as region but has no county NIF.
+    assert(len(results) == caop.NUMBER_OF_COUNTIES - 1)
+
+    with open(DGAL_PATH + '/DGAL_normalized.json', 'w') as outfile:
         json.dump(results, outfile)
 
 
@@ -187,7 +192,7 @@ def _get_counties():
 
     all_keys = set(counties_index.keys())
 
-    with open('contracts/DGAL_data/DGAL_counties.json', 'r') as in_file:
+    with open(DGAL_PATH + '/DGAL_normalized.json', 'r') as in_file:
         data = json.load(in_file)
 
     counties = []
@@ -224,7 +229,7 @@ def _get_counties():
 
 
 def get_counties():
-    file_name = 'contracts/DGAL_data/counties.json'
+    file_name = DGAL_PATH + '/counties.json'
     try:
         with open(file_name, 'r') as in_file:
             return json.load(in_file)

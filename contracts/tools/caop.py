@@ -1,6 +1,8 @@
 """
-This module uses the database from
- https://www.bportugal.pt/pt-PT/Estatisticas/MetodologiaseNomenclaturasEstatisticas/LEFE/Publicacoes/AP_listas.xls
+ This module uses the database from
+ http://www.dgterritorio.pt/cartografia_e_geodesia/cartografia/carta_administrativa_oficial_de_portugal__caop_/caop_em_vigor/
+ specifically from the excel file
+ http://www.dgterritorio.pt/ficheiros/cadastro/caop/caop_download/caop_2014_0/areasfregmundistcaop2014_3
 
  which was:
  1. each sheet was exported to TSV via "save as..." "UTF-16 Unicode Text" in excel.
@@ -12,22 +14,19 @@ This module uses the database from
 """
 import csv
 import json
+import os
 
 
 NUMBER_OF_DISTRICTS = 29
 NUMBER_OF_MUNICIPALITIES = 308
 NUMBER_OF_COUNTIES = 3092
 
+CONTRACTS_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+CAOP_PATH = os.path.join(CONTRACTS_PATH, 'CAOP_data')
 
-# These functions use data from
-# http://www.dgterritorio.pt/cartografia_e_geodesia/cartografia/carta_administrativa_oficial_de_portugal__caop_/caop_em_vigor/
-# specifically from the excel file
-# http://www.dgterritorio.pt/ficheiros/cadastro/caop/caop_download/caop_2014_0/areasfregmundistcaop2014_3
-# which was:
-# 1. exported to TSV via "save as..." "UTF-16 Unicode Text" in excel.
-# 2. converted to utf-8 via a text program.
-def normalize_districts_to_json():
-    with open('contracts/CAOP_data/Areas_distritos_CAOP2014_utf8.txt', 'r') as tsvin:
+
+def _get_normalized_districts():
+    with open(CAOP_PATH + '/Areas_distritos_CAOP2014_utf8.txt', 'r') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')
         tsvin = list(tsvin)[1:]  # ignore first line
 
@@ -48,22 +47,27 @@ def normalize_districts_to_json():
             )
 
     assert(len(results) == NUMBER_OF_DISTRICTS)
-    with open('contracts/CAOP_data/districts.json', 'w') as outfile:
-        json.dump(results, outfile)
-
-
-def get_districts():
-    with open('contracts/CAOP_data/districts.json', 'r') as in_file:
-        results = json.load(in_file)
-
-    assert(len(results) == NUMBER_OF_DISTRICTS)
     return results
 
 
-def normalize_municipalities_to_json():
+def get_districts():
+    file_name = CAOP_PATH + '/caop_districts_normalized.json'
+    try:
+        with open(file_name, 'r') as in_file:
+            data = json.load(in_file)
+    except IOError:
+        data = _get_normalized_districts()
+        with open(file_name, 'w') as out_file:
+            json.dump(data, out_file)
+
+    assert(len(data) == NUMBER_OF_DISTRICTS)
+    return data
+
+
+def _get_normalized_municipalities():
     districts = get_districts()
 
-    with open('contracts/CAOP_data/Areas_municipios_CAOP2014_utf8.txt', 'r') as tsvin:
+    with open(CAOP_PATH + '/Areas_municipios_CAOP2014_utf8.txt', 'r') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')
         tsvin = list(tsvin)[1:]  # ignore first line
 
@@ -94,19 +98,24 @@ def normalize_municipalities_to_json():
             results.append(result)
 
     assert(len(results) == NUMBER_OF_MUNICIPALITIES)
-    with open('contracts/CAOP_data/municipalities.json', 'w') as outfile:
-        json.dump(results, outfile)
-
-
-def get_municipalities():
-    with open('contracts/CAOP_data/municipalities.json', 'r') as in_file:
-        results = json.load(in_file)
-
-    assert(len(results) == NUMBER_OF_MUNICIPALITIES)
     return results
 
 
-def normalize_counties_to_json():
+def get_municipalities():
+    file_name = CAOP_PATH + '/caop_municipalities_normalized.json'
+    try:
+        with open(file_name, 'r') as in_file:
+            data = json.load(in_file)
+    except IOError:
+        data = _get_normalized_municipalities()
+        with open(file_name, 'w') as out_file:
+            json.dump(data, out_file)
+
+    assert(len(data) == NUMBER_OF_MUNICIPALITIES)
+    return data
+
+
+def _get_normalized_counties():
     municipalities = get_municipalities()
     districts = get_districts()
 
@@ -116,7 +125,7 @@ def normalize_counties_to_json():
         assert(d['DSG'] not in districts_index)
         districts_index[d['DSG']] = d
 
-    with open('contracts/CAOP_data/Areas_freguesias_CAOP2014_utf8.txt', 'r') as tsvin:
+    with open(CAOP_PATH + '/Areas_freguesias_CAOP2014_utf8.txt', 'r') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')
         tsvin = list(tsvin)[1:]  # ignore first line
 
@@ -150,19 +159,24 @@ def normalize_counties_to_json():
             results.append(result)
 
     assert(len(results) == NUMBER_OF_COUNTIES)
-    with open('contracts/CAOP_data/counties.json', 'w') as outfile:
-        json.dump(results, outfile)
-
-
-def get_counties():
-    with open('contracts/CAOP_data/counties.json', 'r') as in_file:
-        results = json.load(in_file)
-
-    assert(len(results) == NUMBER_OF_COUNTIES)
     return results
 
 
+def get_counties():
+    file_name = CAOP_PATH + '/caop_counties_normalized.json'
+    try:
+        with open(file_name, 'r') as in_file:
+            data = json.load(in_file)
+    except IOError:
+        data = _get_normalized_counties()
+        with open(file_name, 'w') as out_file:
+            json.dump(data, out_file)
+
+    assert(len(data) == NUMBER_OF_COUNTIES)
+    return data
+
+
 if __name__ == '__main__':
-    normalize_districts_to_json()
-    normalize_municipalities_to_json()
-    normalize_counties_to_json()
+    get_districts()
+    get_municipalities()
+    get_districts()
