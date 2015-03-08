@@ -8,16 +8,26 @@ from django.utils.translation import ugettext as _
 
 from . import models
 from deputies.analysis import ANALYSIS, PRIMARY_KEY
+from deputies.forms import DeputySelectorForm
 
 
 def build_deputies_list_context(context, GET):
-    def apply_order(querySet, order):
-        ordering = {_('name'): 'name', _('mandates'): '-mandate_count'}
+    """
+    Uses parameters GET (from a request) to modify the context
+    of deputies lists.
 
-        if order not in ordering:
-            return querySet, False
+    Validates GET using ``DeputySelectorForm``, and uses the ``cleaned_data``
+    to apply search and ordering to ``context['deputies']``.
 
-        return querySet.order_by(ordering[order]), True
+    Returns the modified context.
+    """
+    page = GET.get(_('page'))
+
+    context['selector'] = DeputySelectorForm(GET)
+    if context['selector'].is_valid():
+        GET = context['selector'].cleaned_data
+    else:
+        GET = {}
 
     def filter_search(search):
         words = search.split(' ')
@@ -26,25 +36,17 @@ def build_deputies_list_context(context, GET):
             _filter &= Q(name__icontains=word)
         return _filter
 
-    key = _('search')
+    key = 'search'
     if key in GET and GET[key]:
         search_Q = filter_search(GET[key])
-        context[key] = GET[key]
         context['deputies'] = context['deputies'].filter(search_Q)
-        context['search'] = GET[key]
 
-    if _('sorting') in GET:
-        order = GET[_('sorting')]
+    key = 'sorting'
+    if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
+        context['deputies'] = context['deputies'].order_by(
+            context['selector'].SORTING_LOOKUPS[GET[key]])
 
-        context['deputies'], applied = apply_order(context['deputies'], order)
-
-        # if it is a valid ordering, we send it to the template.
-        order_name = {_('name'): 'name', _('mandates'): 'mandates'}
-        if applied:
-            context['ordering'] = order_name[order]
-
-    paginator = Paginator(context['deputies'], 50)
-    page = GET.get(_('page'))
+    paginator = Paginator(context['deputies'], 20)
     try:
         context['deputies'] = paginator.page(page)
     except PageNotAnInteger:

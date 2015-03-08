@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-08 11:46+0000\n"
+"POT-Creation-Date: 2015-03-08 20:27+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -105,7 +105,7 @@ msgstr "preço"
 msgid "filter contracts"
 msgstr "filtrar contratos"
 
-#: contracts/forms.py:44 contracts/forms.py:91
+#: contracts/forms.py:44 contracts/forms.py:91 deputies/forms.py:18
 msgid "order"
 msgstr "ordem"
 
@@ -121,7 +121,7 @@ msgstr "datas"
 msgid "filter tenders"
 msgstr "filtrar concursos"
 
-#: contracts/forms.py:69 contracts/forms.py:109
+#: contracts/forms.py:69 contracts/forms.py:109 deputies/forms.py:8
 msgid "any order"
 msgstr "qualquer ordem"
 
@@ -1128,12 +1128,14 @@ msgstr "Nesta categoria:"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
 #: contracts/templates/contracts/entity_list/search_entities.html:8
+#: deputies/templates/deputies/search_bar.html:8
 msgid "Apply filter and order"
 msgstr "Aplicar filtros e ordenação"
 
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
 #: contracts/templates/contracts/contract_list/selector_template.html:11
 #: contracts/templates/contracts/entity_list/search_entities.html:8
+#: deputies/templates/deputies/search_bar.html:8
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -1586,7 +1588,7 @@ msgid "categories"
 msgstr "categorias"
 
 #: contracts/views.py:47 contracts/views.py:126 contracts/views.py:190
-#: deputies/views.py:47 law/views.py:23 main/templates/pagination.html:24
+#: deputies/views.py:24 law/views.py:23 main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
@@ -1650,6 +1652,19 @@ msgstr "ajuste direto"
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
 
+#: deputies/forms.py:9 deputies/forms.py:11
+msgid "name"
+msgstr "nome"
+
+#: deputies/forms.py:10 deputies/forms.py:11
+#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:30
+msgid "mandates"
+msgstr "mandatos"
+
+#: deputies/forms.py:14
+msgid "filter deputies"
+msgstr "filtrar deputados"
+
 #: deputies/templates/deputies/analysis.html:9
 msgid "Analysis of deputies"
 msgstr "Análises aos deputados"
@@ -1682,13 +1697,6 @@ msgstr "Licença"
 #: deputies/templates/deputies/analysis/mandates_distribution/graph.html:29
 msgid "with"
 msgstr "com"
-
-#: deputies/templates/deputies/analysis/mandates_distribution/graph.html:30
-#: deputies/templates/deputies/search_bar.html:23
-#: deputies/templates/deputies/search_bar.html:37 deputies/views.py:15
-#: deputies/views.py:42
-msgid "mandates"
-msgstr "mandatos"
 
 #: deputies/templates/deputies/analysis/mandates_distribution/graph.html:34
 msgid "Number of mandates"
@@ -1991,35 +1999,6 @@ msgstr[1] ""
 msgid "Deputies list"
 msgstr "Lista de deputados"
 
-#: deputies/templates/deputies/search_bar.html:10
-msgid "search deputies"
-msgstr "procurar deputados"
-
-#: deputies/templates/deputies/search_bar.html:16
-msgid "order by name"
-msgstr "ordenar por nome"
-
-#: deputies/templates/deputies/search_bar.html:18
-#: deputies/templates/deputies/search_bar.html:35 deputies/views.py:15
-#: deputies/views.py:42
-msgid "name"
-msgstr "nome"
-
-#: deputies/templates/deputies/search_bar.html:21
-msgid "order by mandates"
-msgstr "ordenar por número de mandatos"
-
-#: deputies/templates/deputies/search_bar.html:35
-#: deputies/templates/deputies/search_bar.html:37 deputies/views.py:36
-#: deputies/views.py:37
-msgid "sorting"
-msgstr "ordem"
-
-#: deputies/templates/deputies/search_bar.html:49 deputies/views.py:29
-#: law/templates/law/law_list/search_law.html:23 law/views.py:16
-msgid "search"
-msgstr "procura"
-
 #: deputies/urls.py:11
 msgid "parties"
 msgstr "partidos"
@@ -2028,7 +2007,7 @@ msgstr "partidos"
 msgid "party"
 msgstr "partido"
 
-#: deputies/views.py:109
+#: deputies/views.py:111
 msgid "How many mandates a deputy is in the Parliament?"
 msgstr "Quantos mandatos um deputado está no Parlamento?"
 
@@ -2632,6 +2611,10 @@ msgstr "Leis"
 #: law/templates/law/law_list/search_law.html:10
 msgid "search laws"
 msgstr "procurar leis"
+
+#: law/templates/law/law_list/search_law.html:23 law/views.py:16
+msgid "search"
+msgstr "procura"
 
 #: law/templates/law/type_list/main.html:3
 msgid "Types of laws"
