@@ -8,19 +8,34 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 
 from . import models
+from .forms import LawSelectorForm
 
 import law.analysis
 
 
 def build_laws_list_context(context, GET):
-    key = _('search')
+    """
+    Uses parameters GET (from a request) to modify the context
+    of deputies lists.
+
+    Validates GET using ``LawSelectorForm``, and uses the ``cleaned_data``
+    to apply search and ordering to ``context['laws']``.
+
+    Returns the modified context.
+    """
+    page = GET.get(_('page'))
+
+    context['selector'] = LawSelectorForm(GET)
+    if context['selector'].is_valid():
+        GET = context['selector'].cleaned_data
+    else:
+        GET = {}
+
+    key = 'search'
     if key in GET and GET[key]:
-        context[key] = GET[key]
         context['laws'] = context['laws'].filter(text__search=GET[key])
-        context['search'] = GET[key]
 
     paginator = Paginator(context['laws'], 20)
-    page = GET.get(_('page'))
     try:
         context['laws'] = paginator.page(page)
     except PageNotAnInteger:

@@ -11,15 +11,4 @@
         </div>
     </form>
 </div>
-<script>
-    {# remove parameters that don't have a value #}
-    $('form').on('submit', function() {
-        var allInputs = this.getElementsByTagName('input');
-        var input, i;
-        for(i = 0; input = allInputs[i]; i++) {
-            if(input.getAttribute('name') && !input.value) {
-                input.setAttribute('name', '');
-            }
-        }
-    });
-</script>
+{% include "clean_parameters.html" %}
