@@ -1,7 +1,6 @@
 import datetime
 import json
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import connection
 from django.db.models import Sum, Count
 from django.http import HttpResponse
@@ -10,7 +9,9 @@ from django.utils.translation import ugettext as _
 
 from . import models
 from . import indexes
-from .views import build_contract_list_context, build_tender_list_context
+from .views import build_contract_list_context, build_tender_list_context,\
+    build_entity_list_context
+from .forms import CostumerSelectorForm
 from .analysis.analysis import add_months
 
 
@@ -61,70 +62,22 @@ def contracts(request, entity_id):
     return render(request, 'contracts/entity_view/tab_contracts/main.html', context)
 
 
-def build_costumer_list_context(context, GET):
-    ordering = {_('value'): 'value', _('name'): 'name', _('contracts'): 'contracts'}
-
-    def apply_order(querySet, order):
-        if order not in ordering:
-            return querySet, False
-
-        elif ordering[order] == 'value':
-            return querySet.order_by('-total_expended'), True
-        elif ordering[order] == 'name':
-            return querySet.order_by('name'), True
-        elif ordering[order] == 'contracts':
-            return querySet.order_by('-total_contracts'), True
-
-    key = _('search')
-    if key in GET and GET[key]:
-        context[key] = GET[key]
-
-        try:
-            nif = int(GET[key])
-            context['entities'] = context['entities'].filter(nif__contains=nif)
-        except ValueError:
-            nif = None
-        if not nif:
-            context['entities'] = context['entities'].filter(name__search=GET[key])
-
-        context['search'] = GET[key]
-
-    if _('sorting') in GET:
-        order = GET[_('sorting')]
-
-        context['entities'], applied = apply_order(context['entities'], order)
-
-        # if it is a valid ordering, we send it to the template.
-        if applied:
-            context['sorting'] = ordering[order]
-
-    paginator = Paginator(context['entities'], 20)
-    page = GET.get(_('page'))
-    try:
-        context['entities'] = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        context['entities'] = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        context['entities'] = paginator.page(paginator.num_pages)
-
-    return context
-
-
 def costumers(request, entity_id):
     entity = get_object_or_404(models.Entity, pk=entity_id)
 
-    all_costumers = models.Entity.objects.filter(contracts_made__contracted__id=entity_id).distinct() \
-        .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
+    all_costumers = indexes.EntityIndex.objects.all()\
+        .filter(contracts_made__contracted__id=entity_id).distinct() \
+        .annotate(total_expended=Sum("contracts_made__price"),
+                  total_contracts=Count("contracts_made__price"))
 
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'costumers',
                'entities': all_costumers}
 
-    ## filter entities by ordering and pagination
-    context = build_costumer_list_context(context, request.GET)
+    # filter entities
+    context = build_entity_list_context(context, request.GET,
+                                        form_cls=CostumerSelectorForm)
 
     return render(request, 'contracts/entity_view/tab_costumers/main.html', context)
 

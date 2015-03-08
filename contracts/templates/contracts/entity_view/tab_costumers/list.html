@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="container">
-    {% include "contracts/entity_view/tab_costumers/search.html" %}
+    {% include "contracts/entity_list/search_entities.html" %}
     {% if entities %}
         {% include "pagination.html" with items=entities%}
     {% endif %}

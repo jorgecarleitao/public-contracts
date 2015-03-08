@@ -91,7 +91,23 @@ class EntitySelectorForm(BootstrapForm):
         attrs={'class': 'form-control', 'title': _('order')}), choices=SORTING_CHOICES)
 
     def add_prefix(self, field_name):
-        # HACK: ensures 'list' is translated.
+        # HACK: ensures 'type' is translated.
         if field_name == 'type':
             return _('type')
         return _(field_name)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Required so we can override the field `sorting`.
+        """
+        super(EntitySelectorForm, self).__init__(*args, **kwargs)
+        self.fields['sorting'].choices = self.SORTING_CHOICES
+
+
+class CostumerSelectorForm(EntitySelectorForm):
+
+    SORTING_CHOICES = (('', _('any order')),
+                       (_('contracts'), _('contracts')),
+                       (_('value'), _('value')))
+    SORTING_LOOKUPS = {_('contracts'): '-total_contracts',
+                       _('value'): '-total_expended'}

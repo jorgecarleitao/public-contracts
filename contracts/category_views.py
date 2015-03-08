@@ -3,8 +3,9 @@ from django.shortcuts import render, get_object_or_404
 
 from . import indexes
 from . import models
-from .views import build_contract_list_context, build_tender_list_context
-from .entity_views import build_costumer_list_context
+from contracts.forms import CostumerSelectorForm
+from .views import build_contract_list_context, build_tender_list_context, \
+    build_entity_list_context
 
 
 def main_view(request, category_id):
@@ -56,8 +57,9 @@ def contractors(request, category_id):
                'tab': 'contractors',
                'entities': entities}
 
-    ## filter entities by ordering and pagination
-    context = build_costumer_list_context(context, request.GET)
+    # filter entities by ordering and pagination
+    context = build_entity_list_context(context, request.GET,
+                                        form_cls=CostumerSelectorForm)
 
     return render(request, 'contracts/category_view/tab_entities/main.html', context)
 
@@ -74,8 +76,9 @@ def contracted(request, category_id):
                'tab': 'contracted',
                'entities': entities}
 
-    ## filter entities by ordering and pagination
-    context = build_costumer_list_context(context, request.GET)
+    # filter entities by ordering and pagination
+    context = build_entity_list_context(context, request.GET,
+                                        form_cls=CostumerSelectorForm)
 
     return render(request, 'contracts/category_view/tab_entities/main.html', context)
 

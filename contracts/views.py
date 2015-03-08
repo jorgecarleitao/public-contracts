@@ -113,19 +113,19 @@ def categories_list(request):
     return render(request, 'contracts/category_list/main.html', context)
 
 
-def build_entity_list_context(context, GET):
+def build_entity_list_context(context, GET, form_cls=EntitySelectorForm):
     """
     Uses parameters GET (from a request) to modify the context
     of entities lists.
 
-    Validates GET using ``EntitySelectorForm``, and uses the ``cleaned_data``
+    Validates GET using ``form_cls``, and uses the ``cleaned_data``
     to apply search and ordering to ``context['entities']``.
 
     Returns the modified context.
     """
     page = GET.get(_('page'))
 
-    context['selector'] = EntitySelectorForm(GET)
+    context['selector'] = form_cls(GET)
     if context['selector'].is_valid():
         GET = context['selector'].cleaned_data
     else:
