@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-08 20:27+0000\n"
+"POT-Creation-Date: 2015-03-10 15:25+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -106,6 +106,7 @@ msgid "filter contracts"
 msgstr "filtrar contratos"
 
 #: contracts/forms.py:44 contracts/forms.py:91 deputies/forms.py:18
+#: deputies/forms.py:25
 msgid "order"
 msgstr "ordem"
 
@@ -1129,6 +1130,7 @@ msgstr "Nesta categoria:"
 #: contracts/templates/contracts/contract_list/search_contracts.html:8
 #: contracts/templates/contracts/entity_list/search_entities.html:8
 #: deputies/templates/deputies/search_bar.html:8
+#: law/templates/law/law_list/search_law.html:8
 msgid "Apply filter and order"
 msgstr "Aplicar filtros e ordenação"
 
@@ -1136,6 +1138,7 @@ msgstr "Aplicar filtros e ordenação"
 #: contracts/templates/contracts/contract_list/selector_template.html:11
 #: contracts/templates/contracts/entity_list/search_entities.html:8
 #: deputies/templates/deputies/search_bar.html:8
+#: law/templates/law/law_list/search_law.html:8
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -1588,7 +1591,7 @@ msgid "categories"
 msgstr "categorias"
 
 #: contracts/views.py:47 contracts/views.py:126 contracts/views.py:190
-#: deputies/views.py:24 law/views.py:23 main/templates/pagination.html:24
+#: deputies/views.py:24 law/views.py:26 main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
@@ -1664,6 +1667,10 @@ msgstr "mandatos"
 #: deputies/forms.py:14
 msgid "filter deputies"
 msgstr "filtrar deputados"
+
+#: deputies/forms.py:23 law/forms.py:15
+msgid "search"
+msgstr "procura"
 
 #: deputies/templates/deputies/analysis.html:9
 msgid "Analysis of deputies"
@@ -2028,6 +2035,10 @@ msgstr "Últimas leis em %s"
 #: law/feed.py:48 law/templates/law/base/header.html:6
 msgid "Documents"
 msgstr "Documentos"
+
+#: law/forms.py:9
+msgid "filter laws"
+msgstr "filtrar leis"
 
 #: law/templates/law/analysis.html:9 law/templates/law/home.html:40
 msgid "Analysis to the law"
@@ -2608,14 +2619,6 @@ msgstr ""
 msgid "Laws"
 msgstr "Leis"
 
-#: law/templates/law/law_list/search_law.html:10
-msgid "search laws"
-msgstr "procurar leis"
-
-#: law/templates/law/law_list/search_law.html:23 law/views.py:16
-msgid "search"
-msgstr "procura"
-
 #: law/templates/law/type_list/main.html:3
 msgid "Types of laws"
 msgstr "Tipos de leis"
@@ -2650,15 +2653,15 @@ msgstr "tipos"
 msgid "document"
 msgstr "documento"
 
-#: law/views.py:83
+#: law/views.py:98
 msgid "How many laws are enacted yearly?"
 msgstr "Quantas leis são criadas anualmente?"
 
-#: law/views.py:84
+#: law/views.py:99
 msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
 
-#: law/views.py:85
+#: law/views.py:100
 msgid "Evolution of the portuguese Law"
 msgstr "Evolução da Lei portuguesa"
 

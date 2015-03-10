@@ -16,3 +16,11 @@ class DeputySelectorForm(BootstrapForm):
 
     sorting = forms.ChoiceField(required=False, widget=forms.Select(
         attrs={'class': 'form-control', 'title': _('order')}), choices=SORTING_CHOICES)
+
+    def add_prefix(self, field_name):
+        # HACK: ensures 'search' is translated.
+        if field_name == 'search':
+            return _('search')
+        if field_name == 'sorting':
+            return _('order')
+        return _(field_name)
