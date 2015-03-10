@@ -9,6 +9,7 @@ from django.utils.text import slugify
 
 from .composer import compose_text, compose_summary, normalize
 
+
 class Type(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
@@ -20,48 +21,33 @@ class Type(models.Model):
         return self.name
 
 
-class Creator(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-
-class LawDocumentManager(models.Manager):
-    """
-    A Document manager that only returns laws,
-    excluding Diary summaries and technical sheets.
-    """
-    def get_queryset(self):
-        return super(LawDocumentManager, self).get_queryset().exclude(type__id__in=[95, 97, 145, 150])
-
-
 class Document(models.Model):
     type = models.ForeignKey(Type)
-    creator = models.ForeignKey(Creator, null=True)
-
-    date = models.DateField()
     number = models.CharField(max_length=20, null=True)
 
-    summary = models.TextField()
+    creator_name = models.TextField()
 
+    date = models.DateField()
+
+    # summary of the publication.
+    # Some documents don't have summary.
+    summary = models.TextField(null=True)
+    # text of the publication, in HTML.
+    # Some documents don't have the text available.
     text = models.TextField(null=True)
 
     # Where it can be found in the internet (DRE)
     dre_doc_id = models.IntegerField(unique=True, db_index=True)
-    pdf_url = models.CharField(max_length=200)
+    dre_pdf_id = models.IntegerField(unique=True, db_index=True)
 
     # Where it can be found in the official book (DR)
-    series = models.IntegerField(db_index=True)
-    series_number = models.CharField(max_length=10)
-    series_other = models.CharField(max_length=30, blank=True)
-    series_pages = models.CharField(max_length=50)
-
-    objects = models.Manager()  # default manager.
-    laws = LawDocumentManager()
+    dr_series = models.CharField(max_length=10, db_index=True)
+    dr_number = models.CharField(max_length=10)
+    dr_supplement = models.CharField(max_length=50, null=True)
+    dr_pages = models.CharField(max_length=50)
 
     def get_pdf_url(self):
-        return "http://dre.pt%s" % self.pdf_url.replace("\\", "/")
+        return "https://dre.pt/application/file/a/%d" % self.dre_pdf_id
 
     def get_absolute_url(self):
         name = "%s" % slugify(self.type.name)
@@ -69,7 +55,7 @@ class Document(models.Model):
             name += '-%s' % self.number
         else:
             name += '-de-' + self.date.strftime('%d/%m/%Y')
-        return reverse('law_view', args=[self.pk, name])
+        return reverse('law_view', args=[self.dre_doc_id, name])
 
     def compose_summary(self):
         return compose_summary(self.summary)
@@ -83,7 +69,7 @@ class Document(models.Model):
 
         try:
             return compose_text(self)
-        except Exception as e:
+        except Exception:
             logger.exception("Compose text failed in document %d", self.id)
             return normalize(self.text)
 

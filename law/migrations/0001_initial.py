@@ -11,30 +11,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Creator',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
-                ('name', models.CharField(max_length=254, unique=True)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='Document',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('number', models.CharField(max_length=20, null=True)),
+                ('creator_name', models.CharField(max_length=254)),
                 ('date', models.DateField()),
-                ('number', models.CharField(null=True, max_length=20)),
                 ('summary', models.TextField()),
-                ('text', models.TextField(null=True)),
-                ('dre_doc_id', models.IntegerField(db_index=True, unique=True)),
-                ('pdf_url', models.CharField(max_length=200)),
-                ('series', models.IntegerField(db_index=True)),
-                ('series_number', models.CharField(max_length=10)),
-                ('series_other', models.CharField(max_length=30, blank=True)),
-                ('series_pages', models.CharField(max_length=50)),
-                ('creator', models.ForeignKey(null=True, to='law.Creator')),
+                ('text', models.TextField()),
+                ('dre_doc_id', models.IntegerField(unique=True, db_index=True)),
+                ('dre_pdf_id', models.IntegerField(unique=True, db_index=True)),
+                ('dr_series', models.CharField(db_index=True, max_length=10)),
+                ('dr_number', models.CharField(max_length=10)),
+                ('dr_supplement', models.CharField(max_length=30, null=True)),
+                ('dr_pages', models.CharField(max_length=50)),
             ],
             options={
             },
@@ -43,8 +33,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Type',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
-                ('name', models.CharField(max_length=254, unique=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('name', models.CharField(unique=True, max_length=254)),
             ],
             options={
             },

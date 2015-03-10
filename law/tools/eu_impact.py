@@ -8,9 +8,7 @@ if __name__ == "__main__":
     import datetime
     date = datetime.date(1986, 1, 1)
 
-    # 95, 97, 145, 150 are types that are not laws:
-    # are summaries and technical sheets of the diary
-    documents = Document.laws.filter(date__gt=date)
+    documents = Document.objects.filter(date__gt=date)
 
     total = documents.count()
     actual = documents.filter(text=None).count()

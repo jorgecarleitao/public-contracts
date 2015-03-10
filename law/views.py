@@ -54,7 +54,7 @@ def home(request):
 
 @cache_page(60 * 60 * 24)
 def law_list(request):
-    context = {'laws': models.Document.laws
+    context = {'laws': models.Document.objects
                              .order_by("-dre_doc_id")
                              .prefetch_related("type")}
 
@@ -67,7 +67,7 @@ def law_list(request):
 
 @cache_page(60 * 60 * 24)
 def types_list(request):
-    types = models.Type.objects.exclude(id__in=[95, 97, 145, 150]).annotate(count=Count('document')).order_by('name')
+    types = models.Type.objects.annotate(count=Count('document')).order_by('name')
 
     context = {'types': types, 'navigation_tab': 'types'}
 
@@ -87,8 +87,9 @@ def type_view(request, type_id, slug=None):
 
 
 @cache_page(60 * 60 * 24 * 31)  # one month
-def law_view(request, law_id, slug=None):
-    law = get_object_or_404(models.Document, id=law_id)
+def law_view(request, dre_doc_id, slug=None):
+    law = get_object_or_404(models.Document.objects.select_related('type'),
+                            dre_doc_id=dre_doc_id)
 
     context = {'law': law, 'navigation_tab': 'documents'}
 

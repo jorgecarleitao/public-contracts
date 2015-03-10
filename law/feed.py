@@ -24,13 +24,13 @@ class LawsFeed(Feed):
     def item_title(self, item):
         return '%s of %s - %s' % (item.name(),
                                   formats.date_format(item.date),
-                                  item.creator.name)
+                                  item.creator_name)
 
     def item_description(self, item):
         return item.summary
 
     def items(self, _):
-        return Document.laws.order_by('-date')\
+        return Document.objects.order_by('-date')\
             .prefetch_related('type', 'creator')[:200]
 
 
@@ -50,7 +50,7 @@ class TypeDocumentsFeed(Feed):
     def item_title(self, item):
         return '%s of %s - %s' % (item.name(),
                                   formats.date_format(item.date),
-                                  item.creator.name)
+                                  item.creator_name)
 
     def item_description(self, item):
         return item.summary

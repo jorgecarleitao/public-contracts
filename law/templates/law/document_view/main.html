@@ -9,7 +9,7 @@
                 <a href="{{ law.get_pdf_url }}">PDF do Diário da República</a>
             </small>
         </p>
-        <p>{{ law.creator.name }}</p>
+        <p>{{ law.creator_name }}</p>
         <p>{{ law.date }}</p>
         <h4 class="text-center">Sumário:</h4>
         <h5 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h5>

@@ -45,7 +45,7 @@ def get_eu_impact_time_series():
         # We also exclude documents that don't have full
         # text since we cannot tell if they mention EU laws
         # and we don't want to bias the result to any side.
-        documents = models.Document.laws.filter(date__year=year).order_by("-date")\
+        documents = models.Document.objects.filter(date__year=year).order_by("-date")\
             .exclude(text=None)
 
         # a dictionary of the form {id, list}
@@ -72,8 +72,7 @@ def get_types_time_series():
     min_year = 1910
     end_year = datetime.now().year - 1  # only ended years
 
-    # exclude summaries and technical sheets
-    types = models.Type.objects.exclude(id__in=[95, 97, 145, 150])
+    types = models.Type.objects.all()
 
     # loop over years
     data = []
@@ -101,9 +100,9 @@ def get_types_time_series():
     def post_processing(data):
         types_time_series = {}
 
-        # create list of existing types (exclude "not defined" and summaries and technical sheets)
+        # create list of existing types
         # order by count and only use 19 types (the 20th is "Others")
-        for type in models.Type.objects.exclude(id__in=[95, 97, 145, 150, 98])\
+        for type in models.Type.objects.all()\
                 .annotate(count=Count('document__id')).order_by('-count')[:17]:
             types_time_series[type.name] = {'values': [], 'key': type.name, 'total': 0}
 
