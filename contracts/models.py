@@ -205,6 +205,13 @@ class ModelType(models.Model):
     name = models.CharField(max_length=254)
 
 
+class ContractManager(models.Manager):
+    def get_queryset(self):
+        return super(ContractManager, self).get_queryset()\
+            .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
+                   order_by=['signing_date_is_null', '-signing_date'])
+
+
 class Contract(models.Model):
     base_id = models.IntegerField(unique=True)
     added_date = models.DateField()
@@ -224,6 +231,8 @@ class Contract(models.Model):
 
     contractors = models.ManyToManyField('Entity', related_name='contracts_made')
     contracted = models.ManyToManyField('Entity')
+
+    objects = ContractManager()
 
     def get_absolute_url(self):
         return reverse('contract', args=(self.id,))
@@ -249,9 +258,6 @@ class Contract(models.Model):
             return self.contracted.all()[0]
         except IndexError:
             return None
-
-    class Meta:
-        ordering = ['-signing_date']
 
 
 class Tender(models.Model):

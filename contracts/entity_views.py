@@ -47,6 +47,8 @@ def contracts(request, entity_id):
 
     contracts = indexes.ContractIndex.objects\
         .filter(id__in=entity.get_all_contracts_ids())\
+        .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
+               order_by=['signing_date_is_null', '-signing_date'])\
         .search_filter(id__in=entity.get_all_contracts_ids())
 
     contracts = contracts.prefetch_related("contracted", "contractors")

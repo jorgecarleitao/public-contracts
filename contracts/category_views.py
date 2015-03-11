@@ -31,6 +31,8 @@ def contracts(request, category_id):
     categories_ids = models.Category.get_tree(category).values_list('id', flat=True)
 
     contracts = indexes.ContractIndex.objects.filter(category_id__in=categories_ids)\
+        .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
+               order_by=['signing_date_is_null', '-signing_date'])\
         .search_filter(category_id__in=list(categories_ids))\
         .prefetch_related("contracted", "contractors", "category")
 

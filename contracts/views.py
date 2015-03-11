@@ -70,8 +70,13 @@ def build_contract_list_context(context, GET):
 
     key = 'sorting'
     if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
-        context['contracts'] = context['contracts'].order_by(
-            context['selector'].SORTING_LOOKUPS[GET[key]])
+        if context['selector'].SORTING_LOOKUPS[GET[key]] == '-signing_date':
+            context['contracts'] = context['contracts'].extra(
+                select={'signing_date_is_null': 'signing_date IS NULL'},
+                order_by=['signing_date_is_null', '-signing_date'])
+        else:
+            context['contracts'] = context['contracts'].order_by(
+                context['selector'].SORTING_LOOKUPS[GET[key]])
 
     paginator = Paginator(context['contracts'], 20)
     try:
@@ -91,7 +96,10 @@ def contracts_list(request):
     View that controls the contracts list.
     """
     contracts = indexes.ContractIndex.objects.all()\
-        .prefetch_related("contracted", "contractors")
+        .prefetch_related("contracted", "contractors")\
+        .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
+               order_by=['signing_date_is_null', '-signing_date'])
+
     context = {'contracts': contracts, 'navigation_tab': 'contracts'}
 
     context = build_contract_list_context(context, request.GET)
