@@ -2,8 +2,6 @@
 Settings file for the scheduler. Requires a ``settings_local`` with private
 information about the database and cache.
 """
-from celery.schedules import crontab
-
 from . import settings_local
 from . import domain
 
@@ -11,20 +9,15 @@ INSTALLED_APPS = (
     'deputies',
     'law',
     'contracts',
-    'main'
+    'main',
+    'django_rq',
 )
 
-# for celery
-BROKER_URL = settings_local.BROKER_URL
 
-CELERYBEAT_SCHEDULE = {
-    'sync-databases': {
-        'task': 'main.tasks.update',
-        'schedule': crontab(minute=0, hour=4),
-    },
-}
 
 DATABASES = settings_local.DATABASES
+
+RQ_QUEUES = settings_local.RQ_QUEUES
 
 SECRET_KEY = settings_local.SECRET_KEY
 

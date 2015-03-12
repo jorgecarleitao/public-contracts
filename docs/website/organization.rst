@@ -1,7 +1,7 @@
 Organization of the code
 ========================
 
-.. _celery: http://www.celeryproject.org/
+.. _django-rq: http://python-rq.org/
 
 Django apps
 -----------
@@ -21,7 +21,7 @@ All apps are Django-standard: they have ``models.py``, ``views.py``, ``urls.py``
 
 Each app has a module called ``<app>/crawler.py`` that contains the crawler it
 uses to download the data from official sources. Each app has a ``<app>/tasks
-.py`` with celery_ tasks for running the app's crawler.
+.py`` with django-rq_ jobs for running the app's crawler.
 
 Besides a crawler, each app has a package ``<app>/analysis``. This package contains
 a list of existing analysis. An analysis is just an expensive operation that is
@@ -35,10 +35,6 @@ Since ``contracts`` is a large app, its backend is sub-divided:
 Scheduling
 ----------
 
-We have a periodic job that runs in celery_ to synchronize our database with
-the official sources and update caches. Its entry point is ``main/celery.py``,
-and it uses settings from ``main/settings_for_schedule.py``. In the server,
-celery beat runs using a command equivalent to::
-
-    cd public-contracts; celery worker -B -A main
-
+We have a periodic job that runs in django-rq_ to synchronize our database with
+the official sources and update caches. It uses settings from
+``main/settings_for_schedule.py``.

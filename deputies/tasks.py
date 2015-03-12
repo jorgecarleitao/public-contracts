@@ -1,17 +1,11 @@
-"""
-Contains tasks for celery.
-"""
-from celery import shared_task
-from celery.utils.log import get_task_logger
-
 from deputies import crawler as c
 from deputies.tools import populator as p
 from deputies.analysis import analysis_manager
 
-logger = get_task_logger(__name__)
+from django_rq import job
 
 
-@shared_task(ignore_result=True)
+@job
 def update_deputies():
     # check if we need to download static data
     crawler = c.DeputiesCrawler()
@@ -22,14 +16,14 @@ def update_deputies():
         deputy.update()
 
 
-@shared_task(ignore_result=True)
+@job
 def recompute_analysis():
     # update analysis
     for analysis in list(analysis_manager.values()):
         analysis.update()
 
 
-@shared_task(ignore_result=True)
+@job
 def update():
     update_deputies()
     recompute_analysis()

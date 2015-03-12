@@ -1,10 +1,11 @@
-from celery import shared_task, group
+import django_rq
+from django_rq import job
 
 import contracts.tasks
 import law.tasks
 
 
-@shared_task(ignore_result=True)
+@job
 def update():
-    group([law.tasks.update.s(),
-           contracts.tasks.update.s()])()
+    #django_rq.enqueue(law.tasks.update)
+    django_rq.enqueue(contracts.tasks.update)
