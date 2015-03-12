@@ -38,13 +38,13 @@ classes to work with the data::
 
     pip install Django
 
-mysql-python
-^^^^^^^^^^^^
+Postgres
+^^^^^^^^
 
-Our remote database is in mysql. To Python communicate with it, we need a
+Our remote database is in postgres. To Python communicate with it, we need a
 binding::
 
-    pip install PyMySQL
+    pip install psycopg2
 
 treebeard
 ^^^^^^^^^

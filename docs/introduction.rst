@@ -18,7 +18,7 @@ databases:
 We build and maintain an open source website and API for querying these databases.
 Specifically, this project consists in three components:
 
-- A database in mysql and driven by Django ORM, remotely accessible.
+- A database in postgres and driven by Django ORM, remotely accessible.
 - An API for querying the database using Django and Python.
 - A website for visualizing the database and sharing statistical features of it.
 

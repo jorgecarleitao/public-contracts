@@ -1,5 +1,5 @@
 Django
-PyMySQL
+psycopg2
 django-treebeard
 Beautifulsoup4
 django-debug-toolbar

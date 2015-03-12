@@ -1,12 +1,12 @@
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'contracts',
-        'USER': 'public_contracts',
-        'PASSWORD': 'read-only',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'publics',
+        'USER': 'publics_read_only',
+        'PASSWORD': r'read-only',
         'HOST': '5.153.9.51',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 

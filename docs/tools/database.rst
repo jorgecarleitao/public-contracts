@@ -19,11 +19,11 @@ Remote connection
 
 You can access our database using:
 
-- database: contracts
-- username: public_contracts
+- database: publics
+- username: publics
 - password: read-only
 - host: 5.153.9.51
-- port: 3306
+- port: 5432
 
 .. _`phpmyadmin panel`: https://web306.webfaction.com/static/phpMyAdmin
 
@@ -34,6 +34,6 @@ Create dumps
 
 In the terminal, run::
 
-    mysqldump -h 5.153.9.51 -upublic_contracts -pread-only --lock-tables=false contracts > dump.sql
+    pg_dump -h 5.153.9.51 -p 5432 -U publics_read_only -W read-only -d publics > dump.sql
 
 This creates a file "dump.sql" (it can take a while) that you can load to a database in your own computer.

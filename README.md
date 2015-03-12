@@ -46,7 +46,7 @@ The installation depend on what you want to do:
 
 ### To access and query the database 
 
-1- Install Django, PyMySQL, [django-treebeard](https://github.com/tabo/django-treebeard) and BeautifulSoup4:
+1- Install Django, psycopg2, [django-treebeard](https://github.com/tabo/django-treebeard) and BeautifulSoup4:
 
 `pip install -r api_requirements.txt` 
 
