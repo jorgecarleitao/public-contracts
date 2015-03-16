@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
@@ -137,3 +137,22 @@ def law_analysis(request, analysis_id, slug=None):
     context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis'}
 
     return render(request, templates[name], context)
+
+
+def redirect_id(request, document_id, url_ending=None):
+    """
+    Redirects an URL of a document to its new url.
+    """
+    old_document = get_object_or_404(models.Document.objects.using('old')
+                                     .select_related('type__name')
+                                     .values_list('type__name', 'date', 'number')
+                                     , id=document_id)
+
+    try:
+        document = models.Document.objects.get(type__name=old_document[0],
+                                               date=old_document[1],
+                                               number=old_document[2])
+    except models.Document.DoesNotExist:
+        raise Http404
+
+    return redirect(document, permanent=True)

@@ -31,4 +31,6 @@ urlpatterns = patterns('',
 
                        url(r'^%s/id(\d+)$' % _('document'), views.law_view, name='law_view'),
                        url(r'^%s/id(\d+)/(.*)' % _('document'), views.law_view, name='law_view'),
+
+                       url(r'(\d+)(/.*)?', views.redirect_id),
                        )
