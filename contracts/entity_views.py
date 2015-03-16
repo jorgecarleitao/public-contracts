@@ -107,20 +107,21 @@ def contracts_made_time_series(request, entity_id):
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
     """
-    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
-                       MONTH(`contracts_contract`.`signing_date`),
-                       COUNT(`contracts_contract`.`id`)
-                FROM `contracts_contract`
-                     INNER JOIN `contracts_contract_contractors`
-                         ON ( `contracts_contract`.`id` = `contracts_contract_contractors`.`contract_id` )
-                     INNER JOIN `contracts_entity`
-                         ON ( `contracts_contract_contractors`.`entity_id` = `contracts_entity`.`id` )
-                WHERE `contracts_entity`.`id` = %s
-                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
+                  EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
+                  COUNT(contracts_contract.id)
+                FROM contracts_contract
+                     INNER JOIN contracts_contract_contractors
+                         ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
+                     INNER JOIN contracts_entity
+                         ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
+                WHERE contracts_entity.base_id = %s
+                GROUP BY s_year, s_month
+                ORDER BY s_year, s_month
                 '''
 
     cursor = connection.cursor()
-    cursor.execute(query, entity_id)
+    cursor.execute(query, (entity_id,))
 
     data = {'values': [], 'key': _('Contracts as hiring')}
     for row in cursor.fetchall():
@@ -143,20 +144,21 @@ def contracts_received_time_series(request, entity_id):
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
     """
-    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
-                       MONTH(`contracts_contract`.`signing_date`),
-                       COUNT(`contracts_contract`.`id`)
-                FROM `contracts_contract`
-                     INNER JOIN `contracts_contract_contracted`
-                         ON ( `contracts_contract`.`id` = `contracts_contract_contracted`.`contract_id` )
-                     INNER JOIN `contracts_entity`
-                         ON ( `contracts_contract_contracted`.`entity_id` = `contracts_entity`.`id` )
-                WHERE `contracts_entity`.`id` = %s
-                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
+                       EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
+                       COUNT(contracts_contract.id)
+                FROM contracts_contract
+                     INNER JOIN contracts_contract_contracted
+                         ON ( contracts_contract.id = contracts_contract_contracted.contract_id )
+                     INNER JOIN contracts_entity
+                         ON ( contracts_contract_contracted.entity_id = contracts_entity.id )
+                WHERE contracts_entity.base_id = %s
+                GROUP BY s_year, s_month
+                ORDER BY s_year, s_month
                 '''
 
     cursor = connection.cursor()
-    cursor.execute(query, entity_id)
+    cursor.execute(query, (entity_id,))
 
     data = {'values': [], 'key': _('Contracts as hired')}
     for row in cursor.fetchall():

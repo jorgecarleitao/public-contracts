@@ -174,20 +174,21 @@ def get_entities_contracts_time_series(startswith_string):
     """
     startswith_string += '%%'
 
-    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
-                       MONTH(`contracts_contract`.`signing_date`),
-                       COUNT(`contracts_contract`.`id`)
-                FROM `contracts_contract`
-                     INNER JOIN `contracts_contract_contractors`
-                         ON ( `contracts_contract`.`id` = `contracts_contract_contractors`.`contract_id` )
-                     INNER JOIN `contracts_entity`
-                         ON ( `contracts_contract_contractors`.`entity_id` = `contracts_entity`.`id` )
-                WHERE `contracts_entity`.`name` LIKE BINARY %s
-                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
+                       EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
+                       COUNT(contracts_contract.id)
+                FROM contracts_contract
+                     INNER JOIN contracts_contract_contractors
+                         ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
+                     INNER JOIN contracts_entity
+                         ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
+                WHERE contracts_entity.name LIKE BINARY %s
+                GROUP BY s_year, s_month
+                ORDER BY s_year, s_month
                 '''
 
     cursor = connection.cursor()
-    cursor.execute(query, startswith_string)
+    cursor.execute(query, (startswith_string,))
 
     data = []
     for row in cursor.fetchall():
@@ -297,13 +298,14 @@ def get_legislation_application_time_series():
 
     max_days = 10  # Código dos contratos públicos - parte II - Contratação pública - CAPÍTULO XII - Artigo 108.
 
-    query = '''SELECT YEAR(`contracts_contract`.`signing_date`),
-                       MONTH(`contracts_contract`.`signing_date`),
-                       COUNT(`contracts_contract`.`id`),
-                       SUM(DATEDIFF(`contracts_contract`.`signing_date`,`contracts_contract`.`added_date`) > 10)
-                FROM `contracts_contract`
-                WHERE `contracts_contract`.`signing_date` IS NOT NULL
-                GROUP BY YEAR(`contracts_contract`.`signing_date`), MONTH(`contracts_contract`.`signing_date`)
+    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
+                       EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
+                       COUNT(contracts_contract.id),
+                       SUM(CASE WHEN contracts_contract.signing_date - contracts_contract.added_date > 10 THEN 1 ELSE 0 END)
+                FROM contracts_contract
+                WHERE contracts_contract.signing_date IS NOT NULL
+                GROUP BY s_year, s_month
+                ORDER BY s_year, s_month
                 '''
 
     cursor = connection.cursor()
