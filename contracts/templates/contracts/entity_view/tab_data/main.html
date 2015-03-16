@@ -23,7 +23,7 @@
                         <span>{{ entity.total_earned|intword }} &euro;</span>
                         <span>({% include "inline_contracts_number.html" with contracts_count=contracts_received_count%})</span>
                         {% if contracts_received_count %}
-                            {% url 'entity_contracts_received_time_series' entity.id as the_url %}
+                            {% url 'entity_contracts_received_time_series' entity.base_id as the_url %}
                             {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
                         {% endif %}
                     </li>
@@ -33,7 +33,7 @@
                         <span>{{ entity.total_expended|intword }} &euro;</span>
                         <span>({{ contracts_made_count }} {% trans "contracts" %})</span>
                         {% if contracts_made_count %}
-                            {% url 'entity_contracts_made_time_series' entity.id as the_url %}
+                            {% url 'entity_contracts_made_time_series' entity.base_id as the_url %}
                             {% include "contracts/entity_view/tab_data/graph.html" with url=the_url %}
                         {% endif %}
                     </li>
@@ -48,7 +48,7 @@
                             <span><strong>
                                 {% trans "Last contracts" %}:</strong></span>
                         {% include "contracts/contracts_minor_list.html" with contracts=last_contracts %}
-                        <p><a href="{% url "entity_contracts" entity.id %}">{% trans "Full list" %}</a></p>
+                        <p><a href="{% url "entity_contracts" entity.base_id %}">{% trans "Full list" %}</a></p>
                     </li>
                     {% if clients_hiring %}
                         <li class="list-group-item">

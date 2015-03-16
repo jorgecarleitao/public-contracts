@@ -4,14 +4,14 @@
         <a href="{{ entity.get_absolute_url }}">{% trans "Summary"%}</a>
     </li>
     <li {% if tab == 'contracts' %}class="active"{% endif %}>
-        <a href="{% url "entity_contracts" entity.id %}">{% trans "Contracts"%}</a>
+        <a href="{% url "entity_contracts" entity.base_id %}">{% trans "Contracts"%}</a>
     </li>
     <li {% if tab == 'costumers' %}class="active"{% endif %}>
-        <a href="{% url "entity_costumers" entity.id %}">{% trans "Customers"%}</a>
+        <a href="{% url "entity_costumers" entity.base_id %}">{% trans "Customers"%}</a>
     </li>
     {% if entity.tender_set.exists %}
         <li {% if tab == 'tenders' %}class="active"{% endif %}>
-            <a href="{% url "entity_tenders" entity.id %}">{% trans "Tenders"%}</a>
+            <a href="{% url "entity_tenders" entity.base_id %}">{% trans "Tenders"%}</a>
         </li>
     {% endif %}
 </ul>

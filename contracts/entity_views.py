@@ -4,7 +4,8 @@ import json
 from django.db import connection
 from django.db.models import Sum, Count
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from . import models
@@ -15,9 +16,9 @@ from .forms import CostumerSelectorForm
 from .analysis.analysis import add_months
 
 
-def main_view(request, entity_id, slug=None):
+def main_view(request, entity_base_id, slug=None):
     entity = get_object_or_404(models.Entity.objects.select_related('data'),
-                               pk=entity_id)
+                               base_id=entity_base_id)
 
     ids = entity.get_contracts_ids()
     contracts = models.Contract.objects.filter(id__in=ids['made'] + ids['set'])
@@ -42,8 +43,8 @@ def main_view(request, entity_id, slug=None):
     return render(request, 'contracts/entity_view/tab_data/main.html', context)
 
 
-def contracts(request, entity_id):
-    entity = get_object_or_404(models.Entity, pk=entity_id)
+def contracts(request, entity_base_id):
+    entity = get_object_or_404(models.Entity, base_id=entity_base_id)
 
     contracts = indexes.ContractIndex.objects\
         .filter(id__in=entity.get_all_contracts_ids())\
@@ -64,11 +65,11 @@ def contracts(request, entity_id):
     return render(request, 'contracts/entity_view/tab_contracts/main.html', context)
 
 
-def costumers(request, entity_id):
-    entity = get_object_or_404(models.Entity, pk=entity_id)
+def costumers(request, entity_base_id):
+    entity = get_object_or_404(models.Entity, base_id=entity_base_id)
 
     all_costumers = indexes.EntityIndex.objects.all()\
-        .filter(contracts_made__contracted__id=entity_id).distinct() \
+        .filter(contracts_made__contracted__id=entity.id).distinct() \
         .annotate(total_expended=Sum("contracts_made__price"),
                   total_contracts=Count("contracts_made__price"))
 
@@ -84,8 +85,8 @@ def costumers(request, entity_id):
     return render(request, 'contracts/entity_view/tab_costumers/main.html', context)
 
 
-def tenders(request, entity_id):
-    entity = get_object_or_404(models.Entity, pk=entity_id)
+def tenders(request, entity_base_id):
+    entity = get_object_or_404(models.Entity, base_id=entity_base_id)
 
     all_tenders = entity.tender_set.all()
 
@@ -102,7 +103,7 @@ def tenders(request, entity_id):
     return render(request, 'contracts/entity_view/tab_tenders/main.html', context)
 
 
-def contracts_made_time_series(request, entity_id):
+def contracts_made_time_series(request, entity_base_id):
     """
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
@@ -121,7 +122,7 @@ def contracts_made_time_series(request, entity_id):
                 '''
 
     cursor = connection.cursor()
-    cursor.execute(query, (entity_id,))
+    cursor.execute(query, (entity_base_id,))
 
     data = {'values': [], 'key': _('Contracts as hiring')}
     for row in cursor.fetchall():
@@ -139,7 +140,7 @@ def contracts_made_time_series(request, entity_id):
     return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
-def contracts_received_time_series(request, entity_id):
+def contracts_received_time_series(request, entity_base_id):
     """
     Computes the time series of number of contracts of entry with entity_id
     starting with startswith_string.
@@ -158,7 +159,7 @@ def contracts_received_time_series(request, entity_id):
                 '''
 
     cursor = connection.cursor()
-    cursor.execute(query, (entity_id,))
+    cursor.execute(query, (entity_base_id,))
 
     data = {'values': [], 'key': _('Contracts as hired')}
     for row in cursor.fetchall():
@@ -173,3 +174,16 @@ def contracts_received_time_series(request, entity_id):
         data['values'].append(entry)
 
     return HttpResponse(json.dumps([data]), content_type="application/json")
+
+
+def redirect_id(request, entity_id, url_ending=None):
+    """
+    Redirects a URL of an entity to its new url.
+    """
+    if url_ending is None:
+        url_ending = ''
+
+    entity = get_object_or_404(models.Entity.objects.using('old'), id=entity_id)
+
+    return redirect(reverse('entity_id', args=(entity.base_id,)) + url_ending,
+                    permanent=True)

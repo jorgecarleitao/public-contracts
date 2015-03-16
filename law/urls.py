@@ -29,6 +29,6 @@ urlpatterns = patterns('',
                        url(r'^%s/(\d+)/([-\w]+)/rss$' % _('type'), feed.TypeDocumentsFeed(),
                            name='type_documents_feed'),
 
-                       url(r'^%s/(\d+)$' % _('document'), views.law_view, name='law_view'),
-                       url(r'^%s/(\d+)/(.*)' % _('document'), views.law_view, name='law_view'),
+                       url(r'^%s/id(\d+)$' % _('document'), views.law_view, name='law_view'),
+                       url(r'^%s/id(\d+)/(.*)' % _('document'), views.law_view, name='law_view'),
                        )

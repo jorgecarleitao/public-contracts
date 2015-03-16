@@ -83,6 +83,14 @@ DATABASES = {
         'PASSWORD': r'read-only',
         'HOST': '5.153.9.51',
         'PORT': '5432',
+    },
+    'old': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'contracts',
+        'USER': 'public_contracts',
+        'PASSWORD': 'read-only',
+        'HOST': '5.153.9.51',
+        'PORT': '3306',
     }
 }
 

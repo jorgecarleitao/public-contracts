@@ -103,7 +103,7 @@ class Entity(models.Model):
                % self.base_id
 
     def get_absolute_url(self):
-        return reverse('entity', args=(self.id, slugify(self.name)))
+        return reverse('entity', args=(self.base_id, slugify(self.name)))
 
     def get_contracts_ids(self, flush_cache=False):
         """
@@ -235,7 +235,7 @@ class Contract(models.Model):
     objects = ContractManager()
 
     def get_absolute_url(self):
-        return reverse('contract', args=(self.id,))
+        return reverse('contract', args=(self.base_id,))
 
     def get_base_url(self):
         return 'http://www.base.gov.pt/Base/pt/Pesquisa/Contrato?a=%d' \
