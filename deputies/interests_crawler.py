@@ -3,7 +3,7 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from .crawler import safe_pickle_load, AbstractCrawler
+from .crawler import AbstractCrawler
 from . import models
 
 
@@ -72,7 +72,7 @@ class ConflictsCrawler(AbstractCrawler):
         return line_string
 
     def crawl_conflicts_declaration_social(self, bid, legislature):
-        string = self.goToPage(self._string_formatter % (bid, legislature))
+        string = self.get(self._string_formatter % (bid, legislature))
 
         soup = BeautifulSoup(string)
 
@@ -102,7 +102,7 @@ class ConflictsCrawler(AbstractCrawler):
         return entries
 
     def crawl_conflicts_declaration_activities(self, bid, legislature):
-        string = self.goToPage(self._string_formatter % (bid, legislature))
+        string = self.get(self._string_formatter % (bid, legislature))
 
         soup = BeautifulSoup(string)
 

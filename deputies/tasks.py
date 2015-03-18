@@ -11,7 +11,7 @@ def update_deputies():
     crawler = c.DeputiesCrawler()
     populator = p.DeputiesDBPopulator()
 
-    for entry in crawler.get_new_deputies():
+    for entry in crawler.iterate_deputies():
         deputy = populator.populate_deputy(entry)
         deputy.update()
 

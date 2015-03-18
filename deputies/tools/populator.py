@@ -1,13 +1,11 @@
 # coding=utf-8
-from __future__ import unicode_literals
-import datetime
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 from deputies import models
-import contracts.models
+from contracts.models import District
 
 
 class DeputiesDBPopulator(object):
@@ -27,12 +25,9 @@ class DeputiesDBPopulator(object):
 
     @staticmethod
     def _get_or_create_legislature(number, start, end):
-        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
-        if end == '':
-            end = None
-        else:
-            end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
-
+        """
+        Returns a new legislature or updates an existing one.
+        """
         try:
             legislature = models.Legislature.objects.get(number=number)
         except models.Legislature.DoesNotExist:
@@ -44,46 +39,46 @@ class DeputiesDBPopulator(object):
         if legislature.date_start > start:
             legislature.date_start = start
 
-        # the end date can be None, the case the legislature is yet to finish.
-        # in this case, if end is None, we set legislature end data to None. If none of them are None,
-        # we compare dates as before.
-        if legislature.date_end is not None and end is not None and legislature.date_end < end or \
-                                legislature.date_end is not None and end is None:
+        # the end date can be None, the case the legislature haven't finished.
+        # If none of them are None, we compare dates as before.
+        if legislature.date_end is not None and end is not None and \
+                legislature.date_end < end or \
+                legislature.date_end is not None and end is None:
             legislature.date_end = end
 
         legislature.save()
         return legislature
 
-    def _populate_mandate(self, deputy, mandate_data):
-        legislature = self._get_or_create_legislature(mandate_data['legislature'],
-                                                      mandate_data['start_date'],
-                                                      mandate_data['end_date'])
+    def _populate_mandate(self, deputy, data):
+        legislature = self._get_or_create_legislature(data['legislature'],
+                                                      data['start_date'],
+                                                      data['end_date'])
 
         try:
-            district = contracts.models.District.objects.get(name=mandate_data['constituency'])
-        except contracts.models.District.DoesNotExist:
+            district = District.objects.get(name=data['constituency'])
+        except District.DoesNotExist:
             # the districts have slightly different names
-            if mandate_data['constituency'] == "Fora da Europa" or mandate_data['constituency'] == "Europa":
+            if data['constituency'] in ("Fora da Europa", "Europa"):
                 district = None
-            elif mandate_data['constituency'] == "Madeira":
-                district = contracts.models.District.objects.get(name="Região Autónoma da Madeira")
-            elif mandate_data['constituency'] == "Açores":
-                district = contracts.models.District.objects.get(name="Região Autónoma dos Açores")
+            elif data['constituency'] == "Madeira":
+                district = District.objects.get(name="Região Autónoma da Madeira")
+            elif data['constituency'] == "Açores":
+                district = District.objects.get(name="Região Autónoma dos Açores")
             else:
                 raise
 
         try:
-            mandate = models.Mandate.objects.get(deputy=deputy,
-                                                 legislature=legislature,
-                                                 date_start=mandate_data['start_date'])
+            mandate = models.Mandate.objects.get(
+                deputy=deputy, legislature=legislature,
+                date_start=data['start_date'])
         except models.Mandate.DoesNotExist:
             mandate = models.Mandate()
 
         mandate.legislature = legislature
-        mandate.party = self._get_or_create_party(mandate_data['party'])
+        mandate.party = self._get_or_create_party(data['party'])
         mandate.district = district
-        mandate.date_start = mandate_data['start_date']
-        mandate.date_end = mandate_data['end_date'] or None
+        mandate.date_start = data['start_date']
+        mandate.date_end = data['end_date']
         mandate.deputy = deputy
         mandate.save()
 
@@ -92,19 +87,15 @@ class DeputiesDBPopulator(object):
     def populate_deputy(self, data):
         try:
             deputy = models.Deputy.objects.get(official_id=data['id'])
-            logger.info('clean_deputy %d already exists', data['id'])
+            logger.info('populate_deputy: %d already exists', data['id'])
         except models.Deputy.DoesNotExist:
             deputy = models.Deputy()
-            logger.info('clean_deputy %d creating entry', data['id'])
+            logger.info('populate_deputy: %d creating entry', data['id'])
 
         # validate data
         deputy.official_id = data['id']
         deputy.name = data['name']
-
-        if 'birthday' in data:
-            deputy.birthday = data['birthday']
-        else:
-            deputy.birthday = None
+        deputy.birthday = data['birthday']
 
         deputy.save()
 
