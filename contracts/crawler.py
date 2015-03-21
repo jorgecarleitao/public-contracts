@@ -307,7 +307,7 @@ class DynamicCrawler(JSONCrawler):
         """
         Loops on all object ids to update object table.
         """
-        created_instances = []
+        created_instances = 0
 
         base_id = max(self.last_base_id() - 1, 0)
         last_base_id = base_id
@@ -317,7 +317,7 @@ class DynamicCrawler(JSONCrawler):
             try:
                 instance, created = self.update_instance(base_id, flush)
                 if created:
-                    created_instances.append(instance)
+                    created_instances += 1
                 fails = 0
             except JSONLoadError:
                 fails += 1
@@ -326,7 +326,7 @@ class DynamicCrawler(JSONCrawler):
 
         logging.info("Update completed - last base_id %d", last_base_id)
         logging.info("Update completed - %d new instances",
-                     len(created_instances))
+                     created_instances)
 
         return created_instances
 
