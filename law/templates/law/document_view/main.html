@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block title %}{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}{% endblock %}
 {% block content %}
+    <style>.title {text-align: center;}</style>
     <div class="text-center" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
         <p>

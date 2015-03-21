@@ -6,7 +6,7 @@ def robots(request):
 
 
 def home(request):
-    return render(request, 'main_page.html')
+    return render(request, 'main_page.html', {'REQUIRE_D3JS': True})
 
 
 def about(request):

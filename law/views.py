@@ -86,7 +86,6 @@ def type_view(request, type_id, slug=None):
     return render(request, "law/type_view/main.html", context)
 
 
-@cache_page(60 * 60 * 24 * 31)  # one month
 def law_view(request, dre_doc_id, slug=None):
     law = get_object_or_404(models.Document.objects.select_related('type'),
                             dre_doc_id=dre_doc_id)
@@ -134,7 +133,8 @@ def law_analysis(request, analysis_id, slug=None):
     if name not in templates:
         raise IndexError('Template for analysis "%s" not found' % name)
 
-    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis'}
+    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis',
+               'REQUIRE_D3JS': True}
 
     return render(request, templates[name], context)
 

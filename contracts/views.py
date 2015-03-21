@@ -30,7 +30,8 @@ def home(request):
         'latest_contracts': latest_contracts,
         'latest_entities': latest_entities,
         'latest_tenders': latest_tenders,
-        'latest_analysis': latest_analysis})
+        'latest_analysis': latest_analysis,
+        'REQUIRE_D3JS': True})
 
 
 def build_contract_list_context(context, GET):
@@ -100,7 +101,8 @@ def contracts_list(request):
         .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
                order_by=['signing_date_is_null', '-signing_date'])
 
-    context = {'contracts': contracts, 'navigation_tab': 'contracts'}
+    context = {'contracts': contracts, 'navigation_tab': 'contracts',
+               'REQUIRE_DATEPICKER': True}
 
     context = build_contract_list_context(context, request.GET)
 
@@ -238,7 +240,8 @@ def tenders_list(request):
     tenders = models.Tender.objects.all().prefetch_related('contractors')
 
     context = {'navigation_tab': 'tenders',
-               'tenders': tenders}
+               'tenders': tenders,
+               'REQUIRE_DATEPICKER': True}
 
     context = build_tender_list_context(context, request.GET)
 

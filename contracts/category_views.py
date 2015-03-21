@@ -39,7 +39,8 @@ def contracts(request, category_id):
     context = {'navigation_tab': 'categories',
                'category': category,
                'tab': 'contracts',
-               'contracts': contracts}
+               'contracts': contracts,
+               'REQUIRE_DATEPICKER': True}
 
     ## filter contracts by ordering and pagination
     context = build_contract_list_context(context, request.GET)
@@ -94,7 +95,8 @@ def tenders(request, category_id):
     context = {'navigation_tab': 'categories',
                'category': category,
                'tab': 'tenders',
-               'tenders': tenders}
+               'tenders': tenders,
+               'REQUIRE_DATEPICKER': True}
 
     ## filter entities by ordering and pagination
     context = build_tender_list_context(context, request.GET)

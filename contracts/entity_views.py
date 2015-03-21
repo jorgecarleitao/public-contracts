@@ -35,7 +35,8 @@ def main_view(request, entity_base_id, slug=None):
                'contracts_received_count': len(ids['set']),
                'last_contracts': contracts,
                'hired_clients': hired_clients,
-               'clients_hiring': clients_hiring}
+               'clients_hiring': clients_hiring,
+               'REQUIRE_D3JS': True}
 
     return render(request, 'contracts/entity_view/tab_data/main.html', context)
 
@@ -55,7 +56,8 @@ def contracts(request, entity_base_id):
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'contracts',
-               'contracts': contracts}
+               'contracts': contracts,
+               'REQUIRE_DATEPICKER': True}
 
     ## filter contracts by ordering and pagination
     context = build_contract_list_context(context, request.GET)
@@ -93,7 +95,8 @@ def tenders(request, entity_base_id):
     context = {'navigation_tab': 'entities',
                'entity': entity,
                'tab': 'tenders',
-               'tenders': all_tenders}
+               'tenders': all_tenders,
+               'REQUIRE_DATEPICKER': True}
 
     ## filter entities by ordering and pagination
     context = build_tender_list_context(context, request.GET)

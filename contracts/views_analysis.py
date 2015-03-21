@@ -35,7 +35,8 @@ def entities_category_ranking(request):
         count += 1
 
     context = {'navigation_tab': 'analysis',
-               'entities': entities}
+               'entities': entities,
+               'REQUIRE_D3JS': True}
 
     return render(request, 'contracts/analysis/entity_rank/main.html', context)
 
@@ -46,7 +47,8 @@ def contracts_price_histogram(request):
 
     context = {'navigation_tab': 'analysis',
                'count': data['total_count'],
-               'price': data['total_sum']}
+               'price': data['total_sum'],
+               'REQUIRE_D3JS': True}
 
     return render(request,
                   'contracts/analysis/contracts_price_histogram/main.html', context)
@@ -54,14 +56,16 @@ def contracts_price_histogram(request):
 
 def entities_values_histogram(request):
 
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis',
+               'REQUIRE_D3JS': True}
 
     return render(request,
                   'contracts/analysis/entities_values_histogram/main.html', context)
 
 
 def procedure_types_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis',
+               'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/procedure_type_time_series/main.html', context)
 
@@ -76,37 +80,38 @@ def municipalities_delta_time(request):
         count += 1
 
     context = {'navigation_tab': 'analysis',
-               'entities': entities}
+               'entities': entities,
+               'REQUIRE_D3JS': True}
 
     return render(request,
                   'contracts/analysis/municipalities_delta_time/main.html', context)
 
 
 def municipalities_contracts_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/municipalities_contracts_time_series/main.html', context)
 
 
 def municipalities_procedure_types_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/municipalities_procedure_type_time_series/main.html', context)
 
 
 def ministries_contracts_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/ministries_contracts_time_series/main.html', context)
 
 
 def contracts_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request, 'contracts/analysis/contracts_time_series/main.html', context)
 
 
 def legislation_application_time_series(request):
-    context = {'navigation_tab': 'analysis'}
+    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/legislation_application_time_series/main.html', context)
 
@@ -115,7 +120,8 @@ def contracted_lorenz_curve(request):
 
     _, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
 
-    context = {'navigation_tab': 'analysis', 'gini_index': gini_index}
+    context = {'navigation_tab': 'analysis', 'gini_index': gini_index,
+               'REQUIRE_D3JS': True}
     return render(request, 'contracts/analysis/contracted_lorenz_curve/main.html', context)
 
 

@@ -60,7 +60,7 @@ def build_deputies_list_context(context, GET):
 
 
 def home(request):
-    return render(request, 'deputies/main_page.html')
+    return render(request, 'deputies/main_page.html', {'REQUIRE_D3JS': True})
 
 
 def deputies_list(request):
@@ -143,6 +143,7 @@ def analysis(request, analysis_id, slug=None):
     if name not in templates:
         raise IndexError('Template for analysis "%s" not found' % name)
 
-    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis'}
+    context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis',
+               'REQUIRE_D3JS': True}
 
     return render(request, templates[name], context)

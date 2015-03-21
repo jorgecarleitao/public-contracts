@@ -9,32 +9,33 @@
     {% include "google_analytics.html" %}
 
     <link href="{% static 'css/summary.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/document.css' %}" rel="stylesheet" type="text/css"/>
-
-    {# jquery.js #}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
     {# boostrap #}
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/dropdown.min.js"></script>
 
-    {# moment.js to daterangepicker.js #}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/lang/pt.js"></script>
+    {% if REQUIRE_DATEPICKER %}
+        {# jquery.js #}
+        <script async src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-    {# daterangepicker.js #}
-    <link href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1.3.5/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-    <script src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1.3.5/daterangepicker.js" type="text/javascript" ></script>
+        {# moment.js to daterangepicker.js #}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/lang/pt.js"></script>
 
-    {# d3.js #}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js" type="text/javascript" ></script>
+        {# daterangepicker.js #}
+        <link href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1.3.5/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+        <script async src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1.3.5/daterangepicker.js" type="text/javascript" ></script>
+    {% endif %}
 
-    {# nv.d3.js #}
-    <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js" type="text/javascript" ></script>
+    {% if REQUIRE_D3JS %}
+        {# d3.js #}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js" type="text/javascript" ></script>
 
-    <script src="{% static 'js/change_get_parameters.js' %}" type="text/javascript" ></script>
-    {% block forejs %}{% endblock %}
+        {# nv.d3.js #}
+        <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js" type="text/javascript" ></script>
+    {% endif %}
+
+    {% include "change_parameters.html" %}
 </head>
 <body>
 
