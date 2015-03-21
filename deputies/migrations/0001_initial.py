@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Deputy',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('official_id', models.IntegerField()),
                 ('name', models.CharField(max_length=254)),
                 ('birthday', models.DateField(null=True)),
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Legislature',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('number', models.PositiveIntegerField()),
                 ('date_start', models.DateField()),
                 ('date_end', models.DateField(null=True)),
@@ -40,11 +40,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Mandate',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('date_start', models.DateField()),
                 ('date_end', models.DateField(null=True)),
                 ('deputy', models.ForeignKey(to='deputies.Deputy')),
-                ('district', models.ForeignKey(to='contracts.District', null=True)),
+                ('district', models.ForeignKey(null=True, to='contracts.District')),
                 ('legislature', models.ForeignKey(to='deputies.Legislature')),
             ],
             options={
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Party',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('abbrev', models.CharField(max_length=20)),
             ],
             options={
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='deputy',
             name='party',
-            field=models.ForeignKey(to='deputies.Party', null=True),
+            field=models.ForeignKey(null=True, to='deputies.Party'),
             preserve_default=True,
         ),
     ]

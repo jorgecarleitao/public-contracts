@@ -13,17 +13,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Document',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('number', models.CharField(max_length=20, null=True)),
-                ('creator_name', models.CharField(max_length=254)),
+                ('creator_name', models.TextField()),
                 ('date', models.DateField()),
-                ('summary', models.TextField()),
-                ('text', models.TextField()),
-                ('dre_doc_id', models.IntegerField(unique=True, db_index=True)),
-                ('dre_pdf_id', models.IntegerField(unique=True, db_index=True)),
-                ('dr_series', models.CharField(db_index=True, max_length=10)),
+                ('summary', models.TextField(null=True)),
+                ('text', models.TextField(null=True)),
+                ('dre_doc_id', models.IntegerField(db_index=True, unique=True)),
+                ('dre_pdf_id', models.IntegerField(db_index=True, unique=True)),
+                ('dr_series', models.CharField(max_length=10, db_index=True)),
                 ('dr_number', models.CharField(max_length=10)),
-                ('dr_supplement', models.CharField(max_length=30, null=True)),
+                ('dr_supplement', models.CharField(max_length=50, null=True)),
                 ('dr_pages', models.CharField(max_length=50)),
             ],
             options={
@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Type',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
-                ('name', models.CharField(unique=True, max_length=254)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('name', models.CharField(max_length=254, unique=True)),
             ],
             options={
             },

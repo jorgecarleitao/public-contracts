@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ActType',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('name', models.CharField(max_length=254)),
             ],
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('lft', models.PositiveIntegerField(db_index=True)),
                 ('rgt', models.PositiveIntegerField(db_index=True)),
                 ('tree_id', models.PositiveIntegerField(db_index=True)),
@@ -41,26 +41,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contract',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('added_date', models.DateField()),
                 ('signing_date', models.DateField(null=True)),
                 ('close_date', models.DateField(null=True)),
                 ('description', models.TextField(null=True)),
                 ('contract_description', models.TextField()),
-                ('cpvs', models.CharField(null=True, max_length=254)),
+                ('cpvs', models.CharField(max_length=254, null=True)),
                 ('price', models.BigIntegerField()),
                 ('category', models.ForeignKey(null=True, to='contracts.Category')),
             ],
             options={
-                'ordering': ['-signing_date'],
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='ContractType',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('name', models.CharField(max_length=254)),
             ],
@@ -71,7 +70,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Council',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('name', models.CharField(max_length=254)),
                 ('base_id', models.IntegerField()),
             ],
@@ -82,7 +81,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Country',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('name', models.CharField(max_length=254)),
             ],
             options={
@@ -92,7 +91,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='District',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('name', models.CharField(max_length=254)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('country', models.ForeignKey(to='contracts.Country')),
@@ -104,7 +103,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Entity',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('name', models.CharField(max_length=254)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('nif', models.CharField(max_length=254)),
@@ -117,10 +116,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='EntityData',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('total_earned', models.BigIntegerField(default=0)),
                 ('total_expended', models.BigIntegerField(default=0)),
-                ('entity', models.OneToOneField(related_name='data', to='contracts.Entity')),
+                ('entity', models.OneToOneField(to='contracts.Entity', related_name='data')),
             ],
             options={
             },
@@ -129,7 +128,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ModelType',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('name', models.CharField(max_length=254)),
             ],
@@ -140,7 +139,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProcedureType',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
                 ('name', models.CharField(max_length=254)),
             ],
@@ -151,17 +150,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tender',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('base_id', models.IntegerField(unique=True)),
-                ('description', models.CharField(max_length=254)),
+                ('description', models.TextField()),
                 ('announcement_number', models.CharField(max_length=254)),
                 ('publication_date', models.DateField()),
                 ('deadline_date', models.DateField()),
-                ('cpvs', models.CharField(null=True, max_length=254)),
+                ('cpvs', models.CharField(max_length=254, null=True)),
                 ('price', models.BigIntegerField()),
-                ('dre_number', models.IntegerField()),
-                ('dre_series', models.IntegerField()),
-                ('dre_document', models.IntegerField()),
+                ('dre_url', models.TextField()),
                 ('act_type', models.ForeignKey(to='contracts.ActType')),
                 ('category', models.ForeignKey(null=True, to='contracts.Category')),
                 ('contract_type', models.ForeignKey(null=True, to='contracts.ContractType')),
