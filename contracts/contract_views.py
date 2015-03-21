@@ -4,12 +4,14 @@ from . import models
 
 
 def main_view(request, contract_base_id):
-    query = models.Contract.objects.select_related('contract_type__name',
-                                                   'category__id',
-                                                   'category__name',
-                                                   'country__name',
-                                                   'district__name',
-                                                   'council__name')
+    query = models.Contract.default_objects \
+        .select_related('contract_type__name',
+                        'category__id',
+                        'category__name',
+                        'country__name',
+                        'district__name',
+                        'council__name') \
+        .prefetch_related('contractors', 'contracted')
 
     contract = get_object_or_404(query, base_id=contract_base_id)
 
