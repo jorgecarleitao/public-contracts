@@ -19,3 +19,4 @@ class ContractIndex(indexes.Index):
 
     class Meta:
         model = Contract
+        query = Contract.default_objects.all()

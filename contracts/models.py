@@ -233,6 +233,7 @@ class Contract(models.Model):
     contracted = models.ManyToManyField('Entity')
 
     objects = ContractManager()
+    default_objects = models.Manager()
 
     def get_absolute_url(self):
         return reverse('contract', args=(self.base_id,))
