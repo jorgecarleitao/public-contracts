@@ -182,7 +182,7 @@ def get_entities_contracts_time_series(startswith_string):
                          ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
                      INNER JOIN contracts_entity
                          ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
-                WHERE contracts_entity.name LIKE BINARY %s
+                WHERE contracts_entity.name ILIKE %s
                 GROUP BY s_year, s_month
                 ORDER BY s_year, s_month
                 '''
