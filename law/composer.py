@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import re
 from bs4 import BeautifulSoup, NavigableString
 
+from django.db.models import Q
 from django.utils.text import slugify
 
 
@@ -99,8 +100,10 @@ def add_references(text):
         default = '%s n.º %s' % (matched_type_name, matched_number)
 
         try:
-            doc = Document.objects.get(type_id=matched_type.id,
-                                       number=matched_number)
+            doc = Document.objects.filter(Q(dr_series='I') |
+                                          Q(dr_series='I-B') |
+                                          Q(dr_series='I-A'))\
+                .get(type_id=matched_type.id, number=matched_number)
         except Document.DoesNotExist:
             return default
 
