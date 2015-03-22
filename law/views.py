@@ -1,3 +1,5 @@
+import re
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Count
@@ -33,7 +35,15 @@ def build_laws_list_context(context, GET):
 
     key = 'search'
     if key in GET and GET[key]:
-        context['laws'] = context['laws'].filter(text__search=GET[key])
+        # try a match on the law by <type_name> <number>
+        match = re.search(r'^([^\s]+) .*? ([^\s]+/\d{4})', GET[key])
+        if match:
+            type_name, number = match.group(1), match.group(2)
+            context['laws'] = context['laws'].filter(number=number,
+                                                     type__name=type_name)
+
+        else:
+            context['laws'] = context['laws'].filter(text__search=GET[key])
 
     paginator = Paginator(context['laws'], 20)
     try:
