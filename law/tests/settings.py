@@ -3,10 +3,9 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sphinx_example',
-        'TEST_NAME': 'sphinx_example_test',
-        'USER': 'sphinx_example',
-        'PASSWORD': 'test'
+        'NAME': 'tests',
+        'TEST_NAME': 'tests_test',
+        'USER': 'postgres'
     },
 }
 
