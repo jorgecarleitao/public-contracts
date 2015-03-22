@@ -49,7 +49,7 @@ def build_laws_list_context(context, GET):
 
 
 def home(request):
-    return render(request, "law/home.html")
+    return render(request, "law/home.html", {'REQUIRE_D3JS': True})
 
 
 @cache_page(60 * 60 * 24)
