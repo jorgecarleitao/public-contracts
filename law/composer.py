@@ -74,44 +74,54 @@ def add_pdf_references(text, document):
     return text
 
 
-def add_references(text):
-    from .models import Type, Document
+def docs_regex(types):
+    """
+    Returns a regex that matches a document.
+    """
+    return '(%s) n.º ([^\s]+/\d+)(/[A-Z]*)?' % '|'.join([type.name for type in types])
 
-    # pick all types (except some weird ones)
+
+def get_documents(text, types=None):
+    """
+    Returns a query with all documents a given text refers to.
+    """
+    from .models import Type, Document
+    if types is None:
+        types = list(Type.objects.exclude(name__contains='('))
+
+    matches = set(re.findall(docs_regex(types), text))
+    query = Q()
+    for name, number, number_suffix in matches:
+        if number_suffix:
+            number += number_suffix
+        query = query | Q(type__name=name, number=number)
+    # select all documents this document refers to
+    return Document.objects.filter(query)
+
+
+def add_references(text):
+    from .models import Type
     types = list(Type.objects.exclude(name__contains='('))
 
-    def create_regex():
-        """
-        Regex to catch expressions of the form "type_name (\d+).º".
-        """
-        regex = '({0}) n.º (.*?/\d+)'
-        return regex.format('|'.join([type.name for type in types]))
+    documents = get_documents(text, types).prefetch_related('type')
+
+    # create an inverted index (type_name, number) -> doc
+    index = dict([((doc.type.name, doc.number), doc) for doc in documents])
 
     def replace_docs(match):
-        """
-        callback of re.sub to substitute the document expression by a anchor with
-        link to the document.
-        """
-        matched_type_name, matched_number = match.group(1, 2)
-        matched_type = next(type for type in types
-                            if type.name == matched_type_name)
-        matched_number = matched_number.strip()
+        m_type_name, m_number, m_number_suffix = match.group(1, 2, 3)
+        if m_number_suffix:
+            m_number += m_number_suffix
 
-        default = '%s n.º %s' % (matched_type_name, matched_number)
+        default = '%s n.º %s' % (m_type_name, m_number)
 
-        try:
-            doc = Document.objects.filter(Q(dr_series='I') |
-                                          Q(dr_series='I-B') |
-                                          Q(dr_series='I-A'))\
-                .get(type_id=matched_type.id, number=matched_number)
-        except Document.DoesNotExist:
-            return default
+        if (m_type_name, m_number) in index:
+            doc = index[(m_type_name, m_number)]
+            return '<a class="reference-%d" title="%s" href="%s">%s</a>' \
+                   % (doc.id, doc.summary, doc.get_absolute_url(), default)
+        return default
 
-        summary_soup = BeautifulSoup(doc.summary)
-        return '<a class="reference-%d" title="%s" href="%s">%s</a>' \
-               % (doc.id, summary_soup.getText(), doc.get_absolute_url(), default)
-
-    return re.sub(create_regex(), replace_docs, text)
+    return re.sub(docs_regex(types), replace_docs, text)
 
 
 hierarchy_priority = ['Anexo',
