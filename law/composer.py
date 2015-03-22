@@ -8,6 +8,15 @@ from django.db.models import Q
 from django.utils.text import slugify
 
 
+PLURALS = {'Decreto-Lei': 'Decretos-Leis',
+           'Lei': 'Leis',
+           'Portaria': 'Portarias'}
+
+SINGULARS = {'Decretos-Leis': 'Decreto-Lei',
+             'Leis': 'Lei',
+             'Portarias': 'Portaria'}
+
+
 def normalize(text):
 
     text = ' '.join(text.split())
@@ -81,10 +90,35 @@ def docs_regex(types):
     return '(%s) n.º ([^\s]+/\d+)(/[A-Z]*)?' % '|'.join([type.name for type in types])
 
 
+def enum_docs_regex(types):
+    type_names = [PLURALS[type.name] for type in types if type.name in PLURALS]
+    return '(%s) n.os (.*?) e ([^\s]+/\d+)(/[A-Z]*)?' % '|'.join(type_names)
+
+
+def _get_enum_documents_query(text, types):
+    """
+    Returns a Q object representing a query to existing enumerated documents in
+    text.
+    """
+    matches = re.findall(enum_docs_regex(types), text)
+    query = Q()
+    for name, other_numbers_string, number, number_suffix in matches:
+        if number_suffix:
+            number += number_suffix
+
+        numbers = re.findall('([^\s]+/\d+)(/[A-Z]*)?', other_numbers_string)
+        numbers = [number[0] + number[1] for number in numbers] + [number]
+        for number in numbers:
+            query = query | Q(type__name=SINGULARS[name], number=number)
+
+    return query
+
+
 def get_documents(text, types=None):
     """
     Returns a query with all documents a given text refers to.
     """
+    text = re.sub(' +', ' ', text)
     from .models import Type, Document
     if types is None:
         types = list(Type.objects.exclude(name__contains='('))
@@ -95,11 +129,22 @@ def get_documents(text, types=None):
         if number_suffix:
             number += number_suffix
         query = query | Q(type__name=name, number=number)
-    # select all documents this document refers to
+
+    query = query | _get_enum_documents_query(text, types)
     return Document.objects.filter(query)
 
 
 def add_references(text):
+    """
+    This function replaces references of documents with href anchors to
+    the respective documents.
+
+    It does:
+     1. one hit to get all type names
+     2. one pass to get all distinct tuples (type_name, number) in the document
+     3. one hit to retrieve all documents with that tuple
+     4. one pass to replace all occurrences by anchors.
+    """
     from .models import Type
     types = list(Type.objects.exclude(name__contains='('))
 
@@ -108,20 +153,59 @@ def add_references(text):
     # create an inverted index (type_name, number) -> doc
     index = dict([((doc.type.name, doc.number), doc) for doc in documents])
 
-    def replace_docs(match):
-        m_type_name, m_number, m_number_suffix = match.group(1, 2, 3)
-        if m_number_suffix:
-            m_number += m_number_suffix
+    def replace_doc(name, number, number_suffix):
+        """
+        Replaces a reference to a document by a href anchor.
+        """
+        if number_suffix:
+            number += number_suffix
 
-        default = '%s n.º %s' % (m_type_name, m_number)
+        default = '%s n.º %s' % (name, number)
 
-        if (m_type_name, m_number) in index:
-            doc = index[(m_type_name, m_number)]
+        if (name, number) in index:
+            doc = index[(name, number)]
             return '<a class="reference-%d" title="%s" href="%s">%s</a>' \
                    % (doc.id, doc.summary, doc.get_absolute_url(), default)
-        return default
+        return '%s n.º %s' % (name, number)
 
-    return re.sub(docs_regex(types), replace_docs, text)
+    def replace_docs(name, other_numbers_string, last_number, last_number_suffix):
+        """
+        Replaces a reference to multiple documents by href anchors.
+        """
+        name = SINGULARS[name]
+        if last_number_suffix:
+            last_number += last_number_suffix
+
+        if (name, last_number) in index:
+            doc = index[(name, last_number)]
+            last_number = '<a class="reference-%d" title="%s" href="%s">%s</a>' \
+                % (doc.id, doc.summary, doc.get_absolute_url(), last_number)
+
+        def replace_enum_single(match):
+            number, number_suffix = match.group(1, 2)
+            if number_suffix:
+                number += number_suffix
+
+            default = number
+
+            if (name, number) in index:
+                doc = index[(name, number)]
+                return '<a class="reference-%d" title="%s" href="%s">%s</a>' \
+                       % (doc.id, doc.summary, doc.get_absolute_url(), default)
+            return default
+
+        other_numbers_string = re.sub('([^\s]+/\d+)(/[A-Z]*)?', replace_enum_single, other_numbers_string)
+        return '%s n.os %s e %s' % (PLURALS[name], other_numbers_string, last_number)
+
+    def replace(match):
+        if match.group(1, 2, 3) != (None, None, None):
+            return replace_doc(*match.group(1, 2, 3))
+        else:
+            return replace_docs(*match.group(4, 5, 6, 7))
+
+    # the order must be compatible with order in `replace`.
+    text = re.sub(docs_regex(types) + '|' + enum_docs_regex(types), replace, text)
+    return text
 
 
 hierarchy_priority = ['Anexo',
