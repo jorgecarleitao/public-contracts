@@ -1,7 +1,6 @@
 {% extends "law/base.html" %}
-{% load i18n %}
 {% block title %}{{ type.name }}{% endblock %}
 {% block content %}
-    <h2>{{ type.name }}</h2>
+    <h2>Série {{ type.dr_series }}: {{ type.name }}</h2>
     {% include "law/law_list/law_list_template.html" %}
 {% endblock %}

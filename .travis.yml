@@ -7,3 +7,4 @@ install:
 
 script:
   - python -m contracts.tools.example
+  - PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=law.tests.settings law.tests

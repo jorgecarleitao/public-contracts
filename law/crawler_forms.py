@@ -1,17 +1,12 @@
-from django.forms import CharField, DateField, ModelChoiceField,\
-    IntegerField, Form
+from django.forms import CharField, DateField, IntegerField, Form
 
 from . import models
 
 
-class TypeField(ModelChoiceField):
+class TypeField(CharField):
     """
     Validates a relation to a ``models.Category``.
     """
-    def __init__(self, **kwargs):
-        super().__init__(queryset=models.Type.objects,
-                         to_field_name='name', **kwargs)
-
     def clean(self, string):
         type_name = string.strip()
 
@@ -25,9 +20,7 @@ class TypeField(ModelChoiceField):
         if type_name == 'Resolução da  Assembleia da República':
             type_name = 'Resolução da Assembleia da República'
 
-        type, created = models.Type.objects.get_or_create(name=type_name)
-
-        return type
+        return type_name
 
 
 class NumberField(CharField):
@@ -47,7 +40,6 @@ class NumberField(CharField):
 
 
 class DocumentForm(Form):
-    type = TypeField()
     number = NumberField(required=False, max_length=20)
 
     creator_name = CharField()
@@ -60,3 +52,11 @@ class DocumentForm(Form):
     dr_number = CharField(max_length=10)
     dr_supplement = CharField(required=False, max_length=50)
     dr_pages = CharField(max_length=50)
+
+    type = TypeField()
+
+    def clean_type(self):
+        series = self.cleaned_data['dr_series']
+        type, created = models.Type.objects.get_or_create(
+            name=self.cleaned_data['type'], dr_series=series)
+        return type

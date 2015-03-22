@@ -3,17 +3,17 @@
 {% block title %}{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}{% endblock %}
 {% block content %}
     <style>.title {text-align: center;}</style>
+    <h2 class="text-center">Série {{ law.type.dr_series }}</h2>
     <div class="text-center" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
         <p>
             <small>
-                <a href="{{ law.get_pdf_url }}">PDF do Diário da República</a>
+                <a href="{{ law.get_pdf_url }}">Diário da República (PDF)</a>
             </small>
         </p>
         <p>{{ law.creator_name }}</p>
         <p>{{ law.date }}</p>
-        <h4 class="text-center">Sumário:</h4>
-        <h5 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h5>
+        <h4 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h4>
     </div>
     {{ law.compose_text|safe }}
 {% endblock %}

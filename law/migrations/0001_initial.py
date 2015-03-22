@@ -34,7 +34,8 @@ class Migration(migrations.Migration):
             name='Type',
             fields=[
                 ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
-                ('name', models.CharField(max_length=254, unique=True)),
+                ('name', models.CharField(max_length=254)),
+                ('dr_series', models.CharField(max_length=10)),
             ],
             options={
             },
@@ -45,5 +46,9 @@ class Migration(migrations.Migration):
             name='type',
             field=models.ForeignKey(to='law.Type'),
             preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='type',
+            unique_together=set([('name', 'dr_series')]),
         ),
     ]

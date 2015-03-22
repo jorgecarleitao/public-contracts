@@ -26,7 +26,8 @@ def get_documents_time_series():
         entry = {'from': min_date,
                  'to': max_date,
                  'count': aggregate['count']}
-        data.append(entry)
+        if aggregate['count'] > 0:
+            data.append(entry)
 
     return data
 
@@ -70,9 +71,9 @@ def get_eu_impact_time_series():
 def get_types_time_series():
 
     min_year = 1910
-    end_year = datetime.now().year - 1  # only ended years
+    end_year = datetime.now().year - 1
 
-    types = models.Type.objects.all()
+    types = models.Type.objects.exclude(dr_series='II')
 
     # loop over years
     data = []
@@ -101,9 +102,9 @@ def get_types_time_series():
         types_time_series = {}
 
         # create list of existing types
-        # order by count and only use 19 types (the 20th is "Others")
-        for type in models.Type.objects.all()\
-                .annotate(count=Count('document__id')).order_by('-count')[:17]:
+        # order by count and only use 17 types (the 18th is "Others")
+        for type in types.annotate(count=Count('document__id'))\
+                .order_by('-count')[:17]:
             types_time_series[type.name] = {'values': [], 'key': type.name, 'total': 0}
 
         # create a special entry for "others"

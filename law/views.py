@@ -67,7 +67,8 @@ def law_list(request):
 
 @cache_page(60 * 60 * 24)
 def types_list(request):
-    types = models.Type.objects.annotate(count=Count('document')).order_by('name')
+    types = models.Type.objects.filter(dr_series='I')\
+        .annotate(count=Count('document')).order_by('-count', 'name')
 
     context = {'types': types, 'navigation_tab': 'types'}
 
@@ -78,7 +79,7 @@ def type_view(request, type_id, slug=None):
     type = get_object_or_404(models.Type, id=type_id)
 
     context = {'type': type,
-               'laws': type.document_set.order_by("-date", "-number").prefetch_related("type"),
+               'laws': type.document_set.order_by("-date").prefetch_related("type"),
                'navigation_tab': 'types'}
 
     context = build_laws_list_context(context, request.GET)

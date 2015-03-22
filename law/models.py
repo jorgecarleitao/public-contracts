@@ -11,7 +11,8 @@ from .composer import compose_text, compose_summary, normalize
 
 
 class Type(models.Model):
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(max_length=254)
+    dr_series = models.CharField(max_length=10)
 
     def get_absolute_url(self):
         name = "%s" % slugify(self.name)
@@ -19,6 +20,9 @@ class Type(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        unique_together = ('name', 'dr_series')
 
 
 class Document(models.Model):
