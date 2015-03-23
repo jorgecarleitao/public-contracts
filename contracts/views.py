@@ -208,15 +208,18 @@ def build_tender_list_context(context, GET):
     key = 'search'
     if key in GET and GET[key]:
         context[key] = GET[key]
-        context['tenders'] = context['tenders'].filter(description__search=GET[key])
+        context['tenders'] = context['tenders'].search(GET[key])
 
     key = 'range'
     if key in GET and GET[key]:
         start_date = GET[key][0]
         end_date = GET[key][1]
-        context['tenders'] = context['tenders'].filter(
-            publication_date__gte=start_date,
-            publication_date__lte=end_date)
+        if context['tenders'].search_mode:
+            context['tenders'] = context['tenders'].search_filter(
+                publication_date__gte=start_date, publication_date__lte=end_date)
+        else:
+            context['tenders'] = context['tenders'].filter(
+                publication_date__gte=start_date, publication_date__lte=end_date)
 
     key = 'sorting'
     if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
@@ -237,7 +240,7 @@ def build_tender_list_context(context, GET):
 
 
 def tenders_list(request):
-    tenders = models.Tender.objects.all().prefetch_related('contractors')
+    tenders = indexes.TenderIndex.objects.all().prefetch_related('contractors')
 
     context = {'navigation_tab': 'tenders',
                'tenders': tenders,

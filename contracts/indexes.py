@@ -1,5 +1,5 @@
 from sphinxql import indexes, fields
-from .models import Entity, Contract
+from .models import Entity, Contract, Tender
 
 
 class EntityIndex(indexes.Index):
@@ -20,3 +20,12 @@ class ContractIndex(indexes.Index):
     class Meta:
         model = Contract
         query = Contract.default_objects.all()
+
+
+class TenderIndex(indexes.Index):
+    description = fields.Text('description')
+
+    publication_date = fields.Date('publication_date')
+
+    class Meta:
+        model = Tender
