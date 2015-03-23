@@ -88,7 +88,7 @@ def costumers(request, entity_base_id):
 def tenders(request, entity_base_id):
     entity = get_object_or_404(models.Entity, base_id=entity_base_id)
 
-    all_tenders = entity.tender_set.all()
+    all_tenders = indexes.TenderIndex.objects.filter(contractors__id=entity.id)
 
     all_tenders = all_tenders.prefetch_related("contractors")
 

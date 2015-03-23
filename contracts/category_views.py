@@ -90,7 +90,7 @@ def tenders(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    tenders = models.Tender.objects.filter(category_id__in=categories_ids)
+    tenders = indexes.TenderIndex.objects.filter(category_id__in=categories_ids)
 
     context = {'navigation_tab': 'categories',
                'category': category,
