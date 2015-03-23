@@ -420,7 +420,7 @@ class TendersCrawler(DynamicCrawler):
     object_name = 'tender'
     object_model = models.Tender
 
-    MAX_ALLOWED_FAILS = 1000
+    MAX_ALLOWED_FAILS = 5000
 
     @staticmethod
     def clean_data(data):
