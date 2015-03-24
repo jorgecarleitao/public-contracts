@@ -206,10 +206,9 @@ class StaticDataCrawler():
 class DynamicCrawler(JSONCrawler):
     object_directory = '../data'
     object_url = None
+    object_list_url = None
     object_name = None
     object_model = None
-
-    MAX_ALLOWED_FAILS = 100
 
     def goToPage(self, url):
         """
@@ -250,6 +249,28 @@ class DynamicCrawler(JSONCrawler):
     @staticmethod
     def clean_data(data):
         raise NotImplementedError
+
+    def get_newest_base_id(self):
+        """
+            Hits BASE twice to get the newest base_id in BASE db.
+        """
+        def get_instances_count():
+            """
+            Hits BASE to get the total number of instances in BASE db.
+            """
+            response = requests.get(self.object_list_url,
+                                    headers={'Range': 'items=0-1'})
+
+            results_range = response.headers['content-range']
+
+            # in "items 0-%d/%d", we want the second %d, the total.
+            return int(results_range.split('/')[1])
+
+        count = get_instances_count()
+        response = requests.get(self.object_list_url,
+                                headers={'Range': 'items=%d-%d' % (count-1, count)})
+
+        return json.loads(response.text)[0]['id']
 
     def save_instance(self, cleaned_data):
         """
@@ -308,25 +329,21 @@ class DynamicCrawler(JSONCrawler):
         Loops on all object ids to update object table.
         """
         created_instances = 0
+        last_base_id = max(self.last_base_id(), 0)
 
-        base_id = max(self.last_base_id() - 1, 0)
-        last_base_id = base_id
-        fails = 0
-        while True:
-            base_id += 1
+        newest_base_id = self.get_newest_base_id()
+        logging.info("Update of '%s' started - getting base_ids [%d, %d]",
+                     self.object_name, last_base_id, newest_base_id)
+
+        for base_id in range(last_base_id, newest_base_id + 1):
             try:
                 instance, created = self.update_instance(base_id, flush)
                 if created:
                     created_instances += 1
-                fails = 0
             except JSONLoadError:
-                fails += 1
-                if fails == self.MAX_ALLOWED_FAILS:
-                    break
+                pass
 
-        logging.info("Update completed - last base_id %d", last_base_id)
-        logging.info("Update completed - %d new instances",
-                     created_instances)
+        logging.info("Update completed -- %d new instances", created_instances)
 
         return created_instances
 
@@ -337,6 +354,7 @@ class EntitiesCrawler(DynamicCrawler):
     """
     object_directory = '../data/entities'
     object_url = 'http://www.base.gov.pt/base2/rest/entidades/%d'
+    object_list_url = 'http://www.base.gov.pt/base2/rest/entidades'
     object_name = 'entity'
     object_model = models.Entity
 
@@ -362,10 +380,9 @@ class ContractsCrawler(DynamicCrawler):
     """
     object_directory = '../data/contracts'
     object_url = 'http://www.base.gov.pt/base2/rest/contratos/%d'
+    object_list_url = 'http://www.base.gov.pt/base2/rest/contratos'
     object_name = 'contract'
     object_model = models.Contract
-
-    MAX_ALLOWED_FAILS = 5000  # obtained by trial and error
 
     @staticmethod
     def clean_data(data):
@@ -417,10 +434,9 @@ class TendersCrawler(DynamicCrawler):
     """
     object_directory = '../data/tenders'
     object_url = 'http://www.base.gov.pt/base2/rest/anuncios/%d'
+    object_list_url = 'http://www.base.gov.pt/base2/rest/anuncios'
     object_name = 'tender'
     object_model = models.Tender
-
-    MAX_ALLOWED_FAILS = 5000
 
     @staticmethod
     def clean_data(data):
