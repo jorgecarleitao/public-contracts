@@ -45,6 +45,13 @@ def build_laws_list_context(context, GET):
         else:
             context['laws'] = context['laws'].filter(text__search=GET[key])
 
+    key = 'range'
+    if key in GET and GET[key]:
+        start_date = GET[key][0]
+        end_date = GET[key][1]
+        context['laws'] = context['laws'].filter(date__gte=start_date,
+                                                 date__lte=end_date)
+
     paginator = Paginator(context['laws'], 20)
     try:
         context['laws'] = paginator.page(page)
@@ -66,11 +73,12 @@ def home(request):
 def law_list(request):
     context = {'laws': models.Document.objects
                              .order_by("-dre_doc_id")
-                             .prefetch_related("type")}
+                             .prefetch_related("type"),
+               'navigation_tab': 'documents',
+               'REQUIRE_DATEPICKER': True,
+               }
 
     context = build_laws_list_context(context, request.GET)
-
-    context['navigation_tab'] = 'documents'
 
     return render(request, "law/law_list/main.html", context)
 
