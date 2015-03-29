@@ -124,6 +124,10 @@ def get_documents(text, types=None):
         types = list(Type.objects.exclude(name__contains='('))
 
     matches = set(re.findall(docs_regex(types), text))
+
+    if not matches:
+        return Document.objects.none()
+
     query = Q()
     for name, number, number_suffix in matches:
         if number_suffix:
