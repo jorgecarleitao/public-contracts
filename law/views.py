@@ -160,9 +160,10 @@ def redirect_id(request, document_id, url_ending=None):
                                      , id=document_id)
 
     try:
-        document = models.Document.objects.get(type__name=old_document[0],
-                                               date=old_document[1],
-                                               number=old_document[2])
+        document = models.Document.objects.exclude(dr_series='II') \
+            .get(type__name=old_document[0], date=old_document[1],
+                 number=old_document[2])
+
     except models.Document.DoesNotExist:
         raise Http404
 
