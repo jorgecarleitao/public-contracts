@@ -48,6 +48,8 @@ def save_document(document):
             raise ValueError('Data failed validation: %s' % form.errors)
 
         try:
-            Document.objects.get(dre_doc_id=form.cleaned_data['dre_doc_id'])
+            doc = Document.objects.get(dre_doc_id=form.cleaned_data['dre_doc_id'])
         except Document.DoesNotExist:
-            Document.objects.create(**form.cleaned_data)
+            doc = Document.objects.create(**form.cleaned_data)
+
+        doc.update_references()

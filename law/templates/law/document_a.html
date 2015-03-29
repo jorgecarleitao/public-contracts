@@ -1,0 +1,7 @@
+{% spaceless %}
+<a class="list-group-item"
+   href="{{ document.get_absolute_url }}"
+   title="{{ document.summary }}">
+    {{ document.type.name }} {% if document.number %}{{ document.number }}{% endif %}
+</a>
+{% endspaceless %}

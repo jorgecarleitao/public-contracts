@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-22 15:47+0000\n"
+"POT-Creation-Date: 2015-03-30 02:58+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -110,11 +110,11 @@ msgstr "filtrar contratos"
 msgid "order"
 msgstr "ordem"
 
-#: contracts/forms.py:47
+#: contracts/forms.py:47 law/forms.py:13
 msgid "date range"
 msgstr "filtrar por data"
 
-#: contracts/forms.py:53
+#: contracts/forms.py:53 law/forms.py:20
 msgid "range"
 msgstr "datas"
 
@@ -1591,7 +1591,7 @@ msgid "categories"
 msgstr "categorias"
 
 #: contracts/views.py:48 contracts/views.py:136 contracts/views.py:200
-#: deputies/views.py:24 law/views.py:26 main/templates/pagination.html:24
+#: deputies/views.py:24 law/views.py:28 main/templates/pagination.html:24
 msgid "page"
 msgstr "página"
 
@@ -1668,7 +1668,7 @@ msgstr "mandatos"
 msgid "filter deputies"
 msgstr "filtrar deputados"
 
-#: deputies/forms.py:23 law/forms.py:15
+#: deputies/forms.py:23 law/forms.py:18
 msgid "search"
 msgstr "procura"
 
@@ -2509,6 +2509,14 @@ msgstr ""
 msgid "Types"
 msgstr "Tipos"
 
+#: law/templates/law/document_view/main.html:27
+msgid "Referring this document"
+msgstr "Referindo este documento"
+
+#: law/templates/law/document_view/main.html:39
+msgid "Referred in this document"
+msgstr "Referidos neste documento"
+
 #: law/templates/law/home.html:5
 msgid "Public Law"
 msgstr "Lei Pública"
@@ -2649,19 +2657,19 @@ msgstr "lei"
 msgid "types"
 msgstr "tipos"
 
-#: law/urls.py:32 law/urls.py:33
+#: law/urls.py:32 law/urls.py:33 law/urls.py:35
 msgid "document"
 msgstr "documento"
 
-#: law/views.py:99
+#: law/views.py:123
 msgid "How many laws are enacted yearly?"
 msgstr "Quantas leis são criadas anualmente?"
 
-#: law/views.py:100
+#: law/views.py:124
 msgid "Impact of EU Law in the Portuguese Law"
 msgstr "Impacto da lei Europeia na lei Portuguesa"
 
-#: law/views.py:101
+#: law/views.py:125
 msgid "Evolution of the portuguese Law"
 msgstr "Evolução da Lei portuguesa"
 

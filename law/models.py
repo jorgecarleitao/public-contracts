@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 
+from . import composer
 from .composer import compose_text, compose_summary, normalize
 
 
@@ -50,6 +51,9 @@ class Document(models.Model):
     dr_supplement = models.CharField(max_length=50, null=True)
     dr_pages = models.CharField(max_length=50)
 
+    # documents it refers to.
+    references = models.ManyToManyField('self', symmetrical=False)
+
     def get_pdf_url(self):
         return "https://dre.pt/application/file/a/%d" % self.dre_pdf_id
 
@@ -83,3 +87,8 @@ class Document(models.Model):
         if self.number:
             name = name + ' ' + self.number
         return name
+
+    def update_references(self):
+        documents = composer.get_documents(self.text).exclude(id=self.id)\
+            .values_list('id', flat=True)
+        self.references.add(*list(documents))

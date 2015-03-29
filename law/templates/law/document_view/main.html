@@ -3,17 +3,49 @@
 {% block title %}{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}{% endblock %}
 {% block content %}
     <style>.title {text-align: center;}</style>
-    <h2 class="text-center">Série {{ law.type.dr_series }}</h2>
-    <div class="text-center" itemscope itemtype="http://schema.org/Article">
-        <h2 itemprop="name">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
-        <p>
-            <small>
-                <a href="{{ law.get_pdf_url }}">Diário da República (PDF)</a>
-            </small>
-        </p>
-        <p>{{ law.creator_name }}</p>
-        <p>{{ law.date }}</p>
-        <h4 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h4>
+    <div class="container">
+        <div class="row">
+            <div id="colMain" class="col-md-9">
+                <h2 class="text-center">Série {{ law.type.dr_series }}</h2>
+                <div class="text-center" itemscope itemtype="http://schema.org/Article">
+                    <h2 itemprop="name">{{ law.type.name }} {% if law.number %}{{ law.number }}{% endif %}</h2>
+                    <p>
+                        <small>
+                            <a href="{{ law.get_pdf_url }}">Diário da República (PDF)</a>
+                        </small>
+                    </p>
+                    <p>{{ law.creator_name }}</p>
+                    <p>{{ law.date }}</p>
+                    <h4 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h4>
+                </div>
+                {{ law.compose_text|safe }}
+            </div>
+            <div id="colPush" class="col-md-3">
+                {% if related %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">{% trans "Referring this document" %}</h4>
+                        </div>
+                        <div class="list-group">
+                            {% for document in related %}
+                                {% include "law/document_a.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if references %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">{% trans "Referred in this document" %}</h4>
+                        </div>
+                        <div class="list-group">
+                            {% for document in references %}
+                                {% include "law/document_a.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    {{ law.compose_text|safe }}
 {% endblock %}

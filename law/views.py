@@ -109,7 +109,13 @@ def law_view(request, dre_doc_id, slug=None):
     law = get_object_or_404(models.Document.objects.select_related('type'),
                             dre_doc_id=dre_doc_id)
 
-    context = {'law': law, 'navigation_tab': 'documents'}
+    related = law.document_set.all().order_by('-date', 'type__name',
+                                              '-number').select_related('type')
+    references = law.references.all().order_by('-date', 'type__name',
+                                               '-number').select_related('type')
+
+    context = {'law': law, 'navigation_tab': 'documents', 'related': related,
+               'references': references}
 
     return render(request, "law/document_view/main.html", context)
 
