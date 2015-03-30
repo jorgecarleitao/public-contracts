@@ -6,8 +6,7 @@ from . import models
 def main_view(request, contract_base_id):
     query = models.Contract.default_objects \
         .select_related('contract_type__name',
-                        'category__id',
-                        'category__name',
+                        'category',
                         'country__name',
                         'district__name',
                         'council__name') \
