@@ -135,7 +135,7 @@ def get_documents(text, types=None):
         query = query | Q(type__name=name, number=number)
 
     query = query | _get_enum_documents_query(text, types)
-    return Document.objects.filter(query)
+    return Document.objects.exclude(dr_series='II').filter(query)
 
 
 def add_references(text):
