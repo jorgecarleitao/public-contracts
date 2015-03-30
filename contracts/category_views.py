@@ -52,8 +52,10 @@ def contractors(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    entities = models.Entity.objects.filter(contracts_made__category_id__in=categories_ids).distinct()\
-               .annotate(total_expended=Sum("contracts_made__price"), total_contracts=Count("contracts_made__price"))
+    entities = indexes.EntityIndex.objects \
+        .filter(contracts_made__category_id__in=categories_ids).distinct() \
+        .annotate(total_expended=Sum("contracts_made__price"),
+                  total_contracts=Count("contracts_made__price"))
 
     context = {'navigation_tab': 'categories',
                'category': category,
@@ -71,8 +73,10 @@ def contracted(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
-    entities = models.Entity.objects.filter(contract__category_id__in=categories_ids).distinct()\
-               .annotate(total_expended=Sum("contract__price"), total_contracts=Count("contract__price"))
+    entities = indexes.EntityIndex.objects \
+        .filter(contract__category_id__in=categories_ids).distinct() \
+        .annotate(total_expended=Sum("contract__price"),
+                  total_contracts=Count("contract__price"))
 
     context = {'navigation_tab': 'categories',
                'category': category,
@@ -98,7 +102,7 @@ def tenders(request, category_id):
                'tenders': tenders,
                'REQUIRE_DATEPICKER': True}
 
-    ## filter entities by ordering and pagination
+    # filter entities by ordering and pagination
     context = build_tender_list_context(context, request.GET)
 
     return render(request, 'contracts/category_view/tab_tenders/main.html', context)
