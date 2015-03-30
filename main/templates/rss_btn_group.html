@@ -1,7 +1,0 @@
-{% load i18n %}
-<div class="btn-group">
-    <a class="btn btn-default" href="{{ request.path }}{% if request.path|last != "/"%}/{% endif %}rss"
-       title="{% trans "get RSS feed" %}">
-        <i class="glyphicon glyphicon-download"></i> RSS
-    </a>
-</div>
