@@ -1,14 +1,4 @@
 {% extends "base/header.html" %}
-{% load static %}
-{% load i18n %}
 {% block scope_nav %}
-    <li {% if navigation_tab == 'documents' %}class="active"{% endif %}>
-        <a href="{% url "law_law_list" %}">{% trans "Documents" %}</a>
-    </li>
-    <li {% if navigation_tab == 'types' %}class="active"{% endif %}>
-        <a href="{% url "law_types_list" %}">{% trans "Types" %}</a>
-    </li>
-    <li {% if navigation_tab == 'analysis' %}class="active"{% endif %}>
-        <a href="{% url "law_analysis" %}">{% trans "Analysis" %}</a>
-    </li>
+    {% include "law/base/navigation_items.html" %}
 {% endblock %}
