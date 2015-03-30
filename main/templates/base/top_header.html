@@ -1,8 +1,15 @@
 {% load i18n %}
+{% load static %}
 <nav class="navbar navbar-default">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url "home" %}">
+          <img alt="{% trans "Publics" %}"
+               src="{% static "images/logo_big.png" %}"
+               class="img-rounded"
+               width="44px" style="margin-top: -12px; margin-right: -12px;">
+      </a>
+    </div>
     <ul class="nav navbar-nav">
-        <li>
-            <a href="{% url "home" %}">{% trans "Publics" %}</a></li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 {% trans "Contracts" %}<span class="caret"></span></a>
