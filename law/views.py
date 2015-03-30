@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 
 from . import models
+from . import indexes
 from .forms import LawSelectorForm
 
 import law.analysis
@@ -43,7 +44,7 @@ def build_laws_list_context(context, GET):
                                                      type__name=type_name)
 
         else:
-            context['laws'] = context['laws'].filter(text__search=GET[key])
+            context['laws'] = context['laws'].search(GET[key])
 
     key = 'range'
     if key in GET and GET[key]:
@@ -71,7 +72,7 @@ def home(request):
 
 @cache_page(60 * 60 * 24)
 def law_list(request):
-    context = {'laws': models.Document.objects
+    context = {'laws': indexes.DocumentIndex.objects
                              .order_by("-dre_doc_id")
                              .prefetch_related("type"),
                'navigation_tab': 'documents',
