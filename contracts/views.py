@@ -14,23 +14,14 @@ from contracts.views_analysis import analysis_list
 
 def home(request):
 
-    today = now().date()
-    last_month = add_months(today, -1)
-
-    latest_contracts = models.Contract.objects.filter(
-        signing_date__gt=last_month).order_by('-price')[:5]
-
-    latest_entities = models.Entity.objects.order_by('-id')[:5]
-
-    latest_tenders = models.Tender.objects.order_by('-id')[:5]
-
-    latest_analysis = analysis_list()[-5:]
+    last_month = add_months(now().date(), -1)
 
     return render(request, 'contracts/main_page.html', {
-        'latest_contracts': latest_contracts,
-        'latest_entities': latest_entities,
-        'latest_tenders': latest_tenders,
-        'latest_analysis': latest_analysis,
+        'latest_contracts': models.Contract.objects
+                  .filter(signing_date__gt=last_month).order_by('-price')[:5],
+        'latest_entities': models.Entity.objects.order_by('-id')[:5],
+        'latest_tenders': models.Tender.objects.order_by('-id')[:5],
+        'latest_analysis': analysis_list()[-5:],
         'REQUIRE_D3JS': True})
 
 
