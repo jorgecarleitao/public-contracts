@@ -1,14 +1,5 @@
 {% load i18n %}
 {% load contracts.humanize %}
-<ul class="nav nav-stacked">
-    {% for category in categories %}
-        <li class="summary">
-            <h4>{% include "contracts/category_a.html" %} ({{ category.code }})</h4>
-            <p>
-                <a href="{% url "category_contracts" category.id %}">
-                    {{ category.contracts_count }} {% trans "contracts" %}
-                </a> ({{ category.contracts_price|intword }})
-            </p>
-        </li>
-    {% endfor %}
-</ul>
+{% for category in categories %}
+    {% include "contracts/category_list/category_summary.html" %}
+{% endfor %}

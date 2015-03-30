@@ -1,0 +1,11 @@
+{% extends "summary.html" %}
+{% load i18n %}
+{% load contracts.humanize %}
+{% block summary_heading %}
+    {% include "contracts/category_a.html" %}
+{% endblock %}
+{% block summary_body %}
+    <a href="{% url "category_contracts" category.id %}">
+        {{ category.contracts_count }} {% trans "contracts" %}
+    </a> ({{ category.contracts_price|intword }})
+{% endblock %}
