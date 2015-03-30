@@ -31,7 +31,7 @@ class LawsFeed(Feed):
 
     def items(self, _):
         return Document.objects.order_by('-date')\
-            .prefetch_related('type', 'creator')[:200]
+            .prefetch_related('type')[:200]
 
 
 class TypeDocumentsFeed(Feed):
@@ -57,4 +57,4 @@ class TypeDocumentsFeed(Feed):
 
     def items(self, obj):
         return obj.document_set.order_by('-date')\
-            .prefetch_related('type', 'creator')[:200]
+            .prefetch_related('type')[:200]
