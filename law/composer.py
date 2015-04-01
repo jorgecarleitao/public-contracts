@@ -354,7 +354,7 @@ def organize_soup(soup):
                     add_element(format_to_move, format_to_receive)
                     break
 
-    def create_id(format, search):
+    def create_id(format, format_number):
         prefix = ''
         for index in reversed(range(formal_hierarchy_elements.index(format))):
             temp_format = formal_hierarchy_elements[index]
@@ -363,8 +363,8 @@ def organize_soup(soup):
                 break
 
         suffix = ''
-        if search.group(1):
-            suffix = '-' + slugify(search.group(1).strip())
+        if format_number:
+            suffix = '-' + slugify(format_number)
         current_element[format]['id'] = prefix + hierarchy_ids[format] + suffix
 
         anchor_tag = soup.new_tag('a',
@@ -387,6 +387,7 @@ def organize_soup(soup):
             search = re.search(hierarchy_regex[format], element.text)
             if not search:
                 continue
+            format_number = search.group(1).strip()
 
             # moving elements to inside other elements
             add_element_in_hierarchy(format)
@@ -417,7 +418,7 @@ def organize_soup(soup):
 
             # Create ids of elements
             if format in formal_hierarchy_elements:
-                create_id(format, search)
+                create_id(format, format_number)
 
             # reset all current_element in lower hierarchy
             for lower_format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
