@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import re
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 from django.db.models import Q
 from django.utils.text import slugify
@@ -15,6 +15,26 @@ PLURALS = {'Decreto-Lei': 'Decretos-Leis',
 SINGULARS = {'Decretos-Leis': 'Decreto-Lei',
              'Leis': 'Lei',
              'Portarias': 'Portaria'}
+
+
+def clone(el):
+    """
+    Returns a copy of a bs4 element `el`.
+
+    Credits to http://stackoverflow.com/a/23058678/931303
+    """
+    if isinstance(el, NavigableString):
+        return type(el)(el)
+
+    copy = Tag(None, el.builder, el.name, el.namespace, el.nsprefix)
+    # work around bug where there is no builder set
+    # https://bugs.launchpad.net/beautifulsoup/+bug/1307471
+    copy.attrs = dict(el.attrs)
+    for attr in ('can_be_empty_element', 'hidden'):
+        setattr(copy, attr, getattr(el, attr))
+    for child in el.contents:
+        copy.append(clone(child))
+    return copy
 
 
 def normalize(text):
@@ -295,66 +315,69 @@ def organize_text(text):
     return soup.prettify()
 
 
-def organize_soup(soup):
-    last_element = soup.new_tag('p', **{'text': 'Anexo'})
-    soup.append(last_element)
-
+def organize_soup(soup, add_links=True):
     # the current element of the state
     current_element = dict([(format, None) for format in hierarchy_classes])
-
     previous_element = None
 
-    def add_element(format_to_move, format_to_receive):
+    root = BeautifulSoup()
+
+    def add_element(receiving_element, element):
         """
-        Adds the current element of `format_to_move` to the current element of
-        `format_to_receive`.
+        Adds the current element of `format_to_move` to `receiving_element`.
 
         If element to add is an element of a list, create a ordered list
         in the receiving element, and add the element to to it.
         """
-        receiving_element = current_element[format_to_receive]
-
         # if format_to_move is an item of lists
-        if format_to_move in hierarchy_html_lists:
-            # and format_to_receive does not have a list, we create it:
-            if current_element[format_to_receive].contents[-1].name != 'ol':
-                current_element[format_to_receive].append(soup.new_tag('ol'))
+        if element.name == 'li':
+            # and receiving_element does not have a list, we create it:
+            if receiving_element.contents[-1].name != 'ol':
+                receiving_element.append(root.new_tag('ol'))
 
-            receiving_element = current_element[format_to_receive].contents[-1]
+            receiving_element = receiving_element.contents[-1]
 
-        receiving_element.append(current_element[format_to_move])
+        receiving_element.append(element)
 
-    def add_element_in_hierarchy(format_to_move):
+    def add_element_to_hierarchy(element, format):
         """
         Adds element of format `format_to_move` to the format above in the
         hierarchy, if any.
         """
-        if current_element[format_to_move] is None:
-            return
-
-        format_to_receive_index = hierarchy_priority.index(format_to_move) - 1
-        while format_to_receive_index != -1:
-            format_to_receive = hierarchy_priority[format_to_receive_index]
+        for index in reversed(range(0, hierarchy_priority.index(format))):
+            format_to_receive = hierarchy_priority[index]
 
             if current_element[format_to_receive] is not None:
-                add_element(format_to_move, format_to_receive)
-                return
-            format_to_receive_index -= 1
+                add_element(current_element[format_to_receive], element)
+                break
+        else:
+            add_element(root, element)
 
-    def add_element_in_hierarchy_backward(base_format):
-        for format_to_move in reversed(hierarchy_priority[
-                                           hierarchy_priority.index(base_format)+1:]):
-            if current_element[format_to_move] is None:
-                continue
+    def create_element(element, format):
+        # create new tag for `div` or `li`.
+        if format in hierarchy_html_lists:
+            new_element = root.new_tag(
+                hierarchy_html_lists[format],
+                **{'class': hierarchy_classes[format]})
+        else:
+            new_element = root.new_tag(
+                'div',
+                **{'class': hierarchy_classes[format]})
 
-            for format_to_receive_index in reversed(range(
-                    hierarchy_priority.index(format_to_move))):
-                format_to_receive = hierarchy_priority[format_to_receive_index]
-                if current_element[format_to_receive] is not None:
-                    add_element(format_to_move, format_to_receive)
-                    break
+        # and put the element in the newly created tag.
+        if format in hierarchy_html_titles:
+            # if format is title, create it.
+            current_element_title = root.new_tag(
+                hierarchy_html_titles[format], **{'class': 'title'})
+            current_element_title.append(clone(element))
 
-    def create_id(format, format_number):
+            new_element.append(current_element_title)
+        else:
+            new_element.append(clone(element))
+
+        return new_element
+
+    def create_id(new_element, format, format_number):
         prefix = ''
         for index in reversed(range(formal_hierarchy_elements.index(format))):
             temp_format = formal_hierarchy_elements[index]
@@ -365,86 +388,69 @@ def organize_soup(soup):
         suffix = ''
         if format_number:
             suffix = '-' + slugify(format_number)
-        current_element[format]['id'] = prefix + hierarchy_ids[format] + suffix
 
-        anchor_tag = soup.new_tag('a',
-                                  **{'class': 'headerlink',
-                                     'href': '#%s' % current_element[
-                                         format]['id']})
+        new_element['id'] = prefix + hierarchy_ids[format] + suffix
+
+        anchor_tag = root.new_tag('a',
+                                  **{'href': '#%s' % new_element['id']})
         anchor_tag.insert(0, NavigableString(' ¶'))
 
         if format in hierarchy_html_titles:
-            current_element_title.contents[0].append(anchor_tag)
+            new_element.contents[0].contents[0].append(anchor_tag)
         else:
-            try:
-                current_element[format].contents[0].contents[0].append(anchor_tag)
-            except AttributeError:
-                current_element[format].contents[0].append(anchor_tag)
+            new_element.contents[0].append(anchor_tag)
 
-    body = soup
-    for element in body.select('p'):
+    for element in soup:
+        if element.name == 'blockquote':
+            # todo: add the blockquote
+            for format in reversed(hierarchy_priority):
+                if current_element[format] is not None:
+                    blockquote = root.new_tag('blockquote')
+                    blockquote.append(organize_soup(element, add_links=False))
+                    current_element[format].append(blockquote)
+                    break
+            else:
+                raise Exception("blockquote without format.")
+            continue  # blockquote added, ignore rest.
         for format in hierarchy_priority:
             search = re.search(hierarchy_regex[format], element.text)
             if not search:
                 continue
             format_number = search.group(1).strip()
 
-            # moving elements to inside other elements
-            add_element_in_hierarchy(format)
+            new_element = create_element(element, format)
 
-            add_element_in_hierarchy_backward(format)
+            if add_links and format in formal_hierarchy_elements:
+                create_id(new_element, format, format_number)
 
-            # create new tag for `div` or `li`.
-            if format in hierarchy_html_lists:
-                current_element[format] = soup.new_tag(
-                    hierarchy_html_lists[format],
-                    **{'class': hierarchy_classes[format]})
-            else:
-                current_element[format] = soup.new_tag(
-                    'div',
-                    **{'class': hierarchy_classes[format]})
-            # and replace the current element by it.
-            element.replaceWith(current_element[format])
+            add_element_to_hierarchy(new_element, format)
 
-            # and put the element in the newly created tag.
-            if format in hierarchy_html_titles:
-                # if format is title, create it now.
-                current_element_title = soup.new_tag(
-                    hierarchy_html_titles[format], **{'class': 'title'})
-                current_element_title.append(element)
-                current_element[format].append(current_element_title)
-            else:
-                current_element[format].append(element)
-
-            # Create ids of elements
-            if format in formal_hierarchy_elements:
-                create_id(format, format_number)
-
+            current_element[format] = new_element
             # reset all current_element in lower hierarchy
-            for lower_format in hierarchy_priority[hierarchy_priority.index(format)+1:]:
+            for lower_format in hierarchy_priority[hierarchy_priority.index(format) + 1:]:
                 current_element[lower_format] = None
-
             break
         else:  # is just text
+            new_element = clone(element)
 
-            # add to the first non-None hierarchy
-            for format in reversed(hierarchy_priority):
-                if current_element[format] is not None:
-                    current_element[format].append(element)
-                    break
+            # previous has contents and is not a Navigatable string and first
+            # child has class 'title' => it is a title of the previous element.
+            if previous_element and previous_element.contents and \
+                    previous_element.contents[0].name is not None and \
+                    'title' in previous_element.contents[0].get("class", []):
+                previous_element.contents[0].append(new_element)
+            else:
+                # add to last non-None format
+                for format in reversed(hierarchy_priority):
+                    if current_element[format] is not None:
+                        current_element[format].append(new_element)
+                        break
+                else:
+                    root.append(new_element)
 
-            if previous_element and previous_element.parent:
-                try:
-                    classes = previous_element.parent["class"]
-                except KeyError:
-                    classes = []
-                if 'title' in classes \
-                        and previous_element.parent.contents \
-                        and previous_element.parent.contents[0] == previous_element:
-                    previous_element.parent.append(element)
-        previous_element = element
+        previous_element = new_element
 
-    return soup
+    return root
 
 
 def compose_summary(summary):
