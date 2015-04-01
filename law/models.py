@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from . import composer
-from .composer import compose_text, compose_summary, normalize
+from .composer import compose_text, compose_summary, normalize, compose_index
 
 
 class Type(models.Model):
@@ -80,6 +80,12 @@ class Document(models.Model):
         except Exception:
             logger.exception("Compose text failed in document %d", self.id)
             return normalize(self.text)
+
+    def compose_index(self):
+        try:
+            return compose_index(self.text)
+        except:
+            return ''
 
     def name(self):
         name = self.type.name

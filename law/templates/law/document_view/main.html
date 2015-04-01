@@ -18,6 +18,17 @@
                     <p>{{ law.date }}</p>
                     <h4 class="text-center" itemprop="description">{{ law.compose_summary|safe }}</h4>
                 </div>
+                <div class="well">
+                    {{ law.compose_index|safe }}
+                </div>
+                <script>
+                    $(function(){$('.tree-toggler').parent().children('ul.tree').hide();});
+                    $(document).ready(function () {
+                        $('.tree-toggler').click(function () {
+                            $(this).parent().children('ul.tree').toggle(150);
+                        });
+                    });
+                </script>
                 {{ law.compose_text|safe }}
             </div>
             <div id="colPush" class="col-md-3">

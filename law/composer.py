@@ -290,6 +290,41 @@ hierarchy_regex = {'Anexo': '^Anexo(.*)',
 formal_hierarchy_elements = ['Anexo', 'Artigo', 'Número', 'Alínea']
 
 
+def compose_index(text):
+    soup = organize_soup(BeautifulSoup(normalize(text)))
+
+    new_soup = BeautifulSoup()
+
+    def _add_to_index(soup, root):
+        if soup.find_all('div', recursive=False):
+            ul_tag = new_soup.new_tag('ul', **{'class': 'tree'})
+        else:
+            return None
+
+        for element in soup.find_all('div', recursive=False):
+            name = element.contents[0].contents[0].text + ' '
+            if len(element.contents[0].contents) >= 2:
+                name += element.contents[0].contents[1].text
+            name = name.replace(' ¶', '')
+
+            anchor = element.contents[0].contents[0].find('a')
+            if anchor:
+                tag = new_soup.new_tag('a', **{'href': anchor['href']})
+                tag.string = name
+            else:
+                tag = new_soup.new_tag('h5', **{'class': 'tree-toggler'})
+                tag.string = name
+            li_tag = new_soup.new_tag('li')
+            li_tag.append(tag)
+            _add_to_index(element, li_tag)
+            ul_tag.append(li_tag)
+
+        root.append(ul_tag)
+
+    _add_to_index(soup, new_soup)
+    return new_soup.prettify()
+
+
 def compose_text(document):
     text = organize_text(document.text)
 
@@ -377,7 +412,7 @@ def organize_soup(soup, add_links=True):
 
         return new_element
 
-    def create_id(new_element, format, format_number):
+    def add_id(new_element, format, format_number):
         prefix = ''
         for index in reversed(range(formal_hierarchy_elements.index(format))):
             temp_format = formal_hierarchy_elements[index]
@@ -421,7 +456,7 @@ def organize_soup(soup, add_links=True):
             new_element = create_element(element, format)
 
             if add_links and format in formal_hierarchy_elements:
-                create_id(new_element, format, format_number)
+                add_id(new_element, format, format_number)
 
             add_element_to_hierarchy(new_element, format)
 
