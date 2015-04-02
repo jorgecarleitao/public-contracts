@@ -437,15 +437,14 @@ def organize_soup(soup, add_links=True):
 
     for element in soup:
         if element.name == 'blockquote':
-            # todo: add the blockquote
+            blockquote = root.new_tag('blockquote')
+            blockquote.append(organize_soup(element, add_links=False))
             for format in reversed(hierarchy_priority):
                 if current_element[format] is not None:
-                    blockquote = root.new_tag('blockquote')
-                    blockquote.append(organize_soup(element, add_links=False))
                     current_element[format].append(blockquote)
                     break
             else:
-                raise Exception("blockquote without format.")
+                root.append(blockquote)
             continue  # blockquote added, ignore rest.
         for format in hierarchy_priority:
             search = re.search(hierarchy_regex[format], element.text)
