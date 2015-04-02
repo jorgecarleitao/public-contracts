@@ -367,7 +367,8 @@ def organize_soup(soup, add_links=True):
         # if format_to_move is an item of lists
         if element.name == 'li':
             # and receiving_element does not have a list, we create it:
-            if receiving_element.contents[-1].name != 'ol':
+            if len(receiving_element.contents) == 0 or \
+                    receiving_element.contents[-1].name != 'ol':
                 receiving_element.append(root.new_tag('ol'))
 
             receiving_element = receiving_element.contents[-1]

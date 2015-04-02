@@ -78,7 +78,7 @@ class Document(models.Model):
         try:
             return compose_text(self)
         except Exception:
-            logger.exception("Compose text failed in document %d", self.id)
+            logger.exception("Compose text failed in dre_doc_id=%d", self.dre_doc_id)
             return normalize(self.text)
 
     def compose_index(self):
