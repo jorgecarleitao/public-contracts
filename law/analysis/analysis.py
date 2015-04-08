@@ -96,7 +96,8 @@ def get_types_time_series():
             entry['value'][t.name] = t.count
             total += t.count
         entry['value']['Total'] = total
-        data.append(entry)
+        if total > 0:
+            data.append(entry)
 
     def post_processing(data):
         types_time_series = {}
