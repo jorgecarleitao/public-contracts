@@ -1,7 +1,9 @@
-from datetime import date, datetime
+from collections import defaultdict
+from datetime import date
 import re
 
 from django.db.models import Count
+from django.db import connection
 
 from law import models
 
@@ -70,77 +72,40 @@ def get_eu_impact_time_series():
 
 def get_types_time_series():
 
-    min_year = 1910
-    end_year = datetime.now().year - 1
+    query = '''SELECT EXTRACT(YEAR FROM law_document.date) as s_year,
+                      law_type.name,
+                      COUNT(law_document.id) as doc_count
+               FROM law_type
+                  INNER JOIN law_document
+                      ON ( law_type.id = law_document.type_id )
+               WHERE NOT (law_type.dr_series = %s)
+               GROUP BY s_year, law_type.name
+               ORDER BY s_year, law_type.name
+               '''
 
-    types = models.Type.objects.exclude(dr_series='II')
+    cursor = connection.cursor()
+    cursor.execute(query, ('II',))
 
-    # loop over years
+    types_total = defaultdict(int)
     data = []
-    for year in range(min_year, end_year + 1):
-        min_date = date(year, 1, 1)
-        max_date = date(year + 1, 1, 1)
+    current_year = 1974
+    entry = None
+    total = 0
+    for row in cursor.fetchall():
+        year, type_name, count = row
+        year = int(year)
 
-        # annotate on all types the count of this year
-        annotation = types.filter(document__date__gte=min_date,
-                                  document__date__lt=max_date)\
-            .annotate(count=Count("document__id"))
+        if year != current_year:
+            if entry is not None:
+                entry['value']['Total'] = total
+                data.append(entry)
+            entry = {'from': date(year, 1, 1),
+                     'to': date(year + 1, 1, 1), 'value': {}}
+            current_year = year
+            total = 0
 
-        # put the results in `data`, also counting the total
-        # 'value' will be a dict of the form `<type_name>: <count>`
-        # with an extra `'Total': <total_count>`
-        entry = {'from': min_date, 'to': max_date, 'value': {}}
+        entry['value'][type_name] = count
+        total += count
+        types_total[type_name] += count
 
-        total = 0
-        for t in annotation:
-            entry['value'][t.name] = t.count
-            total += t.count
-        entry['value']['Total'] = total
-        if total > 0:
-            data.append(entry)
-
-    def post_processing(data):
-        types_time_series = {}
-
-        # create list of existing types
-        # order by count and only use 17 types (the 18th is "Others")
-        for type in types.annotate(count=Count('document__id'))\
-                .order_by('-count')[:17]:
-            types_time_series[type.name] = {'values': [], 'key': type.name, 'total': 0}
-
-        # create a special entry for "others"
-        # we don't translate 'Outros' since no type is translated to English.
-        others_time_series = {'values': [], 'key': 'Outros', 'total': 0}
-
-        # populate the values from the analysis
-        for entry in data:
-            # append a new entry for this time-point
-            for t in types_time_series:
-                types_time_series[t]['values'].append(
-                    {'year': entry['from'].strftime('%Y'),
-                     'value': 0})
-            others_time_series['values'].append(
-                {'year': entry['from'].strftime('%Y'),
-                 'value': 0})
-
-            # add value to type or "others"
-            for t in entry['value']:
-                if t == 'Total':
-                    continue
-
-                value = entry['value'][t]
-                if t in types_time_series:
-                    types_time_series[t]['values'][-1]['value'] += value
-                    types_time_series[t]['total'] += value
-                else:
-                    others_time_series['values'][-1]['value'] += value
-                    others_time_series['total'] += value
-
-        # sort them by total
-        types_time_series = list(types_time_series.values())
-        types_time_series = sorted(types_time_series, key=lambda x: x['total'], reverse=True)
-        # and finally, insert the "Others" result in the final list
-        types_time_series.append(others_time_series)
-        return types_time_series
-
-    return post_processing(data)
+    return data, types_total
