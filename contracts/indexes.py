@@ -17,6 +17,11 @@ class ContractIndex(indexes.Index):
 
     category_id = fields.Integer('category')
 
+    category = fields.Text('category__description_pt')
+
+    district = fields.Text('district__name')
+    council = fields.Text('council__name')
+
     class Meta:
         model = Contract
         query = Contract.default_objects.all()
@@ -24,6 +29,8 @@ class ContractIndex(indexes.Index):
 
 class TenderIndex(indexes.Index):
     description = fields.Text('description')
+
+    category = fields.Text('category__description_pt')
 
     publication_date = fields.Date('publication_date')
 
