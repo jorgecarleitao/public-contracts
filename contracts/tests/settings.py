@@ -7,7 +7,7 @@ DATABASES = {
     },
 }
 
-INSTALLED_APPS = ('law',)
+INSTALLED_APPS = ('contracts',)
 
 SECRET_KEY = 'no secret'
 

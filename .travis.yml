@@ -1,10 +1,13 @@
 language: python
-python:
-  - "3.4"
 
-install:
-  - pip install -r api_requirements.txt
+matrix:
+  include:
+    - env: CONFIGURATION=API
+      python: "3.4"
+    - env: CONFIGURATION=WEBSITE
+      python: "3.4"
+    - env: CONFIGURATION=PRODUCTION
+      python: "3.4"
 
 script:
-  - python -m contracts.tools.example
-  - PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=law.tests.settings law.tests
+  - export CONFIGURATION; ./travis_test.sh
