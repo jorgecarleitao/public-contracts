@@ -11,3 +11,7 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def contribute(request):
+    return render(request, 'contribute.html')
