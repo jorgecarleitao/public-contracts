@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/jorgecarleitao/public-contracts.svg)](https://travis-ci.org/jorgecarleitao/public-contracts)
 
-# Publics pt
+# Publicos.pt
 
-Publics pt is an open source Django website and API to query and analyse data of
+Publicos.pt is an open source Django website and API to query and analyse data of
 the portuguese state. Thanks for checking it out.
 
 ## The problem we aim to solve
@@ -44,9 +44,9 @@ The API and the crawler are [documented](http://public-contracts.readthedocs.org
 
 The installation depend on what you want to do:
 
-### To access and query the database 
+### Access and query the database
 
-1- Install Django, psycopg2, [django-treebeard](https://github.com/tabo/django-treebeard) and BeautifulSoup4:
+1- Install Django, psycopg2 and [django-treebeard](https://github.com/tabo/django-treebeard):
 
 `pip install -r api_requirements.txt` 
 
@@ -64,10 +64,10 @@ The installation depend on what you want to do:
 
 you should see two numbers. You now have full access to the database.
 
-### To deploy the website locally
+### Deploy the website locally
 
-1- Additionally to the installation above, install django-debug-toolbar and 
-[Django-SphinxQL](https://github.com/jorgecarleitao/django-sphinxql):
+1- Additionally to the installation above, install [django-debug-toolbar](https://github.com/django-debug-toolbar/django-debug-toolbar),  
+[Django-SphinxQL](https://github.com/jorgecarleitao/django-sphinxql) and [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/bs4/doc/):
 
 `pip install -r website_requirements.txt`
 
@@ -76,6 +76,17 @@ you should see two numbers. You now have full access to the database.
 `python manage.py runserver`
 
 3- Enter in the url `127.0.0.1:8000`.
+
+You should see the website as it is in [http://publicos.pt](http://publicos.pt).
+Some plots will not be displayed right away because they take some time to be
+computed, but `127.0.0.1:8000/contratos` should show the latest contracts.
+
+### Crawl the official sources
+
+To be able to use crawlers, you need to install two extra dependencies: [requests](http://docs.python-requests.org/en/latest/)
+and [pt-law-downloader](https://github.com/publicos-pt/pt_law_downloader):
+
+`pip install -r production_requirements.txt`
 
 If something went wrong, please report an [issue](https://github.com/jorgecarleitao/public-contracts/issues)
 so we can help you and improve these instructions.

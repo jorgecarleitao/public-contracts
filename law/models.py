@@ -7,9 +7,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 
-from . import composer
-from .composer import compose_text, compose_summary, normalize, compose_index
-
 
 class Type(models.Model):
     name = models.CharField(max_length=254)
@@ -66,24 +63,27 @@ class Document(models.Model):
         return reverse('law_view', args=[self.dre_doc_id, name])
 
     def compose_summary(self):
-        return compose_summary(self.summary)
+        from . import composer
+        return composer.compose_summary(self.summary)
 
     def compose_text(self):
         """
         Wrapper to avoid errors, since compose_text is experimental at this point.
         """
+        from . import composer
         if self.text is None:
             return None
 
         try:
-            return compose_text(self)
+            return composer.compose_text(self)
         except Exception:
             logger.exception("Compose text failed in dre_doc_id=%d", self.dre_doc_id)
-            return normalize(self.text)
+            return composer.normalize(self.text)
 
     def compose_index(self):
+        from . import composer
         try:
-            return compose_index(self.text)
+            return composer.compose_index(self.text)
         except:
             return ''
 
@@ -95,6 +95,7 @@ class Document(models.Model):
         return name
 
     def update_references(self):
+        from . import composer
         documents = composer.get_documents(self.text).exclude(id=self.id)\
             .values_list('id', flat=True)
         self.references.add(*list(documents))
