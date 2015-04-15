@@ -6,14 +6,6 @@ This document explains how you can contribute to this project.
 It assumes you know a minimum of Python and Git.
 
 
-The mailing-list
-----------------
-
-.. _mailing-list: https://groups.google.com/forum/#!forum/public-contracts
-
-The mailing-list_ is the place to communicate in this project.
-
-
 Ticket system
 -------------
 
@@ -24,11 +16,8 @@ This project uses a `ticket system`_ for documenting issues.
 The system's idea is to keep track of the issues the
 project has and by whom they are being addressed.
 
-We prefer using the ticket system to communicate about specific
-issues, and the mailing-list_ to broader topics such as new features.
-
-Given the size and time of the project, we prefer to use tickets for problems
-that require some time to be solved.
+Given the size of the project, we prefer to use tickets for problems that require
+some time to be solved.
 
 Adding tickets
 ::::::::::::::
@@ -38,8 +27,8 @@ We write tickets with clear, concise and specific information about issue we are
 Working on tickets
 ::::::::::::::::::
 
-Working on the ticket means the contributor is committing himself to modify to the source to fulfill the ticket
-expectations.
+Working on the ticket means the contributor is committing himself to modify to the
+source to fulfill the ticket expectations.
 
 We give the chance to contributors - specially to new contributors -
 to go thought the full process: if the person who submitted the ticket is willing to work on it,
@@ -48,8 +37,8 @@ he should have priority on doing it, even if this means having the ticket open f
 Closing tickets
 :::::::::::::::
 
-When a ticket is fixed, normally by a commit or set of commits, it is closed as fixed. A ticket can be re-opened
-if there is no consensus that it was solved.
+When a ticket is fixed, normally by a commit or set of commits, it is closed as fixed.
+A ticket can be re-opened if there is no consensus that it was solved.
 
 The Source Code
 ---------------

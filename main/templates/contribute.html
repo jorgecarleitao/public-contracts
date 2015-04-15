@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "Contribute"%}{% endblock %}
 {% block content %}
-    <h3>{% trans "Why contribute to publicos.pt?" %}</h3>
+    <h3 class="page-header">{% trans "Why contribute to publicos.pt?" %}</h3>
     <p>{% blocktrans trimmed %}
-        ~1.000 persons visit this website every day searching for portuguese contracts, companies and laws.
+        More than 1.000 persons visit us every day searching for portuguese
+        contracts, companies and laws.
         This is our way of helping the country: we build tools that help citizens
         and companies taking better decisions by having better access to public information.
     {% endblocktrans %}</p>
     <p>{% blocktrans trimmed %}
-        We develop such tools because we believe that public information should be as
-        accessible and transparent as possible for citizens and companies:
-        we believe that lack of accessibility and transparency leads to lower
-        economical output, more need of bureaucracy, and less democratic procedures.
+        We develop such tools because we believe that public information should be
+        as accessible as possible for citizens and companies:
+        we believe that lack of accessibility and transparency decreases
+        economical output, increases bureaucracy and undermines democracy.
     {% endblocktrans %}</p>
     <p>{% blocktrans trimmed %}
         By contributing to publicos.pt you are thus helping real people to have better
         access to public information with a hands on approach to help the country.
-        But by contributing to publicos.pt you are also improving your programmers skills:
-        we use latest technology from web development industry and are
-        always open to help you in any difficulty you have.
     {% endblocktrans %}</p>
     <p>{% blocktrans trimmed %}
-        As contributor is you are expected to execute mini projects where you implement
-        a bug fix or a feature. This provides you valuable experience in designing solutions
-        that don't break existing functionality.
+        But by contributing to publicos.pt you are also improving your programmers skills:
+        we use state-of-the-art technology and best practices from web development industry
+        and we are always open to help you in any difficulty you may have.
     {% endblocktrans %}</p>
-    <h3>{% trans "What to contribute to publicos.pt?" %}</h3>
+    <p>{% blocktrans trimmed %}
+        As contributor you are expected to execute mini projects where you implement
+        a bug fix or a feature. This provides you valuable experience in designing
+        solutions that don't break existing functionality.
+    {% endblocktrans %}</p>
+    <h3 class="page-header">{% trans "What to contribute?" %}</h3>
     <p>{% blocktrans trimmed %}
         A contribution typically falls in one of the following categories:
     {% endblocktrans %}</p>
@@ -36,25 +40,47 @@
     </ol>
     <p>{% blocktrans trimmed %}
         The first category typically does not require programming skills: navigate
-        on the website and feel free to report what you believe should be improved.
+        on the website and report what you believe should be improved. Any suggestion
+        is welcome!
     {% endblocktrans %}</p>
     <p>{% blocktrans trimmed %}
-        The second category typically requires programming skills. We require a minimal
-        understanding of Python/Django and Git.
+        The second category typically requires programming skills: typically Django
+        and Git. If you don't know them but you would still like to help,
+        feel free to ask us for help.
     {% endblocktrans %}</p>
-    <h3>{% trans "How to contribute to publicos.pt?" %}</h3>
-    <p>{% blocktrans trimmed %}
-        Like most websites, publicos.pt uses continuous deployment:
-        once your contribution is pushed to the repository's master branch, it is deployed
-        on the server and your contribution is used by all users of the website.
-    {% endblocktrans %}</p>
+    <h3 class="page-header">{% trans "How to contribute?" %}</h3>
     <p>{% blocktrans trimmed %}
         As a user of publicos.pt with a suggestion, the easiest way to contribute
-        is to send us an e-mail with it. We create open a ticket on our bug tracker,
-        so that someone can pick it up. You can also report it directly in the bug
-        tracker if you have a Github account.
+        is to send us an e-mail with it.
     {% endblocktrans %}</p>
     <p>{% blocktrans trimmed %}
-
+        As a developer, you can either pick an existing issue in our bug tracker,
+        or open a new one in Github. Check the details on <a href="http://public-contracts.readthedocs.org/en/latest/contribute.html">our page for developers</a>.
     {% endblocktrans %}</p>
+    <p>{% blocktrans trimmed %}
+        Like most websites, publicos.pt uses continuous deployment:
+        once your contribution is pushed to the repository's master branch, it is
+        deployed on the server and your contribution is used by all users of the website.
+    {% endblocktrans %}</p>
+    <h2 class="text-center">
+        <a href="https://github.com/jorgecarleitao/public-contracts">
+        {% trans "Visit our github page" %}<img height="80px" src="{% static 'images/octocat.jpg' %}"/></a>
+    </h2>
+    <h3 class="page-header">{% trans "People that contribute to publicos.pt"%}</h3>
+    <ul>
+        <li><a href="http://jorgecarleitao.net"><strong>Jorge C. Leitão</strong></a></li>
+        <li><a href="https://github.com/martamatos"><strong>Marta M. Matos</strong></a></li>
+        <li><a href="https://github.com/nmota"><strong>Nuno Mota</strong></a></li>
+    </ul>
+    <h3 class="page-header">{% trans "Technologies we use" %}</h3>
+    <div class="text-center">
+    <a href="https://www.djangoproject.com"><img height="100px" src="{% static 'images/django.png' %}"/></a>
+    <a href="https://www.github.com"><img height="100px" src="{% static 'images/github.png' %}"/></a>
+    <a href="http://www.postgresql.org/"><img height="100px" src="{% static 'images/postgres.png' %}"/></a>
+    <a href="http://redis.io"><img height="100px" src="{% static 'images/redis.png' %}"/></a>
+    <a href="http://travis-ci.org"><img height="100px" src="{% static 'images/travis.png' %}"/></a>
+    <a href="http://jquery.com"><img height="100px" src="{% static 'images/jquery.png' %}"/></a>
+    <a href="http://sphinxsearch.com"><img height="100px" src="{% static 'images/sphinx.png' %}"/></a>
+
+    </div>
 {% endblock %}

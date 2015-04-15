@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:12+0100\n"
+"POT-Creation-Date: 2015-04-15 21:25+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2031,6 +2031,7 @@ msgid "time in office"
 msgstr "tempo no parlamento"
 
 #: law/feed.py:14
+#, python-format
 msgid "%(name)s - %(date)s - %(creator)s"
 msgstr "%(name)s - %(date)s - %(creator)s"
 
@@ -2907,6 +2908,10 @@ msgstr ""
 msgid "About"
 msgstr "Acerca"
 
+#: main/templates/base/footer.html:5 main/templates/contribute.html:4
+msgid "Contribute"
+msgstr "Contribui"
+
 #: main/templates/base/top_header.html:6 main/templates/main_page.html:4
 #: main/templates/main_page.html.py:9
 msgid "Publics"
@@ -2919,6 +2924,148 @@ msgstr "Lei"
 #: main/templates/base/top_header.html:39
 msgid "Language"
 msgstr "Idioma"
+
+#: main/templates/contribute.html:6
+msgid "Why contribute to publicos.pt?"
+msgstr "Porquê contribuir para o públicos.pt?"
+
+#: main/templates/contribute.html:7
+msgid ""
+"More than 1.000 persons visit us every day searching for portuguese "
+"contracts, companies and laws. This is our way of helping the country: we "
+"build tools that help citizens and companies taking better decisions by "
+"having better access to public information."
+msgstr ""
+"Mais de 1.000 portugueses visitam-nos todos os dias à procura de contratos, "
+"entidades e leis. Esta é a nossa forma de ajudar o país: construímos "
+"ferramentas que ajudam pessoas e empresas a tomarem decisões mais informadas "
+"dando-lhes melhor acesso a informação pública."
+
+#: main/templates/contribute.html:13
+msgid ""
+"We develop such tools because we believe that public information should be "
+"as accessible as possible for citizens and companies: we believe that lack "
+"of accessibility and transparency decreases economical output, increases "
+"bureaucracy and undermines democracy."
+msgstr ""
+"Desenvolvemos estas ferramentas porque acreditamos que informação pública "
+"deve ser tão acessível quanto possível: acreditamos que falta de acesso e "
+"transparência a esta informação dificulta o desenvolvimento económico, "
+"aumenta a burocracia, e mina a democracia."
+
+#: main/templates/contribute.html:19
+msgid ""
+"By contributing to publicos.pt you are thus helping real people to have "
+"better access to public information with a hands on approach to help the "
+"country."
+msgstr ""
+"Ao contribuires para o publicos.pt estás assim a ajudar pessoas reais a "
+"terem melhor acesso a informação pública portuguesa com uma abordagem 'mãos "
+"na massa' para ajudar o país."
+
+#: main/templates/contribute.html:23
+msgid ""
+"But by contributing to publicos.pt you are also improving your programmers "
+"skills: we use state-of-the-art technology and best practices from web "
+"development industry and we are always open to help you in any difficulty "
+"you may have."
+msgstr ""
+"Mas ao contribuir para o publicos.pt estás também a melhorar a tua "
+"programação: usamos tecnologia moderna e boas práticas da indústria de web "
+"development e estamos sempre disponíveis para te ajudar nalguma dificuldade "
+"que tiveres."
+
+#: main/templates/contribute.html:28
+msgid ""
+"As contributor you are expected to execute mini projects where you implement "
+"a bug fix or a feature. This provides you valuable experience in designing "
+"solutions that don't break existing functionality."
+msgstr ""
+"Como contribuidor expectamos que executes mini projetos onde implementas uma "
+"resolução de um erro ou uma nova funcionalidade autonomamente. Isto dá-te "
+"valiosa experiência a desenhar soluções compatíveis com funcionalidades "
+"existentes."
+
+#: main/templates/contribute.html:33
+msgid "What to contribute?"
+msgstr "O que contribuir?"
+
+#: main/templates/contribute.html:34
+msgid "A contribution typically falls in one of the following categories:"
+msgstr "As contribuições são tipicamente de dois tipos:"
+
+#: main/templates/contribute.html:38
+msgid "Error reports or feature suggestions"
+msgstr "Reportar erros ou sugerir novas funcionalidades"
+
+#: main/templates/contribute.html:39
+msgid "Error fixes or implementation of features"
+msgstr "Resolver erros ou implementar funcionalidades"
+
+#: main/templates/contribute.html:41
+msgid ""
+"The first category typically does not require programming skills: navigate "
+"on the website and report what you believe should be improved. Any "
+"suggestion is welcome!"
+msgstr ""
+"A primeira categoria tipicamente não requer programação: navega pelo website "
+"e reporta o que acreditas poder ser melhorado."
+
+#: main/templates/contribute.html:46
+msgid ""
+"The second category typically requires programming skills: typically Django "
+"and Git. If you don't know them but you would still like to help, feel free "
+"to ask us for help."
+msgstr ""
+"A segunda categoria tipicamente requer programação: Django e Git. Se não "
+"estás à vontade mas ainda assim gostarias de ajudar, entra em contacto "
+"connosco para te ajudarmos."
+
+#: main/templates/contribute.html:51
+msgid "How to contribute?"
+msgstr "Como contribuir?"
+
+#: main/templates/contribute.html:52
+msgid ""
+"As a user of publicos.pt with a suggestion, the easiest way to contribute is "
+"to send us an e-mail with it."
+msgstr ""
+"Como utilizador do publicos.pt com uma sugestão, a melhor forma de "
+"contribuir é partilhá-la por e-mail."
+
+#: main/templates/contribute.html:56
+msgid ""
+"As a developer, you can either pick an existing issue in our bug tracker, or "
+"open a new one in Github. Check the details on <a href=\"http://public-"
+"contracts.readthedocs.org/en/latest/contribute.html\">our page for "
+"developers</a>."
+msgstr ""
+"Como programador, a melhor forma de contribuir é resolver um erro ou sugerir "
+"e implementar um nova funcionalidade. Podes encontrar mais detalhes na "
+"<a href=\"http://public-contracts.readthedocs.org/en/latest/contribute.html\">nossa página para "
+"programadores</a>."
+
+#: main/templates/contribute.html:60
+msgid ""
+"Like most websites, publicos.pt uses continuous deployment: once your "
+"contribution is pushed to the repository's master branch, it is deployed on "
+"the server and your contribution is used by all users of the website."
+msgstr ""
+"Como a maioria dos sites, o publicos.pt usa continuous deployment: assim que "
+"a tua contribuição é submetida para o repositório, o código é atualizado no "
+"servidor e os utilizadores imediatamente começam a usá-la."
+
+#: main/templates/contribute.html:67
+msgid "Visit our github page"
+msgstr "Visita a nossa página Github"
+
+#: main/templates/contribute.html:69
+msgid "People that contribute to publicos.pt"
+msgstr "Pessoas que contribuem para o publicos.pt"
+
+#: main/templates/contribute.html:75
+msgid "Technologies we use"
+msgstr "Tecnologias que usamos"
 
 #: main/templates/main_page.html:11
 msgid ""
@@ -3041,6 +3188,10 @@ msgstr "Mais sobre nós"
 msgid "get RSS feed"
 msgstr "obter a feed RSS"
 
-#: main/urls.py:18
+#: main/urls.py:19
 msgid "about"
 msgstr "acerca"
+
+#: main/urls.py:20
+msgid "contribute"
+msgstr "contribui"
