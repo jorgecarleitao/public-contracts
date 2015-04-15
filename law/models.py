@@ -62,6 +62,9 @@ class Document(models.Model):
             name += '-de-' + self.date.strftime('%d/%m/%Y')
         return reverse('law_view', args=[self.dre_doc_id, name])
 
+    def get_minimal_url(self):
+        return reverse('law_view', args=[self.dre_doc_id])
+
     def compose_summary(self):
         from . import composer
         return composer.compose_summary(self.summary)

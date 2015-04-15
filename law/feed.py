@@ -58,3 +58,33 @@ class TypeDocumentsFeed(Feed):
     def items(self, obj):
         return obj.document_set.order_by('-date')\
             .prefetch_related('type')[:200]
+
+
+class DocumentFeed(Feed):
+
+    def get_object(self, request, dre_doc_id, slug=None):
+        return get_object_or_404(Document.objects.select_related('type'),
+                                 dre_doc_id=dre_doc_id)
+
+    def title(self, obj):
+        return _("Laws refering %s") % obj.name()
+
+    def link(self, obj):
+        return obj.get_absolute_url()
+
+    def description(self, obj):
+        return _("Documents from Series I of Diário da República that refer to %s")\
+               % obj.name()
+
+    def item_title(self, item):
+        return _('%(name)s of %(date)s - %(creator)s') % \
+               {'name': item.name(),
+                'date': formats.date_format(item.date),
+                'creator': item.creator_name}
+
+    def item_description(self, item):
+        return item.summary
+
+    def items(self, obj):
+        return obj.document_set.all()\
+            .order_by('-date', 'type__name', '-number').select_related('type')

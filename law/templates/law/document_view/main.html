@@ -32,18 +32,29 @@
                 {{ law.compose_text|safe }}
             </div>
             <div id="colPush" class="col-md-3">
-                {% if related %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">{% trans "Referring this document" %}</h4>
-                        </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">{% trans "Referring this document" %}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <span>{% trans "Subscribe to be notified when this document is referred:" %}</span>
+                        <a type="button" class="center-block btn btn-default btn-md" href="{{ law.get_minimal_url }}/rss">
+                            <span class="glyphicon glyphicon-download"></span> RSS
+                        </a>
+                    </div>
+                    {% if related %}
                         <div class="list-group">
                             {% for document in related %}
                                 {% include "law/document_a.html" %}
                             {% endfor %}
                         </div>
-                    </div>
-                {% endif %}
+                    {% else %}
+                        <div class="panel-body">
+                            <p>{% trans "This document has not been referred by any other document yet." %}</p>
+                        </div>
+                    {% endif %}
+                </div>
                 {% if references %}
                     <div class="panel panel-default">
                         <div class="panel-heading">
