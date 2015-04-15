@@ -13,4 +13,5 @@ class DocumentIndex(indexes.Index):
 
     class Meta:
         model = Document
+        query = Document.objects.exclude(dr_series='II')
         range_step = 10000
