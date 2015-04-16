@@ -3,6 +3,8 @@
 {% load contracts.humanize %}
 {% block title %}{% trans "Categories"%}{% endblock %}
 {% block content %}
+<div class="row">
     <h2>{% trans "Categories"%}</h2>
     {% include "contracts/category_list/categories_loop.html" %}
+</div>
 {% endblock %}

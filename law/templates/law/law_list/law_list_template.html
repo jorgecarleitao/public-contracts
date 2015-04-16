@@ -1,11 +1,17 @@
 {% load i18n %}
+<div class="row">
 {% include "law/law_list/search_law.html" %}
 {% if laws %}
     {% include "pagination.html" with items=laws%}
 {% endif %}
+</div>
+<div class="row">
 {% for law in laws %}
     {% include "law/law_list/law_summary.html" %}
 {% endfor %}
+</div>
+<div class="row">
 {% if laws %}
     {% include "pagination.html" with items=laws%}
 {% endif %}
+</div>

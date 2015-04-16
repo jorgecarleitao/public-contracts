@@ -1,13 +1,17 @@
 {% load i18n %}
-<div class="container">
+<div class="row">
     {% include "contracts/contract_list/search_contracts.html" %}
     {% if tenders %}
         {% include "pagination.html" with items=tenders%}
     {% endif %}
 </div>
+<div class="row">
 {% for tender in tenders %}
     {% include "contracts/tender_list/tender_summary.html" %}
 {% endfor %}
+</div>
 {% if tenders %}
-    {% include "pagination.html" with items=tenders%}
+    <div class="row">
+        {% include "pagination.html" with items=tenders%}
+    </div>
 {% endif %}

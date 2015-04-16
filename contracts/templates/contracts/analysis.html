@@ -4,6 +4,7 @@
 
 {% block title %}{% trans "Analysis"%}{% endblock %}
 {% block content %}
+<div clas="row">
     <div class="list-group">
         {% for analys in analysis %}
             <a class="list-group-item" href="{{ analys.url }}">
@@ -13,4 +14,5 @@
             </a>
         {% endfor %}
     </div>
+</div>
 {% endblock %}
