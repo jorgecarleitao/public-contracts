@@ -1,10 +1,8 @@
 {% load i18n %}
-<div class="container">
-    {% include "contracts/contract_list/search_contracts.html" %}
-    {% if contracts %}
-        {% include "pagination.html" with items=contracts %}
-    {% endif %}
-</div>
+{% include "contracts/contract_list/search_contracts.html" %}
+{% if contracts %}
+    {% include "pagination.html" with items=contracts %}
+{% endif %}
 {% for contract in contracts %}
     {% include "contracts/contract_list/contract_summary.html" %}
 {% endfor %}
