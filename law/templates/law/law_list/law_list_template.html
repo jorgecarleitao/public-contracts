@@ -1,7 +1,7 @@
 {% load i18n %}
 {% include "law/law_list/search_law.html" %}
 {% if laws %}
-        {% include "pagination.html" with items=laws%}
+    {% include "pagination.html" with items=laws%}
 {% endif %}
 {% for law in laws %}
     {% include "law/law_list/law_summary.html" %}
