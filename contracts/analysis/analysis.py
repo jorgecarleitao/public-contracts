@@ -26,11 +26,29 @@ def get_price_histogram():
     For each bin, we filter contracts within these values.
     40 was arbitrarily chosen, but includes all prices.
     """
-    data = []
-    for x in range(7, 40):
-        count = models.Contract.objects.filter(price__gte=2**x, price__lt=2**(x+1)).count()
-        data.append([(2**x)/100., count])  # price in euros
+    cases = 'CASE'
+    for x in range(1, 41):
+        cases += ' WHEN (%d < contracts_contract.price/100 AND ' \
+                 'contracts_contract.price/100 < %d) THEN %d\n' % (2**x, 2*2**x, 2**x)
+    cases += ' END'
 
+    query = """
+        SELECT %s as hist, COUNT(*)
+        FROM contracts_contract
+        WHERE contracts_contract.price > 100
+        GROUP BY hist
+        ORDER BY hist ASC
+    """ % cases
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    data = []
+    for row in cursor.fetchall():
+        value, count = row
+        if value is None:
+            continue
+        data.append([value, count])
     return data
 
 
