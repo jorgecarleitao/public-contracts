@@ -1,11 +1,15 @@
 {% load i18n %}
-<div class="container">
+<div class="row">
     {% include "deputies/search_bar.html" %}
     {% if deputies %}
         {% include "pagination.html" with items=deputies%}
     {% endif %}
 </div>
+<div class="row">
 {% include "deputies/deputies_loop.html" %}
+</div>
 {% if deputies %}
+<div class="row">
     {% include "pagination.html" with items=deputies %}
+</div>
 {% endif %}

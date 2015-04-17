@@ -10,8 +10,9 @@
     {% include "law/law_list/law_summary.html" %}
 {% endfor %}
 </div>
-<div class="row">
 {% if laws %}
+<div class="row">
     {% include "pagination.html" with items=laws%}
-{% endif %}
 </div>
+{% endif %}
+

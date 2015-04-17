@@ -4,5 +4,7 @@
 
 {% block title %}{{ entity.name }} - {% trans "Contracts" %}{% endblock %}
 {% block entity_content %}
+<div class="col-md-12">
     {% include "contracts/contract_list/contract_list_template.html"%}
+</div>
 {% endblock %}

@@ -3,8 +3,10 @@
 {% block title %}{{ entity.name }}{% endblock %}
 {% block content %}
     <div class="row">
-        <h2>{{ entity.name }}</h2>
-        {% include "contracts/entity_view/selector.html" %}
+        <div class="col-md-12">
+            <h2>{{ entity.name }}</h2>
+            {% include "contracts/entity_view/selector.html" %}
+        </div>
     </div>
     {% block entity_content %}{% endblock %}
 {% endblock %}

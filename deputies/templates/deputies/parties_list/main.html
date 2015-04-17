@@ -2,7 +2,9 @@
 {% load i18n %}
 {% block title %}{% trans "Parties"%}{% endblock %}
 {% block content %}
+<div class="row">
     {% for party in parties %}
         {% include "deputies/parties_list/party_summary.html" %}
     {% endfor %}
+</div>
 {% endblock %}
