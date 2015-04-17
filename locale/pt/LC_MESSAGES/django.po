@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-18 07:26+0100\n"
+"POT-Creation-Date: 2015-04-17 17:25+0100\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,11 +53,11 @@ msgstr "concursos"
 msgid "customers"
 msgstr "clientes"
 
-#: contracts/entity_views.py:128
+#: contracts/entity_views.py:129
 msgid "Contracts as hiring"
 msgstr "Contratos como contratante"
 
-#: contracts/entity_views.py:165
+#: contracts/entity_views.py:166
 msgid "Contracts as hired"
 msgstr "Contratos como contratado"
 
@@ -1099,10 +1099,8 @@ msgid "its clients"
 msgstr "os seus clientes"
 
 #: contracts/templates/contracts/main_page.html:70
-#: contracts/templates/contracts/main_page.html:98
-#: contracts/templates/contracts/main_page.html:142
-msgid "Most recent"
-msgstr "Mais recentes"
+msgid "With recent activity"
+msgstr "Com actividade recente"
 
 #: contracts/templates/contracts/main_page.html:85
 msgid ""
@@ -1126,6 +1124,11 @@ msgstr "O quê e a que preço"
 #: contracts/templates/contracts/main_page.html:94
 msgid "when is the deadline"
 msgstr "Qual a data limite"
+
+#: contracts/templates/contracts/main_page.html:98
+#: contracts/templates/contracts/main_page.html:142
+msgid "Most recent"
+msgstr "Mais recentes"
 
 #: contracts/templates/contracts/main_page.html:109
 msgid "economical sectors"
@@ -1314,7 +1317,7 @@ msgstr "categoria"
 msgid "categories"
 msgstr "categorias"
 
-#: contracts/views.py:39 contracts/views.py:127 contracts/views.py:191
+#: contracts/views.py:39 contracts/views.py:127 contracts/views.py:192
 #: deputies/views.py:24 law/views.py:29 main/templates/pagination.html:24
 msgid "page"
 msgstr "página"

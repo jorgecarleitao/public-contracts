@@ -18,8 +18,8 @@ def home(request):
 
     return render(request, 'contracts/main_page.html', {
         'latest_contracts': models.Contract.objects
-                  .filter(signing_date__gt=last_month).order_by('-price')[:5],
-        'latest_entities': models.Entity.objects.order_by('-id')[:5],
+            .filter(signing_date__gt=last_month).order_by('-price')[:5],
+        'latest_entities': models.Entity.objects.order_by('-data__last_activity', '-id')[:5],
         'latest_tenders': models.Tender.objects.order_by('-id')[:5],
         'latest_analysis': analysis_list()[-5:],
         'REQUIRE_D3JS': True})
@@ -173,7 +173,8 @@ def build_entity_list_context(context, GET, form_cls=EntitySelectorForm):
 
 
 def entities_list(request):
-    entities = indexes.EntityIndex.objects.all().select_related("data")
+    entities = indexes.EntityIndex.objects.all()\
+        .order_by('-data__last_activity').select_related("data")
 
     context = {'navigation_tab': 'entities',
                'entities': entities}

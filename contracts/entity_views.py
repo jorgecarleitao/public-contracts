@@ -68,7 +68,8 @@ def contracts(request, entity_base_id):
 def costumers(request, entity_base_id):
     entity = get_object_or_404(models.Entity, base_id=entity_base_id)
 
-    all_costumers = indexes.EntityIndex.objects.all()\
+    all_costumers = indexes.EntityIndex.objects.all() \
+        .order_by('-data__last_activity') \
         .filter(contracts_made__contracted__id=entity.id).distinct() \
         .annotate(total_expended=Sum("contracts_made__price"),
                   total_contracts=Count("contracts_made__price"))

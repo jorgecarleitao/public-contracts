@@ -53,6 +53,7 @@ def contractors(request, category_id):
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
     entities = indexes.EntityIndex.objects \
+        .order_by('-data__last_activity') \
         .filter(contracts_made__category_id__in=categories_ids).distinct() \
         .annotate(total_expended=Sum("contracts_made__price"),
                   total_contracts=Count("contracts_made__price"))
@@ -74,6 +75,7 @@ def contracted(request, category_id):
     categories_ids = list(models.Category.get_tree(category).values_list('id'))
 
     entities = indexes.EntityIndex.objects \
+        .order_by('-data__last_activity') \
         .filter(contract__category_id__in=categories_ids).distinct() \
         .annotate(total_expended=Sum("contract__price"),
                   total_contracts=Count("contract__price"))

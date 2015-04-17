@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -6,7 +7,7 @@ logger = logging.getLogger(__name__)
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Max
 from django.utils.text import slugify
 
 from treebeard.ns_tree import NS_Node
@@ -141,11 +142,32 @@ class Entity(models.Model):
         except EntityData.DoesNotExist:
             self.data = EntityData(entity=self)
 
-        # we update the total earnings and total expenses.
-        aggregate = self.contract_set.aggregate(Sum('price'))
-        self.data.total_earned = aggregate['price__sum'] or 0
-        aggregate = self.contracts_made.aggregate(Sum('price'))
-        self.data.total_expended = aggregate['price__sum'] or 0
+        c_set = self.contract_set.aggregate(Sum('price'), Max('signing_date'))
+        c_made = self.contracts_made.aggregate(Sum('price'), Max('signing_date'))
+
+        def max_dates(*dates):
+            """
+            Returns the max of all non-None dates and None if all dates are None.
+            """
+            dates = list(dates)
+            none = datetime.date(1900, 1, 1)
+
+            for index, date in enumerate(dates):
+                if date is None:
+                    dates[index] = none
+            date = max(dates)
+            if date == none:
+                date = None
+            return date
+
+        # update the total earnings and total expenses.
+        self.data.total_earned = c_set['price__sum'] or 0
+        self.data.total_expended = c_made['price__sum'] or 0
+
+        self.data.last_activity = max_dates(c_set['signing_date__max'],
+                                            c_made['signing_date__max'])
+
+        # finish
         self.data.save()
 
         # update list of contracts on cache
@@ -175,6 +197,7 @@ class EntityData(models.Model):
     entity = models.OneToOneField('Entity', related_name='data')
     total_earned = models.BigIntegerField(default=0)
     total_expended = models.BigIntegerField(default=0)
+    last_activity = models.DateField(default=None, null=True, db_index=True)
 
 
 class ContractType(models.Model):
