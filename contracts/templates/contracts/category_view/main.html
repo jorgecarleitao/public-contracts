@@ -2,27 +2,35 @@
 {% load i18n %}
 {% block title %}{{ category.description_pt }}{% endblock %}
 {% block content %}
-    <h2>{{ category.description_pt }} ({{ category.code }})</h2>
-    {% with ancentors=category.get_ancestors %}
-        {% if ancentors %}
-            <h4>{% trans "Parent categories"%}:</h4>
-            <ol>
-            {% for ancestor in ancentors %}
-                <li>
-                    {% include "contracts/category_a.html" with category=ancestor %}
-                </li>
-            {% endfor %}
-            </ol>
-        {% endif %}
-    {% endwith %}
+    <div class="row">
+        <h2>{{ category.description_pt }} ({{ category.code }})</h2>
+        {% with ancentors=category.get_ancestors %}
+            {% if ancentors %}
+                <h4>{% trans "Parent categories"%}:</h4>
+                <ol>
+                {% for ancestor in ancentors %}
+                    <li>
+                        {% include "contracts/category_a.html" with category=ancestor %}
+                    </li>
+                {% endfor %}
+                </ol>
+            {% endif %}
+        {% endwith %}
 
-    {% with categories=category.get_children %}
-        {% if categories %}
-            <h4>{% trans "Children categories"%}:</h4>
-            {% include "contracts/category_list/categories_loop.html" %}
-        {% endif %}
-    {% endwith %}
+        {% with categories=category.get_children %}
+            {% if categories %}
+                <h4>{% trans "Children categories"%}:</h4>
+                {% include "contracts/category_list/categories_loop.html" %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <hr>
-    {% include "contracts/category_view/selector.html" %}
-    {% block category_content %}{% endblock %}
+    <div class="col-md-12">
+        <div class="row">
+        {% include "contracts/category_view/selector.html" %}
+        </div>
+        {% block category_content %}{% endblock %}
+
+    </div>
+
 {% endblock %}

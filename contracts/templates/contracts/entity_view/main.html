@@ -2,7 +2,9 @@
 {% load i18n %}
 {% block title %}{{ entity.name }}{% endblock %}
 {% block content %}
-    <h2>{{ entity.name }}</h2>
-    {% include "contracts/entity_view/selector.html" %}
+    <div class="row">
+        <h2>{{ entity.name }}</h2>
+        {% include "contracts/entity_view/selector.html" %}
+    </div>
     {% block entity_content %}{% endblock %}
 {% endblock %}

@@ -1,13 +1,18 @@
 {% load i18n %}
-<div class="container">
+<div class="row">
     {% include "contracts/entity_list/search_entities.html" %}
     {% if entities %}
         {% include "pagination.html" with items=entities%}
     {% endif %}
 </div>
+<div class="row">
 {% for entity in entities %}
     {% include "contracts/entity_view/tab_costumers/costumer_summary.html" %}
 {% endfor %}
+</div>
 {% if entities %}
+<div class="row">
     {% include "pagination.html" with items=entities %}
+</div>
 {% endif %}
+
