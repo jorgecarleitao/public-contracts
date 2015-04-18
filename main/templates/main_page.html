@@ -4,24 +4,22 @@
 {% block title %}{% trans "Publics"%}{% endblock %}
 {% block content %}
     <div class="jumbotron" itemscope itemtype="http://schema.org/WebPage">
-        <div class="container">
-            <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
-            <h1>{% trans "Publics" %}</h1>
-            <p><small>
-                {% blocktrans trimmed %}
-                    Know the <strong>contracts</strong>, the <strong>laws</strong>
-                    and the <strong>deputies</strong> of the portuguese state.
-                {% endblocktrans %}
-            </small></p>
-            <p itemprop="description">
-                {% blocktrans trimmed %}
-                    Here you can find any public contract, tender,
-                    law or deputy officially released by official sources. We
-                    aim to provide tools for you to extract meaningful answers
-                    about them. Learn how...
-                {% endblocktrans %}
-            </p>
-        </div>
+        <h1><img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/> {% trans "Publics" %}
+        </h1>
+        <p>
+            {% blocktrans trimmed %}
+                Know the <strong>contracts</strong>, the <strong>laws</strong>
+                and the <strong>deputies</strong> of the portuguese state.
+            {% endblocktrans %}
+        </p>
+        <p itemprop="description"><small>
+            {% blocktrans trimmed %}
+                Here you can find any public contract, tender,
+                law or deputy officially released by official sources. We
+                aim to provide tools for you to extract meaningful answers
+                about them. Learn how...
+            {% endblocktrans %}
+        </small></p>
     </div>
     <div class="panel panel-primary">
         <div class="panel-heading">
