@@ -4,7 +4,7 @@
     <a href="{{ type.get_absolute_url }}">{{ type.name }}</a>
 {% endblock %}
 {% block summary_body %}
-    {% blocktrans count doc_number=type.count %}
+    {% blocktrans count doc_number=type.count trimmed %}
         {{ doc_number }} document
     {% plural %}
         {{ doc_number }} documents

@@ -6,7 +6,7 @@
     <div class="text-element">
         <h2>{% trans "How many contracts are priced as X Euros?"%}</h2>
         <p>
-            {% blocktrans with count=count price=price|intword%}
+            {% blocktrans trimmed with count=count price=price|intword %}
                 Portugal's official database has today {{ count }} contracts, with a total value of {{ price }} €.
                 In this analysis, we asked:
             {% endblocktrans %}
@@ -14,7 +14,7 @@
         <h3>{% trans "What is the distribution of prices of these contracts?" %}</h3>
         {% include "contracts/analysis/contracts_price_histogram/graph.html" %}
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The graph represents the number of contracts (y-axis) within a price range (x-axis).
                 We point out two caracteristics of the distribution:
             {% endblocktrans %}

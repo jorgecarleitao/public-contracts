@@ -8,7 +8,7 @@
         </div>
         <div class="panel-body">
             <p>
-                {% blocktrans with author="Jorge C. Leitão" email="jorgecarleitao@publicos.pt" %}
+                {% blocktrans trimmed with author="Jorge C. Leitão" email="jorgecarleitao@publicos.pt" %}
                     The author and responsible for this website is <strong>{{ author }}</strong>,
                     <a href="mailto:{{ email }}">{{ email }}</a>.
                     If you have any suggestion or criticism, please contact me.
@@ -22,14 +22,14 @@
         </div>
         <div class="panel-body">
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     We make a huge effort to have the data in this website synchronized with the different official websites,
                     however, sometimes it simply does not happen. Ultimately, real-time and up-to-date
                     information can only be obtained trough them.
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     While we always try to be rigorous on the analysis found in this website, they <strong>are not</strong> intended to be or substitute scientific investigations.
                     Fundamentally, they are answers to simple curiosities and <strong>this work is not peer-reviewed</strong>.
                 {% endblocktrans %}
@@ -42,33 +42,33 @@
         </div>
         <div class="panel-body">
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     This website was created in the hope that it may be useful
                     to anyone who wants to have better access to the
                     portuguese public information.
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     Our objectives are:
                 {% endblocktrans %}
             </p>
             <ul>
                 <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         <strong>Help companies</strong> to have better
                         access to public information to take more informed decisions.
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         <strong>Help citizens</strong> to have better access to
                         public information and to better understand portuguese public
                         procurements.
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         <strong>Help scientists and policy makers</strong> with a
                         tool to study portuguese open data.
                     {% endblocktrans %}
@@ -82,7 +82,7 @@
         </div>
         <div class="panel-body">
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     This website could not be possible without the help of
                     numerous persons that gave a lot to open data,
                     web development and active citizenship. We would like to
@@ -91,31 +91,31 @@
             </p>
             <ul>
                 <li>
-                    {% blocktrans with mailing_list="https://www.djangoproject.com/"%}
+                    {% blocktrans trimmed with mailing_list="https://www.djangoproject.com/"%}
                         <a href="{{ mailing_list }}">Django foundation and its contributors</a> for the
                         extraordinary software and helpful community they are;
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans with mailing_list="http://madespesapublica.blogspot.pt/"%}
+                    {% blocktrans trimmed with mailing_list="http://madespesapublica.blogspot.pt/"%}
                         <a href="{{ mailing_list }}">Má despesa pública</a>, a portuguese blog,
                         for publicizing some of our analysis;
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans with mailing_list="http://www.base.gov.pt/base2/"%}
+                    {% blocktrans trimmed with mailing_list="http://www.base.gov.pt/base2/"%}
                         <a href="{{ mailing_list }}">The portuguese's official database</a>
                         for insights on the current law about public contracts;
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans with mailing_list="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm"%}
+                    {% blocktrans trimmed with mailing_list="http://europa.eu/legislation_summaries/internal_market/businesses/public_procurement/l22008_pt.htm"%}
                         <a href="{{ mailing_list }}">The European Union's website</a>
                         for the insightful information about public contracts;
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans with mailing_list="https://readthedocs.org/"%}
+                    {% blocktrans trimmed with mailing_list="https://readthedocs.org/"%}
                         <a href="{{ mailing_list }}">read the docs</a> for hosting our documentation.
                     {% endblocktrans %}
                 </li>

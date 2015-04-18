@@ -3,13 +3,13 @@
 {% load static %}
 {% block analysis_content %}
     <p itemprop="description">
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             The types of laws that ever exist or existed in the Portuguese Law
             are shown since the first Republic.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             In this work I take a look at how the number of different laws evolved
             over time. To that, I considered all documents in the Series I of "Diário da República",
             and plotted the number of documents of a given type published at a given year.
@@ -19,21 +19,21 @@
     {% include "law/analysis/law_types_time_series/graph.html" with url=the_url%}
     <h4>{% trans "How to use" %}</h4>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             To exclude one type, click on it; to select only one type, double click on it.
             Over the mouse for detailed information on each year.
         {% endblocktrans %}
     </p>
     <h4>{% trans "Details" %}</h4>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             Only the 17 most common types are shown to simplify the visualization; "Outros"
             represent the others types; types are ordered by
             commonness ("Portaria" is the commonest, then "Decreto", etc.)
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             Here we are interested in the phenomena of <em>creation of new laws</em>;
             naturally most of the documents here were already revoked.
         {% endblocktrans %}
@@ -42,17 +42,17 @@
     <ul>
         <li>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     <strong>Portaria</strong> is by far the most common type of document;
                     it was used consistently throughout our modern history.
                 {% endblocktrans %}
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     This is consistent since portarias are administrative and regulatory laws
                     with narrow scope.
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     It is relevant to point out that since 2011 it has been used very little
                     when compared to previous decades; only in the 50' Portaria was
                     used this little.
@@ -61,7 +61,7 @@
         </li>
         <li>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     <strong>Decreto</strong> was used very often until the dictatorship (1933),
                     and it seems to have been replaced by other types,
                     notably <strong>Declaração</strong> and <strong>Decreto-Lei</strong>.
@@ -71,7 +71,7 @@
         <li>
             <p>
                 {% url "law_view" 166072 as the_url %}
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     If we exclude "Portaria", we observe that, overall, the number of laws
                     is decreasing since 1976 (year of <a href="{{ the_url }}">approval of a new Constitution</a>).
                 {% endblocktrans %}
@@ -79,13 +79,13 @@
         </li>
         <li>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     In <strong>radical governmental changes</strong> (1933, 1974) new types appear and old
                     become extinct [hide "Portaria" and "Decreto" to notice this]
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     "Decreto-Lei" is highly used immediately after these changes,
                     which is consistent with its used to define general principles
                     [hide "Portaria" and "Decreto" to see this better].
@@ -94,21 +94,21 @@
         </li>
         <li>
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     <strong>Declaração</strong> seems to have been used less in recent years,
                     but in fact it has been replaced by more specific types of declarations (also part of "Others").
                 {% endblocktrans %}
             </p>
         </li>
         <li>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Further observations are left as exercise to the reader. ;)
             {% endblocktrans %}
         </li>
     </ul>
     <h4>{% trans "Acknowledgments" %}</h4>
     <p>
-        {% blocktrans with home_url="http://www.pedro-magalhaes.org/" suggestion_url="https://twitter.com/PCMagalhaes/statuses/453990079535783936"%}
+        {% blocktrans trimmed with home_url="http://www.pedro-magalhaes.org/" suggestion_url="https://twitter.com/PCMagalhaes/statuses/453990079535783936"%}
             I would like to thank <a href="{{ home_url }}">Pedro Magalhães</a> for the
             <a href="{{ suggestion_url }}">discussion</a> that lead to this plot.
         {% endblocktrans %}

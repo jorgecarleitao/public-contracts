@@ -7,14 +7,14 @@
         <h2 itemprop="name">{% trans "Income Inequality in Public Contracts" %}</h2>
 
         <p itemprop="description">
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 A popular tool among economists to visualize the income inequality
                 between entities (typically households) is to plot the so called
                 <strong>Lorenz curve</strong>.
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The Lorenz curve relates the income of an entity with its relative
                 position among all other entities.
                 <a id="extend-button-1" href="#">(how it is constructed)</a>
@@ -23,13 +23,13 @@
         <div id="extendable-1" hidden="1">
             <ul>
                 <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         On the x axis, the entity's relative rank: 0 is the entity with
                         lowest income; 1 is the entity with highest income.
                     {% endblocktrans %}
                 </li>
                 <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         On the y axis, the relative cumulative income: the 1st entity
                         value is its income; the 2nd entity value is its income plus the
                         income of the 1st entity, and so forth such that, the last
@@ -42,7 +42,7 @@
             </ul>
         </div>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The Lorenz curve starts at (x, y) = (0, 0) and ends at (x, y) =
                 (1, 1). If all entities have the same income, the curve is a strait
                 line; if only one entity has income, the curve is a constant at 0,
@@ -50,7 +50,7 @@
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The relevance of the Lorenz curve is that it measures the income
                 inequality of the entities considered: the farther away from the
                 strait line, the larger the inequality. In particular, the area
@@ -60,7 +60,7 @@
         </p>
         <h3>{% trans "Lorenz Curve" %}</h3>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 In this analysis we consider the Lorenz curve of all private entities
                 that were ever contracted on a public contract, over their income by
                 public contracts.
@@ -74,7 +74,7 @@
         </p>
         <div id="extendable-2" hidden="1">
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     The database has both public and private entities.
                     We used the following approximation to exclude public entities:
                     entities where the total earned is higher than the total expended
@@ -87,20 +87,20 @@
         <hr>
         <h3>{% trans "Gini Index" %}</h3>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The Gini index is a popular index to quantify inequality: a
                 Gini index of 0 means that all entities have the same income; a Gini
                 index of 1 means that only one entity has income.
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans with gini_index=gini_index|stringformat:".3f"%}
+            {% blocktrans trimmed with gini_index=gini_index|stringformat:".3f" %}
                 From our data, we computed the Gini index, from which we obtain the
                 numeric value of <strong>{{ gini_index }}</strong>.
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Compared to the Gini index of household income,
                 <strong>~0.34</strong> <a href="http://www.pordata.pt/en/Portugal/Gini+index-2166">[PORDATA]</a>,
                 the value seems to be high. However, one should note that here
@@ -111,7 +111,7 @@
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 It would be interesting to compare this value to the Gini index
                 computed from the taxes-declared income of portuguese entities,
                 and see if income by public contracts is different.

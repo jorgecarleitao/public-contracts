@@ -11,7 +11,7 @@
             </h1>
             <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
             <p itemprop="description">
-                {% blocktrans with github_url="https://github.com/jorgecarleitao/public-contracts" parliament_url="http://www.parlamento.pt/" %}
+                {% blocktrans trimmed with github_url="https://github.com/jorgecarleitao/public-contracts" parliament_url="http://www.parlamento.pt/" %}
                     In this sub-project we use the official database of deputies from the
                     <a href="{{ parliament_url }}">portuguese parliament</a>
                     to try to understand the relationship between political agents (deputies)
@@ -20,22 +20,22 @@
             </p>
         </div>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 We are working on a way to map the declarations of conflicts of interests of the deputies
                 into public and private entities.
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Meanwhile, we provide some analysis of the deputies.
             {% endblocktrans %}
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The first analysis is:
             {% endblocktrans %}
         </p>
         <h4>{% trans "How long a portuguese deputy stays in the parliament?"%}</h4>
         <p>
-            {% blocktrans with parliament_url="http://www.parlamento.pt/"%}
+            {% blocktrans trimmed with parliament_url="http://www.parlamento.pt/"%}
                 Portuguese deputies can be in the parliament for multiple mandates,
                 bounded only by the persons' maximum age. With the data from the
                 <a href="{{ parliament_url }}">official website</a> of the portuguese
@@ -44,7 +44,7 @@
         </p>
         {% include "deputies/analysis/deputies_survival_distribution/graph.html" %}
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The data accounts for ~1200 deputies since 1992. For each deputy, we
                 considered the total time of all his mandates.
                 The graph shows the percentage of deputies (y-axis, log-scale) with at
@@ -52,25 +52,25 @@
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 For instance, if a deputy has 2 mandates (consecutives or not), one with 1500 days
                 and other with 1010 days, he or she counts to the interval [2050, 2100].
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The data seems to show an exponential decay with an half-life of about ~1500 days (one complete legislature).
             {% endblocktrans %}
         </p>
         <p>
             {% url "deputies_deputies" as the_url %}
-            {% blocktrans with url=the_url %}
+            {% blocktrans trimmed with url=the_url %}
                 The graph also shows that ~2% of all deputies ever in the parliament are there for at least 20 years.
                 You can find who they are <a href="{{ url }}?sorting=mandates">here</a>.
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans with url="https://twitter.com/joaomiranda/status/439387468367142912"%}
+            {% blocktrans trimmed with url="https://twitter.com/joaomiranda/status/439387468367142912"%}
                 Notice that deputies with less than one legislature can be due to interruptions in legislatures.
                 Thanks to João Miranda and Pedro Magalhães, see discussion <a href="{{ url }}">here</a>.
             {% endblocktrans %}
@@ -79,14 +79,14 @@
         <ul>
             <li>
                 <p>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         We use Twitter to announce updates and new analysis.
                     {% endblocktrans %}
                 </p>
             </li>
             <li>
                 <p>
-                    {% blocktrans with url="http://demo.cratica.org/"%}
+                    {% blocktrans trimmed with url="http://demo.cratica.org/" trimmed %}
                         This sub-project is becoming possible also because
                         <a href="{{ url }}">demo.cratica</a>'s source code is open.
                         We thank the contributors of demo.cratica for that and for the code.

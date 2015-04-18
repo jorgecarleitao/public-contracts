@@ -4,13 +4,13 @@
     <a href="{{ party.get_absolute_url }}">{{ party.abbrev }}</a>
 {% endblock %}
 {% block summary_body %}
-    {% blocktrans count count=party.mandates_count %}
+    {% blocktrans count count=party.mandates_count trimmed %}
         {{ count }} mandate
     {% plural %}
         {{ count }} mandates
     {% endblocktrans %}-
 
-    {% blocktrans count count=party.deputies_count %}
+    {% blocktrans count count=party.deputies_count trimmed %}
         {{ count }} deputy
     {% plural %}
         {{ count }} deputies

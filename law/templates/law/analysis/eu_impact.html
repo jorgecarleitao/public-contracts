@@ -5,33 +5,33 @@
 {% block analysis_content %}
     <h4>{% trans "Introduction" %}</h4>
     <p itemprop="description">
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             The Laws of a country are probably the written documents with most impact on the people's life, as they
             constitute the rules on which they live in a country.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             The European Union (EU) is today an important legislative body in
             creating laws that affect all EU state members and it has been claimed that the
             European elections are the most important elections so far.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             Here we try to quantify this. Our assumption is that european elections are important
             when the EU law has an impact on people's life, which is quantifiable by its impact on national laws.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             With this in mind, we posed the question:
             what is the impact of the european law in the portuguese law?
         {% endblocktrans %}
     </p>
     <h4>{% trans "Main result" %}</h4>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             To answer this, we picked all documents published in the Series I of "Diário da República",
             counted how many cited <em>at least</em> one european law,
             and divided that number by the total number of created laws, for each year, which gives
@@ -48,7 +48,7 @@
     <ul>
         {% include "law/analysis/notation_items.html" %}
         <li>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 If the document does not have its text available, we ignore it;
                 this accounts for 17% of all documents.
             {% endblocktrans %}
@@ -56,13 +56,13 @@
     </ul>
     <h4>{% trans "Discussion" %}</h4>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             As expected, we observe a steady increase from 1986 (year Portugal joined EU), and
             14% of all portuguese laws created in 2013 cited at least one european law.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             From 1985 to 2005 (20 years), there was a consistent increase to ~7%. We observe that
             there was a change in sloop since ~2005, which gave rise to an increase of ~7% in ~10 years,
             or double the sloop.
@@ -70,28 +70,28 @@
     </p>
     <h4>{% trans "Conclusion" %}</h4>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             Here, we measured quantitatively the impact of the european law in the portuguese law and
             we have shown that Europe legislation has a strong impact in portuguese law: in 2013 about 14%
             of all portuguese laws cited an european law at least once.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             Furthermore, we have shown that the velocity of this impact doubled since 2004:
             in 10 years (2003-2013) the percentage of laws citing european law raised as
             much as in the 20 years before (1985-2005).
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             This seems to support the idea that the European elections are not only important,
             but they are also becoming more important as they have more impact on the
             rules that govern people's life.
         {% endblocktrans %}
     </p>
     <p>
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             It remains to be studied if this effect is similar in other european states.
         {% endblocktrans %}
     </p>

@@ -7,7 +7,7 @@
 {% block summary_body %}
     <img src="{{ deputy.get_image_url }}" height="100">
     <div class="age">
-        {% blocktrans count count=deputy.mandate_count %}
+        {% blocktrans count count=deputy.mandate_count trimmed %}
             {{ count }} mandate
         {% plural %}
             {{ count }} mandates

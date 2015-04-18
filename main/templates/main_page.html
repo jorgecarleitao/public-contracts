@@ -8,13 +8,13 @@
             <img class="img-rounded" src="{% static 'images/logo_big.png' %}" itemprop="primaryImageOfPage"/>
             <h1>{% trans "Publics" %}</h1>
             <p><small>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     Know the <strong>contracts</strong>, the <strong>laws</strong>
                     and the <strong>deputies</strong> of the portuguese state.
                 {% endblocktrans %}
             </small></p>
             <p itemprop="description">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     Here you can find any public contract, tender,
                     law or deputy officially released by official sources. We
                     aim to provide tools for you to extract meaningful answers
@@ -29,7 +29,7 @@
         </div>
         <div class="panel-body">
             <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     In this website you can find all contracts,
                     entities and tenders officially published by the state.
                     You can also find:
@@ -55,7 +55,7 @@
             <h2 class="panel-title">{% trans "Laws" %}</h2>
         </div>
         <div class="panel-body">
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 In this website you can find all portuguese laws officially
                 published.
             {% endblocktrans %}
@@ -70,7 +70,7 @@
             <h2 class="panel-title">{% trans "Deputies" %}</h2>
         </div>
         <div class="panel-body">
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 In this website you can find all members of the portuguese
                 parliament since 1992.
             {% endblocktrans %}

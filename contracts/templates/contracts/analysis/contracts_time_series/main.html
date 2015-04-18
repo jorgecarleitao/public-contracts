@@ -6,14 +6,14 @@
     <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{% trans "When Portugal contract most?" %}</h2>
         <p itemprop="description">
-            {% blocktrans with url="http://www.base.gov.pt/base2/" %}
+            {% blocktrans trimmed with url="http://www.base.gov.pt/base2/" %}
                 By European law, portuguese public entities must publish their contracts in an
                 <a href="{{ url }}">official public database</a>. With this database,
                 we posed the question: when Portugal contract most?
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 We picked all contracts in that database and count how many of then were signed on each month.
                 Here is the result:
             {% endblocktrans %}
@@ -24,7 +24,7 @@
     <div class="text-element">
         <h4>{% trans "Observations and context" %}</h4>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 The database only started to be populated in 2008-2009. This is consistent with
                 the time the portuguese law of public procurements came into effect.
             {% endblocktrans %}
@@ -32,13 +32,13 @@
         </p>
         <ul>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     Because the database contains only a percentage of all contracts (not every contract is published),
                     one important assumption is that this percentage does not strongly depend on the signing date.
                 {% endblocktrans %}
             </li>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     We are not using the sum of values (€) of the contracts.
                     The argument is that values are unbounded:
                     one single contract can make a particular month to have a arbitrary large value.
@@ -48,7 +48,7 @@
             </li>
         </ul>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 We see that there is a non-negligible peak in september of 2009, and we now show that
                 it is due to a portuguese municipal election in that month.
                 To that, we divide all contracts in two: the ones made only by municipalities, and the ones
@@ -61,7 +61,7 @@
         <ul>
             <li>
                 {% url "contracts_analysis_internal_selector" 2 as the_url %}
-                {% blocktrans with url=the_url %}
+                {% blocktrans trimmed with url=the_url %}
                     In <a href="{{ the_url }}">this analysis</a> we justify that this graph is consistent
                     with the existence of two municipal elections, one in 10-2009 and other in 10-2013.
                 {% endblocktrans %}
@@ -71,7 +71,7 @@
         {% url 'contracts_data_selector' 'excluding-municipalities-contracts-time-series-json' as the_url %}
         {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 If we exclude all contracts from municipalities, this peak disappears, showing that
                 municipal elections have a considerable influence on municipalities procurement,
                 which, in turn, considerably influences the overall portuguese procurement statistics.

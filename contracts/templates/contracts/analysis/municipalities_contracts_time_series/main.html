@@ -6,14 +6,14 @@
     <div class="text-element" itemscope itemtype="http://schema.org/Article">
         <h2 itemprop="name">{% trans "When do portuguese municipalities contract most?" %}</h2>
         <p itemprop="description">
-            {% blocktrans with url="http://www.base.gov.pt/base2/" %}
+            {% blocktrans trimmed with url="http://www.base.gov.pt/base2/" %}
                 By European law, portuguese public entities must publish their contracts in an
                 <a href="{{ url }}">official public database</a>. With this database,
                 we posed the question: when do portuguese municipalities contract most?
             {% endblocktrans %}
         </p>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 We picked all contracts of all municipalities and grouped then by the month of <strong>signing date</strong>.
                 Here is the result:
             {% endblocktrans %}
@@ -23,33 +23,33 @@
     {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
     <div class="text-element">
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Relevant context:
             {% endblocktrans %}
         </p>
         <ul>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     The database only started to be populated from 2008, when European Union law came into effect.
                     To some extent, this explains the sudden increase during 2008-2009.
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     However, this does not explain the increase in 2009 to values to above the average value of
                     dates posterior to 2009,
                     i.e., why number of signed contracts decreased after end of 2009?
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     There were two municipal elections; one in 11-10-2009, the other in 29-09-2013.
                     In both cases, the number of contracts significantly increases before the election month.
                 {% endblocktrans %}
             </li>
             <li><a id="extend-button-1">{% trans "Expand technical details..." %}</a></li>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                 Because the database contains only a percentage of all contracts (not every contract is published),
                 one important assumption is that this percentage does not depend on the signing date.
                 (For experts:) the assumption is that the database constitute an unbiased sample
@@ -57,7 +57,7 @@
                 {% endblocktrans %}
             </li>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                 We are not using the sum of values (€) of the contracts.
                 The argument is that values are unbounded:
                 one single contract can make a particular month to have a arbitrary large value.
@@ -66,24 +66,24 @@
                 {% endblocktrans %}
             </li>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                 On the other hand, the number of contracts is bounded. Moreover, the number of contracts
                 reflects better the idea of "number of individual actions" the municipality does.
                 {% endblocktrans %}
             </li>
             <li class="extendable-1" hidden="1">
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     There is a periodic peak of contracts in September. The beginning of school can be a
                     justification for it.
                 {% endblocktrans %}
             </li>
         </ul>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Overall, we argue that municipal elections have a strong
                 influence on the number of contracts on months preceding the election.
             {% endblocktrans %}
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 In the particular case of 2009, this quantifies to an almost duplication
                 of the number of contracts in relation to posterior dates.
             {% endblocktrans %}

@@ -7,7 +7,7 @@
         <ul>
             <li>
                 <p>
-                    {% blocktrans count count=party.deputies_count %}
+                    {% blocktrans count count=party.deputies_count trimmed %}
                         {{ count }} deputy
                     {% plural %}
                         {{ count }} deputies
@@ -17,7 +17,7 @@
             </li>
             <li>
                 <p>
-                    {% blocktrans count count=party.mandates_count %}
+                    {% blocktrans count count=party.mandates_count trimmed %}
                         {{ count }} mandate
                     {% plural %}
                         {{ count }} mandates
