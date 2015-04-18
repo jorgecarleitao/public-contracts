@@ -1,0 +1,20 @@
+{% load i18n %}
+<form class="navbar-form">
+    <div class="form-group" style="display:inline;">
+        <div class="input-group" style="display:table;">
+            <input id="search_string" type="text" class="form-control form-group-lg" placeholder="{% trans "Search something" %}" autofocus="1">
+            <span class="input-group-btn" style="width: 1%;">
+                <button id="search_select" type="button" class="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown">
+                    {% trans 'What' %} <span class="caret"></span></button>
+                <ul id="search_list" class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a id="search_contract" href="{% url "contracts_list" %}">{% trans "Contract" %}</a></li>
+                    <li><a id="search_entity" href="{% url "entities_list" %}">{% trans "Entity" %}</a></li>
+                    <li><a id="search_tender" href="{% url "tenders_list" %}">{% trans "Tender" %}</a></li>
+                    <li><a id="search_law" href="{% url "law_law_list" %}">{% trans "Lei" %}</a></li>
+                </ul>
+                <button id="search" type="button" class="btn btn-success">{% trans 'Search' %}</button>
+            </span>
+        </div>
+    </div>
+</form>
