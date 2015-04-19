@@ -20,7 +20,7 @@ Remote connection
 You can access our database using:
 
 - database: publics
-- username: publics
+- username: publics_read_only
 - password: read-only
 - host: 5.153.9.51
 - port: 5432

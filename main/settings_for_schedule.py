@@ -1,8 +1,8 @@
 """
-Settings file for the scheduler. Requires a ``settings_local`` with private
-information about the database and cache.
+Settings file for the scheduler. Requires a `settings_live` with private
+information of the server.
 """
-from . import settings_local
+from . import settings_live
 from . import domain
 
 INSTALLED_APPS = (
@@ -14,25 +14,24 @@ INSTALLED_APPS = (
 )
 
 
+DATABASES = settings_live.DATABASES
 
-DATABASES = settings_local.DATABASES
+RQ_QUEUES = settings_live.RQ_QUEUES
 
-RQ_QUEUES = settings_local.RQ_QUEUES
+SECRET_KEY = settings_live.SECRET_KEY
 
-SECRET_KEY = settings_local.SECRET_KEY
+CACHES = settings_live.CACHES
 
-CACHES = settings_local.CACHES
-
-ADMINS = settings_local.ADMINS
+ADMINS = settings_live.ADMINS
 
 TIME_ZONE = 'Europe/Lisbon'
 
-if hasattr(settings_local, 'EMAIL_HOST'):
-    EMAIL_HOST = settings_local.EMAIL_HOST
-    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
-    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
-    SERVER_EMAIL = settings_local.SERVER_EMAIL
+if hasattr(settings_live, 'EMAIL_HOST'):
+    EMAIL_HOST = settings_live.EMAIL_HOST
+    EMAIL_HOST_USER = settings_live.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = settings_live.EMAIL_HOST_PASSWORD
+    DEFAULT_FROM_EMAIL = settings_live.DEFAULT_FROM_EMAIL
+    SERVER_EMAIL = settings_live.SERVER_EMAIL
     EMAIL_SUBJECT_PREFIX = '[%s] ' % domain.SITE_DOMAIN
 
 

@@ -2,36 +2,48 @@
 This is the entry point settings of manage.py runserver and wsgi.py.
 (I.e. we use it in production)
 
-What this module does depends on (1) whether module `settings_local` exists
-and (2) how the value of `settings_local.HOST_NAME` compares with
-`socket.gethostname()`. Specifically, this module:
+This module uses settings from `settings_live` and `settings_dev` to build the
+final settings.
 
-- tries to import `settings_local`. If it doesn't exist, uses DEBUG mode
-(LIVE = False);
+It has three modes of operation defined by the variables LIVE and DEBUG:
+- "LIVE": LIVE and not DEBUG
+- "DEV": not LIVE and not DEBUG
+- "DEBUG": not LIVE and DEBUG
 
-- if `settings_local` exists, checks if the machine name (`socket.gethostname(
-)`) is equal to `settings_local.HOST_NAME`. If `settings_local.HOST_NAME` doesn't
-exist or the names are different, uses DEBUG mode. Otherwise, LIVE = True;
+Mode LIVE is activated when:
+(L1) `settings_live.HOST_NAME` exists and
+(L2) `settings_live.HOST_NAME == socket.gethostname()`
 
-- In DEBUG mode, it ignores `settings_local` and uses the settings defined
-in this module;
+Mode DEV is activated when:
+(1) LIVE is not activated and
+(2) `settings_dev.DEBUG` exists and
+(3) `settings_dev.DEBUG == False`
 
-- In LIVE mode, it tries to overwrite some settings in this module
-with settings in `settings_local`.
+Mode DEBUG is activated when:
+(1) LIVE is not activated and
+(2) `settings_dev.DEBUG` exists and
+(3) `settings_dev.DEBUG == True`
+or
+`(1)` and `settings_dev.DEBUG` doesn't exist.
 
-Mandatory settings in `settings_local` for LIVE mode:
+It then uses settings from `settings_live` if LIVE or from `settings_dev` if
+not LIVE.
+
+Mandatory settings in `settings_live`:
 - `ALLOWED_HOSTS`
 - `SECRET_KEY`
 
-Optional settings in `settings_local` for LIVE or DEBUG:
+Optional settings in `settings_live` that overwrite the ones in this module:
 - `CACHES`
-
-Optional settings in `settings_local` for LIVE mode:
 - `ADMINS`
 - `EMAIL_HOST`
 - `DATABASES`
 - `STATIC_ROOT`
 - `STATIC_URL`
+
+Optional settings in `settings_dev` that overwrite the ones in this module:
+- `CACHES`
+- `DATABASES`
 
 """
 import socket
@@ -41,36 +53,44 @@ import os.path
 from .domain import SITE_DOMAIN
 
 try:
-    from . import settings_local
+    from . import settings_live
 except ImportError:
-    settings_local = object
+    settings_live = object
+
+try:
+    from . import settings_dev
+except ImportError:
+    settings_dev = object
 
 
-if hasattr(settings_local, 'HOST_NAME') and \
-        socket.gethostname() == settings_local.HOST_NAME:
+if hasattr(settings_live, 'HOST_NAME') and \
+        socket.gethostname() == settings_live.HOST_NAME:
     LIVE = True
     DEBUG = False
-    TEMPLATE_DEBUG = False
 else:
     LIVE = False
     DEBUG = True
-    TEMPLATE_DEBUG = True
+
+if not LIVE and hasattr(settings_dev, 'DEBUG'):
+    DEBUG = settings_dev.DEBUG
+
+TEMPLATE_DEBUG = DEBUG
 
 main_directory = os.path.abspath(os.path.dirname(__file__))
 site_directory = os.path.abspath(os.path.dirname(main_directory))
 
 
 ############## Email and email receivers ##############
-if LIVE and hasattr(settings_local, 'ADMINS'):
-    ADMINS = settings_local.ADMINS
+if LIVE and hasattr(settings_live, 'ADMINS'):
+    ADMINS = settings_live.ADMINS
     MANAGERS = ADMINS
 
-if LIVE and hasattr(settings_local, 'EMAIL_HOST'):
-    EMAIL_HOST = settings_local.EMAIL_HOST
-    EMAIL_HOST_USER = settings_local.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = settings_local.EMAIL_HOST_PASSWORD
-    DEFAULT_FROM_EMAIL = settings_local.DEFAULT_FROM_EMAIL
-    SERVER_EMAIL = settings_local.SERVER_EMAIL
+if LIVE and hasattr(settings_live, 'EMAIL_HOST'):
+    EMAIL_HOST = settings_live.EMAIL_HOST
+    EMAIL_HOST_USER = settings_live.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = settings_live.EMAIL_HOST_PASSWORD
+    DEFAULT_FROM_EMAIL = settings_live.DEFAULT_FROM_EMAIL
+    SERVER_EMAIL = settings_live.SERVER_EMAIL
     EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_DOMAIN
 
 
@@ -94,23 +114,25 @@ DATABASES = {
     }
 }
 
-if LIVE and hasattr(settings_local, 'DATABASES'):
-    DATABASES = settings_local.DATABASES
+if LIVE and hasattr(settings_live, 'DATABASES'):
+    DATABASES = settings_live.DATABASES
 
+if not LIVE and hasattr(settings_dev, 'DATABASES'):
+    DATABASES = settings_dev.DATABASES
 
 ############## Security settings ##############
 
-# We force `settings_local` to contain `ALLOWED_HOSTS` so we don't go live
+# We force `settings_live` to contain `ALLOWED_HOSTS` so we don't go live
 # with all hosts allowed
 ALLOWED_HOSTS = ['*']
 if LIVE:
-    ALLOWED_HOSTS = settings_local.ALLOWED_HOSTS
+    ALLOWED_HOSTS = settings_live.ALLOWED_HOSTS
 
-# We force `settings_local` to contain a `SECRET_KEY` so we don't go live
+# We force `settings_live` to contain a `SECRET_KEY` so we don't go live
 # with a public key
 SECRET_KEY = 'a_public_key'
 if LIVE:
-    SECRET_KEY = settings_local.SECRET_KEY
+    SECRET_KEY = settings_live.SECRET_KEY
 
 ############## Time zones and internationalization ##############
 TIME_ZONE = 'Europe/Lisbon'
@@ -126,8 +148,8 @@ LOCALE_PATHS = (site_directory + '/locale',)
 
 ############## Location of the static files ##############
 STATIC_ROOT = os.path.join(main_directory, 'static')
-if LIVE and hasattr(settings_local, 'STATIC_ROOT'):
-    STATIC_ROOT = settings_local.STATIC_ROOT
+if LIVE and hasattr(settings_live, 'STATIC_ROOT'):
+    STATIC_ROOT = settings_live.STATIC_ROOT
 
 STATIC_URL = '/static/'
 if LIVE:
@@ -173,9 +195,11 @@ if DEBUG:
 
 
 ############## Caches ##############
-# We don't need to be LIVE to have caching.
-if hasattr(settings_local, 'CACHES'):
-    CACHES = settings_local.CACHES
+if LIVE and hasattr(settings_live, 'CACHES'):
+    CACHES = settings_live.CACHES
+
+if not LIVE and hasattr(settings_dev, 'CACHES'):
+    CACHES = settings_dev.CACHES
 
 
 ############## Django-SphinxQL specifics ##############
