@@ -1,3 +1,13 @@
+### project specific:
+main/settings_dev.py
+main/settings_live.py
+searchd.log
+searchd.pid
+sphinx.conf
+_index/
+
+### project independent:
+
 *.py[cod]
 
 # C extensions
