@@ -34,6 +34,6 @@ Create dumps
 
 In the terminal, run::
 
-    pg_dump -h 5.153.9.51 -p 5432 -U publics_read_only -W read-only -d publics > dump.sql
+    pg_dump -h 5.153.9.51 -p 5432 -U publics_read_only -d publics > dump.sql
 
 This creates a file "dump.sql" (it can take a while) that you can load to a database in your own computer.
