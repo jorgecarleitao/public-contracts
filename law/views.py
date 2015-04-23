@@ -37,12 +37,11 @@ def build_laws_list_context(context, GET):
     key = 'search'
     if key in GET and GET[key]:
         # try a match on the law by <type_name> <number>
-        match = re.search(r'^([^\s]+) .*? ([^\s]+/\d{4})', GET[key])
+        match = re.search(r'^(.+?(?=([^\s]+\/\d{2,4}(\/[A-Z])?)))', GET[key])
         if match:
-            type_name, number = match.group(1), match.group(2)
+            type_name, number = match.group(1).strip(), match.group(2)
             context['laws'] = context['laws'].filter(number=number,
-                                                     type__name=type_name)
-
+                                                     type__name__icontains=type_name)
         else:
             context['laws'] = context['laws'].search(GET[key])
 
