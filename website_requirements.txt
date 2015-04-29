@@ -1,6 +1,6 @@
 Django
 psycopg2
 django-treebeard
-Beautifulsoup4
 django-debug-toolbar
 git+https://github.com/jorgecarleitao/django-sphinxql.git
+git+https://github.com/publicos-pt/pt_law_parser.git

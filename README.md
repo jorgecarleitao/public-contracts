@@ -66,8 +66,7 @@ you should see two numbers. You now have full access to the database.
 
 ### Deploy the website locally
 
-1- Additionally to the installation above, install [django-debug-toolbar](https://github.com/django-debug-toolbar/django-debug-toolbar),  
-[Django-SphinxQL](https://github.com/jorgecarleitao/django-sphinxql) and [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/bs4/doc/):
+1- Install the requirements:
 
 `pip install -r website_requirements.txt`
 

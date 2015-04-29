@@ -66,8 +66,7 @@ class Document(models.Model):
         return reverse('law_view', args=[self.dre_doc_id])
 
     def compose_summary(self):
-        from . import composer
-        return composer.compose_summary(self.summary)
+        return self.summary
 
     def compose_text(self):
         """
@@ -78,15 +77,15 @@ class Document(models.Model):
             return None
 
         try:
-            return composer.compose_text(self)
+            return composer.text_analysis(self).as_html()
         except Exception:
             logger.exception("Compose text failed in dre_doc_id=%d", self.dre_doc_id)
-            return composer.normalize(self.text)
+            return self.text
 
     def compose_index(self):
         from . import composer
         try:
-            return composer.compose_index(self.text)
+            return composer.compose_index(self)
         except:
             return ''
 
@@ -99,6 +98,5 @@ class Document(models.Model):
 
     def update_references(self):
         from . import composer
-        documents = composer.get_documents(self.text).exclude(id=self.id)\
-            .values_list('id', flat=True)
+        documents = composer.get_references(self).values_list('id', flat=True)
         self.references.add(*list(documents))
