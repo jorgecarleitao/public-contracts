@@ -1,7 +1,7 @@
 import json
 
 from django.db.models import Q
-from django.core.cache import caches
+from django.core.cache import caches, InvalidCacheBackendError
 
 from pt_law_parser import analyse, common_managers, observers, ObserverManager, \
     from_json, html_toc
@@ -64,11 +64,12 @@ def _text_analysis(document):
 
 def text_analysis(document, flush=False):
     # short-circuit if no caching present
-    if 'law_texts' not in caches:
+    try:
+        cache = caches['law_texts']
+    except InvalidCacheBackendError:
         return _text_analysis(document)
 
     key = 'analyse_text>v%d>%d' % (1, document.dre_doc_id)
-    cache = caches['law_texts']
 
     value = cache.get(key)
     if value and not flush:
