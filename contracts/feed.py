@@ -91,8 +91,8 @@ class ContractsFeed(Feed):
 
 
 class EntityContractsFeed(Feed):
-    def get_object(self, request, entity_id):
-        return get_object_or_404(Entity, id=entity_id)
+    def get_object(self, request, entity_base_id):
+        return get_object_or_404(Entity, base_id=entity_base_id)
 
     def title(self, obj):
         return "%s - %s" % (SITE_NAME, obj.name)
