@@ -1,7 +1,5 @@
-import json
-
 from django.db.models import Q
-from django.core.cache import caches, InvalidCacheBackendError
+from django.core.cache import cache, caches, InvalidCacheBackendError
 
 from pt_law_parser import analyse, common_managers, observers, ObserverManager, \
     from_json, html_toc
@@ -62,26 +60,33 @@ def _text_analysis(document):
     return analysis
 
 
-def text_analysis(document, flush=False):
+def text_analysis(document):
+    """
+    Cached version of `_text_analysis`. Uses cache `law_analysis` to store
+    the result.
+    """
     # short-circuit if no caching present
     try:
-        cache = caches['law_texts']
+        cache = caches['law_analysis']
     except InvalidCacheBackendError:
         return _text_analysis(document)
 
-    key = 'analyse_text>v%d>%d' % (1, document.dre_doc_id)
-
-    value = cache.get(key)
-    if value and not flush:
-        result = from_json(json.loads(value))
-    else:
+    key = 'text_analysis>%d' % document.dre_doc_id
+    result = cache.get(key)
+    if result is None:
         result = _text_analysis(document)
-        cache.set(key, json.dumps(result.as_json()))
+        cache.set(key, result.as_json())
+    else:
+        result = from_json(result)
 
     return result
 
 
-def compose_index(document):
-    analysis = text_analysis(document)
-
-    return html_toc(analysis).as_html()
+def compose_all(document):
+    key = 'compose_all>%d>%d' % (1, document.dre_doc_id)
+    result = cache.get(key)
+    if result is None:
+        result = text_analysis(document)
+        result = (result.as_html(), html_toc(result).as_html())
+        cache.set(key, result)
+    return result

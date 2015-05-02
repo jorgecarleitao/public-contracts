@@ -68,27 +68,6 @@ class Document(models.Model):
     def compose_summary(self):
         return self.summary
 
-    def compose_text(self):
-        """
-        Wrapper to avoid errors, since compose_text is experimental at this point.
-        """
-        from . import composer
-        if self.text is None:
-            return None
-
-        try:
-            return composer.text_analysis(self).as_html()
-        except Exception:
-            logger.exception("Compose text failed in dre_doc_id=%d", self.dre_doc_id)
-            return self.text
-
-    def compose_index(self):
-        from . import composer
-        try:
-            return composer.compose_index(self)
-        except:
-            return ''
-
     def name(self):
         name = self.type.name
 

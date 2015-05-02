@@ -12,6 +12,7 @@ from django.views.decorators.cache import cache_page
 from . import models
 from . import indexes
 from .forms import LawSelectorForm
+from law import composer
 
 import law.analysis
 
@@ -106,16 +107,17 @@ def type_view(request, type_id, slug=None):
 
 
 def law_view(request, dre_doc_id, slug=None):
-    law = get_object_or_404(models.Document.objects.select_related('type'),
-                            dre_doc_id=dre_doc_id)
+    document = get_object_or_404(models.Document.objects.select_related('type'),
+                                 dre_doc_id=dre_doc_id)
 
-    related = law.document_set.all().order_by('-date', 'type__name',
-                                              '-number').select_related('type')
-    references = law.references.all().order_by('-date', 'type__name',
-                                               '-number').select_related('type')
+    related = document.document_set.all()\
+        .order_by('-date', 'type__name', '-number').select_related('type')
+    references = document.references.all()\
+        .order_by('-date', 'type__name', '-number').select_related('type')
 
-    context = {'law': law, 'navigation_tab': 'documents', 'related': related,
-               'references': references}
+    text, toc = composer.compose_all(document)
+    context = {'law': document, 'navigation_tab': 'documents', 'related': related,
+               'references': references, 'text': text, 'toc': toc}
 
     return render(request, "law/document_view/main.html", context)
 
