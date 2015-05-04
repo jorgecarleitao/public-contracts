@@ -1,5 +1,4 @@
-# coding=utf-8
-from __future__ import unicode_literals
+from collections import defaultdict
 
 from datetime import date, timedelta
 import datetime
@@ -54,23 +53,65 @@ def get_price_histogram():
 
 def get_entities_value_histogram():
     """
-    Since the distribution is broad, we use logarithmic bins.
-
-    For each bin, we filter contracts within these values.
-    40 was arbitrarily chosen, but includes all prices.
+    Returns a list of tuples (value, count_earnings, count_expenses)
+    where `value` is 2^i and count_* is the number of entities with
+    earnings/expenses in range [2^i, 2^(i+1)].
+    We use logarithmic bins because the distribution is broad.
     """
-    data = []
-    total_checker = 0
-    for x in range(5, 40):
-        expended = models.Entity.objects.filter(data__total_earned__gte=2**x,
-                                                data__total_earned__lt=2**(x+1)).count()
-        earned = models.Entity.objects.filter(data__total_expended__gte=2**x,
-                                              data__total_expended__lt=2**(x+1)).count()
-        data.append([(2**x)/100., earned, expended])  # price in euros
+    def _entities_histogram():
+        cases_earned = 'CASE'
+        for x in range(1, 43):
+            cases_earned += ' WHEN (' \
+                '%d < contracts_entitydata.total_earned/100 AND ' \
+                'contracts_entitydata.total_earned/100 < %d) THEN %d\n' % \
+                            (2**x, 2*2**x, 2**x)
+        cases_earned += 'ELSE 0 END'
 
-    total = models.Entity.objects.count()
+        cases_expended = 'CASE'
+        for x in range(1, 41):
+            cases_expended += ' WHEN (' \
+                '%d < contracts_entitydata.total_expended/100 AND ' \
+                'contracts_entitydata.total_expended/100 < %d) THEN %d\n' % \
+                              (2**x, 2*2**x, 2**x)
+        cases_expended += 'ELSE 0 END'
 
-    return data
+        query = """
+        SELECT (%s, %s) as hist, COUNT(*)
+        FROM contracts_entity
+        INNER JOIN contracts_entitydata ON (contracts_entity.id =
+        contracts_entitydata.entity_id)
+        WHERE contracts_entitydata.total_earned > 100
+        GROUP BY hist
+        """ % (cases_earned, cases_expended)
+
+        cursor = connection.cursor()
+        cursor.execute(query)
+
+        data = []
+        for row in cursor.fetchall():
+            value, count = row
+            value = value[1:-1].split(',')
+            value = [int(value[0]), int(value[1])]
+            if value is None:
+                continue
+            data.append([value, count])
+        return data
+
+    data = _entities_histogram()
+    result_earnings = defaultdict(int)
+    result_expenses = defaultdict(int)
+    for x in data:
+        values, count = x
+        result_earnings[values[0]] += count
+        result_expenses[values[1]] += count
+
+    result = []
+    for x in sorted(set(result_earnings.keys()) | set(result_expenses.keys())):
+        if x == 0:
+            continue
+        result.append((x, result_earnings[x], result_expenses[x]))
+
+    return result
 
 
 def get_entities_specificity(startswith_string):
