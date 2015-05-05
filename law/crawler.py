@@ -40,16 +40,20 @@ def save_document(document):
         if publication['dre_id'] is None:
             continue
 
-        form = DocumentForm(build_data(document, publication))
+        save_publication(publication, document)
 
-        if not form.is_valid():
-            logger.error('Publication %d of doc %d failed.' %
-                         (publication['dre_id'], document['dre_id']))
-            raise ValueError('Data failed validation: %s' % form.errors)
 
-        try:
-            doc = Document.objects.get(dre_doc_id=form.cleaned_data['dre_doc_id'])
-        except Document.DoesNotExist:
-            doc = Document.objects.create(**form.cleaned_data)
+def save_publication(publication, document):
+    form = DocumentForm(build_data(document, publication))
 
-        doc.update_references()
+    if not form.is_valid():
+        logger.error('Publication %d of doc %d failed.' %
+                     (publication['dre_id'], document['dre_id']))
+        raise ValueError('Data failed validation: %s' % form.errors)
+
+    try:
+        doc = Document.objects.get(dre_doc_id=form.cleaned_data['dre_doc_id'])
+    except Document.DoesNotExist:
+        doc = Document.objects.create(**form.cleaned_data)
+
+    doc.update_references()

@@ -1,3 +1,5 @@
+from main.settings import *
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -7,8 +9,6 @@ DATABASES = {
     },
 }
 
-INSTALLED_APPS = ('law',)
-
-SECRET_KEY = 'no secret'
-
-MIDDLEWARE_CLASSES = ()
+# ignore requests logging
+import logging
+logging.getLogger("requests").setLevel(logging.WARNING)

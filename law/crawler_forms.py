@@ -5,42 +5,27 @@ from . import models
 
 class TypeField(CharField):
     """
-    Validates a relation to a ``models.Category``.
+    Validates a relation to a ``models.Type``.
     """
+    mapping = {'Declaração de Rectificação': 'Declaração de Retificação',
+               'Declaração de rectificação': 'Declaração de Retificação',
+               'Decreto do Presidente de República':
+                   'Decreto do Presidente da República',
+               'Resolução da  Assembleia da República':
+                   'Resolução da Assembleia da República'}
+
     def clean(self, string):
         type_name = string.strip()
 
         # synonymous and typos check
-        if type_name == 'Declaração de Rectificação':
-            type_name = 'Declaração de Retificação'
-        if type_name == 'Declaração de rectificação':
-            type_name = 'Declaração de Retificação'
-        if type_name == 'Decreto do Presidente de República':
-            type_name = 'Decreto do Presidente da República'
-        if type_name == 'Resolução da  Assembleia da República':
-            type_name = 'Resolução da Assembleia da República'
+        if type_name in self.mapping:
+            type_name = self.mapping[type_name]
 
         return type_name
 
 
-class NumberField(CharField):
-    """
-    Some numbers contain more than they should.
-    E.g. publication 638275, whose number is `'4/93, de 13 de Setembro'`
-    """
-    def clean(self, value):
-        if value is not None and ',' in value:
-            value = value.split(',')[0]
-        if value is not None and ' - ' in value:
-            value = value.split(' - ')[0]
-        if value is not None and ' ' in value:
-            value = value.split(' ')[0]
-
-        return super(NumberField, self).clean(value)
-
-
 class DocumentForm(Form):
-    number = NumberField(required=False, max_length=20)
+    number = CharField(required=False, max_length=20)
 
     creator_name = CharField()
     date = DateField()
@@ -56,6 +41,8 @@ class DocumentForm(Form):
     type = TypeField()
 
     def clean_type(self):
+        if 'dr_series' not in self.cleaned_data or 'type' not in self.cleaned_data:
+            return
         series = self.cleaned_data['dr_series']
         type, created = models.Type.objects.get_or_create(
             name=self.cleaned_data['type'], dr_series=series)

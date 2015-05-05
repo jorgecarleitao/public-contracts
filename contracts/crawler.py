@@ -16,11 +16,6 @@ from contracts.crawler_forms import EntityForm, ContractForm, \
 logger = logging.getLogger(__name__)
 
 
-class EntityNotFoundError(Exception):
-    def __init__(self, entities_base_ids):
-        self.entities_base_ids = entities_base_ids
-
-
 class JSONLoadError(Exception):
     """
     When JSON fails to parse the content of an url.
@@ -57,7 +52,7 @@ class JSONCrawler(AbstractCrawler):
 
 
 class ContractsStaticDataCrawler(JSONCrawler):
-    def retrieve_and_save_contracts_types(self):
+    def save_contracts_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tipocontratos'
         data = self.goToPage(url)
 
@@ -73,7 +68,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
                                                     base_id=element['id'])
                 contract_type.save()
 
-    def retrieve_and_save_procedures_types(self):
+    def save_procedures_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos'
         data = self.goToPage(url)
 
@@ -89,7 +84,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
                                                       base_id=element['id'])
                 procedure_type.save()
 
-    def retrieve_and_save_countries(self):
+    def save_all_countries(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/paises'
         data = self.goToPage(url)
 
@@ -102,13 +97,11 @@ class ContractsStaticDataCrawler(JSONCrawler):
                 country = models.Country(name=element['description'])
                 country.save()
 
-    def retrieve_and_save_districts(self):
-        # We currently only retrieve from Portugal (187) because BASE only has
-        # from it.
-        url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=187'
-        data = self.goToPage(url)
-
+    def save_all_districts(self):
+        base_url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=%d'
         portugal = models.Country.objects.get(name="Portugal")
+
+        data = self.goToPage(base_url % 187)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
@@ -123,34 +116,36 @@ class ContractsStaticDataCrawler(JSONCrawler):
                                            country=portugal)
                 district.save()
 
-    def retrieve_and_save_councils(self):
+    def save_councils(self, district):
         base_url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d'
-        for district in models.District.objects.all():
-            url = base_url % district.base_id
-            data = self.goToPage(url)
+        data = self.goToPage(base_url % district.base_id)
 
-            for element in data['items']:
-                if element['id'] == '0':  # id = 0 is "All", that we don't use.
-                    continue
-                try:
-                    # if it exists, we pass
-                    models.Council.objects.get(base_id=element['id'])
-                    pass
-                except models.Council.DoesNotExist:
-                    council = models.Council(name=element['description'],
-                                             base_id=element['id'],
-                                             district=district)
-                    council.save()
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All", that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.Council.objects.get(base_id=element['id'])
+                pass
+            except models.Council.DoesNotExist:
+                council = models.Council(name=element['description'],
+                                         base_id=element['id'],
+                                         district=district)
+                council.save()
+
+    def save_all_councils(self):
+        for district in models.District.objects.all():
+            self.save_councils(district)
 
     def retrieve_and_save_all(self):
-        self.retrieve_and_save_contracts_types()
-        self.retrieve_and_save_procedures_types()
+        self.save_contracts_types()
+        self.save_procedures_types()
         # Countries first
-        self.retrieve_and_save_countries()
+        self.save_all_countries()
         # Districts second
-        self.retrieve_and_save_districts()
+        self.save_all_districts()
         # Councils third
-        self.retrieve_and_save_councils()
+        self.save_all_councils()
 
 
 class TendersStaticDataCrawler(JSONCrawler):

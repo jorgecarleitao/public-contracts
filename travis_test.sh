@@ -12,7 +12,7 @@ python -m contracts.tools.example
 elif [ $CONFIGURATION = "WEBSITE" ]
 then
 # install
-pip install -r production_requirements.txt
+pip install -r website_requirements.txt
 
 # script
 python -m contracts.tools.example
@@ -25,6 +25,5 @@ pip install -r production_requirements.txt
 
 # script
 python -m contracts.tools.example
-PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=law.tests.settings law.tests
-PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=contracts.tests.settings contracts.tests
+PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=main.settings_test law.tests contracts.tests
 fi

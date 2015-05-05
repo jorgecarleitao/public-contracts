@@ -1,11 +1,13 @@
 # coding=utf-8
 from unittest import TestCase
 import datetime
+
+import django.test
 from django.core.exceptions import ValidationError
 
 from contracts.crawler import ContractsStaticDataCrawler
 from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField, \
-    CountryChoiceField, ContractTypeField
+    CountryChoiceField, ContractTypeField, EntitiesField, CouncilChoiceField
 from contracts import models
 
 
@@ -76,7 +78,7 @@ class CPVSFieldTestCase(TestCase):
 class CountryChoiceFieldTestCase(TestCase):
     def setUp(self):
         crawler = ContractsStaticDataCrawler()
-        crawler.retrieve_and_save_countries()
+        crawler.save_all_countries()
 
         self.field = CountryChoiceField(required=False)
 
@@ -94,7 +96,7 @@ class CountryChoiceFieldTestCase(TestCase):
 class ContractTypeFieldTestCase(TestCase):
     def setUp(self):
         crawler = ContractsStaticDataCrawler()
-        crawler.retrieve_and_save_contracts_types()
+        crawler.save_contracts_types()
 
         self.field = ContractTypeField(required=False)
 
@@ -118,3 +120,21 @@ class ContractTypeFieldTestCase(TestCase):
     def test_others(self):
         self.assertEqual(self.field.clean('Outros Tipos (Concessão de exploração de bens do domínio público)'),
                          models.ContractType.objects.get(name='Outros'))
+
+
+class EntitiesFieldTestCase(django.test.TransactionTestCase):
+
+    def test_clean(self):
+        ContractsStaticDataCrawler().save_all_countries()
+
+        field = EntitiesField()
+        self.assertRaises(ValidationError, field.clean, [{'id': -1}])
+
+        field.clean([{'id': 1}])
+        self.assertEqual(models.Entity.objects.count(), 1)
+
+        models.Entity.objects.all().delete()
+
+        # ensure correct rollback after a fail
+        self.assertRaises(ValidationError, field.clean, [{'id': 1}, {'id': -1}])
+        self.assertEqual(models.Entity.objects.count(), 0)

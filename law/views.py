@@ -150,11 +150,8 @@ def analysis_list(request):
 
 
 def law_analysis(request, analysis_id, slug=None):
-    try:
-        analysis_id = int(analysis_id)
-    except:
-        raise Http404
-    if int(analysis_id) not in law.analysis.PRIMARY_KEY:
+    analysis_id = int(analysis_id)
+    if analysis_id not in law.analysis.PRIMARY_KEY:
         raise Http404
 
     name = law.analysis.PRIMARY_KEY[analysis_id]
@@ -163,8 +160,7 @@ def law_analysis(request, analysis_id, slug=None):
                  'law_eu_impact_time_series': 'law/analysis/eu_impact.html',
                  'law_types_time_series': 'law/analysis/law_types_time_series/main.html'}
 
-    if name not in templates:
-        raise IndexError('Template for analysis "%s" not found' % name)
+    assert(name in templates)
 
     context = {'title': ANALYSIS_TITLES[name], 'navigation_tab': 'analysis',
                'REQUIRE_D3JS': True}

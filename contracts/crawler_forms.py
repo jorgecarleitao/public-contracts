@@ -4,6 +4,7 @@ from datetime import timedelta
 import re
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.forms import CharField, \
     DateField, ModelChoiceField, IntegerField,\
     Field, ModelMultipleChoiceField, Form
@@ -92,8 +93,13 @@ class EntitiesField(ModelMultipleChoiceField):
             import contracts.crawler
             entity_crawler = contracts.crawler.EntitiesCrawler()
 
-            for base_id in value:
-                entity_crawler.update_instance(base_id)
+            try:
+                with transaction.atomic():
+                    for base_id in value:
+                        entity_crawler.update_instance(base_id)
+            except contracts.crawler.JSONLoadError:
+                raise ValidationError("An entity in %s doesn't exist in BASE." %
+                                      value)
 
             return super().clean(value)
 
