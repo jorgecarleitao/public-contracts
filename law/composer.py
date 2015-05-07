@@ -7,11 +7,12 @@ from pt_law_parser import analyse, common_managers, observers, ObserverManager, 
 from law.models import Document, Type
 
 
-PLURALS = {'Decreto-Lei': 'Decretos-Leis',
-           'Lei': 'Leis',
-           'Portaria': 'Portarias'}
+PLURALS = {'Decreto-Lei': ['Decretos-Leis', 'Decretos-Lei'],
+           'Lei': ['Leis'],
+           'Portaria': ['Portarias']}
 
 SINGULARS = {'Decretos-Leis': 'Decreto-Lei',
+             'Decretos-Lei': 'Decreto-Lei',
              'Leis': 'Lei',
              'Portarias': 'Portaria'}
 
@@ -34,7 +35,8 @@ def get_references(document, analysis=None):
 def _text_analysis(document):
     type_names = list(Type.objects.exclude(name__contains='(')
                       .exclude(dr_series='II').values_list('name', flat=True))
-    type_names += [PLURALS[name] for name in type_names if name in PLURALS]
+    type_names += [plural for name in type_names if name in PLURALS
+                   for plural in PLURALS[name]]
 
     managers = common_managers + [
         ObserverManager(dict((name, observers.DocumentRefObserver)
@@ -52,7 +54,8 @@ def _text_analysis(document):
     for doc in docs:
         type_name = doc.type.name
         if doc.type.name in PLURALS:
-            mapping[(PLURALS[doc.type.name], doc.number)] = doc.get_absolute_url()
+            for plural in PLURALS[doc.type.name]:
+                mapping[(plural, doc.number)] = doc.get_absolute_url()
         mapping[(type_name, doc.number)] = doc.get_absolute_url()
 
     analysis.set_doc_refs(mapping)
