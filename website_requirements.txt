@@ -3,4 +3,5 @@ psycopg2
 django-treebeard
 django-debug-toolbar
 git+https://github.com/jorgecarleitao/django-sphinxql.git
+git+https://github.com/publicos-pt/pt_law_downloader.git
 git+https://github.com/publicos-pt/pt_law_parser.git

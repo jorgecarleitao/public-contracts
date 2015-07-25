@@ -25,5 +25,6 @@ pip install -r production_requirements.txt
 
 # script
 python -m contracts.tools.example
-PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=main.settings_test law.tests contracts.tests
+mkdir cached_html
+PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=main.settings_test law.test contracts.test
 fi

@@ -2,12 +2,12 @@
 from unittest import TestCase
 import datetime
 
-import django.test
 from django.core.exceptions import ValidationError
 
+from . import CrawlerTestCase
 from contracts.crawler import ContractsStaticDataCrawler
 from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField, \
-    CountryChoiceField, ContractTypeField, EntitiesField, CouncilChoiceField
+    CountryChoiceField, ContractTypeField, EntitiesField
 from contracts import models
 
 
@@ -122,7 +122,7 @@ class ContractTypeFieldTestCase(TestCase):
                          models.ContractType.objects.get(name='Outros'))
 
 
-class EntitiesFieldTestCase(django.test.TransactionTestCase):
+class EntitiesFieldTestCase(CrawlerTestCase):
 
     def test_clean(self):
         ContractsStaticDataCrawler().save_all_countries()

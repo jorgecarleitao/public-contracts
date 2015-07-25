@@ -9,6 +9,8 @@ DATABASES = {
     },
 }
 
-# ignore requests logging
+LANGUAGE_CODE = 'en'
+
+# ignore all logging
 import logging
-logging.getLogger("requests").setLevel(logging.WARNING)
+logging.disable(logging.CRITICAL)
