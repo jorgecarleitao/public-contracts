@@ -13,7 +13,6 @@ from . import indexes
 from .views import build_contract_list_context, build_tender_list_context,\
     build_entity_list_context
 from .forms import CostumerSelectorForm
-from .analysis.analysis import add_months
 
 
 def main_view(request, entity_base_id, slug=None):
@@ -99,7 +98,7 @@ def tenders(request, entity_base_id):
                'tenders': all_tenders,
                'REQUIRE_DATEPICKER': True}
 
-    ## filter entities by ordering and pagination
+    # filter tenders
     context = build_tender_list_context(context, request.GET)
 
     return render(request, 'contracts/entity_view/tab_tenders/main.html', context)
@@ -133,7 +132,6 @@ def contracts_made_time_series(request, entity_base_id):
             continue
 
         min_date = datetime.date(int(year), int(month), 1)
-        max_date = add_months(min_date, 1)
 
         entry = {'month': min_date.strftime('%Y-%m'),
                  'value': int(value)}

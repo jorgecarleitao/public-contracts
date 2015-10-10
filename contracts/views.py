@@ -63,9 +63,7 @@ def build_contract_list_context(context, GET):
     key = 'sorting'
     if key in GET and GET[key] in context['selector'].SORTING_LOOKUPS:
         if context['selector'].SORTING_LOOKUPS[GET[key]] == '-signing_date':
-            context['contracts'] = context['contracts'].extra(
-                select={'signing_date_is_null': 'signing_date IS NULL'},
-                order_by=['signing_date_is_null', '-signing_date'])
+            context['contracts'] = context['contracts']
         else:
             context['contracts'] = context['contracts'].order_by(
                 context['selector'].SORTING_LOOKUPS[GET[key]])
@@ -88,9 +86,7 @@ def contracts_list(request):
     View that controls the contracts list.
     """
     contracts = indexes.ContractIndex.objects.all()\
-        .prefetch_related("contracted", "contractors")\
-        .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
-               order_by=['signing_date_is_null', '-signing_date'])
+        .prefetch_related("contracted", "contractors")
 
     context = {'contracts': contracts, 'navigation_tab': 'contracts',
                'REQUIRE_DATEPICKER': True}
