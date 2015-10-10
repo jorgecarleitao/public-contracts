@@ -1,20 +1,11 @@
-from django.test import TestCase
-
 from contracts.crawler import ContractsCrawler
-from contracts.tasks import create_static_fixture
+from contracts.test import CrawlerTestCase
 
 
-def create_fixture(*args):
-    create_static_fixture()
-    c = ContractsCrawler()
-    for id in args:
-        contract, _ = c.update_instance(id)
-
-
-class TestCrawler(TestCase):
+class TestCrawler(CrawlerTestCase):
 
     def test_basic(self):
-        create_static_fixture()
+        self.create_fixture()
 
         c = ContractsCrawler()
 

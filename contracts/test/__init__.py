@@ -3,7 +3,8 @@ import shutil
 
 import django.test
 
-from contracts.crawler import EntitiesCrawler, ContractsCrawler, TendersCrawler
+from contracts.crawler import EntitiesCrawler, ContractsCrawler, TendersCrawler, \
+    StaticDataCrawler
 
 
 class CrawlerTestCase(django.test.TransactionTestCase):
@@ -21,3 +22,11 @@ class CrawlerTestCase(django.test.TransactionTestCase):
 
     def tearDown(self):
         shutil.rmtree('_data')
+
+    @staticmethod
+    def create_fixture(*args):
+        c = StaticDataCrawler()
+        c.retrieve_and_save_all()
+        c = ContractsCrawler()
+        for id in args:
+            contract, _ = c.update_instance(id)

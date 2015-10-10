@@ -1,6 +1,5 @@
 import urllib.request
 
-from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from contracts.views import home, contracts_list, categories_list, entities_list, \
@@ -11,16 +10,16 @@ from contracts.entity_views import main_view as entity_main_view, \
     tenders as entity_tenders
 from contracts.contract_views import main_view as contract_main_view
 
-from .test_crawler import create_fixture
+from contracts.test import CrawlerTestCase
 
 
-class TestBasic(TestCase):
+class TestBasic(CrawlerTestCase):
     def test_home(self):
         response = self.client.get(reverse(home))
         self.assertEqual(200, response.status_code)
 
     def test_contracts_list(self):
-        create_fixture(35356)
+        self.create_fixture(35356)
 
         response = self.client.get(reverse(contracts_list))
         self.assertEqual(200, response.status_code)
@@ -35,7 +34,7 @@ class TestBasic(TestCase):
         self.assertEqual(200, response.status_code)
 
     def test_entities_list(self):
-        create_fixture(35356)
+        self.create_fixture(35356)
 
         response = self.client.get(reverse(entities_list))
         self.assertEqual(200, response.status_code)
@@ -47,10 +46,10 @@ class TestBasic(TestCase):
         self.assertEqual(200, response.status_code)
 
 
-class TestContractsContext(TestCase):
+class TestContractsContext(CrawlerTestCase):
 
     def test_sorting(self):
-        create_fixture(35356, 2048)
+        self.create_fixture(35356, 2048)
 
         response = self.client.get(reverse(contracts_list), {'sorting': 'date'})
         contracts = response.context['contracts']
@@ -65,7 +64,7 @@ class TestContractsContext(TestCase):
 
     def test_range(self):
         # only the contract 1656582 is on 10/9/2015
-        create_fixture(1656582, 1656371)
+        self.create_fixture(1656582, 1656371)
 
         response = self.client.get(reverse(contracts_list), {'range': '10/9/2015 - 10/9/2015'})
         contracts = response.context['contracts']
@@ -80,11 +79,11 @@ class TestContractsContext(TestCase):
         self.assertEqual(200, response.status_code)
 
 
-class TestEntityViews(TestCase):
+class TestEntityViews(CrawlerTestCase):
 
     def test_main(self):
         # contract 1656582 contains entity 11253
-        create_fixture(1656582)
+        self.create_fixture(1656582)
         response = self.client.get(reverse(entity_main_view, args=(11253,)))
         self.assertEqual(200, response.status_code)
 
@@ -118,12 +117,12 @@ class TestEntityViews(TestCase):
         self.assertEqual(200, response.status_code)
 
 
-class TestEntitiesContext(TestCase):
+class TestEntitiesContext(CrawlerTestCase):
 
     def test_type(self):
         # 5826 and 101 are municipalities
         # contract 1657030 is made by 5826, 1656371 is made by 101
-        create_fixture(1657030, 1656371)
+        self.create_fixture(1657030, 1656371)
         response = self.client.get(reverse(entities_list))
         entities = response.context['entities']
         self.assertEqual(4, len(entities))
