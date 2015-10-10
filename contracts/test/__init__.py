@@ -29,4 +29,10 @@ class CrawlerTestCase(django.test.TransactionTestCase):
         c.retrieve_and_save_all()
         c = ContractsCrawler()
         for id in args:
-            contract, _ = c.update_instance(id)
+            c.update_instance(id)
+
+    @staticmethod
+    def add_tenders(*args):
+        c = TendersCrawler()
+        for id in args:
+            c.update_instance(id)

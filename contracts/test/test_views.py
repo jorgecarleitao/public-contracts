@@ -151,3 +151,36 @@ class TestEntitiesContext(CrawlerTestCase):
     def test_page(self):
         response = self.client.get(reverse(entities_list), {'page': '100'})
         self.assertEqual(200, response.status_code)
+
+
+class TestTendersContext(CrawlerTestCase):
+
+    def test_main(self):
+        self.create_fixture()
+        self.add_tenders(3957, 3926)
+
+        response = self.client.get(reverse(tenders_list), {'sorting': 'date'})
+        tenders = response.context['tenders']
+
+        self.assertEqual(2, len(tenders))
+        self.assertEqual(3926, tenders[0].base_id)
+        self.assertEqual(3957, tenders[1].base_id)
+
+        response = self.client.get(reverse(tenders_list), {'sorting': 'price'})
+        tenders = response.context['tenders']
+
+        self.assertEqual(3957, tenders[0].base_id)
+        self.assertEqual(3926, tenders[1].base_id)
+
+        # only the contract 3957 is on 12/8/2009
+        response = self.client.get(reverse(tenders_list), {'range': '8/12/2009 - 8/12/2009'})
+        tenders = response.context['tenders']
+
+        self.assertEqual(200, response.status_code)
+
+        self.assertEqual(1, len(tenders))
+        self.assertEqual(3957, tenders[0].base_id)
+
+    def test_page(self):
+        response = self.client.get(reverse(tenders_list), {'page': '100'})
+        self.assertEqual(200, response.status_code)
