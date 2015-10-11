@@ -7,7 +7,7 @@
 </style>
 <div id="graph-histogram"><svg></svg></div>
 <script>
-    d3.json("{% url 'contracts_data_selector' 'municipalities-delta-time-histogram-json' %}", function(data) {
+    d3.json("{% url 'contracts_data_selector' 'entities-category-ranking-histogram-json' %}", function(data) {
 
         data.forEach(function(series) {
             series['values'].forEach(function(d) {
@@ -31,8 +31,8 @@
                                         d.max_position.toFixed(1) + ' {% trans "days" %}</p>';
                 });
             chart.xAxis
-                    .tickFormat(d3.format(',.0f'))
-                    .axisLabel('{% trans "Average time (days)" %}');
+                    .tickFormat(d3.format(',.1f'))
+                    .axisLabel('{% trans "Average depth" %}');
 
             chart.yAxis
                     .tickFormat(d3.format(',.d'))

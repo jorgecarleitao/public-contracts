@@ -12,15 +12,11 @@
         </h3>
         <p>Use Crl + F para procurar o seu :-)</p>
     </div>
-    {% with entities=entities %}
-        {% if entities %}
-            <div class="list-loop">
-                {% for entity in entities %}
-                    {% include "contracts/analysis/entity_rank/summary.html" %}
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+    <div class="list-loop">
+        {% for entity in entities %}
+            {% include "contracts/analysis/entity_rank/summary.html" %}
+        {% endfor %}
+    </div>
 
     <script>
         $(document).ready(function() {

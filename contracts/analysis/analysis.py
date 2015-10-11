@@ -4,7 +4,8 @@ from datetime import date, timedelta
 import datetime
 import calendar
 
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count, F, Avg
+from django.db.models.functions import Coalesce
 from django.db import connection
 
 from contracts import models
@@ -114,28 +115,22 @@ def get_entities_value_histogram():
     return result
 
 
-def get_entities_specificity(startswith_string):
+def get_municipalities_specificity():
     """
-    1. We filter entities that start with "startswith_string"
-    2. We compute the sum of depths and the number of contracts
-    3. We exclude entities with less than 5 contracts
-    4. We compute the average depth
-    5. We order them by decreasing average depth
+    1. Filter municipalities
+    2. Compute the average depths and the number of contracts
+    3. Exclude entities with less than 5 contracts
+    4. Order them by decreasing average depth
     """
-    entities = models.Entity.objects \
-        .filter(name__startswith=startswith_string) \
-        .annotate(sum_depth=Sum('contracts_made__category__depth'), count=Count('contracts_made')) \
-        .exclude(count__lt=5)
+    from pt_regions import municipalities
 
-    # 4.
-    entities = list(entities)
-    for entity in entities:
-        entity.avg_depth = entity.sum_depth*1./entity.count
-
-    # 5.
-    entities.sort(key=lambda x: x.avg_depth, reverse=True)
-
-    return entities
+    # Coalesce transforms Null -> 0
+    return list(models.Entity.objects \
+        .filter(nif__in=[m['NIF'] for m in municipalities()]) \
+        .annotate(count=Count('contracts_made'),
+                  avg_depth=Avg(Coalesce('contracts_made__category__depth', 0))) \
+        .exclude(count__lt=5) \
+        .order_by('-avg_depth'))
 
 
 def get_contracts_macro_statistics():

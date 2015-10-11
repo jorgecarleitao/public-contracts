@@ -25,7 +25,7 @@ def analysis_selector(request, analysis_id, slug=None):
     return AVAILABLE_VIEWS[name](request)
 
 
-@cache_page(60 * 60 * 24)
+@cache_page(60 * 60 * 24 * 7)  # 7 days
 def entities_category_ranking(request):
     entities = analysis_manager.get_analysis('municipalities_categories_ranking')
 

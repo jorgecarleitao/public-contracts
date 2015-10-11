@@ -50,7 +50,7 @@ def entities_category_ranking_histogram_json(request):
                        'value': 0,
                        'min_position': min_value + (max_value - min_value)*x/n_bins,
                        'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-                      } for x in range(n_bins)]
+                      } for x in reversed(range(n_bins))]
 
     for entity in entities:
         for x in range(n_bins):
