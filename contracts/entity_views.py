@@ -111,7 +111,7 @@ def contracts_made_time_series(request, entity_base_id):
     """
     query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
                   EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
-                  COUNT(contracts_contract.id)
+                  COUNT(contracts_contract.id), SUM(contracts_contract.price)
                 FROM contracts_contract
                      INNER JOIN contracts_contract_contractors
                          ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
@@ -125,19 +125,24 @@ def contracts_made_time_series(request, entity_base_id):
     cursor = connection.cursor()
     cursor.execute(query, (entity_base_id,))
 
-    data = {'values': [], 'key': _('Contracts as hiring')}
+    data1 = {'values': [], 'key': _('Contracts as hiring'), "bar": True}
+    data2 = {'values': [], 'key': _('Expenses'), 'color': 'black'}
     for row in cursor.fetchall():
-        year, month, value = row
-        if year is None:
+        year, month, count, value = row
+        if year is None or count == 0:
             continue
 
         min_date = datetime.date(int(year), int(month), 1)
 
-        entry = {'month': min_date.strftime('%Y-%m'),
-                 'value': int(value)}
-        data['values'].append(entry)
+        entry1 = {'month': min_date.strftime('%Y-%m'),
+                  'value': int(count)}
+        data1['values'].append(entry1)
 
-    return HttpResponse(json.dumps([data]), content_type="application/json")
+        entry2 = {'month': min_date.strftime('%Y-%m'),
+                  'value': int(value/100)}
+        data2['values'].append(entry2)
+
+    return HttpResponse(json.dumps([data1, data2]), content_type="application/json")
 
 
 def contracts_received_time_series(request, entity_base_id):
@@ -147,7 +152,7 @@ def contracts_received_time_series(request, entity_base_id):
     """
     query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
                        EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
-                       COUNT(contracts_contract.id)
+                       COUNT(contracts_contract.id), SUM(contracts_contract.price)
                 FROM contracts_contract
                      INNER JOIN contracts_contract_contracted
                          ON ( contracts_contract.id = contracts_contract_contracted.contract_id )
@@ -161,19 +166,24 @@ def contracts_received_time_series(request, entity_base_id):
     cursor = connection.cursor()
     cursor.execute(query, (entity_base_id,))
 
-    data = {'values': [], 'key': _('Contracts as hired')}
+    data1 = {'values': [], 'key': _('Contracts as hired'), 'bar': True}
+    data2 = {'values': [], 'key': _('Earnings'), 'color': 'black'}
     for row in cursor.fetchall():
-        year, month, value = row
+        year, month, count, value = row
         if year is None:
             continue
 
         min_date = datetime.date(int(year), int(month), 1)
 
-        entry = {'month': min_date.strftime('%Y-%m'),
-                 'value': int(value)}
-        data['values'].append(entry)
+        entry1 = {'month': min_date.strftime('%Y-%m'),
+                  'value': int(count)}
+        data1['values'].append(entry1)
 
-    return HttpResponse(json.dumps([data]), content_type="application/json")
+        entry2 = {'month': min_date.strftime('%Y-%m'),
+                  'value': int(value/100)}
+        data2['values'].append(entry2)
+
+    return HttpResponse(json.dumps([data1, data2]), content_type="application/json")
 
 
 def redirect_id(request, entity_id, url_ending=None):

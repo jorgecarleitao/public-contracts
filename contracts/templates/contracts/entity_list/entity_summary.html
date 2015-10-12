@@ -11,14 +11,14 @@
         {% with expended=entity.total_expended %}
             <p>
                 {% if expended %}
-                    {% trans "Expenses:" %} {{ expended|intword }} €
+                    {% trans "Expenses" %}: {{ expended|intword }} €
                 {% else %}
                     {% trans "No expenses" %}
                 {% endif %}
             </p>
             <p>
                 {% if earned %}
-                    {% trans "Earnings:" %} {{ earned|intword }} €
+                    {% trans "Earnings" %}: {{ earned|intword }} €
                 {% else %}
                     {% trans "No earnings" %}
                 {% endif %}
