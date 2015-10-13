@@ -21,28 +21,29 @@
         });
 
         nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                            .margin({left: 100, right: 100})
-                            .useInteractiveGuideline(true)
-                            .transitionDuration(750)
-                            .showYAxis(true)
-                            .showXAxis(true);
+            var chart = nv.models.linePlusBarChart()
+                .margin({left: 80, right: 80})
+                .x(function(d,i) { return i });
 
             chart.xAxis
                     .axisLabel('{% trans 'month' %}')
                     .tickFormat(function(d) {
-                        return d3.time.format('%Y-%m')(new Date(d));
+                        var dx = data[0].values[d] && data[0].values[d].x || 0;
+                        return dx ? d3.time.format('%x')(new Date(dx)) : '';
                     });
 
-            chart.xScale(d3.time.scale());
+            chart.y1Axis
+                    .axisLabel("{% trans "Number of contracts" %}").axisLabelDistance(20)
+                    .tickFormat(d3.format(',.0d'));
 
-            chart.yAxis     //Chart y-axis settings
-                    .axisLabel("{% trans "Number of signed contracts" %}")
-                    .tickFormat(d3.format(',d'));
+            chart.y2Axis
+                    .axisLabel("{% trans "Value of contracts" %}")
+                    .tickFormat(function(d) { return d3.format(',.2s')(d) + '€' });
 
-            var svg = d3.select('#graph-{{ url|slugify }}').append('svg')
-                    .datum(data)
-                    .call(chart);
+            chart.lines.forceY([0]);
+
+            var svg = d3.select("#graph-{{ url|slugify }}").append("svg");
+            svg.datum(data).transition().duration(500).call(chart);
 
             // link to data
             var a = svg.append("a")
@@ -53,7 +54,7 @@
                 .text('{% trans "Download data" %}');
 
             //Update the chart when window resizes.
-            nv.utils.windowResize(function() { chart.update() });
+            nv.utils.windowResize(chart.update);
             return chart;
         });
     });

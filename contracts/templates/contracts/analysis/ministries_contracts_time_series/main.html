@@ -14,7 +14,7 @@
         </p>
         <p>
             {% blocktrans trimmed %}
-                We picked all contracts of all ministries and grouped then by the month of <strong>signing date</strong>.
+                We picked all contracts of all ministries and grouped then by the month.
                 Here is the result:
             {% endblocktrans %}
         </p>
@@ -24,36 +24,7 @@
     <div class="text-element">
         <p>
             {% blocktrans trimmed %}
-                Relevant context:
+                By ministry we mean entities whose name starts with "Secretaria-Geral do Ministério ...".
             {% endblocktrans %}
-        </p>
-        <ul>
-            <li>
-                {% blocktrans trimmed %}
-                    By ministry we mean entities whose name starts with "Secretaria-Geral do Ministério ...".
-                {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans trimmed %}
-                    The database only started to be populated from 2008, when European Union law came into effect.
-                    To some extent, this explains the sudden increase during 2008-2009.
-                {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans trimmed %}
-                    We are not using the sum of values (€) of the contracts.
-                    The argument is that values are unbounded:
-                    one single contract can make a particular month to have a arbitrary large value.
-                    (For experts:) the reason is that the variance of the sum of values can be
-                    unbounded because the distribution of values is broad.
-                {% endblocktrans %}
-            </li>
-            <li>
-                {% blocktrans trimmed %}
-                    We have no explanation why there is a consistent increase since the beginning of 2013,
-                    which is already the double of the average value over the last 3 years.
-                {% endblocktrans %}
-            </li>
-        </ul>
     </div>
 {% endblock %}

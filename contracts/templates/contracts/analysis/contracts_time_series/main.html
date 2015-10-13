@@ -9,75 +9,25 @@
             {% blocktrans trimmed with url="http://www.base.gov.pt/base2/" %}
                 By European law, portuguese public entities must publish their contracts in an
                 <a href="{{ url }}">official public database</a>. With this database,
-                we posed the question: when Portugal contract most?
+                we posed the question: when Portugal hires most?
             {% endblocktrans %}
         </p>
         <p>
             {% blocktrans trimmed %}
-                We picked all contracts in that database and count how many of then were signed on each month.
-                Here is the result:
+                We picked all contracts in that database and count how many of then were signed on each month
+                and what was their value. Here is the result:
             {% endblocktrans %}
         </p>
     </div>
+    <h4>{% trans "All contracts" %}:</h4>
     {% url 'contracts_data_selector' 'contracts-time-series-json' as the_url %}
     {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
-    <div class="text-element">
-        <h4>{% trans "Observations and context" %}</h4>
-        <p>
-            {% blocktrans trimmed %}
-                The database only started to be populated in 2008-2009. This is consistent with
-                the time the portuguese law of public procurements came into effect.
-            {% endblocktrans %}
-            <a id="extend-button-1">{% trans "Expand technical details..." %}</a>.
-        </p>
-        <ul>
-            <li class="extendable-1" hidden="1">
-                {% blocktrans trimmed %}
-                    Because the database contains only a percentage of all contracts (not every contract is published),
-                    one important assumption is that this percentage does not strongly depend on the signing date.
-                {% endblocktrans %}
-            </li>
-            <li class="extendable-1" hidden="1">
-                {% blocktrans trimmed %}
-                    We are not using the sum of values (€) of the contracts.
-                    The argument is that values are unbounded:
-                    one single contract can make a particular month to have a arbitrary large value.
-                    (For experts:) the reason is that the variance of the sum of values can be
-                    unbounded because the distribution of values is broad.
-                {% endblocktrans %}
-            </li>
-        </ul>
-        <p>
-            {% blocktrans trimmed %}
-                We see that there is a non-negligible peak in september of 2009, and we now show that
-                it is due to a portuguese municipal election in that month.
-                To that, we divide all contracts in two: the ones made only by municipalities, and the ones
-                made only by non-municipalities.
-            {% endblocktrans %}
-        </p>
-        <h4>{% trans "Municipalities only:" %}</h4>
-        {% url 'contracts_data_selector' 'municipalities-contracts-time-series-json' as the_url %}
-        {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
-        <ul>
-            <li>
-                {% url "contracts_analysis_internal_selector" 2 as the_url %}
-                {% blocktrans trimmed with url=the_url %}
-                    In <a href="{{ the_url }}">this analysis</a> we justify that this graph is consistent
-                    with the existence of two municipal elections, one in 10-2009 and other in 10-2013.
-                {% endblocktrans %}
-            </li>
-        </ul>
-        <h4>{% trans "Non-Municipalities only:" %}</h4>
-        {% url 'contracts_data_selector' 'excluding-municipalities-contracts-time-series-json' as the_url %}
-        {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
-        <p>
-            {% blocktrans trimmed %}
-                If we exclude all contracts from municipalities, this peak disappears, showing that
-                municipal elections have a considerable influence on municipalities procurement,
-                which, in turn, considerably influences the overall portuguese procurement statistics.
-            {% endblocktrans %}
-        </p>
-    </div>
+    <h4>{% trans "Municipalities only" %}:</h4>
+    {% url 'contracts_data_selector' 'municipalities-contracts-time-series-json' as the_url %}
+    {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
+    <h4>{% trans "Excluding municipalities" %}:</h4>
+    {% url 'contracts_data_selector' 'excluding-municipalities-contracts-time-series-json' as the_url %}
+    {% include "contracts/analysis/contracts_time_series/graph.html" with url=the_url %}
     <script>
         $(document).ready(function() {
             $("#extend-button-1").click(function() {

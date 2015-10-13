@@ -2,6 +2,7 @@ import json
 
 from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext as _
+from django.views.generic import View
 
 from .analysis import analysis_manager
 
@@ -158,16 +159,6 @@ def municipalities_delta_time_histogram_json(request):
     return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
-def municipalities_contracts_time_series_json(request):
-    data = analysis_manager.get_analysis('municipalities_contracts_time_series')
-
-    count_time_series = {'values': [], 'key': _('contracts')}
-    for x in data:
-        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
-
-    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
-
-
 def municipalities_procedure_types_time_series_json(request):
     data = analysis_manager.get_analysis('municipalities_procedure_types_time_series')
 
@@ -181,34 +172,35 @@ def municipalities_procedure_types_time_series_json(request):
     return HttpResponse(json.dumps([tender_time_series, direct_time_series]), content_type="application/json")
 
 
-def ministries_contracts_time_series_json(request):
-    data = analysis_manager.get_analysis('ministries_contracts_time_series')
+class ContractsTimeSeriesJsonView(View):
+    http_method_names = ['get']
+    analysis = 'contracts_time_series'
 
-    count_time_series = {'values': [], 'key': _('contracts')}
-    for x in data:
-        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
+    def get(self, request):
+        data = analysis_manager.get_analysis(self.analysis)
 
-    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
+        count_time_series = {'values': [], 'key': _('contracts'), 'bar': True}
+        value_time_series = {'values': [], 'key': _('value'), 'color': 'black'}
+        for x in data:
+            count_time_series['values'].append(
+                {'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
+            value_time_series['values'].append(
+                {'month': x['from'].strftime('%Y-%m'), 'value': x['value']})
 
-
-def excluding_municipalities_contracts_time_series_json(request):
-    data = analysis_manager.get_analysis('excluding_municipalities_contracts_time_series')
-
-    count_time_series = {'values': [], 'key': _('contracts')}
-    for x in data:
-        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
-
-    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
+        return HttpResponse(json.dumps([count_time_series, value_time_series]),
+                            content_type="application/json")
 
 
-def contracts_time_series_json(request):
-    data = analysis_manager.get_analysis('contracts_time_series')
+class MunicipalitiesTimeSeriesJsonView(ContractsTimeSeriesJsonView):
+    analysis = 'municipalities_contracts_time_series'
 
-    count_time_series = {'values': [], 'key': _('contracts')}
-    for x in data:
-        count_time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
 
-    return HttpResponse(json.dumps([count_time_series]), content_type="application/json")
+class ExcludeMunicipalitiesTimeSeriesJsonView(ContractsTimeSeriesJsonView):
+    analysis = 'excluding_municipalities_contracts_time_series'
+
+
+class MinistriesTimeSeiresJsonView(ContractsTimeSeriesJsonView):
+    analysis = 'ministries_contracts_time_series'
 
 
 def legislation_application_time_series_json(request):
@@ -231,13 +223,13 @@ AVAILABLE_VIEWS = {
 
     'municipalities-delta-time-json': municipalities_delta_time_json,
     'municipalities-delta-time-histogram-json': municipalities_delta_time_histogram_json,
-    'contracts-time-series-json': contracts_time_series_json,
-    'excluding-municipalities-contracts-time-series-json': excluding_municipalities_contracts_time_series_json,
+    'contracts-time-series-json': ContractsTimeSeriesJsonView.as_view(),
+    'excluding-municipalities-contracts-time-series-json': ExcludeMunicipalitiesTimeSeriesJsonView.as_view(),
 
-    'municipalities-contracts-time-series-json': municipalities_contracts_time_series_json,
+    'municipalities-contracts-time-series-json': MunicipalitiesTimeSeriesJsonView.as_view(),
     'municipalities-procedure-types-time-series-json': municipalities_procedure_types_time_series_json,
 
-    'ministries-contracts-time-series-json': ministries_contracts_time_series_json,
+    'ministries-contracts-time-series-json': MinistriesTimeSeiresJsonView.as_view(),
     'legislation-application-time-series-json': legislation_application_time_series_json,
 
     'entities-values-histogram-json': entities_values_histogram_json,

@@ -1,11 +1,11 @@
 {% load i18n %}
 <style>
     #graph-{{ url|slugify }} svg {
-        width: 450px;
+        width: 420px;
         height: 200px;
     }
 </style>
-<div class="" id="graph-{{ url|slugify }}">
+<div id="graph-{{ url|slugify }}">
 </div>
 <script>
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
@@ -19,11 +19,10 @@
                 d.y = (+d.value);
             });
         });
-        console.log(data);
 
         nv.addGraph(function() {
             var chart = nv.models.linePlusBarChart()
-                .margin({left: 80, right: 50})
+                .margin({left: 72, right: 72})
                 .x(function(d,i) { return i });
 
             chart.xAxis
@@ -34,11 +33,11 @@
                     });
 
             chart.y1Axis
-                    .axisLabel("{% trans "Contracts" %}")
+                    .axisLabel("{% trans "Number of contracts" %}").axisLabelDistance(30)
                     .tickFormat(d3.format(',.0d'));
 
             chart.y2Axis
-                    .axisLabel("{% trans "Value" %}")
+                    .axisLabel("{% trans "Value of contracts" %}")
                     .tickFormat(function(d) { return d3.format(',.2s')(d) + '€' });
 
             chart.lines.forceY([0]);

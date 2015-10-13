@@ -221,32 +221,10 @@ def get_entities_delta_time(startswith_string):
     return entities
 
 
-def get_entities_contracts_time_series(startswith_string):
-    """
-    Computes the time series of number of contracts of all entities
-    starting with startswith_string.
-    """
-    startswith_string += '%%'
-
-    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
-                       EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
-                       COUNT(contracts_contract.id)
-                FROM contracts_contract
-                     INNER JOIN contracts_contract_contractors
-                         ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
-                     INNER JOIN contracts_entity
-                         ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
-                WHERE contracts_entity.name ILIKE %s
-                GROUP BY s_year, s_month
-                ORDER BY s_year, s_month
-                '''
-
-    cursor = connection.cursor()
-    cursor.execute(query, (startswith_string,))
-
+def _raw_to_python(cursor):
     data = []
     for row in cursor.fetchall():
-        year, month, value = row
+        year, month, count, value = row
         if year is None:
             continue
 
@@ -255,10 +233,77 @@ def get_entities_contracts_time_series(startswith_string):
 
         entry = {'from': min_date,
                  'to': max_date,
-                 'count': int(value)}
+                 'count': int(count),
+                 'value': int(value/100)}
         data.append(entry)
 
     return data
+
+
+def _get_entities_contracts_time_series(where_statement):
+    distinct_query = \
+        '''SELECT DISTINCT contracts_contract.id AS id,
+                  contracts_contract.price AS price,
+                  EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
+                  EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month
+           FROM contracts_contract
+                INNER JOIN contracts_contract_contractors
+                    ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
+                INNER JOIN contracts_entity
+                    ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
+           %s
+        ''' % where_statement
+
+    query = '''SELECT contracts.s_year, contracts.s_month, COUNT(contracts.id), SUM(contracts.price)
+               FROM (%s) AS contracts
+               WHERE contracts.s_year > 2009
+               GROUP BY contracts.s_year, contracts.s_month
+               ORDER BY contracts.s_year, contracts.s_month
+               ''' % distinct_query
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    return _raw_to_python(cursor)
+
+
+def get_municipalities_contracts_time_series():
+    from pt_regions import municipalities
+
+    return _get_entities_contracts_time_series(
+        'WHERE contracts_entity.nif IN (%s)' %
+        ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
+
+
+def get_exclude_municipalities_contracts_time_series():
+    from pt_regions import municipalities
+
+    return _get_entities_contracts_time_series(
+        'WHERE contracts_entity.nif NOT IN (%s)' %
+        ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
+
+
+def get_contracts_price_time_series():
+
+    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
+       EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month,
+       COUNT(contracts_contract.id),
+       SUM(contracts_contract.price)
+       FROM contracts_contract
+       WHERE EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009
+       GROUP BY s_year, s_month
+       ORDER BY s_year, s_month
+    '''
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    return _raw_to_python(cursor)
+
+
+def get_ministries_contracts_time_series():
+    return _get_entities_contracts_time_series(
+        r"WHERE contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
 
 
 def get_procedure_types_time_series(startswith_string):
@@ -283,64 +328,6 @@ def get_procedure_types_time_series(startswith_string):
             }
             data.append(entry)
 
-        min_date = max_date
-        if min_date == end_date:
-            break
-
-    return data
-
-
-def get_excluding_entities_contracts_time_series(startswith_string):
-    """
-    Computes the number of and value of contracts of all entities excluding the ones
-    starting with startswith_string.
-    from 2008 to today, with a window of 1 month.
-    """
-    min_date = datetime.date(2008, 1, 1)
-    end_date = datetime.date(date.today().year, date.today().month, 1)
-
-    entities = models.Entity.objects.exclude(name__startswith=startswith_string)
-
-    data = []
-    while True:
-        max_date = add_months(min_date, 1)
-
-        aggregate = entities.filter(contracts_made__signing_date__gte=min_date,
-                                    contracts_made__signing_date__lt=max_date) \
-            .aggregate(count=Count("contracts_made"), value=Sum("contracts_made__price"))
-
-        entry = {'from': min_date,
-                 'to': max_date,
-                 'count': aggregate['count'],
-                 'value': aggregate['value'] or 0}
-        data.append(entry)
-        min_date = max_date
-        if min_date == end_date:
-            break
-
-    return data
-
-
-def get_contracts_price_time_series():
-
-    min_date = datetime.date(2008, 1, 1)
-    end_date = datetime.date(date.today().year, date.today().month, 1)
-
-    contracts = models.Contract.objects.all()
-
-    data = []
-    while True:
-        max_date = add_months(min_date, 1)
-
-        aggregate = contracts.filter(signing_date__gte=min_date,
-                                     signing_date__lt=max_date) \
-            .aggregate(count=Count("id"), value=Sum("price"))
-
-        entry = {'from': min_date,
-                 'to': max_date,
-                 'count': aggregate['count'],
-                 'value': aggregate['value'] or 0}
-        data.append(entry)
         min_date = max_date
         if min_date == end_date:
             break
