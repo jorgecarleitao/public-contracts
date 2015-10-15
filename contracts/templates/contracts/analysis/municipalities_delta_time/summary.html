@@ -1,6 +1,8 @@
 {% extends "summary.html" %}
 {% load i18n %}
-{% block summary_content %}
-    <h4>{{ entity.average_delta_time|floatformat:1 }}: <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a></h4>
-    <p>{{ entity.contracts_number }} {% trans "contracts" %}</p>
+{% block summary_heading %}
+    {{ entity.average_delta_time|floatformat:1 }} {% trans "days" %}: <a href="{{ entity.get_absolute_url }}">{{ entity.name }}</a>
+{% endblock %}
+{% block summary_body %}
+    {{ entity.contracts_number }} {% trans "contracts" %}
 {% endblock %}

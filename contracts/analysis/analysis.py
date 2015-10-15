@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from datetime import date, timedelta
+from datetime import date
 import datetime
 import calendar
 
@@ -199,26 +199,60 @@ def get_all_procedure_types_time_series():
     return data
 
 
-def get_entities_delta_time(startswith_string):
-    entities = models.Entity.objects.filter(name__startswith=startswith_string) \
-        .annotate(total=Count('contracts_made')).exclude(total__lt=5)
+def _entities_delta_time(conditional_statement):
+    """
+    Annotates in a set of entities defined by a `conditional_statement`
+    the average time between a contract be signed and added to the db.
 
-    entities = list(entities)
+    It ignores contracts before 2010 and contracts where the signing date
+    or addition date is null.
+    """
+    query = '''
+        SELECT contracts_entity.id,
+               contracts_entity.base_id,
+               contracts_entity.name,
+               AVG(contracts_contract.added_date - contracts_contract.signing_date) AS avg,
+               COUNT(contracts_contract.id) AS "count"
+        FROM contracts_entity
+          LEFT OUTER JOIN contracts_contract_contractors
+            ON ( contracts_entity.id = contracts_contract_contractors.entity_id )
+          LEFT OUTER JOIN contracts_contract
+            ON ( contracts_contract_contractors.contract_id = contracts_contract.id )
+        WHERE contracts_contract.added_date IS NOT NULL AND
+              contracts_contract.signing_date IS NOT NULL AND
+              EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009 AND
+              %s
+        GROUP BY contracts_entity.id, contracts_entity.base_id, contracts_entity.name
+        ORDER BY avg ASC
+    ''' % conditional_statement
 
-    for entity in entities:
-        count = 0
-        avg = timedelta(0)
-        for contract in entity.contracts_made.exclude(signing_date=None).exclude(added_date=None) \
-                .values('signing_date', 'added_date'):
-            avg += contract['added_date'] - contract['signing_date']
-            count += 1
+    def raw_to_python(cursor):
+        data = []
+        for row in cursor.fetchall():
+            id, base_id, name, avg, count = row
+            entity = models.Entity(id=id, base_id=base_id, name=name)
+            entity.average_delta_time = float(avg)
+            entity.contracts_number = count
+            data.append(entity)
+        return data
 
-        entity.average_delta_time = avg.days*1./count
-        entity.contracts_number = count
+    cursor = connection.cursor()
+    cursor.execute(query)
 
-    entities.sort(key=lambda x: x.average_delta_time)
+    return raw_to_python(cursor)
 
-    return entities
+
+def municipalities_delta_time():
+    from pt_regions import municipalities
+
+    return _entities_delta_time(
+        'contracts_entity.nif IN (%s)' %
+        ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
+
+
+def ministries_delta_time():
+    return _entities_delta_time(
+        r"contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
 
 
 def _raw_to_python(cursor):
@@ -240,7 +274,7 @@ def _raw_to_python(cursor):
     return data
 
 
-def _get_entities_contracts_time_series(where_statement):
+def _entities_contracts_time_series(conditional_statement):
     distinct_query = \
         '''SELECT DISTINCT contracts_contract.id AS id,
                   contracts_contract.price AS price,
@@ -251,15 +285,15 @@ def _get_entities_contracts_time_series(where_statement):
                     ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
                 INNER JOIN contracts_entity
                     ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
-           %s
-        ''' % where_statement
+           WHERE %s
+        ''' % conditional_statement
 
     query = '''SELECT contracts.s_year, contracts.s_month, COUNT(contracts.id), SUM(contracts.price)
                FROM (%s) AS contracts
                WHERE contracts.s_year > 2009
                GROUP BY contracts.s_year, contracts.s_month
                ORDER BY contracts.s_year, contracts.s_month
-               ''' % distinct_query
+            ''' % distinct_query
 
     cursor = connection.cursor()
     cursor.execute(query)
@@ -267,23 +301,23 @@ def _get_entities_contracts_time_series(where_statement):
     return _raw_to_python(cursor)
 
 
-def get_municipalities_contracts_time_series():
+def municipalities_contracts_time_series():
     from pt_regions import municipalities
 
-    return _get_entities_contracts_time_series(
-        'WHERE contracts_entity.nif IN (%s)' %
+    return _entities_contracts_time_series(
+        'contracts_entity.nif IN (%s)' %
         ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
 
 
-def get_exclude_municipalities_contracts_time_series():
+def exclude_municipalities_contracts_time_series():
     from pt_regions import municipalities
 
-    return _get_entities_contracts_time_series(
-        'WHERE contracts_entity.nif NOT IN (%s)' %
+    return _entities_contracts_time_series(
+        'contracts_entity.nif NOT IN (%s)' %
         ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
 
 
-def get_contracts_price_time_series():
+def contracts_price_time_series():
 
     query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
        EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month,
@@ -301,9 +335,9 @@ def get_contracts_price_time_series():
     return _raw_to_python(cursor)
 
 
-def get_ministries_contracts_time_series():
-    return _get_entities_contracts_time_series(
-        r"WHERE contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
+def ministries_contracts_time_series():
+    return _entities_contracts_time_series(
+        r"contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
 
 
 def get_procedure_types_time_series(startswith_string):
