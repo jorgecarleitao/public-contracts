@@ -37,7 +37,7 @@
                     .tickFormat(d3.format(',.0d'));
 
             chart.y2Axis
-                    .axisLabel("{% trans "Value of contracts" %}")
+                    .axisLabel("{% trans "Value of the contracts" %}")
                     .tickFormat(function(d) { return d3.format(',.2s')(d) + '€' });
 
             chart.lines.forceY([0]);

@@ -1,10 +1,10 @@
 {% extends "contracts/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?{% endblock %}
+{% block title %}Evolução temporal dos procedimentos usados na contratação pública{% endblock %}
 {% block content %}
-    <div class="text-element" itemscope itemtype="http://schema.org/Article">
-        <h2 itemprop="name">Evolução temporal da contratação pública portuguesa - concurso público ou ajuste direto?</h2>
+    <div itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">Evolução temporal dos procedimentos usados na contratação pública</h2>
         <p>
             A contratação pública em Portugal é feita maioritariamente por
         </p>
@@ -27,49 +27,15 @@
             usado pois permite uma análise quantitativa de quais os tipos
             relevantes na lei.
         </p>
-        <p>
-            Assim, neste trabalho respondemos à pergunta: qual a percentagem de
-            cada um destes tipos?
-        </p>
         <p itemprop="description">
             Considerámos todos os contratos da <a href="http://www.base.gov.pt/base2/">base de dados pública</a>
-            fechados em cada mês desde 2010 e cálculamos as percentagens feitas
-            de cada um dos tipos.
+            fechados em cada mês desde 2010 e cálculamos quantos são realizados
+            pelos diferentes procedimentos, e a que valor esses tipos correspondem.
         </p>
-    </div>
-    {% url 'contracts_data_selector' 'procedure-types-time-series-json' as the_url %}
-    {% include "contracts/analysis/procedure_type_time_series/graph.html" with url=the_url%}
-    <div class="text-element">
-        <p>
-            De 2010 a 2013, dentro dos contratos existentes na base de dados,
-            houve um aumento consistente para o uso de concurso público (de ~1% para ~10%)
-            que se tem invertido em 2014.
-        </p>
-        <p>
-            Os acordos-quadro, uma forma de contratação que só em 2014 foi
-            adicionada na base de dados oficial, que explica o seu início nessa
-            altura.
-        </p>
-        <h4>
-            Dados deste mês ainda não são conclusivos
-        </h4>
-        <p>
-            O tempo médio entre o contrato ter sido fechado e a publicação do
-            mesmo na base de dados oficial é por volta de 1-2 meses.
-        </p>
-        <p>
-            Assim, os últimos dois meses ainda podem sofrer alterações e portanto
-            devemos esperar até os valores estabilizarem para tirarmos conclusões.
-        </p>
-        <h4>
-            Ajustes directos dominam
-        </h4>
-        <p>
-            Como já reportado pelo Instituto de Construção e Imobiliário I.P.
-            para 2012 (<a href="http://www.base.gov.pt/base2/downloads/Rel_Anual_Contratos_Publicos_2012.pdf">relatório oficial</a>, Quadro 9),
-            os ajustes directos dominam a contratação pública portuguesa,
-            embora em 2014 tenham atingido pela primeira vez menos de 90%
-            de toda a contratação reportada.
-        </p>
+        {% url 'contracts_data_selector' 'procedure-types-time-series-json' as the_url %}
+        {% include "contracts/analysis/procedure_type_time_series/graph.html" with url=the_url%}
+
+        {% url 'contracts_data_selector' 'procedure-types-time-series-json' as the_url %}
+        {% include "contracts/analysis/procedure_type_time_series/graph_count.html" with url=the_url%}
     </div>
 {% endblock %}

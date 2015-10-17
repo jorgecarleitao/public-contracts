@@ -1,0 +1,10 @@
+{% extends 'contracts/analysis/procedure_type_time_series/graph.html' %}
+{% load i18n %}
+{% block y_quantity %}count{% endblock %}
+{% block y_axis %}
+    chart.yAxis
+        .axisLabel("{% trans 'Number of contracts' %}")
+        .tickFormat(d3.format('.d'));
+{% endblock %}
+{% block id_name %}graph-count{% endblock %}
+{% block id_name1 %}graph-count{% endblock %}

@@ -1,25 +1,41 @@
 {% extends "contracts/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'Portuguese municipalities - tender or direct procurement?' %}{% endblock %}
+{% block title %}Que procedimentos os municípios usam na contratação pública?{% endblock %}
 {% block content %}
-    <div class="text-element" itemscope itemtype="http://schema.org/Article">
-        <h2 itemprop="name">{% trans 'Portuguese municipalities - tender or direct procurement?' %}</h2>
+    <div itemscope itemtype="http://schema.org/Article">
+        <h2 itemprop="name">Que procedimentos os municípios usam na sua contratação pública?</h2>
         <p>
-            {% blocktrans trimmed %}
-                The procedure to create a public procurement in Portugal is mainly either by
-                <strong>direct procurement</strong> or by a <strong>public tender</strong>.
-                In this analysis we asked the question:
-            {% endblocktrans %}
+            A contratação pública em Portugal é feita maioritariamente por
         </p>
-        <h3>{% trans "How municipalities do procurement?"%}</h3>
+        <ul>
+            <li>
+                <strong>ajuste direto</strong>,
+            </li>
+            <li>
+                <strong>concurso público</strong>,
+            </li>
+            <li>
+                <strong>concurso limitado por prévia qualificação</strong> ou
+            </li>
+            <li>
+                <strong>acordo quadro</strong>.
+            </li>
+        </ul>
+        <p>
+            Do ponto de vista legislativo é relevante saber quanto cada um é
+            usado pois permite uma análise quantitativa de quais os tipos
+            relevantes na lei.
+        </p>
         <p itemprop="description">
-            {% blocktrans trimmed %}
-                We considered all contracts of all municipalities of each month and asked how many were decided
-                by a public tender, and how many were decided by direct procurement. Here is the result:
-            {% endblocktrans %}
+            Considerámos todos os contratos da <a href="http://www.base.gov.pt/base2/">base de dados pública</a>
+            fechados em cada mês por municípios desde 2010 e cálculamos quantos são realizados
+            pelos diferentes procedimentos, e a que valor esses tipos correspondem.
         </p>
+        {% url 'contracts_data_selector' 'municipalities-procedure-types-time-series-json' as the_url %}
+        {% include "contracts/analysis/procedure_type_time_series/graph.html" with url=the_url%}
+
+        {% url 'contracts_data_selector' 'municipalities-procedure-types-time-series-json' as the_url %}
+        {% include "contracts/analysis/procedure_type_time_series/graph_count.html" with url=the_url%}
     </div>
-    {% url 'contracts_data_selector' 'municipalities-procedure-types-time-series-json' as the_url %}
-    {% include "contracts/analysis/procedure_type_time_series/graph.html" with url=the_url%}
 {% endblock %}

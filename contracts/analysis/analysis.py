@@ -152,53 +152,6 @@ def get_contracts_macro_statistics():
             'month_count': month_price['count']}
 
 
-def get_all_procedure_types_time_series():
-    min_date = datetime.date(2010, 1, 1)
-    end_date = datetime.date(date.today().year, date.today().month, 1)
-
-    # ignore procedure types with less than 100 contracts
-    valid_types = models.ProcedureType.objects\
-        .annotate(count=Count('contract'))\
-        .exclude(count__lt=100)
-    # avoid subqueries (Django related optimization)
-    valid_types = list(valid_types)
-
-    data = []
-    while True:
-        max_date = add_months(min_date, 1)
-
-        # restrict to date bounds
-        counts = models.ProcedureType.objects\
-            .filter(id__in=[p.id for p in valid_types])\
-            .filter(contract__signing_date__gte=min_date,
-                    contract__signing_date__lt=max_date)
-
-        # annotate number of contracts
-        counts = counts.annotate(count=Count('contract'))
-
-        # hit db and make it a dictionary
-        counts = dict(counts.values_list('id', 'count'))
-
-        # total of this month (to make percentages)
-        total = sum([count for count in counts.values()])
-
-        entry = {'from': min_date,
-                 'to': max_date}
-
-        for procedure_type in valid_types:
-            if procedure_type.id in counts:
-                entry[procedure_type.name] = counts[procedure_type.id]/total
-            else:
-                entry[procedure_type.name] = 0
-        data.append(entry)
-
-        min_date = max_date
-        if min_date == end_date:
-            break
-
-    return data
-
-
 def _entities_delta_time(conditional_statement):
     """
     Annotates in a set of entities defined by a `conditional_statement`
@@ -340,33 +293,90 @@ def ministries_contracts_time_series():
         r"contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
 
 
-def get_procedure_types_time_series(startswith_string):
+def _procedure_types_time_series_to_python(cursor):
+        data = []
+        for row in cursor.fetchall():
+            procedure_name, year, month, count, value = row
+            if year is None:
+                continue
 
-    min_date = datetime.date(2008, 1, 1)
-    end_date = datetime.date(date.today().year, date.today().month, 1)
+            min_date = datetime.date(int(year), int(month), 1)
+            max_date = add_months(min_date, 1)
 
-    data = []
-    while True:
-        max_date = add_months(min_date, 1)
-
-        contracts = models.Contract.objects.filter(contractors__name__startswith=startswith_string,
-                                                   signing_date__gte=min_date,
-                                                   signing_date__lt=max_date)
-
-        count = contracts.count()
-        if count != 0:
-            entry = {'from': min_date,
+            entry = {'procedure': procedure_name,
+                     'from': min_date,
                      'to': max_date,
-                     'direct': contracts.filter(procedure_type_id=2).count()*1./count,
-                     'tender': contracts.filter(procedure_type_id=3).count()*1./count
-            }
+                     'count': int(count),
+                     'value': int(value/100)}
+
             data.append(entry)
+        return data
 
-        min_date = max_date
-        if min_date == end_date:
-            break
 
-    return data
+def _entities_procedure_types_time_series(conditional_statement):
+
+    distinct_query = '''
+SELECT DISTINCT contracts_contract.id AS id,
+                contracts_contract.procedure_type_id AS procedure_type,
+                contracts_contract.price AS price,
+                EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
+                EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month
+FROM contracts_contract
+  INNER JOIN contracts_contract_contractors
+    ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
+  INNER JOIN contracts_entity
+    ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
+WHERE %s
+''' % conditional_statement
+
+    query = '''
+SELECT contracts_proceduretype.name,
+       contracts.s_year,
+       contracts.s_month,
+       COUNT(contracts.id),
+       SUM(contracts.price)
+FROM (%s) AS contracts
+  INNER JOIN contracts_proceduretype
+    ON ( contracts.procedure_type = contracts_proceduretype.id )
+WHERE contracts.s_year > 2009
+GROUP BY contracts_proceduretype.name, contracts.s_year, contracts.s_month
+ORDER BY contracts_proceduretype.name, contracts.s_year, contracts.s_month
+            ''' % distinct_query
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    return _procedure_types_time_series_to_python(cursor)
+
+
+def municipalities_procedure_types_time_series():
+    from pt_regions import municipalities
+
+    return _entities_procedure_types_time_series(
+        'contracts_entity.nif IN (%s)' %
+        ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
+
+
+def procedure_types_time_series():
+
+    query = '''
+SELECT contracts_proceduretype.name,
+       EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
+       EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month,
+       COUNT(contracts_contract.id),
+       SUM(contracts_contract.price)
+FROM contracts_contract
+  INNER JOIN contracts_proceduretype
+    ON ( contracts_contract.procedure_type_id = contracts_proceduretype.id )
+WHERE EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009
+GROUP BY contracts_proceduretype.name, s_year, s_month
+ORDER BY contracts_proceduretype.name, s_year, s_month
+    '''
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    return _procedure_types_time_series_to_python(cursor)
 
 
 def get_legislation_application_time_series():

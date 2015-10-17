@@ -1,62 +1,61 @@
 {% load i18n %}
 <style>
-    #graph svg {
+    .graph svg {
         width: 720px;
         height: 300px;
     }
 </style>
-
-<div id="graph">
+<div class="graph" id="{% block id_name %}graph{% endblock %}">
 </div>
 <script>
-    /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
-    d3.json('{{ url }}', function(error, data) {
+    d3.json('{{ url }}', function (error, data) {
 
         var parseDate = d3.time.format('%Y-%m');
 
-        data.forEach(function(series) {
-            series['values'].forEach(function(d) {
+        data.forEach(function (series) {
+            series['values'].forEach(function (d) {
                 d.x = parseDate.parse(d.month);
-                d.y = (+d.value);
+                d.y = (+d.{% block y_quantity %}value{% endblock %});
             });
         });
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                            .margin({left: 100, right: 100})  //Adjust chart margins to give the x-axis some breathing room.
-                            .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
-                            .transitionDuration(750)  //how fast do you want the lines to transition?
-                            .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-                            .showYAxis(true)        //Show the y-axis
-                            .showXAxis(true)        //Show the x-axis
-                    ;
+        nv.addGraph(function () {
+            var chart = nv.models.stackedAreaChart()
+                    .margin({left: 80, right: 40})
+                    .useInteractiveGuideline(true)
+                    .transitionDuration(500)
+                    .showControls(false);
 
             chart.xAxis
                     .axisLabel('{% trans 'month' %}')
-                    .tickFormat(function(d) {
+                    .tickFormat(function (d) {
                         return d3.time.format('%Y-%m')(new Date(d));
                     });
 
             chart.xScale(d3.time.scale());
 
-            chart.yAxis     //Chart y-axis settings
-                    .axisLabel("{% trans 'Percentage of contracts' %}")
-                    .tickFormat(d3.format(',.02%'));
+            {% block y_axis %}
+            chart.yAxis
+                    .axisLabel("{% trans 'Value of the contracts' %}")
+                    .tickFormat(function (d) {
+                        return d3.format(',.2s')(d) + '€'
+                    });
+            {% endblock %}
 
-            var svg = d3.select('#graph').append('svg')
+            var svg = d3.select('#{% block id_name1 %}graph{% endblock %}').append('svg')
                     .datum(data)
                     .call(chart);
 
             // link to data
             var a = svg.append("a")
-                .attr("xlink:href", '{{ url }}')
+                    .attr("xlink:href", '{{ url }}')
                     .attr("target", "_blank");
             a.append("svg:text")
-                .attr("x", 500).attr("y", 280)
-                .text('{% trans "Download data" %}');
+                    .attr("x", 500).attr("y", 280)
+                    .text('{% trans "Download data" %}');
 
             //Update the chart when window resizes.
-            nv.utils.windowResize(function() { chart.update() });
+            nv.utils.windowResize(chart.update);
             return chart;
         });
     });
