@@ -99,6 +99,12 @@ def ministries_contracts_time_series(request):
                   context)
 
 
+@cache_page(60 * 60 * 24 * 30)
+def municipalities_ranking(request):
+    return render(request, 'contracts/analysis/municipalities_ranking/main.html',
+                  {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True})
+
+
 def contracts_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request, 'contracts/analysis/contracts_time_series/main.html',
@@ -157,7 +163,9 @@ _ANALYSIS = {
          'view': ministries_contracts_time_series, 'order': 10},
     'contracted_lorenz_curve':
         {'id': 14, 'title': _('Income Inequality in Public Contracts'),
-         'view': contracted_lorenz_curve, 'order': 11}
+         'view': contracted_lorenz_curve, 'order': 11},
+    'municipalities_ranking': {'id': 15, 'title': _('Municipalities Ranking'),
+         'view': municipalities_ranking, 'order': 12}
 }
 
 # order the list as `-order`

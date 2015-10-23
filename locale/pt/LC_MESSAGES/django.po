@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-17 17:54+0100\n"
+"POT-Creation-Date: 2015-10-28 13:43+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: contracts/templates/contracts/entity_view/tab_data/main.html:34
 #: contracts/urls.py:16 contracts/urls.py:19 contracts/urls.py:22
 #: contracts/urls.py:25 contracts/urls.py:30 contracts/urls.py:43
-#: contracts/urls.py:44 contracts/views_data.py:194
+#: contracts/urls.py:44 contracts/views_data.py:197
 msgid "contracts"
 msgstr "contratos"
 
@@ -167,7 +167,7 @@ msgstr "limita a lista a entidades específicas"
 msgid "type"
 msgstr "tipo"
 
-#: contracts/forms.py:111 contracts/forms.py:113 contracts/views_data.py:195
+#: contracts/forms.py:111 contracts/forms.py:113 contracts/views_data.py:198
 msgid "value"
 msgstr "valor"
 
@@ -192,7 +192,6 @@ msgstr "Cumulativo relativo"
 
 #: contracts/templates/contracts/analysis/contracted_lorenz_curve/graph.html:42
 #: contracts/templates/contracts/analysis/contracts_time_series/graph.html:54
-#: contracts/templates/contracts/analysis/entity_time_series.html:49
 #: contracts/templates/contracts/analysis/health_system/graph.html:53
 #: contracts/templates/contracts/analysis/legislation_application_time_series/graph.html:55
 #: contracts/templates/contracts/analysis/procedure_type_time_series/graph.html:55
@@ -203,7 +202,7 @@ msgstr "Baixar dados"
 
 #: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:4
 #: contracts/templates/contracts/analysis/contracted_lorenz_curve/main.html:7
-#: contracts/views_analysis.py:160
+#: contracts/views_analysis.py:165
 msgid "Income Inequality in Public Contracts"
 msgstr "Desigualdade de Rendimentos em Contratos Públicos"
 
@@ -383,7 +382,6 @@ msgstr "Valor em €"
 
 #: contracts/templates/contracts/analysis/contracts_price_histogram/graph.html:39
 #: contracts/templates/contracts/analysis/contracts_time_series/graph.html:36
-#: contracts/templates/contracts/analysis/entity_time_series.html:35
 #: contracts/templates/contracts/analysis/procedure_type_time_series/graph_count.html:6
 #: contracts/templates/contracts/entity_view/tab_data/graph.html:36
 msgid "Number of contracts"
@@ -430,7 +428,6 @@ msgstr ""
 "desde euros até milhões de euros."
 
 #: contracts/templates/contracts/analysis/contracts_time_series/graph.html:29
-#: contracts/templates/contracts/analysis/entity_time_series.html:28
 #: contracts/templates/contracts/analysis/health_system/graph.html:32
 #: contracts/templates/contracts/analysis/legislation_application_time_series/graph.html:34
 #: contracts/templates/contracts/analysis/procedure_type_time_series/graph.html:30
@@ -500,7 +497,7 @@ msgid "Number of entities"
 msgstr "Número de entidades"
 
 #: contracts/templates/contracts/analysis/entities_values_histogram/main.html:4
-#: contracts/views_analysis.py:149
+#: contracts/views_analysis.py:140
 msgid "Distribution of earnings of entities"
 msgstr "Distribuição de ganhos de entidades"
 
@@ -515,7 +512,7 @@ msgstr "Média de"
 
 #: contracts/templates/contracts/analysis/entity_rank/graph.html:35
 #: contracts/templates/contracts/analysis/municipalities_delta_time/graph.html:34
-#: contracts/views_data.py:12 contracts/views_data.py:107
+#: contracts/views_data.py:15 contracts/views_data.py:110
 msgid "Ranking"
 msgstr "Ranking"
 
@@ -528,6 +525,7 @@ msgstr "Especificidade média"
 #: contracts/templates/contracts/analysis/municipalities_delta_time/graph.html:30
 #: contracts/templates/contracts/analysis/municipalities_delta_time/histogram.html:31
 #: contracts/templates/contracts/analysis/municipalities_delta_time/summary.html:4
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:152
 #: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:30
 #: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:34
 msgid "days"
@@ -551,7 +549,7 @@ msgstr "Percentagem de contratos"
 
 #: contracts/templates/contracts/analysis/legislation_application_time_series/main.html:4
 #: contracts/templates/contracts/analysis/legislation_application_time_series/main.html:7
-#: contracts/views_analysis.py:151
+#: contracts/views_analysis.py:147
 msgid "How many contracts are published too late?"
 msgstr "Quantos contratos são publicados demasiado tarde?"
 
@@ -630,7 +628,7 @@ msgstr ""
 
 #: contracts/templates/contracts/analysis/ministries_contracts_time_series/main.html:4
 #: contracts/templates/contracts/analysis/ministries_contracts_time_series/main.html:7
-#: contracts/views_analysis.py:158
+#: contracts/views_analysis.py:162
 msgid "When do portuguese ministries contract most?"
 msgstr "Quando é que os ministérios mais contratam?"
 
@@ -663,7 +661,7 @@ msgstr ""
 
 #: contracts/templates/contracts/analysis/municipalities_contracts_time_series/main.html:4
 #: contracts/templates/contracts/analysis/municipalities_contracts_time_series/main.html:7
-#: contracts/views_analysis.py:153
+#: contracts/views_analysis.py:150
 msgid "When do portuguese municipalities contract most?"
 msgstr "Quando é que os municípios mais contratam?"
 
@@ -775,6 +773,16 @@ msgstr ""
 msgid "Average time (days)"
 msgstr "Tempo médio (dias)"
 
+#: contracts/templates/contracts/analysis/municipalities_ranking/main.html:4
+#: contracts/views_analysis.py:167
+msgid "Municipalities Ranking"
+msgstr "Ranking de municípios"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:125
+msgid "Municipality"
+msgstr "Município"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:134
 #: contracts/templates/contracts/base/navigation_items.html:3
 #: contracts/templates/contracts/category_view/selector.html:7
 #: contracts/templates/contracts/contract_list/main.html:3
@@ -785,6 +793,22 @@ msgstr "Tempo médio (dias)"
 #: main/templates/base/top_header.html:24 main/templates/main_page.html:26
 msgid "Contracts"
 msgstr "Contratos"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:139
+msgid "Volume"
+msgstr "Volume"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:147
+msgid "Ranking </br>mean publication delay (value)"
+msgstr "Ranking </br>Tempo médio de publicação (valor)"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:159
+msgid "Ranking </br>mean specificity (value)"
+msgstr "Ranking </br>Especificidade média (valor)"
+
+#: contracts/templates/contracts/analysis/municipalities_ranking/table.html:172
+msgid "Ranking </br>&#37; of correct publications (value)"
+msgstr "Ranking </br>&#37; de publicações correctas (valor)"
 
 #: contracts/templates/contracts/base/navigation_items.html:6
 #: contracts/templates/contracts/category_list/main.html:4
@@ -1129,10 +1153,6 @@ msgstr ""
 "Se este local é vantajoso para alguém na sua rede de contactos, ajude-nos a "
 "divulgá-lo."
 
-#: contracts/templates/contracts/municipalities.html:5
-msgid "Municipalities"
-msgstr "Municípios"
-
 #: contracts/templates/contracts/tender_list/colored_price.html:6
 msgid "Value negotiable"
 msgstr "Valor negociável"
@@ -1254,55 +1274,55 @@ msgstr "categorias"
 msgid "page"
 msgstr "página"
 
-#: contracts/views_analysis.py:147
+#: contracts/views_analysis.py:134
 msgid "When do Portugal contract most?"
 msgstr "Quando é que o estado mais contrata?"
 
-#: contracts/views_analysis.py:148
+#: contracts/views_analysis.py:137
 msgid "Distribution of prices of contracts"
 msgstr "Distribuição de preços dos contratos"
 
-#: contracts/views_analysis.py:150
+#: contracts/views_analysis.py:143
 msgid "Percentage of contracts by direct procurement or public tender"
 msgstr "Percentagem de contratos por ajuste direto e por concurso público."
 
-#: contracts/views_analysis.py:154
+#: contracts/views_analysis.py:153
 msgid "How do portuguese municipalities contract most?"
 msgstr "Como é que os municípios mais contratam?"
 
-#: contracts/views_analysis.py:155
+#: contracts/views_analysis.py:156
 msgid "Time of publication of municipalities"
 msgstr "Tempo de publicação dos municípios"
 
-#: contracts/views_analysis.py:156
+#: contracts/views_analysis.py:159
 msgid "Ranking of specificity of municipalities"
 msgstr "Ranking de especificidade de municípios"
 
-#: contracts/views_data.py:27
+#: contracts/views_data.py:30
 msgid "Lorenz curve of private entities"
 msgstr "Curva de Lorenz de entidades privadas"
 
-#: contracts/views_data.py:28
+#: contracts/views_data.py:31
 msgid "Equality line"
 msgstr "Linha de igualdade"
 
-#: contracts/views_data.py:49 contracts/views_data.py:129
+#: contracts/views_data.py:52 contracts/views_data.py:132
 msgid "Histogram"
 msgstr "Histograma"
 
-#: contracts/views_data.py:70
+#: contracts/views_data.py:73
 msgid "histogram of contracts values"
 msgstr "Histograma do preços dos contratos"
 
-#: contracts/views_data.py:85
+#: contracts/views_data.py:88
 msgid "entities earning"
 msgstr "entidades que ganharam"
 
-#: contracts/views_data.py:86
+#: contracts/views_data.py:89
 msgid "entities expending"
 msgstr "entidades que gastaram"
 
-#: contracts/views_data.py:221
+#: contracts/views_data.py:224
 msgid "contracts published too late"
 msgstr "contratos publicados demasiado tarde"
 
@@ -1342,7 +1362,7 @@ msgstr "com pelo menos"
 #: deputies/templates/deputies/analysis/deputies_survival_distribution/graph.html:38
 #: deputies/templates/deputies/base/navigation_items.html:3
 #: deputies/templates/deputies/deputies_list.html:3
-#: main/templates/base/top_header.html:31 main/templates/main_page.html:68
+#: main/templates/base/top_header.html:31 main/templates/main_page.html:69
 msgid "Deputies"
 msgstr "Deputados"
 
@@ -2001,7 +2021,7 @@ msgstr ""
 "e em particular ao Helder Guerreiro, pelas ideias e discussões que têm "
 "melhorado este projeto."
 
-#: law/templates/law/law_list/main.html:3 main/templates/main_page.html:53
+#: law/templates/law/law_list/main.html:3 main/templates/main_page.html:54
 msgid "Laws"
 msgstr "Leis"
 
@@ -2423,38 +2443,38 @@ msgstr ""
 "evolução temporal de indicadores macroscópicos da contratação pública "
 "portuguesa."
 
-#: main/templates/main_page.html:48 main/templates/main_page.html.py:63
-#: main/templates/main_page.html:76
+#: main/templates/main_page.html:49 main/templates/main_page.html.py:64
+#: main/templates/main_page.html:77
 msgid "More information"
 msgstr "Mais informações"
 
-#: main/templates/main_page.html:56
+#: main/templates/main_page.html:57
 msgid "In this website you can find all portuguese laws officially published."
 msgstr "Neste local pode encontrar todas as leis oficialmente publicadas."
 
-#: main/templates/main_page.html:71
+#: main/templates/main_page.html:72
 msgid ""
 "In this website you can find all members of the portuguese parliament since "
 "1992."
 msgstr ""
 "Neste website pode encontrar todos os deputados portugueses desde 1992."
 
-#: main/templates/main_page.html:81
+#: main/templates/main_page.html:82
 msgid "Other information"
 msgstr "Outras informações:"
 
-#: main/templates/main_page.html:86
+#: main/templates/main_page.html:87
 msgid "This website is open source, public, and non-governmental."
 msgstr "Este website é open source, público e não-governamental."
 
-#: main/templates/main_page.html:90
+#: main/templates/main_page.html:91
 msgid ""
 "All data in this website is synchronized with official sources within 24h."
 msgstr ""
 "Todos os dados aqui apresentados estão sincronizados com os dados oficiais "
 "com o máximo de 24h de erro."
 
-#: main/templates/main_page.html:94
+#: main/templates/main_page.html:95
 msgid ""
 "The database is <strong>public</strong>. Check out the documentation to "
 "access it."
@@ -2462,7 +2482,7 @@ msgstr ""
 "A base de dados deste website é <strong>pública</strong>. Consulte a "
 "documentação do website para a aceder."
 
-#: main/templates/main_page.html:99
+#: main/templates/main_page.html:100
 msgid "More about us"
 msgstr "Mais sobre nós"
 

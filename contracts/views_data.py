@@ -1,7 +1,10 @@
 from collections import OrderedDict
 import json
+import string
 
 from django.http import HttpResponse, Http404
+from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 
@@ -225,6 +228,87 @@ def legislation_application_time_series_json(request):
     return HttpResponse(json.dumps([time_series]), content_type="application/json")
 
 
+def municipalities_ranking(request):
+    data = analysis_manager.get_analysis('municipalities_ranking')
+
+    series = OrderedDict()
+
+    # existing years and respective values for each entity.
+    year_slices = {}
+    # non-existing years (i.e. with 0 counts) are added in the end
+
+    for base_id in data:
+        name = string.capwords(data[base_id][0]['name'])
+        series[base_id] = {'values': [], 'key': name, 'url': reverse('entity', args=(base_id, slugify(name)))}
+        for entry in data[base_id]:
+            year = entry['date'].strftime('%Y')
+
+            series[base_id]['values'].append(
+                {'year': year,
+                 'value': entry['value'],
+                 'count': entry['count'],
+                 'avg_deltat': entry['avg_deltat'],
+                 'avg_specificity': entry['avg_specificity'],
+                 'avg_good_text': entry['avg_good_text']})
+
+            if year not in year_slices:
+                year_slices[year] = []
+            year_slices[year].append({
+                'base_id': base_id,
+                'series_index': len(series[base_id]['values']) - 1,
+                'avg_deltat': entry['avg_deltat'],
+                'avg_specificity': entry['avg_specificity'],
+                'avg_good_text': entry['avg_good_text']})
+
+    # Compute the ranks for each year slice
+    for year in year_slices:
+        date_slice = year_slices[year]
+
+        REVERSED_SORT = {'avg_deltat': False,
+                         'avg_specificity': True,
+                         'avg_good_text': True}
+        for quantity in ['avg_deltat', 'avg_good_text', 'avg_specificity']:
+            avg_points = [x[quantity] for x in date_slice]
+
+            rank = 1
+            previous = None
+            previous_rank = 1
+
+            for index, value in [i for i in sorted(
+                    enumerate(avg_points), key=lambda x:x[1],
+                    reverse=REVERSED_SORT[quantity])]:
+
+                base_id = date_slice[index]['base_id']
+                series_index = date_slice[index]['series_index']
+                assert(series[base_id]['values'][series_index]['year'] == year)
+                assert(series[base_id]['values'][series_index][quantity] == value)
+
+                if value != previous:
+                    previous_rank = rank
+                series[base_id]['values'][series_index][quantity + '_rank'] = previous_rank
+
+                rank += 1
+                previous = value
+
+    # add missing entries with 0 counts, typically in the current year
+    for base_id in series:
+        for year in year_slices:
+            if year not in [x['year'] for x in series[base_id]['values']]:
+                series[base_id]['values'].append(
+                    {'year': year, 'value': 0, 'count': 0,
+                     'avg_deltat': None,
+                     'avg_deltat_rank': None,
+                     'avg_specificity': None,
+                     'avg_specificity_rank': None,
+                     'avg_good_text': None,
+                     'avg_good_text_rank': None})
+
+        series[base_id]['values'].sort(key=lambda x: x['year'])
+
+    return HttpResponse(json.dumps(list(series.values())),
+                        content_type='application/json')
+
+
 AVAILABLE_VIEWS = {
     'category-ranking-index-json': entities_category_ranking_json,
     'entities-category-ranking-histogram-json': entities_category_ranking_histogram_json,
@@ -247,6 +331,8 @@ AVAILABLE_VIEWS = {
     'entities-values-histogram-json': entities_values_histogram_json,
 
     'contracted-lorenz-curve-json': lorenz_curve,
+
+    'municipalities-ranking-json': municipalities_ranking,
 }
 
 

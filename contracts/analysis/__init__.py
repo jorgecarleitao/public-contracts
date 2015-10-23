@@ -25,7 +25,8 @@ _allAnalysis = [
     Analysis('entities_values_distribution',
              get_entities_value_histogram),
     Analysis('contracted_lorenz_curve',
-             get_lorenz_curve)
+             get_lorenz_curve),
+    Analysis('municipalities_ranking', municipalities_ranking),
 ]
 
 

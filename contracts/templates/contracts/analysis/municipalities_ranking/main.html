@@ -1,0 +1,80 @@
+{% extends "contracts/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Municipalities Ranking"%}{% endblock %}
+
+{% block extra_html_head %}
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.0/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.0/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.0/locale/bootstrap-table-pt-PT.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Ranking de transparência contratual dos municípios portugueses</h1>
+    <p>
+        Por lei, os municípios portugueses têm de publicar os seus contratos numa base de dados oficial.
+
+        Como é que o município publica os seus contratos é uma forma de quantificar a eficiência dos
+        seus processos administrativos.
+    </p>
+    <p>
+        O publicos.pt tem analisado esta base de dados e nesta página sumariza alguns dos indicadores
+        que tem desenvolvido para comparar a transparência contratual dos municípios portugueses.
+    </p>
+
+    <h3>Base de dados</h3>
+    <p>
+        A base de dados usada é a base de dados oficial dos contratos públicos, <a href="http://www.base.gov.pt/">BASE</a>.
+        Como a base de dados não diferencia municipios de não municipios, os NIFs desta
+        base de dados foram cruzados com os da base de dados de entidades públicas
+        (que diferencia municípios) do Banco de Portugal
+        (<a href="https://www.bportugal.pt/pt-PT/Estatisticas/MetodologiaseNomenclaturasEstatisticas/LEFE/Publicacoes/AP_listas.xls">ficheiro excel</a>).
+    </p>
+    <p>
+        Todos os contratos de cada município em cada ano foram
+        selecionados e alguns indicadores de performance do município foram calculados.
+        Os municípios foram depois ordenados (ranking) de acordo com o seu performance
+        em cada indicador individual.
+    </p>
+    <h3>Indicadores:</h3>
+    <h4>Tempo médio de publicação:</h4>
+    <p>
+        É o valor médio de (data de inserção - data de assinatura), onde "data
+        de inserção" é a data em que o contrato foi adicionado à base de dados
+        oficial e "data de assinatura" é a data em que o contrato foi assinado.
+    </p>
+    <p>
+        O tempo médio de publicação é assim um indicador de eficiência administrativa
+        do município.
+    </p>
+    <h4>Especificidade média</h4>
+    <p>
+        A União Europeia tem um sistema de categorização de contratos públicos (CPVS),
+        que define ~9000 categorias de acordo com uma hierarquia de ~7 níveis de especificidade
+        (e.g. categoria "fruta" está dentro da categoria "produtos alimentares").
+    </p>
+    <p>
+        A especificidade de um contrato é o nível (0-7) na hierarquia da categoria do contrato
+        quando este é adicionado.
+        Há contratos em que o município não escolheu qualquer categoria (nível 0),
+        e outros em que escolheu uma categoria específica (>4).
+    </p>
+    <p>
+        A especificidade média é assim um indicador de transparência do município
+        pois indica quanto esforço o município faz para os seus contratos serem
+        adicionados correctamente.
+    </p>
+    <h4>Percentagem de publicação correcta</h4>
+    <p>
+        Encontrar contratos públicos numa base de dados tipicamente requer uma busca textual (e.g. google).
+        Para isso, é importante que quando o contrato é adicionado, contenha uma descrição
+        do mesmo. Publicações correctas são aquelas que contém essa descrição.
+    </p>
+    <p>
+        Este indicador é forma de quantificar a transparência do município.
+    </p>
+
+    <h2 class="text-center">Ranking dos municípios</h2>
+    {% include "contracts/analysis/municipalities_ranking/table.html" %}
+{% endblock %}

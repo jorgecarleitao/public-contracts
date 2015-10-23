@@ -1,0 +1,186 @@
+{% load i18n %}
+<ul class="nav nav-pills nav-justified" id="year-selector"></ul>
+<table id="table"></table>
+<script>
+    String.prototype.format = function () {
+        var i = 0, args = arguments;
+        return this.replace(/{}/g, function () {
+            return typeof args[i] != 'undefined' ? args[i++] : '';
+        });
+    };
+
+    var annotate_data = function(data, year) {
+        // annotate the values for the selected year.
+
+        // map year -> series_index
+        for(var series_index = 0; series_index < data[0]['values'].length; series_index++) {
+            if (data[0]['values'][series_index]['year'] == year) {
+                break;
+            }
+        }
+
+        data.forEach(function (row) {
+            var values = row['values'][series_index];
+            var previous_values = row['values'][series_index - 1];
+            row['count'] = +values.count;
+            row['value'] = +values.value;
+
+            var indicators = ['avg_deltat', 'avg_good_text', 'avg_specificity'];
+            for(var i = 0; i < indicators.length; i++) {
+                var indicator = indicators[i];
+                row[indicator] = +values[indicator];
+                row[indicator] = +values[indicator];
+                row['current_' + indicator + '_rank'] =+values[indicator + '_rank'];
+                row['previous_' + indicator + '_rank'] = +previous_values[indicator + '_rank'];
+            }
+        });
+    };
+
+    var format_string = function (rank, old_rank, value) {
+
+        var rank_diff = old_rank - rank;
+        var glyph = 'glyphicon-triangle-right';
+        var color = 'gray';
+        var diff_string = '+' + rank_diff.toString();
+        if (rank_diff > 0) {
+            glyph = 'glyphicon-triangle-top';
+            color = 'green';
+        }
+        if (rank_diff < 0) {
+            glyph = 'glyphicon-triangle-bottom';
+            color = 'red';
+            diff_string = rank_diff.toString();
+        }
+        if (rank === null) {
+            color = 'gray';
+            glyph = 'glyphicon-triangle-right';
+            diff_string = '?';
+            rank = '?';
+        }
+
+        return ('<strong>' +
+        '{} ' +
+        '<span class="glyphicon {}" style="color:{}"></span>' +
+        '<span style="color:{}">{}</span>' +
+        '</strong> ({})')
+                .format(rank, glyph, color, color, diff_string, value);
+    };
+
+    var year_selector = $("#year-selector");
+    var selected_year = null;
+
+    $.getJSON("{% url 'contracts_data_selector' 'municipalities-ranking-json' %}",
+            function (data) {
+                var table = $('#table');
+
+                // Create the year tabs to all data years except the first
+                for(var series_index = 1; series_index < data[0]['values'].length; series_index++) {
+                    var year = data[0]['values'][series_index]['year'];
+
+                    var a = $('<a href="#" class="year-select">' + year + '</a>');
+                    var li = $('<li></li>');
+                    li.append(a);
+
+                    year_selector.append(li);
+                }
+                // select the most recent year
+                selected_year = a;
+
+                // On click:
+                // 1. selects year element as active
+                // 2. annotates data with data of that year
+                // 3. loads data into table
+                $(".year-select").click(function (e){
+                    // 1.
+                    e.preventDefault();
+                    if ($(this).parent().hasClass("active")) {
+                        return;
+                    }
+                    if ($(this).text() != selected_year.text()) {
+                        selected_year.parent().toggleClass("active");
+                    }
+                    $(this).parent().toggleClass("active");
+                    selected_year = $(this);
+
+                    // 2.
+                    annotate_data(data, selected_year.text());
+
+                    // 3.
+                    table.bootstrapTable('load', data);
+                });
+
+                selected_year.click();
+
+                //annotate_data(data, year);
+
+                table.bootstrapTable({
+                    data: data,
+                    search: true,
+                    searchAlign: 'left',
+                    multipleSearch: true,
+                    locale: '{{ LANGUAGE_CODE }}',
+                    columns: [
+                        {
+                            field: 'key',
+                            title: '{% trans "Municipality" %}',
+                            sortable: true,
+                            searchable: true,
+                            formatter: function (value, row) {
+                                return '<a href="{}">{}</a>'.format(row['url'], value);
+                            }
+                        },
+                        {
+                            field: 'count',
+                            title: '{% trans "Contracts" %}',
+                            sortable: true
+                        },
+                        {
+                            field: 'value',
+                            title: '{% trans "Volume" %}',
+                            formatter: function (value) {
+                                return d3.format(',.2s')(value) + '€';
+                            },
+                            sortable: true
+                        },
+                        {
+                            field: 'avg_deltat',
+                            title: '{% trans "Ranking </br>mean publication delay (value)" %}',
+                            formatter: function (value, row) {
+                                return format_string(
+                                        row.current_avg_deltat_rank,
+                                        row.previous_avg_deltat_rank,
+                                        d3.format(',.1f')(value) + ' {% trans "days" %}'
+                                );
+                            },
+                            sortable: true
+                        },
+                        {
+                            field: 'avg_specificity',
+                            title: '{% trans "Ranking </br>mean specificity (value)" %}',
+                            formatter: function (value, row) {
+
+                                return format_string(
+                                        row.current_avg_specificity_rank,
+                                        row.previous_avg_specificity_rank,
+                                        d3.format(',.1f')(value)
+                                );
+                            },
+                            sortable: true
+                        },
+                        {
+                            field: 'avg_good_text',
+                            title: '{% trans "Ranking </br>&#37; of correct publications (value)" %}',
+                            formatter: function (value, row) {
+                                return format_string(
+                                        row.current_avg_good_text_rank,
+                                        row.previous_avg_good_text_rank,
+                                        d3.format('.0%')(value)
+                                );
+                            },
+                            sortable: true
+                        }]
+                });
+
+            });
+
+</script>

@@ -198,6 +198,83 @@ ORDER BY avg ASC
     return raw_to_python(cursor)
 
 
+def municipalities_ranking():
+    """
+    Computes multiple time-series of annotations of all municipalities:
+    - number of contracts
+    - price of contracts
+    - Mean delta time
+    - Mean category depth
+    - Mean number of contracts with wrong/invalid descriptions
+
+    Returns a dictionary entity_id -> time series
+    """
+    from pt_regions import municipalities
+
+    NIF_TO_NAME = {}
+    for m in municipalities():
+        NIF_TO_NAME[str(m['NIF'])] = m['name']
+
+    query = '''
+SELECT contracts_entity.base_id, contracts_entity.nif,
+  EXTRACT(YEAR FROM contracts_contract.signing_date)                   AS s_year,
+
+  COUNT(contracts_contract.id),
+  SUM(contracts_contract.price)                                        AS value,
+  AVG(ABS(contracts_contract.added_date -
+      contracts_contract.signing_date))                                AS avg_deltat,
+  AVG(COALESCE(contracts_category.depth,
+               0))                                                     AS avg_depth,
+  AVG(CASE WHEN
+    contracts_contract.description = contracts_contract.contract_description OR
+    contracts_contract.description IS NULL OR
+    contracts_contract.contract_description IS NULL
+    THEN 0
+      ELSE 1 END)                                                      AS count_empty_text
+FROM contracts_contract
+  INNER JOIN contracts_contract_contractors
+    ON (contracts_contract.id = contracts_contract_contractors.contract_id)
+  LEFT OUTER JOIN contracts_category
+    ON (contracts_contract.category_id = contracts_category.id)
+  INNER JOIN contracts_entity
+    ON (contracts_contract_contractors.entity_id = contracts_entity.id)
+WHERE EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009 AND
+      contracts_entity.nif IN (%s)
+GROUP BY contracts_entity.base_id, contracts_entity.nif, s_year
+HAVING COUNT(contracts_contract.id) > 0
+ORDER BY contracts_entity.base_id, s_year
+    ''' % ','.join(list(map(lambda x: "'%s'" % x, NIF_TO_NAME.keys())))
+
+    def raw_to_python(cursor):
+        data = {}
+        for row in cursor.fetchall():
+            base_id, nif, year, count, value, \
+                avg_deltat, avg_specificity, avg_good_text = row
+            if year is None:
+                continue
+
+            if base_id not in data:
+                data[base_id] = []
+
+            entry = {
+                'name': NIF_TO_NAME[nif],
+                'date': datetime.date(int(year), 1, 1),
+                'count': int(count),
+                'value': float(value)/100,
+                'avg_deltat': float(avg_deltat),
+                'avg_specificity': float(avg_specificity),
+                'avg_good_text': float(avg_good_text)
+            }
+            data[base_id].append(entry)
+
+        return data
+
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    return raw_to_python(cursor)
+
+
 def municipalities_delta_time():
     from pt_regions import municipalities
 
