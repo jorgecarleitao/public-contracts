@@ -8,21 +8,6 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 from .analysis import analysis_manager
-import contracts.analysis
-
-
-def analysis_selector(request, analysis_id, slug=None):
-    try:
-        analysis_id = int(analysis_id)
-    except:
-        raise Http404
-    if int(analysis_id) not in contracts.analysis.PRIMARY_KEY or \
-                    contracts.analysis.PRIMARY_KEY[analysis_id] not in AVAILABLE_VIEWS:
-        raise Http404
-
-    name = contracts.analysis.PRIMARY_KEY[analysis_id]
-
-    return AVAILABLE_VIEWS[name](request)
 
 
 @cache_page(60 * 60 * 24 * 7)  # 7 days
@@ -51,7 +36,8 @@ def contracts_price_histogram(request):
                'REQUIRE_D3JS': True}
 
     return render(request,
-                  'contracts/analysis/contracts_price_histogram/main.html', context)
+                  'contracts/analysis/contracts_price_histogram/main.html',
+                  context)
 
 
 def entities_values_histogram(request):
@@ -60,14 +46,16 @@ def entities_values_histogram(request):
                'REQUIRE_D3JS': True}
 
     return render(request,
-                  'contracts/analysis/entities_values_histogram/main.html', context)
+                  'contracts/analysis/entities_values_histogram/main.html',
+                  context)
 
 
 def procedure_types_time_series(request):
     context = {'navigation_tab': 'analysis',
                'REQUIRE_D3JS': True}
     return render(request,
-                  'contracts/analysis/procedure_type_time_series/main.html', context)
+                  'contracts/analysis/procedure_type_time_series/main.html',
+                  context)
 
 
 @cache_page(60 * 60 * 24)
@@ -84,36 +72,45 @@ def municipalities_delta_time(request):
                'REQUIRE_D3JS': True}
 
     return render(request,
-                  'contracts/analysis/municipalities_delta_time/main.html', context)
+                  'contracts/analysis/municipalities_delta_time/main.html',
+                  context)
 
 
 def municipalities_contracts_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request,
-                  'contracts/analysis/municipalities_contracts_time_series/main.html', context)
+    return render(
+        request,
+        'contracts/analysis/municipalities_contracts_time_series/main.html',
+        context)
 
 
 def municipalities_procedure_types_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request,
-                  'contracts/analysis/municipalities_procedure_type_time_series/main.html', context)
+    return render(
+        request,
+        'contracts/analysis/municipalities_procedure_type_time_series/main.html',
+        context)
 
 
 def ministries_contracts_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
     return render(request,
-                  'contracts/analysis/ministries_contracts_time_series/main.html', context)
+                  'contracts/analysis/ministries_contracts_time_series/main.html',
+                  context)
 
 
 def contracts_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request, 'contracts/analysis/contracts_time_series/main.html', context)
+    return render(request, 'contracts/analysis/contracts_time_series/main.html',
+                  context)
 
 
 def legislation_application_time_series(request):
     context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request,
-                  'contracts/analysis/legislation_application_time_series/main.html', context)
+    return render(
+        request,
+        'contracts/analysis/legislation_application_time_series/main.html',
+        context)
 
 
 def contracted_lorenz_curve(request):
@@ -122,58 +119,85 @@ def contracted_lorenz_curve(request):
 
     context = {'navigation_tab': 'analysis', 'gini_index': gini_index,
                'REQUIRE_D3JS': True}
-    return render(request, 'contracts/analysis/contracted_lorenz_curve/main.html', context)
+    return render(request, 'contracts/analysis/contracted_lorenz_curve/main.html',
+                  context)
 
 
-AVAILABLE_VIEWS = {
-    'municipalities_delta_time': municipalities_delta_time,
-    'municipalities_contracts_time_series': municipalities_contracts_time_series,
-    'municipalities_procedure_types_time_series': municipalities_procedure_types_time_series,
-    'municipalities_categories_ranking': entities_category_ranking,
-
-    'ministries_contracts_time_series': ministries_contracts_time_series,
-    #'ministries_delta_time': ministries_delta_time,
-
-    'contracts_price_distribution': contracts_price_histogram,
-    'entities_values_distribution': entities_values_histogram,
-    'procedure_type_time_series': procedure_types_time_series,
-    'contracts_time_series': contracts_time_series,
-    'legislation_application_time_series': legislation_application_time_series,
-    'contracted_lorenz_curve': contracted_lorenz_curve,
+_ANALYSIS = {
+    'contracts_time_series':
+        {'id': 7, 'title': _('When do Portugal contract most?'),
+         'view': contracts_time_series, 'order': 1},
+    'contracts_price_distribution':
+        {'id': 9, 'title': _('Distribution of prices of contracts'),
+         'view': contracts_price_histogram, 'order': 2},
+    'entities_values_distribution':
+        {'id': 13, 'title': _('Distribution of earnings of entities'),
+         'view': entities_values_histogram, 'order': 3},
+    'procedure_type_time_series':
+        {'id': 6, 'title': _('Percentage of contracts by direct procurement '
+                             'or public tender'),
+         'view': procedure_types_time_series, 'order': 4},
+    'legislation_application_time_series':
+        {'id': 12, 'title': _('How many contracts are published too late?'),
+         'view': legislation_application_time_series, 'order': 5},
+    'municipalities_contracts_time_series':
+        {'id': 2, 'title': _('When do portuguese municipalities contract most?'),
+         'view': municipalities_contracts_time_series, 'order': 6},
+    'municipalities_procedure_types_time_series':
+        {'id': 5, 'title': _('How do portuguese municipalities contract most?'),
+         'view': municipalities_procedure_types_time_series, 'order': 7},
+    'municipalities_delta_time':
+        {'id': 1, 'title': _('Time of publication of municipalities'),
+         'view': municipalities_delta_time, 'order': 8},
+    'municipalities_categories_ranking':
+        {'id': 4, 'title': _('Ranking of specificity of municipalities'),
+         'view': entities_category_ranking, 'order': 9},
+    'ministries_contracts_time_series':
+        {'id': 10, 'title': _('When do portuguese ministries contract most?'),
+         'view': ministries_contracts_time_series, 'order': 10},
+    'contracted_lorenz_curve':
+        {'id': 14, 'title': _('Income Inequality in Public Contracts'),
+         'view': contracted_lorenz_curve, 'order': 11}
 }
 
+# order the list as `-order`
+ANALYSIS = OrderedDict()
+# cache id -> analysis
+PRIMARY_KEY = {}
+for analysis_name in sorted(_ANALYSIS, key=lambda x: _ANALYSIS[x]['order'],
+                            reverse=True):
+    ANALYSIS[analysis_name] = _ANALYSIS[analysis_name]
 
-titles = OrderedDict([
-        ('contracts_time_series', _('When do Portugal contract most?')),
-        ('contracts_price_distribution', _('Distribution of prices of contracts')),
-        ('entities_values_distribution', _('Distribution of earnings of entities')),
-        ('procedure_type_time_series', _('Percentage of contracts by direct procurement or public tender')),
-        ('legislation_application_time_series', _('How many contracts are published too late?')),
+    PRIMARY_KEY[_ANALYSIS[analysis_name]['id']] = analysis_name
 
-        ('municipalities_contracts_time_series', _('When do portuguese municipalities contract most?')),
-        ('municipalities_procedure_types_time_series', _('How do portuguese municipalities contract most?')),
-        ('municipalities_delta_time', _('Time of publication of municipalities')),
-        ('municipalities_categories_ranking', _('Ranking of specificity of municipalities')),
 
-        ('ministries_contracts_time_series', _('When do portuguese ministries contract most?')),
+def analysis_selector(request, analysis_id, _):
+    try:
+        analysis_id = int(analysis_id)
+    except:
+        raise Http404
+    if int(analysis_id) not in PRIMARY_KEY:
+        raise Http404
 
-        ('contracted_lorenz_curve', _('Income Inequality in Public Contracts')),
-])
+    return ANALYSIS[PRIMARY_KEY[analysis_id]]['view'](request)
 
 
 def analysis_list():
 
-    analysis_list = []
-    for analysis in titles:
-        analysis_list.append({
-            'id': contracts.analysis.ANALYSIS[analysis],
+    all_analysis = []
+    for name in ANALYSIS:
+
+        identity = ANALYSIS[name]['id']
+        title = ANALYSIS[name]['title']
+
+        all_analysis.append({
+            'id': identity,
             'url': reverse('contracts_analysis_selector',
-                           args=(contracts.analysis.ANALYSIS[analysis],
-                                 slugify(titles[analysis]))),
-            'title': titles[analysis]
+                           args=(identity, slugify(title))),
+            'title': title
         })
 
-    return list(reversed(analysis_list))
+    return all_analysis
 
 
 def analysis(request):

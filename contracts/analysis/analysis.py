@@ -15,7 +15,7 @@ def add_months(sourcedate, months):
     month = sourcedate.month - 1 + months
     year = sourcedate.year + month // 12
     month = month % 12 + 1
-    day = min(sourcedate.day, calendar.monthrange(year,month)[1])
+    day = min(sourcedate.day, calendar.monthrange(year, month)[1])
     return datetime.date(year, month, day)
 
 
@@ -29,7 +29,8 @@ def get_price_histogram():
     cases = 'CASE'
     for x in range(1, 41):
         cases += ' WHEN (%d < contracts_contract.price/100 AND ' \
-                 'contracts_contract.price/100 < %d) THEN %d\n' % (2**x, 2*2**x, 2**x)
+                 'contracts_contract.price/100 < %d) THEN %d\n' % (2**x, 2*2**x,
+                                                                   2**x)
     cases += ' END'
 
     query = """
@@ -125,12 +126,14 @@ def get_municipalities_specificity():
     from pt_regions import municipalities
 
     # Coalesce transforms Null -> 0
-    return list(models.Entity.objects \
-        .filter(nif__in=[m['NIF'] for m in municipalities()]) \
+    return list(
+        models.Entity.objects
+        .filter(nif__in=[m['NIF'] for m in municipalities()])
         .annotate(count=Count('contracts_made'),
-                  avg_depth=Avg(Coalesce('contracts_made__category__depth', 0))) \
-        .exclude(count__lt=5) \
-        .order_by('-avg_depth'))
+                  avg_depth=Avg(Coalesce('contracts_made__category__depth', 0)))
+        .exclude(count__lt=5)
+        .order_by('-avg_depth')
+    )
 
 
 def get_contracts_macro_statistics():
@@ -161,22 +164,22 @@ def _entities_delta_time(conditional_statement):
     or addition date is null.
     """
     query = '''
-        SELECT contracts_entity.id,
-               contracts_entity.base_id,
-               contracts_entity.name,
-               AVG(contracts_contract.added_date - contracts_contract.signing_date) AS avg,
-               COUNT(contracts_contract.id) AS "count"
-        FROM contracts_entity
-          LEFT OUTER JOIN contracts_contract_contractors
-            ON ( contracts_entity.id = contracts_contract_contractors.entity_id )
-          LEFT OUTER JOIN contracts_contract
-            ON ( contracts_contract_contractors.contract_id = contracts_contract.id )
-        WHERE contracts_contract.added_date IS NOT NULL AND
-              contracts_contract.signing_date IS NOT NULL AND
-              EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009 AND
-              %s
-        GROUP BY contracts_entity.id, contracts_entity.base_id, contracts_entity.name
-        ORDER BY avg ASC
+SELECT contracts_entity.id,
+       contracts_entity.base_id,
+       contracts_entity.name,
+       AVG(contracts_contract.added_date - contracts_contract.signing_date) AS avg,
+       COUNT(contracts_contract.id) AS "count"
+FROM contracts_entity
+  LEFT OUTER JOIN contracts_contract_contractors
+    ON ( contracts_entity.id = contracts_contract_contractors.entity_id )
+  LEFT OUTER JOIN contracts_contract
+    ON ( contracts_contract_contractors.contract_id = contracts_contract.id )
+WHERE contracts_contract.added_date IS NOT NULL AND
+      contracts_contract.signing_date IS NOT NULL AND
+      EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009 AND
+      %s
+GROUP BY contracts_entity.id, contracts_entity.base_id, contracts_entity.name
+ORDER BY avg ASC
     ''' % conditional_statement
 
     def raw_to_python(cursor):
@@ -229,16 +232,17 @@ def _raw_to_python(cursor):
 
 def _entities_contracts_time_series(conditional_statement):
     distinct_query = \
-        '''SELECT DISTINCT contracts_contract.id AS id,
-                  contracts_contract.price AS price,
-                  EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
-                  EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month
-           FROM contracts_contract
-                INNER JOIN contracts_contract_contractors
-                    ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
-                INNER JOIN contracts_entity
-                    ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
-           WHERE %s
+        '''
+SELECT DISTINCT contracts_contract.id AS id,
+      contracts_contract.price AS price,
+      EXTRACT(YEAR FROM contracts_contract.signing_date) AS s_year,
+      EXTRACT(MONTH FROM contracts_contract.signing_date) AS s_month
+FROM contracts_contract
+    INNER JOIN contracts_contract_contractors
+        ON ( contracts_contract.id = contracts_contract_contractors.contract_id )
+    INNER JOIN contracts_entity
+        ON ( contracts_contract_contractors.entity_id = contracts_entity.id )
+WHERE %s
         ''' % conditional_statement
 
     query = '''SELECT contracts.s_year, contracts.s_month, COUNT(contracts.id), SUM(contracts.price)
