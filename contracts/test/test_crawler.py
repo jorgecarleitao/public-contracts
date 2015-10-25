@@ -66,3 +66,19 @@ class TestCrawler(CrawlerTestCase):
         tender, created = c.update_instance(3957)
         self.assertEqual(3957, tender.base_id)
         self.assertEqual(None, tender.category)
+
+    def test_retrieve_twice(self):
+        self.create_static_fixture()
+
+        c = ContractsCrawler()
+
+        contract, created = c.update_instance(35356)
+        self.assertTrue(created)
+
+        contract1, created = c.update_instance(35356)
+        self.assertFalse(created)
+
+        self.assertEqual(contract, contract1)
+
+        contract1, created = c.update_instance(35356, flush=True)
+        self.assertFalse(created)

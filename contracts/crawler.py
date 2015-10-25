@@ -1,5 +1,3 @@
-import os
-import re
 import json
 import logging
 
@@ -188,7 +186,7 @@ class TendersStaticDataCrawler(JSONCrawler):
         self.retrieve_and_save_act_types()
 
 
-class StaticDataCrawler():
+class StaticDataCrawler:
     def __init__(self):
         self.contracts_crawler = ContractsStaticDataCrawler()
         self.tenders_crawler = TendersStaticDataCrawler()
@@ -219,7 +217,7 @@ class DynamicCrawler(JSONCrawler):
 
     def get_data(self, base_id, flush=False):
         """
-        Returns data retrievedd from BASE or from saved file in directory
+        Returns data retrieved from BASE or from saved file in directory
 
         If retrieved from BASE, saves it in a file in directory.
         """
@@ -244,28 +242,6 @@ class DynamicCrawler(JSONCrawler):
     @staticmethod
     def clean_data(data):
         raise NotImplementedError
-
-    def get_newest_base_id(self):
-        """
-            Hits BASE twice to get the newest base_id in BASE db.
-        """
-        def get_instances_count():
-            """
-            Hits BASE to get the total number of instances in BASE db.
-            """
-            response = requests.get(self.object_list_url,
-                                    headers={'Range': 'items=0-1'})
-
-            results_range = response.headers['content-range']
-
-            # in "items 0-%d/%d", we want the second %d, the total.
-            return int(results_range.split('/')[1])
-
-        count = get_instances_count()
-        response = requests.get(self.object_list_url,
-                                headers={'Range': 'items=%d-%d' % (count-1, count)})
-
-        return json.loads(response.text)[0]['id']
 
     def save_instance(self, cleaned_data):
         """
@@ -299,32 +275,46 @@ class DynamicCrawler(JSONCrawler):
 
     def last_base_id(self):
         """
-        Returns the last known base_id.
+        Returns the latest base_id existing in the database.
         """
-        regex = re.compile(r"%s_(\d+).json" % self.object_name)
-        files = [int(re.findall(regex, f)[0])
-                 for f in os.listdir('%s/' % self.object_directory)
-                 if re.match(regex, f)]
-        ids_in_file = sorted(files, key=lambda x: int(x), reverse=True)
-        if ids_in_file:
-            max_id_from_files = ids_in_file[0]
-        else:
-            max_id_from_files = 0
-
         tender = self.object_model.objects.order_by("-base_id").first()
         if tender:
-            max_id_from_db = tender.base_id
+            max_base_id = tender.base_id
         else:
-            max_id_from_db = 0
+            max_base_id = 0
 
-        return min(max_id_from_files, max_id_from_db)
+        return max_base_id
+
+    def get_newest_base_id(self):
+        """
+        Returns the newest base_id in BASE database.
+
+        Hits BASE twice.
+        """
+        def get_instances_count():
+            """
+            Hits BASE to get the total number of instances in BASE db.
+            """
+            response = requests.get(self.object_list_url,
+                                    headers={'Range': 'items=0-1'})
+
+            results_range = response.headers['content-range']
+
+            # in "items 0-%d/%d", we want the second %d, the total.
+            return int(results_range.split('/')[1])
+
+        count = get_instances_count()
+        response = requests.get(self.object_list_url, headers={
+            'Range': 'items=%d-%d' % (count-1, count)})
+
+        return json.loads(response.text)[0]['id']
 
     def update(self, flush=False):
         """
         Loops on all object ids to update object table.
         """
         created_instances = 0
-        last_base_id = max(self.last_base_id(), 0)
+        last_base_id = self.last_base_id()
 
         newest_base_id = self.get_newest_base_id()
         logging.info("Update of '%s' started - getting base_ids [%d, %d]",
@@ -469,7 +459,7 @@ class TendersCrawler(DynamicCrawler):
         return tender, created
 
 
-class DynamicDataCrawler():
+class DynamicDataCrawler:
     def __init__(self):
         self.entities_crawler = EntitiesCrawler()
         self.contracts_crawler = ContractsCrawler()
