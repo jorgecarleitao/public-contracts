@@ -1,10 +1,6 @@
 import xml.etree.ElementTree
 import logging
 
-if __name__ == "__main__":
-    from main.tools import set_up
-    set_up.set_up_django_environment('main.settings_for_schedule')
-
 from contracts.models import Category
 
 logger = logging.getLogger(__name__)
@@ -12,32 +8,23 @@ logger = logging.getLogger(__name__)
 
 def get_xml():
     """
-    Gets the xml file directly from the server.
-
-    This does not work as of May 2014 since the zip is compressed using type 9,
-    which is proprietary and Python doesn't support it.
-    See http://stackoverflow.com/a/12809847/931303
+    Gets the xml file from the web.
     """
     from urllib.request import urlopen
-    from io import BytesIO
-    from zipfile import ZipFile
 
-    request = urlopen('http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip')
-    zipfile = ZipFile(BytesIO(request.read()))
+    request = urlopen('https://raw.githubusercontent.com/data-ac-uk/cpv/master/etc/cpv_2008.xml')
 
-    tree = xml.etree.ElementTree.parse(zipfile.open('cpv_2008.xml'))
+    tree = xml.etree.ElementTree.parse(request)
+
     return tree.getroot()
 
 
-def build_categories(file_directory=''):
+def build_categories():
     """
     Builds the Categories with tree from the xml file available in:
     http://simap.europa.eu/news/new-cpv/cpv_2008_xml.zip
     """
-    file_directory += 'cpv_2008.xml'
-
-    tree = xml.etree.ElementTree.parse(file_directory)
-    root = tree.getroot()
+    root = get_xml()
 
     data = {}
     for child in root:
@@ -80,7 +67,3 @@ def build_categories(file_directory=''):
                 except Category.DoesNotExist:
                     logger.warning('category %s not added because lacks parent', data['code'])
                     continue
-
-
-if __name__ == "__main__":
-    build_categories()

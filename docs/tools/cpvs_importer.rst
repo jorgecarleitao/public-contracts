@@ -19,13 +19,11 @@ More than categories, this system builds a tree with broader categories like
 
 They provide the fixture as an `XML file`_, which we import:
 
-.. function:: build_categories(file_directory='')
+.. function:: build_categories()
 
-    Reads the XML file and constructs the category tree of
-    :class:`categories <contracts.models.Category>`.
+    Constructs the category tree of :class:`categories <contracts.models.Category>`.
 
     Gets the most general categories and saves then, repeating this recursively
     to more specific categories until it reaches the leaves of the tree.
 
-    Assumes the file is named ``cpv_2008.xml``, and can be supplied with the
-    directory where the file is.
+    The official categories are retrieved from the internet.
