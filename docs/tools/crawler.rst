@@ -10,7 +10,8 @@ This document explains how Base_ provides its data and how the crawler works.
 
 .. important::
     Please, take precautions on using the crawler as it can generate Denial of
-    Service (DoS) to Base_ database. We provide remote access to the database to avoid that.
+    Service (DoS) to Base_ database. We provide remote access to our database to
+    avoid that.
 
 .. important::
     Crawling Base_ from scratch takes more than 2 days as of Jan. 2014.
@@ -38,43 +39,32 @@ What the crawler does
 ---------------------
 
 The crawler accesses Base_ urls using the same procedure for entities, contracts
-and tenders. Starting with ``base_id = 1``, it does:
+and tenders. It does the following:
 
-1. retrieves json ``data`` from one of the links above
-2. Stores ``data`` in a .json file
-3. Cleans and validates ``data`` into ``cleaned_data``
-4. Uses ``cleaned_data`` to construct or update an instance of a model (e.g.
-   :class:`~contracts.models.Entity`)
-5. Saves the model, does ``base_id += 1``, goes to 1.
+1. retrieves the list ``c1_ids=[i*10k, (i+1)*10k]`` of ids from links 4., 5. or 6.;
+2. retrieves all ids in range ``[c_ids[0], c_ids[-1]]`` from our db, ``c2_ids``
+3. Adds, using links 1.,2. or 3. all ids in ``c1_ids`` and not in ``c2_ids``.
+4. Removes, using links 1.,2. or 3. all ids in ``c2_ids`` and not in ``c1_ids``.
+5. Go to 1 with ``i += 1`` until it covers all contracts.
 
-BASE returns an object with ``base_id = 0`` if the ``base_id`` doesn't exist in
-their database. The above procedure stops if ``base_id = 0`` occurs for
-``MAX_ALLOWED_FAILS`` consecutive events (depending of the type),
-which we interpret as the end of the list.
-
-Because Base_ database is constantly being updated with new contracts and entities,
-this procedure is repeated every day.
+The initial value of ``i`` is 0 when the database is populated from scratch, and is
+such that only one cycle 1-5 is performed when searching for new items.
 
 API references
 --------------
 
 This section introduces the different crawlers we use to crawl Base_.
 
-.. class::AbstractCrawler
-
-    An object able to retrieve content from an url.
-    It has one method:
-
-    .. method:: goToPage(url)
-
-        Returns the content of the url, using requests_.
-
 .. class::JSONCrawler
 
-    A subclass of :class:`AbstractCrawler` to retrieve JSON content from an url.
+    Retrieve JSON content from an url.
     It overwrites :meth:`~AbstractCrawler.goToPage`:
 
-    .. method:: goToPage(url)
+    .. method:: get_response(url, headers=None)
+
+        Returns the response of a GET request with optional headers
+
+    .. method:: get_json(url, headers=None)
 
         Returns a dictionary corresponding to the json content of the url.
 
@@ -95,15 +85,6 @@ This section introduces the different crawlers we use to crawl Base_.
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of tenders.
-
-.. class:: StaticDataCrawler
-
-    A crawler that uses :class:`ContractsStaticDataCrawler` and
-    :class:`TendersStaticDataCrawler` to extract all static data.
-
-    .. method:: retrieve_and_save_all()
-
-        Retrieves and saves all static data.
 
 Given the size of Base_ database, and since it is constantly being updated,
 contracts, entities and tenders, use the following approach:
@@ -170,16 +151,23 @@ contracts, entities and tenders, use the following approach:
         Returns the highest ``base_id`` retrieved so far by :meth:`get_data`
         by searching in :attr:`object_directory` for files in :attr:`object_directory`.
 
-    .. method:: update(flush=False)
+    .. method:: get_instances_count()
 
-        Runs a loop over :meth:`update_instance` from ``base_id`` equal to :meth:`last_base_id`
-        with increase by 1 on each iteration until
-        no more results are returned for X consecutive calls of
-        :meth:`update_instance`.
+        Returns the total number of existing instances in BASE db.
 
-        Returns all instances created during the loop.
+    .. method:: get_base_ids(row1, row2)
 
-        This is the entry point of the Method.
+        Returns a list of instances from BASE of length ``row2 - row1``.
+
+    .. method:: update_batch(row1, row2)
+
+        Updates a batch of rows, step 2.-4. of the previous section.
+
+    .. method:: update(start=None)
+
+        Runs a sequence of ``update_batch`` for different rows, step 1. and 5. of
+        previous section.
+
 
 .. class:: EntitiesCrawler
 
@@ -196,7 +184,6 @@ contracts, entities and tenders, use the following approach:
     * :attr:`~DynamicCrawler.object_url`:
       ``'http://www.base.gov.pt/base2/rest/entidades/%d'``
     * :attr:`~DynamicCrawler.object_model`: :class:`~contracts.models.Entity`.
-    * :attr:`MAX_ALLOWED_FAILS`: 100
 
 .. class:: ContractsCrawler
 
@@ -214,7 +201,6 @@ contracts, entities and tenders, use the following approach:
     * :attr:`object_name`: ``'contract'``;
     * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/contratos/%d'``
     * :attr:`object_model`: :class:`~contracts.models.Contract`.
-    * :attr:`MAX_ALLOWED_FAILS`: 5000
 
 .. class:: TenderCrawler
 
@@ -232,4 +218,3 @@ contracts, entities and tenders, use the following approach:
     * :attr:`object_name`: ``'tender'``;
     * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/anuncios/%d'``
     * :attr:`object_model`: :class:`~contracts.models.Tender`.
-    * :attr:`MAX_ALLOWED_FAILS`: 10000

@@ -1,10 +1,10 @@
 import os
 import shutil
+from django.core import management
 
 import django.test
 
-from contracts.crawler import EntitiesCrawler, ContractsCrawler, TendersCrawler, \
-    StaticDataCrawler
+from contracts.crawler import EntitiesCrawler, ContractsCrawler, TendersCrawler
 
 
 class CrawlerTestCase(django.test.TestCase):
@@ -33,17 +33,16 @@ class CrawlerTestCase(django.test.TestCase):
 
     @staticmethod
     def create_static_fixture():
-        c = StaticDataCrawler()
-        c.retrieve_and_save_all()
+        management.call_command('populate_contracts', static=True)
 
     @staticmethod
     def add_contracts(*args):
         c = ContractsCrawler()
-        for id in args:
-            c.update_instance(id)
+        for base_id in args:
+            c.update_instance(base_id)
 
     @staticmethod
     def add_tenders(*args):
         c = TendersCrawler()
-        for id in args:
-            c.update_instance(id)
+        for base_id in args:
+            c.update_instance(base_id)

@@ -17,13 +17,13 @@ class DynamicCrawlerTestCase(TestCase):
         Regression test for #17: if object doesn't exist,
         raise JSONLoadError
         """
-        self.assertRaises(JSONLoadError, self.crawler.goToPage,
+        self.assertRaises(JSONLoadError, self.crawler.get_json,
                           'http://www.base.gov.pt/base2/rest/entidades/322')
 
-        self.assertRaises(JSONLoadError, self.crawler.goToPage,
+        self.assertRaises(JSONLoadError, self.crawler.get_json,
                           'http://www.base.gov.pt/base2/rest/contratos/0')
 
-        self.assertRaises(JSONLoadError, self.crawler.goToPage,
+        self.assertRaises(JSONLoadError, self.crawler.get_json,
                           'http://www.base.gov.pt/base2/rest/anuncios/0')
 
 
@@ -82,3 +82,29 @@ class TestCrawler(CrawlerTestCase):
 
         contract1, created = c.update_instance(35356, flush=True)
         self.assertFalse(created)
+
+    def test_update(self):
+        self.create_static_fixture()
+
+        c = ContractsCrawler()
+
+        c.update_batch(0, 10)
+        # test missing contracts are added
+        models.Contract.objects.get(base_id=21).delete()
+        mods = c.update_batch(0, 10)
+        self.assertEqual(1, mods['added'])
+
+        # test removed contracts are added; deleted contracts are deleted
+        contract = models.Contract.objects.get(base_id=22)
+        contract.base_id = 28
+        contract.save()
+        mods = c.update_batch(0, 10)
+        self.assertEqual(1, mods['deleted'])
+        self.assertEqual(1, mods['added'])
+
+        # test modified contracts are updated
+        contract = models.Contract.objects.get(base_id=22)
+        contract.price = -10
+        contract.save()
+        mods = c.update_batch(0, 10)
+        self.assertEqual(1, mods['updated'])

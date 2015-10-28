@@ -2,16 +2,43 @@ import json
 import logging
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.forms import DateField, CharField
 
 import requests
 import requests.exceptions
 
 from . import models
 from contracts.crawler_forms import EntityForm, ContractForm, \
-    TenderForm, clean_place
-
+    TenderForm, clean_place, PriceField
 
 logger = logging.getLogger(__name__)
+
+
+def call_with_timeout(func, args, kwargs, timeout):
+    import multiprocessing
+
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
+
+    def function(return_dict):
+        return_dict['value'] = func(*args, **kwargs)
+
+    p = multiprocessing.Process(target=function, args=(return_dict,))
+    p.start()
+
+    # Wait `timeout` or for process to finish
+    p.join(timeout)
+
+    # If thread is still active
+    if p.is_alive():
+        p.terminate()
+        p.join()
+        raise TimeoutError
+    else:
+        if 'value' not in return_dict:
+            raise requests.exceptions.Timeout
+        return return_dict['value']
 
 
 class JSONLoadError(Exception):
@@ -22,37 +49,45 @@ class JSONLoadError(Exception):
         self.url = url
 
 
-class AbstractCrawler(object):
+class JSONCrawler:
     """
-    A thin wrapper of request.get with a custom user agent and timeout.
+    A crawler specific for retrieving JSON content.
     """
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) ' \
                  'AppleWebKit/537.36 (KHTML, like Gecko)'
 
-    def goToPage(self, url):
-        response = requests.get(url, headers={'User-agent': self.user_agent},
-                                timeout=20)
-        return response.text
+    def get_response(self, url, headers=None):
+        others = {'User-Agent': self.user_agent}
 
+        if headers:
+            headers.update(others)
+        else:
+            headers = others
 
-class JSONCrawler(AbstractCrawler):
-    """
-    A crawler specific for retrieving JSON content.
-    """
-    def goToPage(self, url):
-        try:
-            return json.loads(super(JSONCrawler, self).goToPage(url))
-        except ValueError:
-            raise JSONLoadError(url)
-        except requests.exceptions.Timeout:
-            logging.warning("timeout in url %s", url)
-            raise JSONLoadError(url)
+        while True:
+            # Keep trying until it returns.
+            try:
+                return call_with_timeout(
+                    requests.get, args=(url,),
+                    kwargs={'headers': headers, 'timeout': 30}, timeout=60)
+            except requests.exceptions.Timeout:
+                pass
+            except TimeoutError:
+                pass
+
+    def get_json(self, url, headers=None):
+        while True:
+            # Keep trying until it returns.
+            try:
+                return json.loads(self.get_response(url, headers).text)
+            except ValueError:
+                logger.error("Error retrieving url %s", url)
 
 
 class ContractsStaticDataCrawler(JSONCrawler):
     def save_contracts_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tipocontratos'
-        data = self.goToPage(url)
+        data = self.get_json(url)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
@@ -68,7 +103,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
 
     def save_procedures_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos'
-        data = self.goToPage(url)
+        data = self.get_json(url)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All that we don't use.
@@ -84,7 +119,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
 
     def save_all_countries(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/paises'
-        data = self.goToPage(url)
+        data = self.get_json(url)
 
         for element in data['items']:
             try:
@@ -99,7 +134,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
         base_url = 'http://www.base.gov.pt/base2/rest/lista/distritos?pais=%d'
         portugal = models.Country.objects.get(name="Portugal")
 
-        data = self.goToPage(base_url % 187)
+        data = self.get_json(base_url % 187)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
@@ -116,7 +151,7 @@ class ContractsStaticDataCrawler(JSONCrawler):
 
     def save_councils(self, district):
         base_url = 'http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=%d'
-        data = self.goToPage(base_url % district.base_id)
+        data = self.get_json(base_url % district.base_id)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All", that we don't use.
@@ -151,7 +186,7 @@ class TendersStaticDataCrawler(JSONCrawler):
     def retrieve_and_save_act_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tiposacto'
 
-        data = self.goToPage(url)
+        data = self.get_json(url)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
@@ -167,7 +202,7 @@ class TendersStaticDataCrawler(JSONCrawler):
 
     def retrieve_and_save_model_types(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/tiposmodelo'
-        data = self.goToPage(url)
+        data = self.get_json(url)
 
         for element in data['items']:
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
@@ -186,16 +221,6 @@ class TendersStaticDataCrawler(JSONCrawler):
         self.retrieve_and_save_act_types()
 
 
-class StaticDataCrawler:
-    def __init__(self):
-        self.contracts_crawler = ContractsStaticDataCrawler()
-        self.tenders_crawler = TendersStaticDataCrawler()
-
-    def retrieve_and_save_all(self):
-        self.contracts_crawler.retrieve_and_save_all()
-        self.tenders_crawler.retrieve_and_save_all()
-
-
 class DynamicCrawler(JSONCrawler):
     object_directory = '../data'
     object_url = None
@@ -203,15 +228,15 @@ class DynamicCrawler(JSONCrawler):
     object_name = None
     object_model = None
 
-    def goToPage(self, url):
+    def get_json(self, url, headers=None):
         """
         Raises a `JSONLoadError` if all entries are `None`,
         the BASE way of saying that the object doesn't exist in its database.
         """
-        data = super(DynamicCrawler, self).goToPage(url)
+        data = super(DynamicCrawler, self).get_json(url, headers)
 
         # ensures that data is not None
-        if data['id'] == 0:
+        if not isinstance(data, list) and data['id'] == 0:
             raise JSONLoadError(url)
         return data
 
@@ -232,7 +257,7 @@ class DynamicCrawler(JSONCrawler):
             f.close()
             action = 'used'
         except IOError:
-            data = self.goToPage(self.object_url % base_id)
+            data = self.get_json(self.object_url % base_id)
             with open(file_name, 'w') as outfile:
                 json.dump(data, outfile)
             action = 'created'
@@ -262,6 +287,7 @@ class DynamicCrawler(JSONCrawler):
 
         return instance, (action == 'created')
 
+    @transaction.atomic
     def update_instance(self, base_id, flush=False):
         """
         Retrieves data of object base_id from BASE,
@@ -285,52 +311,100 @@ class DynamicCrawler(JSONCrawler):
 
         return max_base_id
 
-    def get_newest_base_id(self):
+    def get_instances_count(self):
         """
-        Returns the newest base_id in BASE database.
-
-        Hits BASE twice.
+        Hits BASE to get the total number of instances in BASE db.
         """
-        def get_instances_count():
-            """
-            Hits BASE to get the total number of instances in BASE db.
-            """
-            response = requests.get(self.object_list_url,
-                                    headers={'Range': 'items=0-1'})
+        response = self.get_response(self.object_list_url,
+                                     headers={'Range': 'items=0-1'})
 
-            results_range = response.headers['content-range']
+        results_range = response.headers['content-range']
 
-            # in "items 0-%d/%d", we want the second %d, the total.
-            return int(results_range.split('/')[1])
+        # in "items 0-%d/%d", we want the second %d, the total.
+        return int(results_range.split('/')[1])
 
-        count = get_instances_count()
-        response = requests.get(self.object_list_url, headers={
-            'Range': 'items=%d-%d' % (count-1, count)})
-
-        return json.loads(response.text)[0]['id']
-
-    def update(self, flush=False):
+    def _hasher(self, instance):
         """
-        Loops on all object ids to update object table.
+        Hashes a entry of BASE response to a tuple. E.g. `(instance['id'], )`.
+        Add more values to better identify if the instance changed.
         """
-        created_instances = 0
-        last_base_id = self.last_base_id()
+        raise NotImplementedError
 
-        newest_base_id = self.get_newest_base_id()
-        logging.info("Update of '%s' started - getting base_ids [%d, %d]",
-                     self.object_name, last_base_id, newest_base_id)
+    def _values_list(self):
+        """
+        Returns a list of tuples that are retrieved from the database to match
+        the tuple returned by `_hasher`. E.g. `('base_id',)`.
+        """
+        raise NotImplementedError
 
-        for base_id in range(last_base_id, newest_base_id + 1):
-            try:
-                instance, created = self.update_instance(base_id, flush)
-                if created:
-                    created_instances += 1
-            except JSONLoadError:
-                pass
+    def get_base_ids(self, row1, row2):
 
-        logging.info("Update completed -- %d new instances", created_instances)
+        items = self.get_json(self.object_list_url,
+                              headers={'Range': 'items=%d-%d' % (row1, row2)})
 
-        return created_instances
+        return [self._hasher(instance) for instance in items]
+
+    def update_batch(self, row1, row2):
+        """
+        Updates items from row1 to row2 of BASE db with our db.
+        """
+        c1s = self.get_base_ids(row1, row2)
+
+        c2s = set(self.object_model.objects.filter(base_id__gte=c1s[0][0],
+                                                   base_id__lte=c1s[-1][0])
+                  .order_by('base_id').values_list(*self._values_list()))
+        c1s = set(c1s)
+
+        # just the ids
+        c1_ids = set(item[0] for item in c1s)
+        c2_ids = set(item[0] for item in c2s)
+
+        aggregated_modifications = {'deleted': 0, 'added': 0, 'updated': 0}
+        for item in c1s - c2s:
+            id1 = item[0]
+            self.update_instance(id1, flush=True)
+            if id1 in c2_ids:
+                aggregated_modifications['updated'] += 1
+            else:
+                aggregated_modifications['added'] += 1
+
+        for id2 in c2_ids - c1_ids:
+            self.object_model.objects.get(base_id=id2).delete()
+            logger.info('contract "%d" deleted' % id2)
+            aggregated_modifications['deleted'] += 1
+        return aggregated_modifications
+
+    def update(self, start=None):
+        count = self.get_instances_count()
+
+        aggregated = {'deleted': 0, 'added': 0, 'updated': 0}
+
+        items_per_batch = 1000
+
+        last_batch = count // items_per_batch
+
+        if start is None:
+            first_batch = last_batch - 1
+        else:
+            first_batch = start
+
+        logger.info('update of \'%s\' started: %d batches.' %
+                    (self.object_name, last_batch + 1 - first_batch))
+
+        for i in range(first_batch, last_batch + 1):
+            logger.info('Batch %d/%d started.' % (i + 1, last_batch + 1))
+
+            batch_aggr = self.update_batch(i*items_per_batch,
+                                           min(count, (i+1)*items_per_batch))
+
+            logger.info('Batch %d/%d finished: %s' %
+                        (i + 1, last_batch + 1, batch_aggr))
+
+            for key in aggregated:
+                aggregated[key] += batch_aggr[key]
+
+        logger.info('update of \'%s\' finished: %s' %
+                    (self.object_name, aggregated))
 
 
 class EntitiesCrawler(DynamicCrawler):
@@ -352,11 +426,19 @@ class EntitiesCrawler(DynamicCrawler):
         form = EntityForm(prepared_data)
 
         if not form.is_valid():
-            logging.error('Validation of entity "%d" failed' %
-                          data['id'])
+            logger.error('Validation of entity "%d" failed' %
+                         data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data
+
+    def _hasher(self, instance):
+        return instance['id'], \
+            CharField().clean(instance['nif']), \
+            CharField().clean(instance['description'])
+
+    def _values_list(self):
+        return 'base_id', 'nif', 'name'
 
 
 class ContractsCrawler(DynamicCrawler):
@@ -393,8 +475,8 @@ class ContractsCrawler(DynamicCrawler):
         form = ContractForm(prepared_data)
 
         if not form.is_valid():
-            logging.error('Validation of contract "%d" failed' %
-                          data['id'])
+            logger.error('Validation of contract "%d" failed' %
+                         data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data
@@ -411,6 +493,15 @@ class ContractsCrawler(DynamicCrawler):
         contract.contractors.add(*list(contractors))
 
         return contract, created
+
+    def _hasher(self, instance):
+        date_field = DateField(input_formats=["%d-%m-%Y"], required=False)
+        return instance['id'], \
+            PriceField().clean(instance['initialContractualPrice']), \
+            date_field.clean(instance['signingDate'])
+
+    def _values_list(self):
+        return 'base_id', 'price', 'signing_date'
 
 
 class TendersCrawler(DynamicCrawler):
@@ -444,8 +535,8 @@ class TendersCrawler(DynamicCrawler):
         form = TenderForm(prepared_data)
 
         if not form.is_valid():
-            logging.error('Validation of tender "%d" failed' %
-                          data['id'])
+            logger.error('Validation of tender "%d" failed' %
+                         data['id'])
             raise ValidationError(form.errors)
 
         return form.cleaned_data
@@ -458,34 +549,11 @@ class TendersCrawler(DynamicCrawler):
 
         return tender, created
 
+    def _hasher(self, instance):
+        date_field = DateField(input_formats=["%d-%m-%Y"])
+        return instance['id'], \
+            PriceField().clean(instance['basePrice']), \
+            date_field.clean(instance['drPublicationDate'])
 
-class DynamicDataCrawler:
-    def __init__(self):
-        self.entities_crawler = EntitiesCrawler()
-        self.contracts_crawler = ContractsCrawler()
-        self.tenders_crawler = TendersCrawler()
-
-    def update_all(self):
-        logger.info('Updating entities')
-        modified_entities = self.entities_crawler.update()
-
-        logger.info('Updating contracts')
-        contracts = self.contracts_crawler.update()
-        for contract in contracts:
-            modified_entities += list(contract.contractors.all())
-            modified_entities += list(contract.contracted.all())
-
-        logger.info('Updating tenders')
-        tenders = self.tenders_crawler.update()
-        for tender in tenders:
-            modified_entities += list(tender.contractors.all())
-
-        def distinct(items):
-            """
-            Returns distinct a list of distinct elements
-
-            see http://stackoverflow.com/a/7961390/931303
-            """
-            return list(set(items))
-
-        return distinct(modified_entities)
+    def _values_list(self):
+        return 'base_id', 'price', 'publication_date'
