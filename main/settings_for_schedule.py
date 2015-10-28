@@ -1,22 +1,16 @@
 """
-Settings file for the scheduler. Requires a `settings_live` with private
-information of the server.
+Settings file for the scheduler.
 
 Imports everything from `settings.py`, and them overwrites some of the settings.
 """
 from .settings import *
-from . import settings_live
 
 INSTALLED_APPS = (
     'deputies',
     'law',
     'contracts',
     'main',
-    'django_rq',
 )
-
-# django_rq related
-RQ_QUEUES = settings_live.RQ_QUEUES
 
 # ignore requests logging
 import logging
