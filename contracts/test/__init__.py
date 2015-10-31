@@ -4,7 +4,22 @@ from django.core import management
 
 import django.test
 
+import requests
+import requests.exceptions
+
 from contracts.crawler import EntitiesCrawler, ContractsCrawler, TendersCrawler
+
+
+def _has_remote_access():
+    try:
+        response = requests.get('http://www.base.gov.pt', timeout=1)
+        return response.status_code == 200
+    except requests.exceptions.ConnectionError:
+        return False
+    except requests.exceptions.ReadTimeout:
+        return False
+
+HAS_REMOTE_ACCESS = _has_remote_access()
 
 
 class CrawlerTestCase(django.test.TestCase):

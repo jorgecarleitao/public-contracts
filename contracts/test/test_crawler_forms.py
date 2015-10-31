@@ -1,14 +1,14 @@
-# coding=utf-8
-from unittest import TestCase
+from unittest import TestCase, skipUnless
 import datetime
 
 from django.core.exceptions import ValidationError
+import django.test
 
-from . import CrawlerTestCase
-from contracts.crawler import ContractsStaticDataCrawler
-from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, CPVSField, \
-    CountryChoiceField, ContractTypeField, EntitiesField
+from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, \
+    CPVSField, CountryChoiceField, ContractTypeField, EntitiesField
 from contracts import models
+
+from contracts.test import CrawlerTestCase, HAS_REMOTE_ACCESS
 
 
 class PriceFieldTestCase(TestCase):
@@ -75,30 +75,36 @@ class CPVSFieldTestCase(TestCase):
         self.assertEqual(self.field.clean(''), None)
 
 
-class CountryChoiceFieldTestCase(TestCase):
+class CountryChoiceFieldTestCase:
     def setUp(self):
-        crawler = ContractsStaticDataCrawler()
-        crawler.save_all_countries()
-
         self.field = CountryChoiceField(required=False)
 
     def test_none(self):
         self.assertEqual(self.field.clean('Não definido.'), None)
 
     def test_valid(self):
-        self.assertEqual(self.field.clean('Portugal'), models.Country.objects.get(name='Portugal'))
-        self.assertEqual(self.field.clean('Alemanha'), models.Country.objects.get(name='Alemanha'))
+        pt = models.Country.objects.create(name='Portugal')
+        de = models.Country.objects.create(name='Alemanha')
+
+        self.assertEqual(self.field.clean('Portugal'), pt)
+        self.assertEqual(self.field.clean('Alemanha'), de)
 
     def test_invalid(self):
         self.assertRaises(ValidationError, self.field.clean, 'Non-country')
 
 
-class ContractTypeFieldTestCase(TestCase):
-    def setUp(self):
-        crawler = ContractsStaticDataCrawler()
-        crawler.save_contracts_types()
+class ContractTypeFieldTestCase(django.test.TestCase):
 
-        self.field = ContractTypeField(required=False)
+    @classmethod
+    def setUpTestData(cls):
+        models.ContractType.objects.create(base_id=1,
+                                           name='Concessão de obras públicas')
+        models.ContractType.objects.create(base_id=2,
+                                           name='Aquisição de bens móveis')
+        models.ContractType.objects.create(base_id=3,
+                                           name='Outros')
+
+        cls.field = ContractTypeField(required=False)
 
     def test_none(self):
         self.assertEqual(self.field.clean('Não definido.'), None)
@@ -122,13 +128,15 @@ class ContractTypeFieldTestCase(TestCase):
                          models.ContractType.objects.get(name='Outros'))
 
 
+@skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
 class EntitiesFieldTestCase(CrawlerTestCase):
 
     def test_clean(self):
-        ContractsStaticDataCrawler().save_all_countries()
+        models.Country.objects.create(name='Portugal')
 
         field = EntitiesField()
-        self.assertRaises(ValidationError, field.clean, [{'id': -1}])
+        with self.assertRaises(ValidationError):
+            field.clean([{'id': -1}])
 
         field.clean([{'id': 1}])
         self.assertEqual(models.Entity.objects.count(), 1)
@@ -136,5 +144,6 @@ class EntitiesFieldTestCase(CrawlerTestCase):
         models.Entity.objects.all().delete()
 
         # ensure correct rollback after a fail
-        self.assertRaises(ValidationError, field.clean, [{'id': 1}, {'id': -1}])
+        with self.assertRaises(ValidationError):
+            field.clean([{'id': 1}, {'id': -1}])
         self.assertEqual(models.Entity.objects.count(), 0)

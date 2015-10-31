@@ -1,12 +1,13 @@
-from unittest import TestCase
+from unittest import TestCase, skipUnless
 
 from contracts.crawler import ContractsCrawler, TendersCrawler, DynamicCrawler, \
-    JSONLoadError, ContractsStaticDataCrawler
+    JSONLoadError, ContractsStaticDataCrawler, TendersStaticDataCrawler
 from contracts import models
 
-from contracts.test import CrawlerTestCase
+from contracts.test import CrawlerTestCase, HAS_REMOTE_ACCESS
 
 
+@skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
 class DynamicCrawlerTestCase(TestCase):
 
     def setUp(self):
@@ -27,6 +28,7 @@ class DynamicCrawlerTestCase(TestCase):
                           'http://www.base.gov.pt/base2/rest/anuncios/0')
 
 
+@skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
 class StaticDataCrawlerTestCase(TestCase):
 
     def test_countries_districts_counties(self):
@@ -48,19 +50,27 @@ class StaticDataCrawlerTestCase(TestCase):
         self.assertEqual(models.ContractType.objects.count(), 8)
 
 
+@skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
 class TestCrawler(CrawlerTestCase):
 
     def test_basic(self):
-        self.create_static_fixture()
+        models.Country.objects.create(name='Portugal')
+
+        models.ProcedureType.objects.create(name='Ajuste directo', base_id=1)
 
         c = ContractsCrawler()
 
-        contract, created = c.update_instance(35356)
+        contract, _ = c.update_instance(35356)
 
         self.assertEqual(35356, contract.base_id)
         self.assertEqual(None, contract.category)
 
-        # test tender update
+    def test_tenders(self):
+        models.Country.objects.create(name='Portugal')
+        TendersStaticDataCrawler().retrieve_and_save_all()
+        models.ContractType.objects.create(name='Aquisição de bens móveis',
+                                           base_id=1)
+
         c = TendersCrawler()
 
         tender, created = c.update_instance(3957)
@@ -68,7 +78,9 @@ class TestCrawler(CrawlerTestCase):
         self.assertEqual(None, tender.category)
 
     def test_retrieve_twice(self):
-        self.create_static_fixture()
+        models.Country.objects.create(name='Portugal')
+
+        models.ProcedureType.objects.create(name='Ajuste directo', base_id=1)
 
         c = ContractsCrawler()
 
@@ -84,27 +96,35 @@ class TestCrawler(CrawlerTestCase):
         self.assertFalse(created)
 
     def test_update(self):
-        self.create_static_fixture()
+        pt = models.Country.objects.create(name='Portugal')
+        vs = models.District.objects.create(name='Viseu', country=pt, base_id=1)
+        models.Council.objects.create(name='Viseu', district=vs, base_id=1)
+
+        d = models.District.objects.create(name='Faro', country=pt, base_id=2)
+        models.Council.objects.create(name='Faro', district=d, base_id=2)
+
+        models.ContractType.objects.create(name='Aquisição de serviços', base_id=1)
+        models.ProcedureType.objects.create(name='Ajuste directo', base_id=1)
 
         c = ContractsCrawler()
 
-        c.update_batch(0, 10)
+        c.update_batch(7, 10)
         # test missing contracts are added
-        models.Contract.objects.get(base_id=21).delete()
-        mods = c.update_batch(0, 10)
+        models.Contract.objects.get(base_id=27).delete()
+        mods = c.update_batch(7, 10)
         self.assertEqual(1, mods['added'])
 
         # test removed contracts are added; deleted contracts are deleted
-        contract = models.Contract.objects.get(base_id=22)
+        contract = models.Contract.objects.get(base_id=27)
         contract.base_id = 28
         contract.save()
-        mods = c.update_batch(0, 10)
+        mods = c.update_batch(7, 10)
         self.assertEqual(1, mods['deleted'])
         self.assertEqual(1, mods['added'])
 
         # test modified contracts are updated
-        contract = models.Contract.objects.get(base_id=22)
+        contract = models.Contract.objects.get(base_id=27)
         contract.price = -10
         contract.save()
-        mods = c.update_batch(0, 10)
+        mods = c.update_batch(7, 10)
         self.assertEqual(1, mods['updated'])
