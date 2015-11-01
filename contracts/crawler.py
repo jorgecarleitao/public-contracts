@@ -299,18 +299,6 @@ class DynamicCrawler(JSONCrawler):
         cleaned_data = self.clean_data(data)
         return self.save_instance(cleaned_data)
 
-    def last_base_id(self):
-        """
-        Returns the latest base_id existing in the database.
-        """
-        tender = self.object_model.objects.order_by("-base_id").first()
-        if tender:
-            max_base_id = tender.base_id
-        else:
-            max_base_id = 0
-
-        return max_base_id
-
     def get_instances_count(self):
         """
         Hits BASE to get the total number of instances in BASE db.
