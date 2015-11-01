@@ -1,4 +1,3 @@
-# coding=utf-8
 import datetime
 from datetime import timedelta
 import re
@@ -44,17 +43,20 @@ class PriceField(IntegerField):
         return super().clean(value)
 
 
-class TimeDeltaField(Field):
+class TimeDeltaField(CharField):
     """
     Validates a timedelta of the form "%d dias.".
     """
-    def clean(self, value):
-        if ' ' in value:
-            strings = value.split(' ')
-            if strings[1] == 'dias.':
-                return timedelta(days=int(strings[0]))
+    re = re.compile('(\d+) dias\.')
 
-        return timedelta()
+    def clean(self, value):
+        super(TimeDeltaField, self).clean(value)
+
+        result = self.re.search(value)
+        if not result:
+            raise ValidationError('Validation of "%s" failed' % value)
+
+        return timedelta(days=int(result.group(1)))
 
 
 class CPVSField(CharField):
@@ -66,7 +68,7 @@ class CPVSField(CharField):
         if value in ('', 'Não definido.'):
             return None
 
-        expression = re.compile("(\d{8}-\d),.*")
+        expression = re.compile("(\d{8}-\d)")
         match = expression.match(value)
 
         if match:
