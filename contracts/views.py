@@ -46,7 +46,6 @@ def build_contract_list_context(context, GET):
 
     key = 'search'
     if key in GET and GET[key]:
-        context[key] = GET[key]
         context['contracts'] = context['contracts'].search(GET[key])
 
     key = 'range'
@@ -195,7 +194,6 @@ def build_tender_list_context(context, GET):
 
     key = 'search'
     if key in GET and GET[key]:
-        context[key] = GET[key]
         context['tenders'] = context['tenders'].search(GET[key])
 
     key = 'range'

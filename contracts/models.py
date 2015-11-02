@@ -1,9 +1,6 @@
 import logging
 import datetime
 
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
-
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -11,6 +8,10 @@ from django.db.models import Sum, Count, Max
 from django.utils.text import slugify
 
 from treebeard.ns_tree import NS_Node
+
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class Country(models.Model):
@@ -89,9 +90,6 @@ class Entity(models.Model):
     nif = models.CharField(max_length=254)
 
     country = models.ForeignKey('Country', null=True)
-
-    def __unicode__(self):
-        return self.name
 
     def total_earned(self):
         return self.data.total_earned
@@ -264,24 +262,6 @@ class Contract(models.Model):
     def get_base_url(self):
         return 'http://www.base.gov.pt/Base/pt/Pesquisa/Contrato?a=%d' \
                % self.base_id
-
-    def get_first_contractor(self):
-        # there are at least two contracts with errors in the official database,
-        # which leads to 0 contractors.
-        # These contracts don't have any information.
-        try:
-            return self.contractors.all()[0]
-        except IndexError:
-            return None
-
-    def get_first_contracted(self):
-        # there are at least two contracts with errors in the official database,
-        # which leads to 0 contracted.
-        # These contracts don't have any information.
-        try:
-            return self.contracted.all()[0]
-        except IndexError:
-            return None
 
 
 class Tender(models.Model):
