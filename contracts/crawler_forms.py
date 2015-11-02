@@ -99,7 +99,7 @@ class EntitiesField(ModelMultipleChoiceField):
                 with transaction.atomic():
                     for base_id in value:
                         entity_crawler.update_instance(base_id)
-            except contracts.crawler.JSONLoadError:
+            except (contracts.crawler.JSONLoadError, ValidationError):
                 raise ValidationError("An entity in %s doesn't exist in BASE." %
                                       value)
 

@@ -29,7 +29,6 @@ Base_ uses the following urls to expose its data
 6. List of :class:`~contracts.models.Council`: http://www.base.gov.pt/base2/rest/lista/concelhos?distrito=[district_base_id];
 7. List of :class:`~contracts.models.ContractType`: http://www.base.gov.pt/base2/rest/lista/tipocontratos
 8. List of :class:`~contracts.models.ProcedureType`: http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos
-9. List of :class:`~contracts.models.ProcedureType`: http://www.base.gov.pt/base2/rest/lista/tipoprocedimentos
 
 Each url returns ``json`` with information about the particular object.
 For this reason, we have an abstract crawler for retrieving this information
@@ -70,21 +69,12 @@ This section introduces the different crawlers we use to crawl Base_.
 
 .. class:: ContractsStaticDataCrawler
 
-    A subclass :class:`JSONCrawler` for static data of contracts. This crawler
-    only needs to be run once and is used to populate the database the first time.
+    A subclass :class:`JSONCrawler` for static data. This crawler only needs to
+    be run once and is used to populate the database the first time.
 
     .. method:: retrieve_and_save_all()
 
         Retrieves and saves all static data of contracts.
-
-.. class:: TendersStaticDataCrawler
-
-    A subclass :class:`JSONCrawler` for static data of tenders. This crawler
-    only needs to be run once and is used to populate the database the first time.
-
-    .. method:: retrieve_and_save_all()
-
-        Retrieves and saves all static data of tenders.
 
 Given the size of Base_ database, and since it is constantly being updated,
 contracts, entities and tenders, use the following approach:
@@ -145,11 +135,6 @@ contracts, entities and tenders, use the following approach:
         passed to :meth:`get_data`.
 
         Returns the output of :meth:`save_instance`.
-
-    .. method:: last_base_id()
-
-        Returns the highest ``base_id`` retrieved so far by :meth:`get_data`
-        by searching in :attr:`object_directory` for files in :attr:`object_directory`.
 
     .. method:: get_instances_count()
 

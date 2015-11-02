@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from contracts.crawler import ContractsCrawler, EntitiesCrawler, TendersCrawler, \
-    ContractsStaticDataCrawler, TendersStaticDataCrawler
+    ContractsStaticDataCrawler
 from contracts.tools.cpvs import build_categories
 
 from contracts.models import Category, ProcedureType
@@ -47,11 +47,9 @@ class Command(BaseCommand):
         if options['static']:
             if options['bootstrap']:
                 ContractsStaticDataCrawler().retrieve_and_save_all()
-                TendersStaticDataCrawler().retrieve_and_save_all()
             else:
                 if not ProcedureType.objects.exists():
                     ContractsStaticDataCrawler().retrieve_and_save_all()
-                    TendersStaticDataCrawler().retrieve_and_save_all()
 
         if options['categories']:
             if options['bootstrap']:
@@ -65,18 +63,18 @@ class Command(BaseCommand):
             if options['bootstrap']:
                 crawler.update(0)
             else:
-                crawler.update()
+                crawler.update(-2000)
 
         if options['contracts']:
             crawler = ContractsCrawler()
             if options['bootstrap']:
                 crawler.update(0)
             else:
-                crawler.update()
+                crawler.update(-2000)
 
         if options['tenders']:
             crawler = TendersCrawler()
             if options['bootstrap']:
                 crawler.update(0)
             else:
-                crawler.update()
+                crawler.update(-2000)

@@ -1,10 +1,11 @@
 from unittest import TestCase, skipUnless
+from django.core.exceptions import ValidationError
 
 from contracts.crawler import ContractsCrawler, TendersCrawler, DynamicCrawler, \
-    JSONLoadError, ContractsStaticDataCrawler, TendersStaticDataCrawler
+    JSONLoadError, ContractsStaticDataCrawler
 from contracts import models
 
-from contracts.test import CrawlerTestCase, HAS_REMOTE_ACCESS
+from contracts.test import CrawlerTestCase, EntitiesCrawler, HAS_REMOTE_ACCESS
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
@@ -45,9 +46,13 @@ class StaticDataCrawlerTestCase(TestCase):
     def test_types(self):
         ContractsStaticDataCrawler().save_procedures_types()
         ContractsStaticDataCrawler().save_contracts_types()
+        ContractsStaticDataCrawler().save_act_types()
+        ContractsStaticDataCrawler().save_model_types()
 
         self.assertEqual(models.ProcedureType.objects.count(), 7)
         self.assertEqual(models.ContractType.objects.count(), 8)
+        self.assertEqual(models.ActType.objects.count(), 4)
+        self.assertEqual(models.ModelType.objects.count(), 9)
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
@@ -67,7 +72,9 @@ class TestCrawler(CrawlerTestCase):
 
     def test_tenders(self):
         models.Country.objects.create(name='Portugal')
-        TendersStaticDataCrawler().retrieve_and_save_all()
+
+        models.ActType.objects.create(name='Anúncio de procedimento', base_id=1)
+        models.ModelType.objects.create(name='Concurso público', base_id=1)
         models.ContractType.objects.create(name='Aquisição de bens móveis',
                                            base_id=1)
 
@@ -108,17 +115,17 @@ class TestCrawler(CrawlerTestCase):
 
         c = ContractsCrawler()
 
-        c.update_batch(7, 10)
+        c.update(7, 10)
         # test missing contracts are added
         models.Contract.objects.get(base_id=27).delete()
-        mods = c.update_batch(7, 10)
+        mods = c.update(7, 10)
         self.assertEqual(1, mods['added'])
 
         # test removed contracts are added; deleted contracts are deleted
         contract = models.Contract.objects.get(base_id=27)
         contract.base_id = 28
         contract.save()
-        mods = c.update_batch(7, 10)
+        mods = c.update(7, 10)
         self.assertEqual(1, mods['deleted'])
         self.assertEqual(1, mods['added'])
 
@@ -126,5 +133,50 @@ class TestCrawler(CrawlerTestCase):
         contract = models.Contract.objects.get(base_id=27)
         contract.price = -10
         contract.save()
-        mods = c.update_batch(7, 10)
+        mods = c.update(7, 10)
         self.assertEqual(1, mods['updated'])
+
+    def test_update_limits(self):
+        c = ContractsCrawler()
+
+        # end<0 does nothing
+        mod = c.update(2, -1)
+        for x in mod:
+            self.assertEqual(0, mod[x])
+
+        # start>end does nothing
+        mod = c.update(2, 1)
+        for x in mod:
+            self.assertEqual(0, mod[x])
+
+        # end = None
+        mod = c.update(9000000000, None)
+        for x in mod:
+            self.assertEqual(0, mod[x])
+
+    def test_update_entities(self):
+        c = EntitiesCrawler()
+        with self.assertRaises(ValidationError):
+            c.update(0, 1)
+
+        models.Country.objects.create(name='Portugal')
+
+        mods = c.update(0, 1)
+        self.assertEqual(2, mods['added'])
+
+    def test_update_tenders(self):
+        c = TendersCrawler()
+        with self.assertRaises(ValidationError):
+            c.update(0, 1)
+
+        models.Country.objects.create(name='Portugal')
+        models.ModelType.objects.create(name='Concurso público', base_id=1)
+        models.ActType.objects.create(name='Declaração de retificação de anúncio',
+                                      base_id=1)
+        models.ActType.objects.create(name='Anúncio de procedimento',
+                                      base_id=2)
+        models.ContractType.objects.create(name='Empreitadas de obras públicas',
+                                           base_id=1)
+
+        mods = c.update(0, 1)
+        self.assertEqual(2, mods['added'])

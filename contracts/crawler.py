@@ -93,9 +93,8 @@ class ContractsStaticDataCrawler(JSONCrawler):
             if element['id'] == '0':  # id = 0 is "All" that we don't use.
                 continue
             try:
-                # if it exists, we pass
+                # if it exists, continue
                 models.ContractType.objects.get(base_id=element['id'])
-                pass
             except models.ContractType.DoesNotExist:
                 contract_type = models.ContractType(name=element['description'],
                                                     base_id=element['id'])
@@ -111,11 +110,41 @@ class ContractsStaticDataCrawler(JSONCrawler):
             try:
                 # if it exists, we pass
                 models.ProcedureType.objects.get(name=element['description'])
-                pass
             except models.ProcedureType.DoesNotExist:
                 procedure_type = models.ProcedureType(name=element['description'],
                                                       base_id=element['id'])
                 procedure_type.save()
+
+    def save_act_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tiposacto'
+
+        data = self.get_json(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ActType.objects.get(base_id=element['id'])
+            except models.ActType.DoesNotExist:
+                act_type = models.ActType(name=element['description'],
+                                          base_id=element['id'])
+                act_type.save()
+
+    def save_model_types(self):
+        url = 'http://www.base.gov.pt/base2/rest/lista/tiposmodelo'
+        data = self.get_json(url)
+
+        for element in data['items']:
+            if element['id'] == '0':  # id = 0 is "All" that we don't use.
+                continue
+            try:
+                # if it exists, we pass
+                models.ModelType.objects.get(base_id=element['id'])
+            except models.ModelType.DoesNotExist:
+                act_type = models.ModelType(name=element['description'],
+                                            base_id=element['id'])
+                act_type.save()
 
     def save_all_countries(self):
         url = 'http://www.base.gov.pt/base2/rest/lista/paises'
@@ -142,7 +171,6 @@ class ContractsStaticDataCrawler(JSONCrawler):
             try:
                 # if it exists, we pass
                 models.District.objects.get(base_id=element['id'])
-                pass
             except models.District.DoesNotExist:
                 district = models.District(name=element['description'],
                                            base_id=element['id'],
@@ -159,66 +187,24 @@ class ContractsStaticDataCrawler(JSONCrawler):
             try:
                 # if it exists, we pass
                 models.Council.objects.get(base_id=element['id'])
-                pass
             except models.Council.DoesNotExist:
                 council = models.Council(name=element['description'],
                                          base_id=element['id'],
                                          district=district)
                 council.save()
 
-    def save_all_councils(self):
-        for district in models.District.objects.all():
-            self.save_councils(district)
-
     def retrieve_and_save_all(self):
         self.save_contracts_types()
         self.save_procedures_types()
+        self.save_model_types()
+        self.save_act_types()
         # Countries first
         self.save_all_countries()
         # Districts second
         self.save_all_districts()
         # Councils third
-        self.save_all_councils()
-
-
-class TendersStaticDataCrawler(JSONCrawler):
-
-    def retrieve_and_save_act_types(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/tiposacto'
-
-        data = self.get_json(url)
-
-        for element in data['items']:
-            if element['id'] == '0':  # id = 0 is "All" that we don't use.
-                continue
-            try:
-                # if it exists, we pass
-                models.ActType.objects.get(base_id=element['id'])
-                pass
-            except models.ActType.DoesNotExist:
-                act_type = models.ActType(name=element['description'],
-                                          base_id=element['id'])
-                act_type.save()
-
-    def retrieve_and_save_model_types(self):
-        url = 'http://www.base.gov.pt/base2/rest/lista/tiposmodelo'
-        data = self.get_json(url)
-
-        for element in data['items']:
-            if element['id'] == '0':  # id = 0 is "All" that we don't use.
-                continue
-            try:
-                # if it exists, we pass
-                models.ModelType.objects.get(base_id=element['id'])
-                pass
-            except models.ModelType.DoesNotExist:
-                act_type = models.ModelType(name=element['description'],
-                                            base_id=element['id'])
-                act_type.save()
-
-    def retrieve_and_save_all(self):
-        self.retrieve_and_save_model_types()
-        self.retrieve_and_save_act_types()
+        for district in models.District.objects.all():
+            self.save_councils(district)
 
 
 class DynamicCrawler(JSONCrawler):
@@ -332,7 +318,7 @@ class DynamicCrawler(JSONCrawler):
 
         return [self._hasher(instance) for instance in items]
 
-    def update_batch(self, row1, row2):
+    def _update_batch(self, row1, row2):
         """
         Updates items from row1 to row2 of BASE db with our db.
         """
@@ -362,37 +348,63 @@ class DynamicCrawler(JSONCrawler):
             aggregated_modifications['deleted'] += 1
         return aggregated_modifications
 
-    def update(self, start=None):
-        count = self.get_instances_count()
+    def update(self, start=0, end=None, items_per_batch=1000):
+        """
+        The method retrieves count of all items in BASE (1 hit), and
+        synchronizes items from `start` until `min(end, count)` in batches
+        of `items_per_batch`.
 
+        If `end=None` (default), it retrieves until the last item.
+
+        if `start < 0`, the start is counted from the end.
+
+        Use e.g. `start=-2000` for a quick retrieve of new items;
+
+        Use `start=0` (default) to synchronize all items in database
+        (it takes time!)
+        """
         aggregated = {'deleted': 0, 'added': 0, 'updated': 0}
 
-        items_per_batch = 1000
-
-        last_batch = count // items_per_batch
-
-        if start is None:
-            first_batch = last_batch - 1
+        count = self.get_instances_count()
+        if end is None:
+            end = count
         else:
-            first_batch = start
+            end = min(count, end)
 
-        logger.info('update of \'%s\' started: %d batches.' %
-                    (self.object_name, last_batch + 1 - first_batch))
+        if end <= 0:
+            return aggregated
 
-        for i in range(first_batch, last_batch + 1):
-            logger.info('Batch %d/%d started.' % (i + 1, last_batch + 1))
+        # if start < 0, start is as if it was from the maximum
+        if start < 0:
+            start += end
+        if start > end:
+            return aggregated
 
-            batch_aggr = self.update_batch(i*items_per_batch,
-                                           min(count, (i+1)*items_per_batch))
+        # + 1 because it is [start, end]
+        total_items = end - start
 
-            logger.info('Batch %d/%d finished: %s' %
-                        (i + 1, last_batch + 1, batch_aggr))
+        # 103 // 100 = 1; we want 2 to also get the 3 in the next batch.
+        batches = total_items // items_per_batch + 1
+
+        logger.info('update of \'%s\' started: %d items in %d batches.' %
+                    (self.object_name, total_items, batches))
+
+        for i in range(batches):
+            logger.info('Batch %d/%d started.' % (i + 1, batches))
+
+            batch_aggr = self._update_batch(
+                start + i*items_per_batch,
+                min(end, start + (i+1)*items_per_batch))
+
+            logger.info('Batch %d/%d finished: %s' % (i + 1, batches, batch_aggr))
 
             for key in aggregated:
                 aggregated[key] += batch_aggr[key]
 
         logger.info('update of \'%s\' finished: %s' %
                     (self.object_name, aggregated))
+
+        return aggregated
 
 
 class EntitiesCrawler(DynamicCrawler):

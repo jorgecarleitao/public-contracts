@@ -1,6 +1,5 @@
 import os
 import shutil
-from django.core import management
 
 import django.test
 
@@ -14,9 +13,7 @@ def _has_remote_access():
     try:
         response = requests.get('http://www.base.gov.pt', timeout=1)
         return response.status_code == 200
-    except requests.exceptions.ConnectionError:
-        return False
-    except requests.exceptions.ReadTimeout:
+    except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
         return False
 
 HAS_REMOTE_ACCESS = _has_remote_access()
@@ -45,19 +42,3 @@ class CrawlerTestCase(django.test.TestCase):
 
         for klass in [EntitiesCrawler, ContractsCrawler, TendersCrawler]:
             klass.object_directory = 'data'
-
-    @staticmethod
-    def create_static_fixture():
-        management.call_command('populate_contracts', static=True)
-
-    @staticmethod
-    def add_contracts(*args):
-        c = ContractsCrawler()
-        for base_id in args:
-            c.update_instance(base_id)
-
-    @staticmethod
-    def add_tenders(*args):
-        c = TendersCrawler()
-        for base_id in args:
-            c.update_instance(base_id)
