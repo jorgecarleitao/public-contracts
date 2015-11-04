@@ -14,7 +14,7 @@ INSTALLED_APPS = (
 
 # ignore requests logging
 import logging
-logging.getLogger("requests").setLevel(logging.WARNING)
+logging.getLogger("requests").setLevel(logging.CRITICAL)
 
 # use DEBUG for pt_law_downloader so if any publication fails to download,
 # we have a log of its number.

@@ -81,7 +81,7 @@ class JSONCrawler:
             try:
                 return json.loads(self.get_response(url, headers).text)
             except ValueError:
-                logger.error("Error retrieving url %s", url)
+                pass
 
 
 class ContractsStaticDataCrawler(JSONCrawler):
