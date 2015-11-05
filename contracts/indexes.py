@@ -1,4 +1,6 @@
 from sphinxql import indexes, fields
+from sphinxql.manager import IndexManager
+
 from .models import Entity, Contract, Tender
 
 
@@ -7,6 +9,13 @@ class EntityIndex(indexes.Index):
 
     class Meta:
         model = Entity
+
+
+class Manager(IndexManager):
+    def get_queryset(self):
+        return super(Manager, self).get_queryset()\
+            .extra(select={'signing_date_is_null': 'signing_date IS NULL'},
+                   order_by=['signing_date_is_null', '-signing_date'])
 
 
 class ContractIndex(indexes.Index):
@@ -21,6 +30,8 @@ class ContractIndex(indexes.Index):
 
     district = fields.Text('district__name')
     council = fields.Text('council__name')
+
+    objects = Manager()
 
     class Meta:
         model = Contract

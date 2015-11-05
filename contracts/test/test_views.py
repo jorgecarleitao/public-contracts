@@ -25,13 +25,20 @@ class TestBasic(django.test.TestCase):
     def setUp(self):
         super(TestBasic, self).setUp()
 
-        c = Contract.objects.create(base_id=1, contract_description='da',
-                                    price=100, added_date=datetime(year=2003,
-                                                                   month=1,
-                                                                   day=1))
+        c = Contract.objects.create(
+            base_id=1, contract_description='da', price=100,
+            added_date=datetime(year=2003, month=1, day=1),
+            signing_date=datetime(year=2003, month=1, day=1))
         e1 = Entity.objects.create(name='test1', base_id=1, nif='nif')
         e2 = Entity.objects.create(name='test2', base_id=2, nif='nif')
 
+        c.contractors.add(e1)
+        c.contracted.add(e2)
+
+        c = Contract.objects.create(
+            base_id=2, contract_description='da', price=100,
+            added_date=datetime(year=2008, month=1, day=1),
+            signing_date=datetime(year=2008, month=1, day=1))
         c.contractors.add(e1)
         c.contracted.add(e2)
 
@@ -43,8 +50,13 @@ class TestBasic(django.test.TestCase):
         response = self.client.get(reverse(contracts_list))
         self.assertEqual(200, response.status_code)
 
-        self.assertEqual(1, len(response.context['contracts']))
+        contracts = response.context['contracts']
+        self.assertEqual(2, len(contracts))
 
+        # order is correct
+        self.assertEqual(2, contracts[0].base_id)
+
+    def test_contract_main_view(self):
         response = self.client.get(reverse(contract_main_view, args=(1,)))
         self.assertEqual(200, response.status_code)
 
