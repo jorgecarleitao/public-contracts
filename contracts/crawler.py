@@ -15,32 +15,6 @@ from contracts.crawler_forms import EntityForm, ContractForm, \
 logger = logging.getLogger(__name__)
 
 
-def call_with_timeout(func, args, kwargs, timeout):
-    import multiprocessing
-
-    manager = multiprocessing.Manager()
-    return_dict = manager.dict()
-
-    def function(return_dict):
-        return_dict['value'] = func(*args, **kwargs)
-
-    p = multiprocessing.Process(target=function, args=(return_dict,))
-    p.start()
-
-    # Wait `timeout` or for process to finish
-    p.join(timeout)
-
-    # If thread is still active
-    if p.is_alive():
-        p.terminate()
-        p.join()
-        raise TimeoutError
-    else:
-        if 'value' not in return_dict:
-            raise requests.exceptions.Timeout
-        return return_dict['value']
-
-
 class JSONLoadError(Exception):
     """
     When JSON fails to parse the content of an url.
@@ -56,32 +30,19 @@ class JSONCrawler:
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) ' \
                  'AppleWebKit/537.36 (KHTML, like Gecko)'
 
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.headers.update({'User-Agent': self.user_agent})
+
     def get_response(self, url, headers=None):
-        others = {'User-Agent': self.user_agent}
 
         if headers:
-            headers.update(others)
-        else:
-            headers = others
+            self.session.headers.update(headers)
 
-        while True:
-            # Keep trying until it returns.
-            try:
-                return call_with_timeout(
-                    requests.get, args=(url,),
-                    kwargs={'headers': headers, 'timeout': 30}, timeout=60)
-            except requests.exceptions.Timeout:
-                pass
-            except TimeoutError:
-                pass
+        return self.session.get(url)
 
     def get_json(self, url, headers=None):
-        while True:
-            # Keep trying until it returns.
-            try:
-                return json.loads(self.get_response(url, headers).text)
-            except ValueError:
-                pass
+        return json.loads(self.get_response(url, headers).text)
 
 
 class ContractsStaticDataCrawler(JSONCrawler):
