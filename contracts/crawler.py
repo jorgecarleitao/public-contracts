@@ -169,7 +169,6 @@ class ContractsStaticDataCrawler(JSONCrawler):
 
 
 class DynamicCrawler(JSONCrawler):
-    object_directory = '../data'
     object_url = None
     object_list_url = None
     object_name = None
@@ -185,30 +184,6 @@ class DynamicCrawler(JSONCrawler):
         # ensures that data is not None
         if not isinstance(data, list) and data['id'] == 0:
             raise JSONLoadError(url)
-        return data
-
-    def get_data(self, base_id, flush=False):
-        """
-        Returns data retrieved from BASE or from saved file in directory
-
-        If retrieved from BASE, saves it in a file in directory.
-        """
-        file_name = '%s/%s_%d.json' % (self.object_directory,
-                                       self.object_name,
-                                       base_id)
-        try:
-            if flush:
-                raise IOError  # force flushing the file
-            f = open(file_name, "r")
-            data = json.load(f)
-            f.close()
-            action = 'used'
-        except IOError:
-            data = self.get_json(self.object_url % base_id)
-            with open(file_name, 'w') as outfile:
-                json.dump(data, outfile)
-            action = 'created'
-        logger.debug('file of %s "%d" %s', self.object_name, base_id, action)
         return data
 
     @staticmethod
@@ -235,14 +210,14 @@ class DynamicCrawler(JSONCrawler):
         return instance, (action == 'created')
 
     @transaction.atomic
-    def update_instance(self, base_id, flush=False):
+    def update_instance(self, base_id):
         """
         Retrieves data of object base_id from BASE,
         cleans, and saves it as an instance of a Django model.
 
         Returns the instance
         """
-        data = self.get_data(base_id, flush)
+        data = self.get_json(self.object_url % base_id)
         cleaned_data = self.clean_data(data)
         return self.save_instance(cleaned_data)
 
@@ -297,7 +272,7 @@ class DynamicCrawler(JSONCrawler):
         aggregated_modifications = {'deleted': 0, 'added': 0, 'updated': 0}
         for item in c1s - c2s:
             id1 = item[0]
-            self.update_instance(id1, flush=True)
+            self.update_instance(id1)
             if id1 in c2_ids:
                 aggregated_modifications['updated'] += 1
             else:
@@ -372,7 +347,6 @@ class EntitiesCrawler(DynamicCrawler):
     """
     Crawler used to retrieve entities.
     """
-    object_directory = '../data/entities'
     object_url = 'http://www.base.gov.pt/base2/rest/entidades/%d'
     object_list_url = 'http://www.base.gov.pt/base2/rest/entidades'
     object_name = 'entity'
@@ -406,7 +380,6 @@ class ContractsCrawler(DynamicCrawler):
     """
     Crawler used to retrieve contracts.
     """
-    object_directory = '../data/contracts'
     object_url = 'http://www.base.gov.pt/base2/rest/contratos/%d'
     object_list_url = 'http://www.base.gov.pt/base2/rest/contratos'
     object_name = 'contract'
@@ -469,7 +442,6 @@ class TendersCrawler(DynamicCrawler):
     """
     Crawler used to retrieve tenders.
     """
-    object_directory = '../data/tenders'
     object_url = 'http://www.base.gov.pt/base2/rest/anuncios/%d'
     object_list_url = 'http://www.base.gov.pt/base2/rest/anuncios'
     object_name = 'tender'

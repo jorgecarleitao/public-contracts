@@ -99,9 +99,6 @@ class TestCrawler(CrawlerTestCase):
 
         self.assertEqual(contract, contract1)
 
-        contract1, created = c.update_instance(35356, flush=True)
-        self.assertFalse(created)
-
     def test_update(self):
         pt = models.Country.objects.create(name='Portugal')
         vs = models.District.objects.create(name='Viseu', country=pt, base_id=1)

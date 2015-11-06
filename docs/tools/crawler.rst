@@ -56,8 +56,7 @@ This section introduces the different crawlers we use to crawl Base_.
 
 .. class::JSONCrawler
 
-    Retrieve JSON content from an url.
-    It overwrites :meth:`~AbstractCrawler.goToPage`:
+    Uses a session to get responses from urls.
 
     .. method:: get_response(url, headers=None)
 
@@ -84,11 +83,6 @@ contracts, entities and tenders, use the following approach:
     An abstract subclass of :class:`JSONCrawler` that implements the crawling
     procedure described in the previous section.
 
-    .. attribute:: object_directory = None
-
-        A string with the directory where the ``.json`` files are stored;
-        to be overwritten.
-
     .. attribute:: object_name = None
 
         A string with the name of the object used to name the ``.json`` files;
@@ -102,21 +96,13 @@ contracts, entities and tenders, use the following approach:
 
         The model to be constructed from the retrieved data; to be overwritten.
 
-    .. method:: get_data(base_id, flush=False)
-
-        Returns data from :attr:`object_url` using ``base_id`` and
-        stores it in a ``file`` in :attr:`object_directory` under the name ``<object_name>_<base_id>.json``.
-
-        If ``file`` already exists and ``flush=False``, directly returns its content;
-        otherwise, retrieves the content in the url creates/updates the ``file``.
-
     .. staticmethod:: clean_data(data)
 
         Cleans ``data``, returning a ``cleaned_data`` dictionary with keys being
         fields of the :attr:`object_model` and values being extracted from
         ``data``.
 
-        This method is not implemented and has to be overwritten for each object.
+        To be overwritten by subclasses.
 
     .. method:: save_instance(cleaned_data)
 
@@ -128,11 +114,10 @@ contracts, entities and tenders, use the following approach:
         Returns a tuple ``(instance, created)`` where ``created`` is ``True``
         if the instance was created (and not just updated).
 
-    .. method:: update_instance(base_id, flush=False)
+    .. method:: update_instance(base_id)
 
-        Uses :meth:`get_data`, :meth:`clean_data` and :meth:`save_instance` to
-        create or update an instance identified by ``base_id``. ``flush`` is
-        passed to :meth:`get_data`.
+        Uses :meth:`get_json`, :meth:`clean_data` and :meth:`save_instance` to
+        create or update an instance identified by ``base_id``.
 
         Returns the output of :meth:`save_instance`.
 
@@ -148,10 +133,20 @@ contracts, entities and tenders, use the following approach:
 
         Updates a batch of rows, step 2.-4. of the previous section.
 
-    .. method:: update(start=None)
+    .. method:: update(start=0, end=None, items_per_batch=1000)
 
-        Runs a sequence of ``update_batch`` for different rows, step 1. and 5. of
-        previous section.
+        The method retrieves count of all items in BASE (1 hit), and
+        synchronizes items from `start` until `min(end, count)` in batches
+        of `items_per_batch`.
+
+        If `end=None` (default), it retrieves until the last item.
+
+        if `start < 0`, the start is counted from the end.
+
+        Use e.g. `start=-2000` for a quick retrieve of new items;
+
+        Use `start=0` (default) to synchronize all items in database
+        (it takes time!)
 
 
 .. class:: EntitiesCrawler
