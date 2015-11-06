@@ -1,11 +1,13 @@
-from unittest import TestCase, skipUnless
+from unittest import skipUnless
+
+from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from contracts.crawler import ContractsCrawler, TendersCrawler, DynamicCrawler, \
-    JSONLoadError, ContractsStaticDataCrawler
+from contracts.crawler import ContractsCrawler, EntitiesCrawler, TendersCrawler, \
+    DynamicCrawler, JSONLoadError, ContractsStaticDataCrawler
 from contracts import models
 
-from contracts.test import CrawlerTestCase, EntitiesCrawler, HAS_REMOTE_ACCESS
+from contracts.test import HAS_REMOTE_ACCESS
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
@@ -56,7 +58,7 @@ class StaticDataCrawlerTestCase(TestCase):
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
-class TestCrawler(CrawlerTestCase):
+class TestCrawler(TestCase):
 
     def test_basic(self):
         models.Country.objects.create(name='Portugal')

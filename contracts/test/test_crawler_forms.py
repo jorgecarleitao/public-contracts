@@ -2,17 +2,17 @@ from unittest import skipUnless
 import datetime
 
 from django.core.exceptions import ValidationError
-import django.test
+from django.test import TestCase
 
 from contracts.crawler_forms import PriceField, clean_place, TimeDeltaField, \
     CPVSField, CountryChoiceField, ContractTypeField, EntitiesField, TenderForm, \
     CouncilChoiceField, CategoryField
 from contracts import models
 
-from contracts.test import CrawlerTestCase, HAS_REMOTE_ACCESS
+from contracts.test import HAS_REMOTE_ACCESS
 
 
-class PriceFieldTestCase(django.test.TestCase):
+class PriceFieldTestCase(TestCase):
 
     def setUp(self):
         self.field = PriceField()
@@ -30,11 +30,12 @@ class PriceFieldTestCase(django.test.TestCase):
         self.assertEqual(self.field.clean('1.000.234,00 €'), 100023400)
 
 
-class CleanPlaceTestCase(django.test.TestCase):
+class CleanPlaceTestCase(TestCase):
 
     def test_more_than_one(self):
         value = clean_place('Portugal, Porto, Maia<BR/>'
-                            'Portugal<BR/>Portugal, Distrito não determinado, Concelho não determinado<BR/>'
+                            'Portugal<BR/>Portugal, Distrito não determinado, '
+                            'Concelho não determinado<BR/>'
                             'Portugal, Vila Real, Vila Real')
         self.assertEqual(value, ('Portugal', 'Porto', 'Maia'))
 
@@ -47,7 +48,7 @@ class CleanPlaceTestCase(django.test.TestCase):
         self.assertEqual(value, ('Portugal', 'Porto', None))
 
 
-class TimeDeltaFieldTestCase(django.test.TestCase):
+class TimeDeltaFieldTestCase(TestCase):
 
     def setUp(self):
         self.field = TimeDeltaField()
@@ -63,7 +64,7 @@ class TimeDeltaFieldTestCase(django.test.TestCase):
             self.field.clean('2 meses.')
 
 
-class CPVSFieldTestCase(django.test.TestCase):
+class CPVSFieldTestCase(TestCase):
     def setUp(self):
         self.field = CPVSField(required=False)
 
@@ -79,7 +80,7 @@ class CPVSFieldTestCase(django.test.TestCase):
         self.assertEqual(self.field.clean(''), None)
 
 
-class CategoryFieldTestCase(django.test.TestCase):
+class CategoryFieldTestCase(TestCase):
 
     def test_undefined(self):
         self.assertEqual(None,
@@ -94,7 +95,7 @@ class CategoryFieldTestCase(django.test.TestCase):
         self.assertEqual(c, CategoryField().clean('45233141-9'))
 
 
-class CountryChoiceFieldTestCase(django.test.TestCase):
+class CountryChoiceFieldTestCase(TestCase):
     def setUp(self):
         self.field = CountryChoiceField(required=False)
 
@@ -112,7 +113,7 @@ class CountryChoiceFieldTestCase(django.test.TestCase):
         self.assertRaises(ValidationError, self.field.clean, 'Non-country')
 
 
-class CouncilChoiceFieldTestCase(django.test.TestCase):
+class CouncilChoiceFieldTestCase(TestCase):
     def setUp(self):
         self.field = CouncilChoiceField(required=False)
 
@@ -128,7 +129,7 @@ class CouncilChoiceFieldTestCase(django.test.TestCase):
         self.assertEqual(self.field.clean(value), c)
 
 
-class TenderFormTestCase(django.test.TestCase):
+class TenderFormTestCase(TestCase):
     def test_date_from_url(self):
         date = datetime.date(year=2010, month=8, day=12)
 
@@ -169,7 +170,7 @@ class TenderFormTestCase(django.test.TestCase):
         form.clean_deadline_date()
 
 
-class ContractTypeFieldTestCase(django.test.TestCase):
+class ContractTypeFieldTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -187,25 +188,34 @@ class ContractTypeFieldTestCase(django.test.TestCase):
 
     def test_one(self):
         self.assertEqual(self.field.clean('Concessão de obras públicas'),
-                         models.ContractType.objects.get(name='Concessão de obras públicas'))
+                         models.ContractType.objects.get(
+                             name='Concessão de obras públicas'))
 
     def test_more_than_one(self):
-        self.assertEqual(self.field.clean('Concessão de obras públicas<br/>Aquisição de bens móveis'),
-                         models.ContractType.objects.get(name='Concessão de obras públicas'))
+        self.assertEqual(
+            self.field.clean('Concessão de obras públicas<br/>'
+                             'Aquisição de bens móveis'),
+            models.ContractType.objects.get(name='Concessão de obras públicas'))
 
-        self.assertEqual(self.field.clean('Aquisição de bens móveis<br/>Concessão de obras públicas'),
-                         models.ContractType.objects.get(name='Aquisição de bens móveis'))
+        self.assertEqual(
+            self.field.clean('Aquisição de bens móveis<br/>'
+                             'Concessão de obras públicas'),
+            models.ContractType.objects.get(name='Aquisição de bens móveis'))
 
-        self.assertEqual(self.field.clean('Aquisição de bens móveis; Concessão de obras públicas'),
-                         models.ContractType.objects.get(name='Aquisição de bens móveis'))
+        self.assertEqual(
+            self.field.clean('Aquisição de bens móveis; '
+                             'Concessão de obras públicas'),
+            models.ContractType.objects.get(name='Aquisição de bens móveis'))
 
     def test_others(self):
-        self.assertEqual(self.field.clean('Outros Tipos (Concessão de exploração de bens do domínio público)'),
-                         models.ContractType.objects.get(name='Outros'))
+        self.assertEqual(
+            self.field.clean('Outros Tipos (Concessão de exploração de bens do '
+                             'domínio público)'),
+            models.ContractType.objects.get(name='Outros'))
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')
-class EntitiesFieldTestCase(CrawlerTestCase):
+class EntitiesFieldTestCase(TestCase):
 
     def test_clean(self):
         models.Country.objects.create(name='Portugal')
