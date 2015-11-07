@@ -4,14 +4,10 @@ from contracts.analysis.analysis import *
 
 
 _allAnalysis = [
-    Analysis('municipalities_delta_time',
-             municipalities_delta_time),
     Analysis('municipalities_contracts_time_series',
              municipalities_contracts_time_series),
     Analysis('excluding_municipalities_contracts_time_series',
              exclude_municipalities_contracts_time_series),
-    Analysis('municipalities_categories_ranking',
-             get_municipalities_specificity),
     Analysis('municipalities_procedure_types_time_series',
              municipalities_procedure_types_time_series),
     Analysis('procedure_type_time_series', procedure_types_time_series),

@@ -1,29 +1,13 @@
 from collections import OrderedDict
 
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 from .analysis import analysis_manager
-
-
-@cache_page(60 * 60 * 24 * 7)  # 7 days
-def entities_category_ranking(request):
-    entities = analysis_manager.get_analysis('municipalities_categories_ranking')
-
-    count = 1
-    for entity in entities:
-        entity.rank = count
-        count += 1
-
-    context = {'navigation_tab': 'analysis',
-               'entities': entities,
-               'REQUIRE_D3JS': True}
-
-    return render(request, 'contracts/analysis/entity_rank/main.html', context)
 
 
 def contracts_price_histogram(request):
@@ -55,24 +39,6 @@ def procedure_types_time_series(request):
                'REQUIRE_D3JS': True}
     return render(request,
                   'contracts/analysis/procedure_type_time_series/main.html',
-                  context)
-
-
-@cache_page(60 * 60 * 24)
-def municipalities_delta_time(request):
-
-    entities = analysis_manager.get_analysis('municipalities_delta_time')
-    count = 1
-    for entity in entities:
-        entity.rank = count
-        count += 1
-
-    context = {'navigation_tab': 'analysis',
-               'entities': entities,
-               'REQUIRE_D3JS': True}
-
-    return render(request,
-                  'contracts/analysis/municipalities_delta_time/main.html',
                   context)
 
 
@@ -152,12 +118,6 @@ _ANALYSIS = {
     'municipalities_procedure_types_time_series':
         {'id': 5, 'title': _('How do portuguese municipalities contract most?'),
          'view': municipalities_procedure_types_time_series, 'order': 7},
-    'municipalities_delta_time':
-        {'id': 1, 'title': _('Time of publication of municipalities'),
-         'view': municipalities_delta_time, 'order': 8},
-    'municipalities_categories_ranking':
-        {'id': 4, 'title': _('Ranking of specificity of municipalities'),
-         'view': entities_category_ranking, 'order': 9},
     'ministries_contracts_time_series':
         {'id': 10, 'title': _('When do portuguese ministries contract most?'),
          'view': ministries_contracts_time_series, 'order': 10},
@@ -185,7 +145,7 @@ def analysis_selector(request, analysis_id, _):
     except:
         raise Http404
     if int(analysis_id) not in PRIMARY_KEY:
-        raise Http404
+        return redirect(analysis)
 
     return ANALYSIS[PRIMARY_KEY[analysis_id]]['view'](request)
 

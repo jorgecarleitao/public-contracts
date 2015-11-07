@@ -11,18 +11,6 @@ from django.views.generic import View
 from .analysis import analysis_manager
 
 
-def entities_category_ranking_json(request):
-    data = {'values': [], 'key': _('Ranking')}
-    rank = 0
-    for entity in analysis_manager.get_analysis('municipalities_categories_ranking'):
-        rank += 1
-        name = entity.name.split(' ')[2:]
-        name = ' '.join(name)
-        data['values'].append({'name': name, 'rank': rank, 'avg_depth': entity.avg_depth})
-
-    return HttpResponse(json.dumps([data]), content_type="application/json")
-
-
 def lorenz_curve(request):
 
     entities, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
@@ -37,33 +25,6 @@ def lorenz_curve(request):
 
     return HttpResponse(json.dumps([equality, data]),
                         content_type="application/json")
-
-
-def entities_category_ranking_histogram_json(request):
-
-    entities = analysis_manager.get_analysis('municipalities_categories_ranking')
-
-    min_value = entities[-1].avg_depth - 0.00000001  # avoid rounding, this caused a bug before.
-    max_value = entities[0].avg_depth + 0.00000001   # avoid rounding, this caused a bug before.
-    n_bins = 20
-
-    # center between max and min: min_value + (max_value - min_value)*(count)/n_bins + (max_value - min_value)/n_bins/2
-    # create the histogram
-    data = {'values': [], 'key': _('Histogram')}
-
-    data['values'] = [{'bin': x,
-                       'value': 0,
-                       'min_position': min_value + (max_value - min_value)*x/n_bins,
-                       'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-                      } for x in reversed(range(n_bins))]
-
-    for entity in entities:
-        for x in range(n_bins):
-            if data['values'][x]['min_position'] < entity.avg_depth <= data['values'][x]['max_position']:
-                data['values'][x]['value'] += 1
-                break
-
-    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 def contracts_price_histogram_json(request):
@@ -104,46 +65,6 @@ def entities_values_histogram_json(request):
 def contracts_macro_statistics_json(request):
     data = analysis_manager.get_analysis('contracts_macro_statistics')
     return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-def municipalities_delta_time_json(request):
-    data = {'values': [], 'key': _('Ranking')}
-    rank = 0
-    for entity in analysis_manager.get_analysis('municipalities_delta_time'):
-        rank += 1
-        name = entity.name.split(' ')[2:]
-        name = ' '.join(name)
-        data['values'].append({'name': name, 'rank': rank, 'avg_dt': entity.average_delta_time})
-
-    return HttpResponse(json.dumps([data]), content_type="application/json")
-
-
-def municipalities_delta_time_histogram_json(request):
-
-    entities = analysis_manager.get_analysis('municipalities_delta_time')
-
-    min_value = entities[0].average_delta_time - 0.00000001  # avoid rounding, this caused a bug before.
-    max_value = entities[-1].average_delta_time + 0.00000001   # avoid rounding, this caused a bug before.
-    n_bins = 20
-
-    # center between max and min: min_value + (max_value - min_value)*(count)/n_bins + (max_value - min_value)/n_bins/2
-
-    # create the histogram
-    data = {'values': [], 'key': _('Histogram')}
-
-    data['values'] = [{'bin': x,
-                       'value': 0,
-                       'min_position': min_value + (max_value - min_value)*x/n_bins,
-                       'max_position': min_value + (max_value - min_value)*(x+1)/n_bins
-                      } for x in range(n_bins)]
-
-    for entity in entities:
-        for x in range(n_bins):
-            if data['values'][x]['min_position'] < entity.average_delta_time <= data['values'][x]['max_position']:
-                data['values'][x]['value'] += 1
-                break
-
-    return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
 class ProceduresTimeSeriesJsonView(View):
@@ -310,15 +231,11 @@ def municipalities_ranking(request):
 
 
 AVAILABLE_VIEWS = {
-    'category-ranking-index-json': entities_category_ranking_json,
-    'entities-category-ranking-histogram-json': entities_category_ranking_histogram_json,
     'contracts-price-histogram-json': contracts_price_histogram_json,
     'contracts-macro-statistics-json': contracts_macro_statistics_json,
 
     'procedure-types-time-series-json': ProceduresTimeSeriesJsonView.as_view(),
 
-    'municipalities-delta-time-json': municipalities_delta_time_json,
-    'municipalities-delta-time-histogram-json': municipalities_delta_time_histogram_json,
     'contracts-time-series-json': ContractsTimeSeriesJsonView.as_view(),
     'excluding-municipalities-contracts-time-series-json': ExcludeMunicipalitiesTimeSeriesJsonView.as_view(),
 
