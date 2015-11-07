@@ -5,6 +5,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum, Count, Max
+from django.db.models.signals import m2m_changed, pre_delete
 from django.utils.text import slugify
 
 from treebeard.ns_tree import NS_Node
@@ -132,7 +133,7 @@ class Entity(models.Model):
         """
         Computes the data of this entity from the existing relations.
         """
-        logger.debug('computing data of entity %d', self.base_id)
+        logger.info('computing data of entity %d', self.base_id)
 
         # if data does not exist, we create it.
         try:
@@ -165,6 +166,8 @@ class Entity(models.Model):
         self.data.last_activity = max_dates(c_set['signing_date__max'],
                                             c_made['signing_date__max'])
 
+        self.data.is_updated = True
+
         # finish
         self.data.save()
 
@@ -196,6 +199,9 @@ class EntityData(models.Model):
     total_earned = models.BigIntegerField(default=0)
     total_expended = models.BigIntegerField(default=0)
     last_activity = models.DateField(default=None, null=True, db_index=True)
+
+    # whether this data is updated
+    is_updated = models.BooleanField(default=False)
 
 
 class ContractType(models.Model):
@@ -306,3 +312,22 @@ class Tender(models.Model):
 
     class Meta:
         ordering = ['-publication_date']
+
+
+def invalidate_entity_data(sender, instance, **kwargs):
+    if sender in [Contract.contractors.through,
+                  Contract.contracted.through, Contract]:
+        for entity in list(instance.contractors.all()) + \
+                list(instance.contracted.all()):
+            try:
+                entity.data
+            except EntityData.DoesNotExist:
+                entity.data = EntityData(entity=entity)
+            entity.data.is_updated = False
+            entity.data.save()
+
+
+pre_delete.connect(invalidate_entity_data, sender=Contract)
+
+m2m_changed.connect(invalidate_entity_data, sender=Contract.contractors.through)
+m2m_changed.connect(invalidate_entity_data, sender=Contract.contracted.through)

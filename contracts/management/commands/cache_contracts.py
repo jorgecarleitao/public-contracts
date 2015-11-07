@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         if options['entities'] or options['all']:
-            for entity in Entity.objects.all():
+            for entity in Entity.objects.filter(data__is_updated=False):
                 entity.compute_data()
 
         if options['categories'] or options['all']:
