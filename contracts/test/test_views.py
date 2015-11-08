@@ -1,4 +1,4 @@
-from unittest import skipUnless, skip
+from unittest import skipUnless
 from urllib.request import urlopen
 from datetime import datetime
 
@@ -369,8 +369,6 @@ class TestTendersContext(django.test.TestCase):
 
 class TestSearch(SphinxQLTestCase):
 
-    # this test is failing; understand why
-    @skip
     def test_entities(self):
         Entity.objects.create(nif='506780902', base_id=5826,
                               name='bla termo fla blu try')
@@ -382,11 +380,12 @@ class TestSearch(SphinxQLTestCase):
         response = self.client.get(reverse(entities_list), {'search': 'tra'})
         self.assertEqual(0, len(response.context['entities']))
 
+        response = self.client.get(reverse(entities_list), {'search': 'blu'})
+        self.assertEqual(302, response.status_code)
+
         response = self.client.get(reverse(entities_list), {'search': 'bla'})
         self.assertEqual(2, len(response.context['entities']))
 
-    # this test is failing; understand why
-    @skip
     def test_contracts(self):
         Contract.objects.create(base_id=1, description='double pinbal',
                                 price=100, added_date=datetime(year=2004, month=1,
@@ -400,11 +399,12 @@ class TestSearch(SphinxQLTestCase):
         response = self.client.get(reverse(contracts_list))
         self.assertEqual(2, len(response.context['contracts']))
 
+        response = self.client.get(reverse(contracts_list), {'search': 'double'})
+        self.assertEqual(1, len(response.context['contracts']))
+
         response = self.client.get(reverse(contracts_list), {'search': 'pinbal'})
         self.assertEqual(2, len(response.context['contracts']))
 
-    # this test is failing; understand why
-    @skip
     def test_tenders(self):
         act_type = ActType.objects.create(base_id=1, name='bla')
         model_type = ModelType.objects.create(base_id=1, name='bla')
@@ -426,6 +426,9 @@ class TestSearch(SphinxQLTestCase):
 
         response = self.client.get(reverse(tenders_list))
         self.assertEqual(2, len(response.context['tenders']))
+
+        response = self.client.get(reverse(tenders_list), {'search': 'double'})
+        self.assertEqual(1, len(response.context['tenders']))
 
         response = self.client.get(reverse(tenders_list), {'search': 'something'})
         self.assertEqual(2, len(response.context['tenders']))
