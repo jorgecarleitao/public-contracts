@@ -11,7 +11,7 @@ from django.views.generic import View
 from .analysis import analysis_manager
 
 
-def lorenz_curve(request):
+def contracted_lorenz_curve(request):
 
     entities, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
 
@@ -28,17 +28,9 @@ def lorenz_curve(request):
 
 
 def contracts_price_histogram_json(request):
-
     distribution = analysis_manager.get_analysis('contracts_price_distribution')
 
-    data = {'values': [], 'key': _('histogram of contracts values')}
-    for entry in distribution:
-        if entry[1] > 5:
-            data['values'].append(
-                {'min_position': int(entry[0] + 0.5),
-                 'max_position': int(entry[0]*2 + 0.5),
-                 'value': entry[1]})
-
+    data = {'values': distribution, 'key': _('histogram of contracts values')}
     return HttpResponse(json.dumps([data]), content_type="application/json")
 
 
@@ -46,25 +38,11 @@ def entities_values_histogram_json(request):
 
     distribution = analysis_manager.get_analysis('entities_values_distribution')
 
-    earnings = {'values': [], 'key': _('entities earning')}
-    expenses = {'values': [], 'key': _('entities expending')}
-    for entry in distribution:
-        if entry[1] > 10 or entry[2] > 10:
-            earnings['values'].append(
-                {'min_position': int(entry[0] + 0.5),
-                 'max_position': int(entry[0]*2 + 0.5),
-                 'value': entry[1]})
-            expenses['values'].append(
-                {'min_position': int(entry[0] + 0.5),
-                 'max_position': int(entry[0]*2 + 0.5),
-                 'value': entry[2]})
+    earnings = {'values': distribution[0], 'key': _('entities earning')}
+    expenses = {'values': distribution[1], 'key': _('entities expending')}
 
-    return HttpResponse(json.dumps([earnings, expenses]), content_type="application/json")
-
-
-def contracts_macro_statistics_json(request):
-    data = analysis_manager.get_analysis('contracts_macro_statistics')
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps([earnings, expenses]),
+                        content_type="application/json")
 
 
 class ProceduresTimeSeriesJsonView(View):
@@ -101,10 +79,11 @@ class ProceduresTimeSeriesJsonView(View):
 
             series[procedure]['values'].sort(key=lambda x: x['month'])
 
-        return HttpResponse(json.dumps(list(series.values())), content_type="application/json")
+        return HttpResponse(json.dumps(list(series.values())),
+                            content_type="application/json")
 
 
-class MunicipalitiesProceduresTimeSeriesJsonView(View):
+class MunicipalitiesProceduresTimeSeriesJsonView(ProceduresTimeSeriesJsonView):
     analysis = 'municipalities_procedure_types_time_series'
 
 
@@ -137,16 +116,6 @@ class ExcludeMunicipalitiesTimeSeriesJsonView(ContractsTimeSeriesJsonView):
 
 class MinistriesTimeSeiresJsonView(ContractsTimeSeriesJsonView):
     analysis = 'ministries_contracts_time_series'
-
-
-def legislation_application_time_series_json(request):
-    data = analysis_manager.get_analysis('legislation_application_time_series')
-
-    time_series = {'values': [], 'key': _('contracts published too late')}
-    for x in data:
-        time_series['values'].append({'month': x['from'].strftime('%Y-%m'), 'value': x['count']})
-
-    return HttpResponse(json.dumps([time_series]), content_type="application/json")
 
 
 def municipalities_ranking(request):
@@ -232,7 +201,6 @@ def municipalities_ranking(request):
 
 AVAILABLE_VIEWS = {
     'contracts-price-histogram-json': contracts_price_histogram_json,
-    'contracts-macro-statistics-json': contracts_macro_statistics_json,
 
     'procedure-types-time-series-json': ProceduresTimeSeriesJsonView.as_view(),
 
@@ -243,11 +211,10 @@ AVAILABLE_VIEWS = {
     'municipalities-procedure-types-time-series-json': MunicipalitiesProceduresTimeSeriesJsonView.as_view(),
 
     'ministries-contracts-time-series-json': MinistriesTimeSeiresJsonView.as_view(),
-    'legislation-application-time-series-json': legislation_application_time_series_json,
 
     'entities-values-histogram-json': entities_values_histogram_json,
 
-    'contracted-lorenz-curve-json': lorenz_curve,
+    'contracted-lorenz-curve-json': contracted_lorenz_curve,
 
     'municipalities-ranking-json': municipalities_ranking,
 }

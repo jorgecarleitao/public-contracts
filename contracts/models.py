@@ -32,9 +32,6 @@ class Category(NS_Node):
     description_en = models.CharField(max_length=254)
     description_pt = models.CharField(max_length=254)
 
-    def __unicode__(self):
-        return '%s' % self.code[:8]
-
     def get_absolute_url(self):
         return reverse('category', args=[self.pk])
 

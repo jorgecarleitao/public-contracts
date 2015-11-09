@@ -18,7 +18,7 @@ def add_months(sourcedate, months):
     return datetime.date(year, month, day)
 
 
-def get_price_histogram():
+def contracts_price_histogram():
     """
     Since the distribution is broad, we use logarithmic bins.
 
@@ -33,10 +33,11 @@ def get_price_histogram():
     cases += ' END'
 
     query = """
-        SELECT %s as hist, COUNT(*)
+        SELECT %s AS hist, COUNT(*)
         FROM contracts_contract
-        WHERE contracts_contract.price > 100
+        WHERE contracts_contract.price > 500
         GROUP BY hist
+        HAVING COUNT(*) > 5
         ORDER BY hist ASC
     """ % cases
 
@@ -46,13 +47,12 @@ def get_price_histogram():
     data = []
     for row in cursor.fetchall():
         value, count = row
-        if value is None:
-            continue
-        data.append([value, count])
+        if value is not None:
+            data.append({'min_value': value, 'max_value': value*2, 'count': count})
     return data
 
 
-def get_entities_value_histogram():
+def entities_values_histogram():
     """
     Returns a list of tuples (value, count_earnings, count_expenses)
     where `value` is 2^i and count_* is the number of entities with
@@ -93,8 +93,6 @@ def get_entities_value_histogram():
             value, count = row
             value = value[1:-1].split(',')
             value = [int(value[0]), int(value[1])]
-            if value is None:
-                continue
             data.append([value, count])
         return data
 
@@ -106,16 +104,23 @@ def get_entities_value_histogram():
         result_earnings[values[0]] += count
         result_expenses[values[1]] += count
 
-    result = []
+    result = [[], []]
     for x in sorted(set(result_earnings.keys()) | set(result_expenses.keys())):
         if x == 0:
             continue
-        result.append((x, result_earnings[x], result_expenses[x]))
+        result[0].append(
+            {'min_value': int(x + 0.5),
+             'max_value': int(2*x + 0.5),
+             'value': result_earnings[x]})
+        result[1].append(
+            {'min_value': int(x + 0.5),
+             'max_value': int(2*x + 0.5),
+             'value': result_expenses[x]})
 
     return result
 
 
-def get_contracts_macro_statistics():
+def contracts_statistics():
     contracts = models.Contract.objects.all()
 
     today = date.today()
@@ -132,49 +137,6 @@ def get_contracts_macro_statistics():
             'year_count': year_price['count'],
             'month_sum': month_price['sum'],
             'month_count': month_price['count']}
-
-
-def _entities_delta_time(conditional_statement):
-    """
-    Annotates in a set of entities defined by a `conditional_statement`
-    the average time between a contract be signed and added to the db.
-
-    It ignores contracts before 2010 and contracts where the signing date
-    or addition date is null.
-    """
-    query = '''
-SELECT contracts_entity.id,
-       contracts_entity.base_id,
-       contracts_entity.name,
-       AVG(contracts_contract.added_date - contracts_contract.signing_date) AS avg,
-       COUNT(contracts_contract.id) AS "count"
-FROM contracts_entity
-  LEFT OUTER JOIN contracts_contract_contractors
-    ON ( contracts_entity.id = contracts_contract_contractors.entity_id )
-  LEFT OUTER JOIN contracts_contract
-    ON ( contracts_contract_contractors.contract_id = contracts_contract.id )
-WHERE contracts_contract.added_date IS NOT NULL AND
-      contracts_contract.signing_date IS NOT NULL AND
-      EXTRACT(YEAR FROM contracts_contract.signing_date) > 2009 AND
-      %s
-GROUP BY contracts_entity.id, contracts_entity.base_id, contracts_entity.name
-ORDER BY avg ASC
-    ''' % conditional_statement
-
-    def raw_to_python(cursor):
-        data = []
-        for row in cursor.fetchall():
-            id, base_id, name, avg, count = row
-            entity = models.Entity(id=id, base_id=base_id, name=name)
-            entity.average_delta_time = float(avg)
-            entity.contracts_number = count
-            data.append(entity)
-        return data
-
-    cursor = connection.cursor()
-    cursor.execute(query)
-
-    return raw_to_python(cursor)
 
 
 def municipalities_ranking():
@@ -229,8 +191,6 @@ ORDER BY contracts_entity.base_id, s_year
         for row in cursor.fetchall():
             base_id, nif, year, count, value, \
                 avg_deltat, avg_specificity, avg_good_text = row
-            if year is None:
-                continue
 
             if base_id not in data:
                 data[base_id] = []
@@ -254,17 +214,10 @@ ORDER BY contracts_entity.base_id, s_year
     return raw_to_python(cursor)
 
 
-def ministries_delta_time():
-    return _entities_delta_time(
-        r"contracts_entity.name ~ '^Secretaria-Geral do Ministério.*'")
-
-
-def _raw_to_python(cursor):
+def _contracts_time_series_to_python(cursor):
     data = []
     for row in cursor.fetchall():
         year, month, count, value = row
-        if year is None:
-            continue
 
         min_date = datetime.date(int(year), int(month), 1)
         max_date = add_months(min_date, 1)
@@ -303,7 +256,7 @@ WHERE %s
     cursor = connection.cursor()
     cursor.execute(query)
 
-    return _raw_to_python(cursor)
+    return _contracts_time_series_to_python(cursor)
 
 
 def municipalities_contracts_time_series():
@@ -337,7 +290,7 @@ def contracts_price_time_series():
     cursor = connection.cursor()
     cursor.execute(query)
 
-    return _raw_to_python(cursor)
+    return _contracts_time_series_to_python(cursor)
 
 
 def ministries_contracts_time_series():
@@ -349,8 +302,6 @@ def _procedure_types_time_series_to_python(cursor):
         data = []
         for row in cursor.fetchall():
             procedure_name, year, month, count, value = row
-            if year is None:
-                continue
 
             min_date = datetime.date(int(year), int(month), 1)
             max_date = add_months(min_date, 1)
@@ -409,7 +360,7 @@ def municipalities_procedure_types_time_series():
         ','.join(["'%d'" % m['NIF'] for m in municipalities()]))
 
 
-def procedure_types_time_series():
+def procedure_type_time_series():
 
     query = '''
 SELECT contracts_proceduretype.name,
@@ -431,43 +382,7 @@ ORDER BY contracts_proceduretype.name, s_year, s_month
     return _procedure_types_time_series_to_python(cursor)
 
 
-def get_legislation_application_time_series():
-
-    max_days = 10  # Código dos contratos públicos - parte II - Contratação pública - CAPÍTULO XII - Artigo 108.
-
-    query = '''SELECT EXTRACT(YEAR FROM contracts_contract.signing_date) as s_year,
-                       EXTRACT(MONTH FROM contracts_contract.signing_date) as s_month,
-                       COUNT(contracts_contract.id),
-                       SUM(CASE WHEN contracts_contract.signing_date - contracts_contract.added_date > 10 THEN 1 ELSE 0 END)
-                FROM contracts_contract
-                WHERE contracts_contract.signing_date IS NOT NULL
-                GROUP BY s_year, s_month
-                ORDER BY s_year, s_month
-                '''
-
-    cursor = connection.cursor()
-    cursor.execute(query)
-
-    data = []
-    for row in cursor.fetchall():
-        year, month, count, ilegal_contracts = row
-        if year is None or ilegal_contracts == 0:
-            continue
-
-        min_date = datetime.date(int(year), int(month), 1)
-        max_date = add_months(min_date, 1)
-
-        entry = {'from': min_date,
-                 'to': max_date,
-                 'count': float(ilegal_contracts)/count}
-        data.append(entry)
-
-    return data
-
-
-def get_lorenz_curve():
-    # number of points in the curve. Too much degrades user performance.
-    NUMBER_OF_POINTS = 500
+def contracted_lorenz_curve():
 
     # all entities with earnings above 1 euro, sorted by earnings.
     entities = models.Entity.objects\
@@ -480,6 +395,9 @@ def get_lorenz_curve():
     total_earned = entities.aggregate(total=Sum('data__total_earned'))['total']
     total_count = entities.count()
 
+    # number of points in the curve. Too much degrades user performance.
+    number_of_points = min(500, total_count)
+
     # compute and annotate the relative cumulative (entity.cumulative) and
     # relative rank (entity.rank)
     data = []
@@ -491,7 +409,7 @@ def get_lorenz_curve():
         entity.cumulative = cumulative
 
         # down-sample (but always store last point)
-        if rank % (total_count//NUMBER_OF_POINTS) == 0 or rank == total_count - 1:
+        if rank % (total_count//number_of_points) == 0 or rank == total_count - 1:
             data.append(entity)
 
         integral += entity.cumulative/total_count

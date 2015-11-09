@@ -11,7 +11,7 @@
         console.log(data);
         data.forEach(function(series) {
             series['values'].forEach(function(d) {
-                d.x = ((+d.min_position) + (+d.max_position))/2;
+                d.x = ((+d.min_value) + (+d.max_value))/2;
                 d.y = (+d.value);
             });
         });
@@ -28,8 +28,8 @@
                     .tooltip(function(key, x, y, e, graph) {
                                 var d = e.series.values[e.pointIndex];
                                 return '<p><strong>' + y + ' {% trans "entities"%}</strong> {% trans "earned between" %} ' +
-                                        d.min_position.toLocaleString() + ' € {% trans "and" %} ' +
-                                        d.max_position.toLocaleString() + ' €</p>';});
+                                        d.min_value.toLocaleString() + ' € {% trans "and" %} ' +
+                                        d.max_value.toLocaleString() + ' €</p>';});
 
             chart.xAxis
                     .tickFormat(d3.format(',.0f'))

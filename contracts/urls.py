@@ -17,7 +17,7 @@ urlpatterns = patterns(
         views.home, name='contracts_home'),
 
     url(r'^%s/%s$' % (_('contracts'), _('analysis')),
-        views_analysis.analysis, name='contracts_analysis'),
+        views_analysis.AnalysisListView.as_view(), name='contracts_analysis'),
 
     url(r'^%s/%s/(\d+)/(\w+)' % (_('contracts'), _('analysis')),
         views_analysis.analysis_selector,

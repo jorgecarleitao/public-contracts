@@ -1,131 +1,125 @@
 from collections import OrderedDict
 
-from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
+from django.views.generic import View
 
 from .analysis import analysis_manager
 
 
-def contracts_price_histogram(request):
+class CacheMixin(object):
+    """
+    Caches the response.
+    From here: https://gist.github.com/cyberdelia/1231560
+    """
+    cache_timeout = 60*60*12
 
-    data = analysis_manager.get_analysis("contracts_macro_statistics")
-
-    context = {'navigation_tab': 'analysis',
-               'count': data['total_count'],
-               'price': data['total_sum'],
-               'REQUIRE_D3JS': True}
-
-    return render(request,
-                  'contracts/analysis/contracts_price_histogram/main.html',
-                  context)
+    def dispatch(self, *args, **kwargs):
+        return cache_page(self.cache_timeout)(
+            super(CacheMixin, self).dispatch)(*args, **kwargs)
 
 
-def entities_values_histogram(request):
+class AnalysisView(CacheMixin, View):
+    http_method_names = ['get']
+    template_name = ''
+    required_d3js = True
+    nav_tab = 'analysis'
 
-    context = {'navigation_tab': 'analysis',
-               'REQUIRE_D3JS': True}
+    def build_context(self, context):
+        context['navigation_tab'] = 'analysis'
+        context['REQUIRE_D3JS'] = self.required_d3js
+        return context
 
-    return render(request,
-                  'contracts/analysis/entities_values_histogram/main.html',
-                  context)
-
-
-def procedure_types_time_series(request):
-    context = {'navigation_tab': 'analysis',
-               'REQUIRE_D3JS': True}
-    return render(request,
-                  'contracts/analysis/procedure_type_time_series/main.html',
-                  context)
+    def get(self, request):
+        return render(request, self.template_name, self.build_context({}))
 
 
-def municipalities_contracts_time_series(request):
-    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(
-        request,
-        'contracts/analysis/municipalities_contracts_time_series/main.html',
-        context)
+class ContractsPriceView(AnalysisView):
+    template_name = 'contracts/analysis/contracts_price_histogram/main.html'
+
+    def build_context(self, context):
+        context = super(ContractsPriceView, self).build_context(context)
+
+        data = analysis_manager.get_analysis("contracts_statistics")
+        context['count'] = data['total_count']
+        context['price'] = data['total_sum']
+        return context
 
 
-def municipalities_procedure_types_time_series(request):
-    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(
-        request,
-        'contracts/analysis/municipalities_procedure_type_time_series/main.html',
-        context)
+class EntitiesValuesView(AnalysisView):
+    template_name = 'contracts/analysis/entities_values_histogram/main.html'
 
 
-def ministries_contracts_time_series(request):
-    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request,
-                  'contracts/analysis/ministries_contracts_time_series/main.html',
-                  context)
+class ProcedureTypeTimeSeriesView(AnalysisView):
+    template_name = 'contracts/analysis/procedure_type_time_series/main.html'
 
 
-@cache_page(60 * 60 * 24 * 30)
-def municipalities_ranking(request):
-    return render(request, 'contracts/analysis/municipalities_ranking/main.html',
-                  {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True})
+class MunicipalitiesContractsTimeSeriesView(AnalysisView):
+    template_name = 'contracts/analysis/municipalities_contracts_time_series/' \
+                    'main.html'
 
 
-def contracts_time_series(request):
-    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(request, 'contracts/analysis/contracts_time_series/main.html',
-                  context)
+class MunicipalitiesProceduresTimeSeriesView(AnalysisView):
+    template_name = 'contracts/analysis/municipalities_procedure_type_time_' \
+                    'series/main.html'
 
 
-def legislation_application_time_series(request):
-    context = {'navigation_tab': 'analysis', 'REQUIRE_D3JS': True}
-    return render(
-        request,
-        'contracts/analysis/legislation_application_time_series/main.html',
-        context)
+class MinistriesContractsTimeSeriesView(AnalysisView):
+    template_name = 'contracts/analysis/ministries_contracts_time_series/main.html'
 
 
-def contracted_lorenz_curve(request):
+class MunicipalitiesRankingView(AnalysisView):
+    cache_timeout = 60*60*24*30
+    template_name = 'contracts/analysis/municipalities_ranking/main.html'
 
-    _, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
 
-    context = {'navigation_tab': 'analysis', 'gini_index': gini_index,
-               'REQUIRE_D3JS': True}
-    return render(request, 'contracts/analysis/contracted_lorenz_curve/main.html',
-                  context)
+class ContractsTimeSeriesView(AnalysisView):
+    template_name = 'contracts/analysis/contracts_time_series/main.html'
+
+
+class ContractedLorenzCurveView(AnalysisView):
+    template_name = 'contracts/analysis/contracted_lorenz_curve/main.html'
+
+    def build_context(self, context):
+        context = super(ContractedLorenzCurveView, self).build_context(context)
+
+        _, gini_index = analysis_manager.get_analysis('contracted_lorenz_curve')
+
+        context['gini_index'] = gini_index
+        return context
 
 
 _ANALYSIS = {
     'contracts_time_series':
         {'id': 7, 'title': _('When do Portugal contract most?'),
-         'view': contracts_time_series, 'order': 1},
+         'view': ContractsTimeSeriesView.as_view(), 'order': 1},
     'contracts_price_distribution':
         {'id': 9, 'title': _('Distribution of prices of contracts'),
-         'view': contracts_price_histogram, 'order': 2},
+         'view': ContractsPriceView.as_view(), 'order': 2},
     'entities_values_distribution':
         {'id': 13, 'title': _('Distribution of earnings of entities'),
-         'view': entities_values_histogram, 'order': 3},
+         'view': EntitiesValuesView.as_view(), 'order': 3},
     'procedure_type_time_series':
         {'id': 6, 'title': _('Percentage of contracts by direct procurement '
                              'or public tender'),
-         'view': procedure_types_time_series, 'order': 4},
-    'legislation_application_time_series':
-        {'id': 12, 'title': _('How many contracts are published too late?'),
-         'view': legislation_application_time_series, 'order': 5},
+         'view': ProcedureTypeTimeSeriesView.as_view(), 'order': 4},
     'municipalities_contracts_time_series':
         {'id': 2, 'title': _('When do portuguese municipalities contract most?'),
-         'view': municipalities_contracts_time_series, 'order': 6},
+         'view': MunicipalitiesContractsTimeSeriesView.as_view(), 'order': 6},
     'municipalities_procedure_types_time_series':
         {'id': 5, 'title': _('How do portuguese municipalities contract most?'),
-         'view': municipalities_procedure_types_time_series, 'order': 7},
+         'view': MunicipalitiesProceduresTimeSeriesView.as_view(), 'order': 7},
     'ministries_contracts_time_series':
         {'id': 10, 'title': _('When do portuguese ministries contract most?'),
-         'view': ministries_contracts_time_series, 'order': 10},
+         'view': MinistriesContractsTimeSeriesView.as_view(), 'order': 10},
     'contracted_lorenz_curve':
         {'id': 14, 'title': _('Income Inequality in Public Contracts'),
-         'view': contracted_lorenz_curve, 'order': 11},
+         'view': ContractedLorenzCurveView.as_view(), 'order': 11},
     'municipalities_ranking': {'id': 15, 'title': _('Municipalities Ranking'),
-         'view': municipalities_ranking, 'order': 12}
+         'view': MunicipalitiesRankingView.as_view(), 'order': 12},
 }
 
 # order the list as `-order`
@@ -140,12 +134,9 @@ for analysis_name in sorted(_ANALYSIS, key=lambda x: _ANALYSIS[x]['order'],
 
 
 def analysis_selector(request, analysis_id, _):
-    try:
-        analysis_id = int(analysis_id)
-    except:
-        raise Http404
-    if int(analysis_id) not in PRIMARY_KEY:
-        return redirect(analysis)
+    analysis_id = int(analysis_id)
+    if analysis_id not in PRIMARY_KEY:
+        return redirect('contracts_analysis')
 
     return ANALYSIS[PRIMARY_KEY[analysis_id]]['view'](request)
 
@@ -168,7 +159,11 @@ def analysis_list():
     return all_analysis
 
 
-def analysis(request):
-    return render(request, 'contracts/analysis.html', {
-        'analysis': analysis_list(),
-        'navigation_tab': 'analysis'})
+class AnalysisListView(AnalysisView):
+    template_name = 'contracts/analysis.html'
+    required_d3js = False
+
+    def build_context(self, context):
+        context = super(AnalysisListView, self).build_context(context)
+        context['analysis'] = analysis_list()
+        return context
