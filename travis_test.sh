@@ -26,5 +26,5 @@ pip install -r production_requirements.txt
 # script
 python -m contracts.tools.example
 mkdir cached_html
-PYTHONPATH=$PYTHONPATH:`pwd` django-admin.py test --settings=main.settings_test law.test contracts.test
+PYTHONPATH=$PYTHONPATH:`pwd` coverage run `which django-admin.py` test --settings=main.settings_test law.test contracts.test
 fi

@@ -10,5 +10,10 @@ matrix:
     - env: CONFIGURATION=PRODUCTION
       python: "3.4"
 
+install:
+  - pip install coveralls
+
 script:
   - export CONFIGURATION; ./travis_test.sh
+
+after_success: coveralls

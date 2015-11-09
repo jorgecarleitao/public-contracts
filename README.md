@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/jorgecarleitao/public-contracts.svg)](https://travis-ci.org/jorgecarleitao/public-contracts)
+[![Coverage Status](https://coveralls.io/repos/jorgecarleitao/public-contracts/badge.svg?branch=master&service=github)](https://coveralls.io/github/jorgecarleitao/public-contracts?branch=master)
 
 # Publicos.pt
 
