@@ -28,7 +28,7 @@ class District(models.Model):
 
 
 class Category(NS_Node):
-    code = models.CharField(max_length=254)
+    code = models.CharField(max_length=254, unique=True, db_index=True)
     description_en = models.CharField(max_length=254)
     description_pt = models.CharField(max_length=254)
 
