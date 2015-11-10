@@ -198,3 +198,31 @@ contracts, entities and tenders, use the following approach:
     * :attr:`object_name`: ``'tender'``;
     * :attr:`object_url`: ``'http://www.base.gov.pt/base2/rest/anuncios/%d'``
     * :attr:`object_model`: :class:`~contracts.models.Tender`.
+
+
+Crawler for Categories
+======================
+
+.. currentmodule:: contracts.categories_crawler
+
+.. _CPVS: http://simap.europa.eu/codes-and-nomenclatures/codes-cpv/codes-cpv_en.htm
+.. _tree: https://en.wikipedia.org/wiki/Tree_(data_structure)
+.. _`nested set`: https://en.wikipedia.org/wiki/Nested_set_model
+.. _`XML file`: https://raw.githubusercontent.com/data-ac-uk/cpv/master/etc/cpv_2008.xml
+
+Europe Union has a categorisation system for public contracts, CPVS_, that
+translates a string of 8 digits into a category to be used in public contracts.
+
+More than categories, this system is a tree with broader categories like
+"agriculture", and more specific ones like "potatos".
+
+They provide the fixture as an `XML file`_, which we import:
+
+.. function:: build_categories()
+
+    Constructs the category tree of :class:`categories <contracts.models.Category>`.
+
+    Gets the most general categories and saves then, repeating this recursively
+    to more specific categories until it reaches the leaves of the tree.
+
+    The categories are retrieved from the internet.

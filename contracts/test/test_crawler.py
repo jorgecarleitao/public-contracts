@@ -1,13 +1,59 @@
 from unittest import skipUnless
+import xml.etree.ElementTree
 
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from contracts.crawler import ContractsCrawler, EntitiesCrawler, TendersCrawler, \
     DynamicCrawler, JSONLoadError, ContractsStaticDataCrawler
+from contracts import categories_crawler
 from contracts import models
 
 from contracts.test import HAS_REMOTE_ACCESS
+
+
+class ImportCategoriesTestCase(TestCase):
+
+    def test_get_data(self):
+        text = '''<?xml version="1.0" encoding="UTF-8"?>
+        <CPV_CODE>
+        <CPV CODE="03000000-1">
+        <TEXT LANG="EN">Agricultural, farming, fishing, forestry and related products</TEXT>
+        <TEXT LANG="PT">Produtos da agricultura, da pesca, da silvicultura e afins</TEXT>
+        </CPV>
+        </CPV_CODE>
+        '''
+        tree = xml.etree.ElementTree.fromstring(text)
+
+        data = categories_crawler._get_data(tree[0])
+        self.assertEqual('03000000-1', data['code'])
+        self.assertEqual('Agricultural, farming, fishing, forestry and related '
+                         'products', data['description_en'])
+        self.assertEqual('Produtos da agricultura, da pesca, da silvicultura '
+                         'e afins', data['description_pt'])
+
+    def test_get_parent(self):
+        cat1 = models.Category.add_root(code='04000000-9')
+        cat2 = cat1.add_child(code='04523000-2')
+        cat3 = cat2.add_child(code='04523356-2')
+
+        self.assertEqual(None, categories_crawler._get_parent(cat1.code))
+        self.assertEqual(cat2, categories_crawler._get_parent(cat3.code))
+        self.assertEqual(cat1, categories_crawler._get_parent(cat2.code))
+
+    def test_add_category(self):
+        cat1 = models.Category.add_root(code='04000000-9')
+
+        category = categories_crawler.add_category({'code': '04523000-2'})
+
+        self.assertEqual(cat1, category.get_parent())
+
+        category = categories_crawler.add_category({'code': '05000000-2'})
+
+        self.assertEqual(None, category.get_parent())
+
+    def test_xml(self):
+        self.assertEqual(9454, len(categories_crawler.get_xml()))
 
 
 @skipUnless(HAS_REMOTE_ACCESS, 'Can\'t reach BASE')

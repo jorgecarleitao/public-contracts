@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 
 from contracts.crawler import ContractsCrawler, EntitiesCrawler, TendersCrawler, \
     ContractsStaticDataCrawler
-from contracts.tools.cpvs import build_categories
+from contracts.categories_crawler import build_categories
 
 from contracts.models import Category, ProcedureType
 
@@ -45,18 +45,12 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         if options['static']:
-            if options['bootstrap']:
+            if options['bootstrap'] or not ProcedureType.objects.exists():
                 ContractsStaticDataCrawler().retrieve_and_save_all()
-            else:
-                if not ProcedureType.objects.exists():
-                    ContractsStaticDataCrawler().retrieve_and_save_all()
 
         if options['categories']:
-            if options['bootstrap']:
+            if options['bootstrap'] or not Category.objects.exists():
                 build_categories()
-            else:
-                if not Category.objects.exists():
-                    build_categories()
 
         if options['entities']:
             crawler = EntitiesCrawler()
