@@ -29,6 +29,7 @@ intword_converters = (
     )),
 )
 
+
 @register.filter(is_safe=False)
 def intword(value):
     """
@@ -47,7 +48,7 @@ def intword(value):
     value /= 100.  # prices are in cents, we translate them to euros.
 
     if value < 1000:
-        return value
+        return '%.1f' % value
 
     def _check_for_i18n(value, float_formatted, string_formatted):
         """
@@ -65,4 +66,8 @@ def intword(value):
         if value < large_number * 1000:
             new_value = value / float(large_number)
             return _check_for_i18n(new_value, *converters(new_value))
-    return value
+
+    # use the highest available
+    exponent, converters = intword_converters[-1]
+    new_value = value / float(10 ** exponent)
+    return _check_for_i18n(new_value, *converters(new_value))
