@@ -16,11 +16,6 @@ class FeedTestCase(TestCase):
         chan_elem = feed.getElementsByTagName('channel')
         return chan_elem[0]
 
-    def assertChildNodes(self, elem, expected):
-        actual = set(n.nodeName for n in elem.childNodes)
-        expected = set(expected)
-        self.assertEqual(actual, expected)
-
     def assertChildNodeContent(self, elem, expected):
         for k, v in expected.items():
             self.assertEqual(
