@@ -484,8 +484,13 @@ class TendersCrawler(DynamicCrawler):
 
     def _hasher(self, instance):
         date_field = DateField(input_formats=["%d-%m-%Y"])
-        return instance['id'], \
-            PriceField().clean(instance['basePrice']), \
+
+        # e.g. tender 81558 has no price set
+        price = None
+        if instance['basePrice'] is not None:
+            price = PriceField(required=False).clean(instance['basePrice'])
+
+        return instance['id'], price, \
             date_field.clean(instance['drPublicationDate'])
 
     def _values_list(self):

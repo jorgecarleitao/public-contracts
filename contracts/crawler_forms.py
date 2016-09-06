@@ -52,6 +52,9 @@ class TimeDeltaField(CharField):
     def clean(self, value):
         super(TimeDeltaField, self).clean(value)
 
+        if value == "":
+            return timedelta(days=0)
+
         result = self.re.search(value)
         if not result:
             raise ValidationError('Validation of "%s" failed' % value)
