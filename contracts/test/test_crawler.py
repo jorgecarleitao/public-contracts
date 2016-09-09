@@ -209,6 +209,12 @@ class TestCrawler(TestCase):
         mods = c.update(0, 1)
         self.assertEqual(2, mods['added'])
 
+        # call update again should not make any change
+        mods = c.update(0, 1)
+        self.assertEqual(0, mods['added'])
+        self.assertEqual(0, mods['deleted'])
+        self.assertEqual(0, mods['updated'])
+
     def test_update_tenders(self):
         c = TendersCrawler()
         with self.assertRaises(ValidationError):
@@ -225,3 +231,9 @@ class TestCrawler(TestCase):
 
         mods = c.update(0, 1)
         self.assertEqual(2, mods['added'])
+
+        # call update again should not make any change
+        mods = c.update(0, 1)
+        self.assertEqual(0, mods['added'])
+        self.assertEqual(0, mods['deleted'])
+        self.assertEqual(0, mods['updated'])
