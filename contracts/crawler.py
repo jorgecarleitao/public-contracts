@@ -388,6 +388,14 @@ class ContractsCrawler(DynamicCrawler):
     @staticmethod
     def clean_data(data):
 
+        def fix_exceptions(prepared_data):
+            # this is confirmed from the official contract in PDF
+            if prepared_data['base_id'] in (1892486, 1892453, 1892392):
+                prepared_data['contractors'] = [{'id': 8468}]
+            elif prepared_data['base_id'] in (2377732, 2377789, 2377777):
+                prepared_data['contractors'] = [{'id': 2154}]
+            return prepared_data
+
         places = clean_place(data['executionPlace'])
         prepared_data = {'base_id': data['id'],
                          'procedure_type': data['contractingProcedureType'],
@@ -405,6 +413,8 @@ class ContractsCrawler(DynamicCrawler):
                          'contractors': data['contracting'],
                          'contracted': data['contracted']
                          }
+
+        prepared_data = fix_exceptions(prepared_data)
 
         form = ContractForm(prepared_data)
 

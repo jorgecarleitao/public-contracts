@@ -118,6 +118,21 @@ class TestCrawler(TestCase):
         self.assertEqual(35356, contract.base_id)
         self.assertEqual(None, contract.category)
 
+    def test_1892486_no_contractor(self):
+        pt = models.Country.objects.create(name='Portugal')
+
+        models.ProcedureType.objects.create(name='Concurso público', base_id=1)
+        models.ContractType.objects.create(name='Aquisição de serviços', base_id=1)
+
+        dt = models.District.objects.create(country=pt, name="Portalegre", base_id=1)
+        models.Council.objects.create(district=dt, name="Nisa", base_id=1)
+
+        c = ContractsCrawler()
+
+        contract, _ = c.update_instance(1892486)
+
+        self.assertEqual(1892486, contract.base_id)
+
     def test_tenders(self):
         models.Country.objects.create(name='Portugal')
 
