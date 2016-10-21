@@ -833,7 +833,7 @@ msgstr "NIF"
 
 #: contracts/templates/contracts/entity_view/tab_data/main.html:22
 msgid "Earned"
-msgstr "Lucro"
+msgstr "Faturação"
 
 #: contracts/templates/contracts/entity_view/tab_data/main.html:32
 msgid "Expended"
