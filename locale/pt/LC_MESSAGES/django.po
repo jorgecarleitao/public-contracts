@@ -65,7 +65,7 @@ msgstr "Contratos como contratado"
 #: contracts/entity_views.py:170
 #: contracts/templates/contracts/entity_list/entity_summary.html:21
 msgid "Earnings"
-msgstr "Ganhos"
+msgstr "Faturação"
 
 #: contracts/feed.py:25
 #, python-format
@@ -134,7 +134,7 @@ msgstr "qualquer ordem"
 
 #: contracts/forms.py:70 contracts/forms.py:72
 msgid "earnings"
-msgstr "ganho"
+msgstr "faturação"
 
 #: contracts/forms.py:71 contracts/forms.py:73
 msgid "expenses"
@@ -487,7 +487,7 @@ msgstr "Número de entidades"
 #: contracts/templates/contracts/analysis/entities_values_histogram/main.html:4
 #: contracts/views_analysis.py:103
 msgid "Distribution of earnings of entities"
-msgstr "Distribuição de ganhos de entidades"
+msgstr "Distribuição de faturação de entidades"
 
 #: contracts/templates/contracts/analysis/entities_values_histogram/main.html:7
 msgid "How many entities earned/spent X Euros?"
@@ -817,7 +817,7 @@ msgstr "Sem despesa"
 
 #: contracts/templates/contracts/entity_list/entity_summary.html:23
 msgid "No earnings"
-msgstr "Sem ganhos"
+msgstr "Sem faturação"
 
 #: contracts/templates/contracts/entity_view/selector.html:10
 msgid "Customers"
