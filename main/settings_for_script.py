@@ -5,7 +5,7 @@ DATABASES = {
         'NAME': 'publics',
         'USER': 'publics_read_only',
         'PASSWORD': r'read-only',
-        'HOST': '5.153.9.51',
+        'HOST': '185.20.49.8',
         'PORT': '5432',
     }
 }

@@ -22,18 +22,14 @@ You can access our database using:
 - database: publics
 - username: publics_read_only
 - password: read-only
-- host: 5.153.9.51
+- host: 185.20.49.8
 - port: 5432
-
-.. _`phpmyadmin panel`: https://web306.webfaction.com/static/phpMyAdmin
-
-You can also take a look at it in `phpmyadmin panel`_, using the same credentials.
 
 Create dumps
 ------------
 
 In the terminal, run::
 
-    pg_dump -h 5.153.9.51 -p 5432 -U publics_read_only -d publics > dump.sql
+    pg_dump -h 185.20.49.8 -p 5432 -U publics_read_only -d publics > dump.sql
 
 This creates a file "dump.sql" (it can take a while) that you can load to a database in your own computer.
